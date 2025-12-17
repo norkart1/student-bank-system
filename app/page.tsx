@@ -6,14 +6,6 @@ import { Users, GraduationCap, BookOpen } from "lucide-react"
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#f5f5f7] flex flex-col items-center px-6 py-8">
-      <div className="w-full flex justify-end mb-4">
-        <Link href="/login">
-          <button className="px-4 py-2 text-sm font-medium text-[#4a6670] bg-white rounded-full shadow-sm hover:shadow-md transition-all">
-            Skip
-          </button>
-        </Link>
-      </div>
-
       <div className="flex-1 flex flex-col items-center justify-center max-w-md w-full">
         <div className="relative w-full aspect-square max-w-[320px] mb-8 flex items-center justify-center">
           <div className="relative flex items-end justify-center gap-2">
@@ -53,13 +45,9 @@ export default function Home() {
         </div>
 
         <div className="text-center mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-[#171532] mb-3">
-            Welcome to <span className="text-[#7056B2]">JDSA</span>
+          <h1 className="text-2xl md:text-3xl font-bold text-[#171532]">
+            Welcome to <span className="text-[#7056B2]">JDSA Students Bank</span>
           </h1>
-          <p className="text-[#747384] text-sm md:text-base leading-relaxed">
-            Your trusted student banking partner.<br />
-            Manage your finances with ease.
-          </p>
         </div>
 
         <div className="flex gap-2 mb-8">
