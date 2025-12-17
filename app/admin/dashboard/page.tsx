@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Users, DollarSign, TrendingUp, Activity, LogOut, Plus } from "lucide-react"
+import { Users, DollarSign, TrendingUp, Activity, LogOut, Plus, Home, Trophy, BarChart3, Search, Bot } from "lucide-react"
 import { StudentList } from "@/components/student-list"
 import { AddStudentDialog } from "@/components/add-student-dialog"
 
@@ -13,6 +13,7 @@ export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [students, setStudents] = useState<any[]>([])
   const [showAddStudent, setShowAddStudent] = useState(false)
+  const [activeTab, setActiveTab] = useState("home")
 
   useEffect(() => {
     const auth = localStorage.getItem("isAdminAuthenticated")
@@ -70,7 +71,7 @@ export default function AdminDashboard() {
   const averageBalance = totalStudents > 0 ? totalBalance / totalStudents : 0
 
   return (
-    <div className="min-h-screen bg-[#f8f7fc]">
+    <div className="min-h-screen bg-[#f8f7fc] pb-24">
       {/* Header */}
       <header className="bg-white border-b border-[#e2e0ec] sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -166,6 +167,66 @@ export default function AdminDashboard() {
       </main>
 
       <AddStudentDialog open={showAddStudent} onOpenChange={setShowAddStudent} onAddStudent={handleAddStudent} />
+
+      {/* Bottom Navigation */}
+      <div className="fixed bottom-0 left-0 right-0 px-4 pb-4 z-20">
+        <div className="max-w-md mx-auto bg-gradient-to-r from-[#e8f4f8] to-[#d4eef5] rounded-2xl px-4 py-3 flex items-center justify-between shadow-lg">
+          <button
+            onClick={() => setActiveTab("home")}
+            className={`p-3 rounded-xl transition-all ${
+              activeTab === "home"
+                ? "bg-[#c17f59] text-white shadow-md"
+                : "text-[#4a6670] hover:bg-white/50"
+            }`}
+          >
+            <Home className="w-6 h-6" />
+          </button>
+          
+          <button
+            onClick={() => setActiveTab("rewards")}
+            className={`p-3 rounded-xl transition-all ${
+              activeTab === "rewards"
+                ? "bg-[#c17f59] text-white shadow-md"
+                : "text-[#4a6670] hover:bg-white/50"
+            }`}
+          >
+            <Trophy className="w-6 h-6" />
+          </button>
+          
+          <button
+            onClick={() => setActiveTab("stats")}
+            className={`p-3 rounded-xl transition-all ${
+              activeTab === "stats"
+                ? "bg-[#c17f59] text-white shadow-md"
+                : "text-[#4a6670] hover:bg-white/50"
+            }`}
+          >
+            <BarChart3 className="w-6 h-6" />
+          </button>
+          
+          <button
+            onClick={() => setActiveTab("search")}
+            className={`p-3 rounded-xl transition-all ${
+              activeTab === "search"
+                ? "bg-[#c17f59] text-white shadow-md"
+                : "text-[#4a6670] hover:bg-white/50"
+            }`}
+          >
+            <Search className="w-6 h-6" />
+          </button>
+          
+          <button
+            onClick={() => setActiveTab("bot")}
+            className={`p-3 rounded-xl transition-all ${
+              activeTab === "bot"
+                ? "bg-[#c17f59] text-white shadow-md"
+                : "text-[#4a6670] hover:bg-white/50"
+            }`}
+          >
+            <Bot className="w-6 h-6" />
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
