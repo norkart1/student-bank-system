@@ -2,13 +2,28 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Home, Users, CreditCard, MoreHorizontal, Send, Receipt, Banknote, QrCode, Bell, Grid3X3 } from "lucide-react"
+import { Home, Users, CreditCard, MoreHorizontal, Send, Receipt, Banknote, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet } from "lucide-react"
+
+interface Transaction {
+  type: string
+  amount: number
+  date?: string
+}
+
+interface Student {
+  name: string
+  balance: number
+  transactions: Transaction[]
+}
 
 export default function AdminDashboard() {
   const router = useRouter()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [activeTab, setActiveTab] = useState("home")
   const [currentDate, setCurrentDate] = useState("")
+  const [totalBalance, setTotalBalance] = useState(0)
+  const [totalDeposited, setTotalDeposited] = useState(0)
+  const [totalWithdrawn, setTotalWithdrawn] = useState(0)
 
   useEffect(() => {
     const auth = localStorage.getItem("isAdminAuthenticated")
@@ -17,6 +32,32 @@ export default function AdminDashboard() {
       router.push("/login")
     } else {
       setIsAuthenticated(true)
+      
+      const savedStudents = localStorage.getItem("students")
+      if (savedStudents) {
+        const students: Student[] = JSON.parse(savedStudents)
+        
+        let balance = 0
+        let deposited = 0
+        let withdrawn = 0
+        
+        students.forEach((student) => {
+          balance += student.balance || 0
+          if (student.transactions) {
+            student.transactions.forEach((t) => {
+              if (t.type === 'deposit') {
+                deposited += t.amount || 0
+              } else if (t.type === 'withdraw') {
+                withdrawn += t.amount || 0
+              }
+            })
+          }
+        })
+        
+        setTotalBalance(balance)
+        setTotalDeposited(deposited)
+        setTotalWithdrawn(withdrawn)
+      }
     }
     
     const now = new Date()
@@ -55,28 +96,36 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-[#e5e7eb] p-4 mb-6 shadow-sm">
-          <div className="flex items-start justify-between">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <p className="text-sm text-[#747384]">Account Name</p>
-                <div className="w-4 h-4 rounded-full bg-[#e5e7eb] flex items-center justify-center">
-                  <span className="text-[8px]">●</span>
-                </div>
-              </div>
-              <p className="text-sm font-medium text-[#171532] mb-3">1234-5678-90</p>
-              <div className="inline-block px-3 py-1 bg-[#4a6670] rounded-full">
-                <span className="text-xs text-white font-medium">Primary</span>
-              </div>
+        <div className="bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-2xl p-5 mb-6 shadow-lg">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <Wallet className="w-6 h-6 text-white" />
             </div>
-            <div className="text-right">
-              <div className="w-14 h-14 bg-[#e8f5f2] rounded-xl flex items-center justify-center mb-2">
-                <svg className="w-8 h-8 text-[#4a6670]" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2L2 7v2h20V7L12 2zm0 2.5L18.5 7h-13L12 4.5zM4 10v9h3v-7h2v7h2v-7h2v7h2v-7h2v7h3v-9H4zm-2 11v2h20v-2H2z"/>
-                </svg>
+            <div>
+              <p className="text-white/70 text-sm">Total Balance</p>
+              <p className="text-2xl font-bold text-white">${totalBalance.toFixed(2)}</p>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-white/10 rounded-xl p-3">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-8 h-8 bg-[#10B981]/20 rounded-lg flex items-center justify-center">
+                  <ArrowDownRight className="w-4 h-4 text-[#10B981]" />
+                </div>
+                <p className="text-white/70 text-xs">Deposited</p>
               </div>
-              <p className="text-xs text-[#747384]">Available Balance</p>
-              <p className="text-2xl font-bold text-[#171532]">$2,749.00</p>
+              <p className="text-lg font-bold text-white">${totalDeposited.toFixed(2)}</p>
+            </div>
+            
+            <div className="bg-white/10 rounded-xl p-3">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-8 h-8 bg-[#EF4444]/20 rounded-lg flex items-center justify-center">
+                  <ArrowUpRight className="w-4 h-4 text-[#EF4444]" />
+                </div>
+                <p className="text-white/70 text-xs">Withdrawn</p>
+              </div>
+              <p className="text-lg font-bold text-white">${totalWithdrawn.toFixed(2)}</p>
             </div>
           </div>
         </div>
