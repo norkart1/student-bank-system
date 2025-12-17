@@ -16,6 +16,16 @@ interface Student {
   transactions: Transaction[]
 }
 
+const defaultStudents: Student[] = [
+  { name: "Dara Sok", balance: 1250.00, transactions: [{ type: 'deposit', amount: 1500, date: 'Dec 15, 2025' }, { type: 'withdraw', amount: 250, date: 'Dec 16, 2025' }] },
+  { name: "Sophea Chan", balance: 890.50, transactions: [{ type: 'deposit', amount: 1000, date: 'Dec 14, 2025' }, { type: 'withdraw', amount: 109.50, date: 'Dec 16, 2025' }] },
+  { name: "Visal Meng", balance: 2100.00, transactions: [{ type: 'deposit', amount: 2500, date: 'Dec 12, 2025' }, { type: 'withdraw', amount: 400, date: 'Dec 15, 2025' }] },
+  { name: "Sreynich Phan", balance: 675.25, transactions: [{ type: 'deposit', amount: 800, date: 'Dec 13, 2025' }, { type: 'withdraw', amount: 124.75, date: 'Dec 17, 2025' }] },
+  { name: "Ratanak Ly", balance: 1580.00, transactions: [{ type: 'deposit', amount: 2000, date: 'Dec 10, 2025' }, { type: 'withdraw', amount: 420, date: 'Dec 14, 2025' }] },
+]
+
+const avatarColors = ['bg-orange-100', 'bg-blue-100', 'bg-green-100', 'bg-purple-100', 'bg-pink-100']
+
 export default function AdminDashboard() {
   const router = useRouter()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -24,6 +34,7 @@ export default function AdminDashboard() {
   const [totalBalance, setTotalBalance] = useState(0)
   const [totalDeposited, setTotalDeposited] = useState(0)
   const [totalWithdrawn, setTotalWithdrawn] = useState(0)
+  const [students, setStudents] = useState<Student[]>([])
 
   useEffect(() => {
     const auth = localStorage.getItem("isAdminAuthenticated")
@@ -33,31 +44,38 @@ export default function AdminDashboard() {
     } else {
       setIsAuthenticated(true)
       
-      const savedStudents = localStorage.getItem("students")
-      if (savedStudents) {
-        const students: Student[] = JSON.parse(savedStudents)
-        
-        let balance = 0
-        let deposited = 0
-        let withdrawn = 0
-        
-        students.forEach((student) => {
-          balance += student.balance || 0
-          if (student.transactions) {
-            student.transactions.forEach((t) => {
-              if (t.type === 'deposit') {
-                deposited += t.amount || 0
-              } else if (t.type === 'withdraw') {
-                withdrawn += t.amount || 0
-              }
-            })
-          }
-        })
-        
-        setTotalBalance(balance)
-        setTotalDeposited(deposited)
-        setTotalWithdrawn(withdrawn)
+      let savedStudents = localStorage.getItem("students")
+      let studentList: Student[]
+      
+      if (!savedStudents || JSON.parse(savedStudents).length === 0) {
+        localStorage.setItem("students", JSON.stringify(defaultStudents))
+        studentList = defaultStudents
+      } else {
+        studentList = JSON.parse(savedStudents)
       }
+      
+      setStudents(studentList)
+      
+      let balance = 0
+      let deposited = 0
+      let withdrawn = 0
+      
+      studentList.forEach((student) => {
+        balance += student.balance || 0
+        if (student.transactions) {
+          student.transactions.forEach((t) => {
+            if (t.type === 'deposit') {
+              deposited += t.amount || 0
+            } else if (t.type === 'withdraw') {
+              withdrawn += t.amount || 0
+            }
+          })
+        }
+      })
+      
+      setTotalBalance(balance)
+      setTotalDeposited(deposited)
+      setTotalWithdrawn(withdrawn)
     }
     
     const now = new Date()
@@ -68,13 +86,6 @@ export default function AdminDashboard() {
   if (!isAuthenticated) {
     return null
   }
-
-  const recentUsers = [
-    { name: "Jam Vana", account: "1234-0987-123", color: "bg-orange-100" },
-    { name: "Smart", account: "098-123-456", color: "bg-red-100" },
-    { name: "Sovannaphum", account: "123-123-456", color: "bg-yellow-100" },
-    { name: "Smart", account: "098-123-456", color: "bg-red-100" },
-  ]
 
   return (
     <div className="min-h-screen bg-white pb-24">
@@ -174,15 +185,15 @@ export default function AdminDashboard() {
         </div>
 
         <div className="mb-4">
-          <h2 className="text-lg font-bold text-[#171532] mb-4">Recent</h2>
+          <h2 className="text-lg font-bold text-[#171532] mb-4">Accounts</h2>
           <div className="flex gap-4 overflow-x-auto pb-2">
-            {recentUsers.map((user, index) => (
-              <div key={index} className="flex flex-col items-center min-w-[70px]">
-                <div className={`w-14 h-14 rounded-full ${user.color} flex items-center justify-center mb-2 text-lg font-bold text-[#4a6670]`}>
-                  {user.name.charAt(0)}
+            {students.slice(0, 5).map((student, index) => (
+              <div key={index} className="flex flex-col items-center min-w-[80px]">
+                <div className={`w-14 h-14 rounded-full ${avatarColors[index % avatarColors.length]} flex items-center justify-center mb-2 text-lg font-bold text-[#4a6670]`}>
+                  {student.name.charAt(0)}
                 </div>
-                <p className="text-xs font-medium text-[#171532] text-center truncate w-full">{user.name}</p>
-                <p className="text-[10px] text-[#747384] text-center">{user.account}</p>
+                <p className="text-xs font-medium text-[#171532] text-center truncate w-full">{student.name.split(' ')[0]}</p>
+                <p className="text-[10px] text-[#10B981] text-center font-medium">${student.balance.toFixed(2)}</p>
               </div>
             ))}
           </div>
