@@ -50,7 +50,7 @@ export default function LoginPage() {
         </h1>
       </div>
 
-      <form onSubmit={handleLogin} className="space-y-4 flex-1">
+      <form onSubmit={handleLogin} className="space-y-4">
         <div className="relative">
           <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]">
             <Mail className="w-5 h-5" />
@@ -91,17 +91,15 @@ export default function LoginPage() {
             {error}
           </div>
         )}
-      </form>
 
-      <div className="mt-auto pt-8">
         <button
-          onClick={handleLogin}
+          type="submit"
           disabled={isLoading}
-          className="w-full h-14 bg-[#4a6670] hover:bg-[#3d565e] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 disabled:opacity-70"
+          className="w-full h-14 bg-[#4a6670] hover:bg-[#3d565e] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 disabled:opacity-70 mt-6"
         >
           {isLoading ? "Logging in..." : "Login"}
         </button>
-      </div>
+      </form>
     </div>
   )
 }
