@@ -1,125 +1,91 @@
+"use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Shield, TrendingUp, Users, Wallet } from "lucide-react"
+import { ArrowRight, Wallet, CreditCard, PiggyBank, TrendingUp, Coins, DollarSign } from "lucide-react"
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
-      {/* Hero Section */}
-      <header className="container mx-auto px-4 py-8">
-        <nav className="flex items-center justify-between mb-16">
-          <div className="flex items-center gap-2">
-            <Wallet className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold tracking-tight">JDSA STUDENTS BANK</span>
-          </div>
-          <Link href="/admin/login">
-            <Button variant="outline">Admin Login</Button>
-          </Link>
-        </nav>
+    <div className="min-h-screen bg-gradient-to-b from-[#e8e0f0] via-[#d4c8e8] to-[#c9b8e0] flex flex-col items-center justify-center p-4 relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+        <div className="absolute top-10 left-10 w-32 h-32 bg-[#d4c8e8] rounded-full opacity-50 blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-[#c9b8e0] rounded-full opacity-60 blur-3xl"></div>
+      </div>
 
-        <div className="max-w-4xl mx-auto text-center py-20">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-balance">
-            Banking Made Simple for <span className="text-primary">Students</span>
+      <div className="relative z-10 flex flex-col items-center max-w-md w-full mx-auto">
+        <div className="relative w-full max-w-[320px] md:max-w-[400px] aspect-[3/4] mb-8">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#261863] via-[#1e1b3a] to-[#171532] rounded-[2.5rem] shadow-2xl overflow-hidden">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full">
+              <div className="relative flex items-center justify-center">
+                <div className="absolute w-48 h-32 md:w-56 md:h-36 bg-white/10 rounded-[2rem] backdrop-blur-sm"></div>
+                
+                <div className="relative z-10 flex gap-1 items-end">
+                  <div className="w-3 md:w-4 h-12 md:h-16 bg-[#7056B2] rounded-sm"></div>
+                  <div className="w-3 md:w-4 h-16 md:h-20 bg-[#D975BB] rounded-sm"></div>
+                  <div className="w-3 md:w-4 h-10 md:h-14 bg-[#7056B2] rounded-sm"></div>
+                  <div className="w-3 md:w-4 h-20 md:h-24 bg-[#D975BB] rounded-sm"></div>
+                  <div className="w-3 md:w-4 h-14 md:h-18 bg-[#7056B2] rounded-sm"></div>
+                  <div className="w-3 md:w-4 h-8 md:h-12 bg-[#D975BB] rounded-sm"></div>
+                </div>
+              </div>
+            </div>
+
+            <div className="absolute top-6 left-4 w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#10B981] to-[#059669] rounded-full flex items-center justify-center shadow-lg animate-pulse">
+              <DollarSign className="w-5 h-5 md:w-6 md:h-6 text-white" />
+            </div>
+            
+            <div className="absolute top-12 right-6 w-9 h-9 md:w-11 md:h-11 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-full flex items-center justify-center shadow-lg">
+              <Coins className="w-4 h-4 md:w-5 md:h-5 text-white" />
+            </div>
+            
+            <div className="absolute top-24 left-8 w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-[#8462E1] to-[#7056B2] rounded-full flex items-center justify-center shadow-lg">
+              <Wallet className="w-4 h-4 md:w-5 md:h-5 text-white" />
+            </div>
+            
+            <div className="absolute top-20 right-4 w-7 h-7 md:w-9 md:h-9 bg-gradient-to-br from-[#EC4899] to-[#D946EF] rounded-full flex items-center justify-center shadow-lg animate-bounce" style={{ animationDuration: '3s' }}>
+              <PiggyBank className="w-3 h-3 md:w-4 md:h-4 text-white" />
+            </div>
+            
+            <div className="absolute bottom-28 left-6 w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-[#06B6D4] to-[#0891B2] rounded-full flex items-center justify-center shadow-lg">
+              <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-white" />
+            </div>
+            
+            <div className="absolute bottom-20 right-8 w-9 h-9 md:w-11 md:h-11 bg-gradient-to-br from-[#A855F7] to-[#9333EA] rounded-full flex items-center justify-center shadow-lg animate-pulse" style={{ animationDuration: '2s' }}>
+              <CreditCard className="w-4 h-4 md:w-5 md:h-5 text-white" />
+            </div>
+
+            <div className="absolute bottom-24 left-1/4 w-16 h-10 md:w-20 md:h-12 bg-gradient-to-r from-[#F472B6]/60 to-[#F9A8D4]/60 rounded-full blur-sm"></div>
+            <div className="absolute top-28 right-1/4 w-12 h-8 md:w-16 md:h-10 bg-gradient-to-r from-[#C4B5FD]/60 to-[#DDD6FE]/60 rounded-full blur-sm"></div>
+            
+            <div className="absolute top-4 left-1/3 w-4 h-4 bg-[#FDE047] rounded-full shadow-lg"></div>
+            <div className="absolute bottom-32 right-1/3 w-3 h-3 bg-[#A78BFA] rounded-full shadow-lg"></div>
+            <div className="absolute top-1/4 left-2 w-2 h-2 bg-[#F472B6] rounded-full"></div>
+          </div>
+        </div>
+
+        <div className="text-center mb-8 px-4">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#171532] mb-4 leading-tight">
+            Banking Made Simple<br />
+            <span className="text-[#7056B2]">For Students</span>
           </h1>
-          <p className="text-xl text-muted-foreground mb-8 text-pretty max-w-2xl mx-auto">
-            Manage student finances with ease. A comprehensive banking system designed specifically for educational
-            institutions.
+          <p className="text-[#747384] text-base md:text-lg max-w-sm mx-auto">
+            Connect your student account and get access to easy deposits, withdrawals, and savings management.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/admin/login">
-              <Button size="lg" className="gap-2">
-                Get Started <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-            <Button size="lg" variant="outline">
-              Learn More
-            </Button>
-          </div>
         </div>
-      </header>
 
-      {/* Features Section */}
-      <section className="container mx-auto px-4 py-20">
-        <h2 className="text-3xl font-bold text-center mb-12">Why Choose JDSA Students Bank?</h2>
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          <div className="bg-card rounded-lg p-8 border shadow-sm">
-            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-              <Shield className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="text-xl font-semibold mb-3">Secure & Safe</h3>
-            <p className="text-muted-foreground">
-              Built with security in mind. Your student data is protected with industry-standard encryption.
-            </p>
-          </div>
+        <Link href="/login" className="w-full max-w-xs">
+          <Button 
+            size="lg" 
+            className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-[#7056B2] to-[#55389B] hover:from-[#8462E1] hover:to-[#7056B2] text-white rounded-full shadow-lg shadow-[#7056B2]/30 gap-2 transition-all duration-300 hover:scale-105"
+          >
+            <ArrowRight className="w-5 h-5" />
+            Get Started
+          </Button>
+        </Link>
+      </div>
 
-          <div className="bg-card rounded-lg p-8 border shadow-sm">
-            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-              <Users className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="text-xl font-semibold mb-3">Easy Management</h3>
-            <p className="text-muted-foreground">
-              Intuitive admin dashboard to manage all student accounts, transactions, and balances effortlessly.
-            </p>
-          </div>
-
-          <div className="bg-card rounded-lg p-8 border shadow-sm">
-            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-              <TrendingUp className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="text-xl font-semibold mb-3">Real-time Tracking</h3>
-            <p className="text-muted-foreground">
-              Monitor deposits, withdrawals, and balances in real-time with comprehensive transaction history.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="bg-primary/5 rounded-2xl p-12 border">
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-4xl font-bold text-primary mb-2">100%</div>
-              <div className="text-muted-foreground">Secure Transactions</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-primary mb-2">24/7</div>
-              <div className="text-muted-foreground">Access Anytime</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-primary mb-2">Easy</div>
-              <div className="text-muted-foreground">Account Management</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="bg-card border rounded-2xl p-12 text-center max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
-          <p className="text-muted-foreground mb-8 text-lg">
-            Access the admin dashboard to start managing student accounts today.
-          </p>
-          <Link href="/admin/login">
-            <Button size="lg" className="gap-2">
-              Access Dashboard <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t mt-20">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Wallet className="h-6 w-6 text-primary" />
-              <span className="font-semibold">JDSA Students Bank</span>
-            </div>
-            <p className="text-sm text-muted-foreground">© 2025 JDSA Students Bank. All rights reserved.</p>
-          </div>
-        </div>
+      <footer className="absolute bottom-4 text-center text-sm text-[#747384]">
+        © 2025 JDSA Students Bank
       </footer>
     </div>
   )

@@ -16,8 +16,9 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     const auth = localStorage.getItem("isAdminAuthenticated")
-    if (auth !== "true") {
-      router.push("/admin/login")
+    const role = localStorage.getItem("userRole")
+    if (auth !== "true" || role !== "admin") {
+      router.push("/login")
     } else {
       setIsAuthenticated(true)
       // Load students from localStorage
@@ -30,7 +31,8 @@ export default function AdminDashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem("isAdminAuthenticated")
-    router.push("/admin/login")
+    localStorage.removeItem("userRole")
+    router.push("/login")
   }
 
   const handleAddStudent = (student: any) => {
