@@ -5,8 +5,8 @@ import { Users, GraduationCap, BookOpen } from "lucide-react"
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#f5f5f7] flex flex-col items-center px-6 py-8">
-      <div className="flex-1 flex flex-col items-center justify-center max-w-md w-full">
+    <div className="min-h-screen bg-[#f5f5f7] flex flex-col items-center justify-center px-6 py-8">
+      <div className="flex flex-col items-center max-w-md w-full">
         <div className="relative w-full aspect-square max-w-[320px] mb-8 flex items-center justify-center">
           <div className="relative flex items-end justify-center gap-2">
             <div className="flex flex-col items-center">
@@ -50,18 +50,18 @@ export default function Home() {
           </h1>
         </div>
 
-        <div className="flex gap-2 mb-8">
+        <div className="flex gap-2 mb-6">
           <div className="w-2 h-2 rounded-full bg-[#c9c9ce]"></div>
           <div className="w-6 h-2 rounded-full bg-[#4a6670]"></div>
           <div className="w-2 h-2 rounded-full bg-[#c9c9ce]"></div>
         </div>
-      </div>
 
-      <Link href="/login" className="w-full max-w-md">
-        <button className="w-full h-14 bg-[#4a6670] hover:bg-[#3d565e] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300">
-          Get Started
-        </button>
-      </Link>
+        <Link href="/login" className="w-full">
+          <button className="w-full h-14 bg-[#4a6670] hover:bg-[#3d565e] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300">
+            Get Started
+          </button>
+        </Link>
+      </div>
     </div>
   )
 }
