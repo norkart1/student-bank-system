@@ -7,13 +7,13 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#f5f5f7] flex flex-col items-center justify-center px-6 py-8">
       <div className="flex flex-col items-center max-w-md w-full">
-        <div className="relative w-full max-w-[280px] mb-8 flex items-center justify-center">
+        <div className="relative w-full max-w-[320px] mb-10 flex items-center justify-center">
           <Image 
             src="/students.png" 
             alt="Students" 
-            width={280} 
-            height={280}
-            className="object-contain"
+            width={320} 
+            height={320}
+            className="object-contain w-auto h-auto"
             priority
           />
         </div>

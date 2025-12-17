@@ -810,6 +810,10 @@
     height: calc(100% - 1px);
   }
 
+  .h-auto {
+    height: auto;
+  }
+
   .max-h-48 {
     max-height: calc(var(--spacing) * 48);
   }
@@ -850,6 +854,10 @@
     width: calc(var(--spacing) * 14);
   }
 
+  .w-auto {
+    width: auto;
+  }
+
   .w-fit {
     width: fit-content;
   }
@@ -862,8 +870,8 @@
     max-width: var(--container-4xl);
   }
 
-  .max-w-\[280px\] {
-    max-width: 280px;
+  .max-w-\[320px\] {
+    max-width: 320px;
   }
 
   .max-w-\[calc\(100\%-2rem\)\] {
