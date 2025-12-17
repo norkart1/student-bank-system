@@ -4,7 +4,7 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
-import { User, Lock, Eye, EyeOff, ArrowLeft, Check } from "lucide-react"
+import { Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 
 export default function LoginPage() {
@@ -14,7 +14,6 @@ export default function LoginPage() {
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const [rememberMe, setRememberMe] = useState(false)
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
@@ -38,117 +37,114 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      <div className="relative">
-        <div className="h-48 md:h-56 bg-gradient-to-br from-[#261863] via-[#55389B] to-[#7056B2] relative overflow-hidden">
-          <div className="absolute inset-0 opacity-30">
-            <div className="absolute top-4 left-8 w-32 h-32 bg-[#8462E1] rounded-full blur-3xl"></div>
-            <div className="absolute top-12 right-4 w-24 h-24 bg-[#D975BB] rounded-full blur-2xl"></div>
-            <div className="absolute bottom-0 left-1/2 w-40 h-20 bg-[#A855F7] rounded-full blur-3xl"></div>
-          </div>
-          
-          <Link href="/" className="absolute top-4 left-4 z-20">
-            <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-colors">
-              <ArrowLeft className="w-5 h-5 text-white" />
-            </div>
-          </Link>
+    <div className="min-h-screen bg-[#f5f5f7] flex flex-col px-6 py-8">
+      <Link href="/">
+        <div className="w-10 h-10 bg-[#4a6670] rounded-full flex items-center justify-center hover:bg-[#3d565e] transition-colors mb-8">
+          <ArrowLeft className="w-5 h-5 text-white" />
         </div>
-        
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-            <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="white"/>
-          </svg>
-        </div>
+      </Link>
+
+      <div className="mb-10">
+        <h1 className="text-3xl md:text-4xl font-bold text-[#171532] leading-tight">
+          Hey,<br />Welcome Back
+        </h1>
       </div>
 
-      <div className="flex-1 px-6 md:px-8 -mt-4">
-        <div className="max-w-md mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-[#171532] mb-2">Welcome Back</h1>
-            <p className="text-[#747384]">Login to your account</p>
+      <form onSubmit={handleLogin} className="space-y-4 flex-1">
+        <div className="relative">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]">
+            <Mail className="w-5 h-5" />
           </div>
+          <Input
+            type="text"
+            placeholder="Enter your email"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#4a6670]/30 focus:border-[#4a6670]"
+          />
+        </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7056B2]">
-                <User className="w-5 h-5" />
-              </div>
-              <Input
-                type="text"
-                placeholder="Full Name"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-                className="h-14 pl-12 bg-[#f4f0fa] border-0 rounded-xl text-[#171532] placeholder:text-[#A8A3C1] focus:ring-2 focus:ring-[#7056B2]/30"
-              />
+        <div className="relative">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]">
+            <Lock className="w-5 h-5" />
+          </div>
+          <Input
+            type={showPassword ? "text" : "password"}
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="h-14 pl-12 pr-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#4a6670]/30 focus:border-[#4a6670]"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-[#4a6670] transition-colors"
+          >
+            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+          </button>
+        </div>
+
+        <div className="flex justify-end py-1">
+          <button type="button" className="text-sm text-[#4a6670] font-medium hover:underline">
+            Forgot Password?
+          </button>
+        </div>
+
+        {error && (
+          <div className="text-sm text-red-600 bg-red-50 p-3 rounded-xl text-center">
+            {error}
+          </div>
+        )}
+      </form>
+
+      <div className="mt-auto pt-8 space-y-4">
+        <button
+          onClick={handleLogin}
+          disabled={isLoading}
+          className="w-full h-14 bg-[#4a6670] hover:bg-[#3d565e] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 disabled:opacity-70"
+        >
+          {isLoading ? "Logging in..." : "Login"}
+        </button>
+
+        <p className="text-center text-[#9ca3af] text-sm">Or Continue with</p>
+
+        <div className="flex justify-center gap-4">
+          <button className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm hover:shadow-md transition-all border border-[#e5e7eb]">
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#1877F2">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </button>
+          <button className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm hover:shadow-md transition-all border border-[#e5e7eb]">
+            <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115Z"/>
+              <path fill="#34A853" d="M16.04 18.013c-1.09.703-2.474 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.067A11.965 11.965 0 0 0 12 24c2.933 0 5.735-1.043 7.834-3l-3.793-2.987Z"/>
+              <path fill="#4A90E2" d="M19.834 21c2.195-2.048 3.62-5.096 3.62-9 0-.71-.109-1.473-.272-2.182H12v4.637h6.436c-.317 1.559-1.17 2.766-2.395 3.558L19.834 21Z"/>
+              <path fill="#FBBC05" d="M5.277 14.268A7.12 7.12 0 0 1 4.909 12c0-.782.125-1.533.357-2.235L1.24 6.65A11.934 11.934 0 0 0 0 12c0 1.92.445 3.73 1.237 5.335l4.04-3.067Z"/>
+            </svg>
+          </button>
+          <button className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm hover:shadow-md transition-all border border-[#e5e7eb]">
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#000000">
+              <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+            </svg>
+          </button>
+        </div>
+
+        <p className="text-center text-[#747384] text-sm pt-2">
+          Don't have an Account? <span className="text-[#4a6670] font-semibold cursor-pointer hover:underline">Sign-Up</span>
+        </p>
+
+        <div className="pt-4 border-t border-[#e5e7eb] mt-4">
+          <p className="text-center text-xs text-[#9ca3af] mb-2">Demo Credentials</p>
+          <div className="grid grid-cols-2 gap-3 text-xs">
+            <div className="bg-white p-3 rounded-xl text-center border border-[#e5e7eb]">
+              <p className="font-semibold text-[#4a6670]">Admin</p>
+              <p className="text-[#747384]">admin / 12345</p>
             </div>
-
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7056B2]">
-                <Lock className="w-5 h-5" />
-              </div>
-              <Input
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="h-14 pl-12 pr-12 bg-[#f4f0fa] border-0 rounded-xl text-[#171532] placeholder:text-[#A8A3C1] focus:ring-2 focus:ring-[#7056B2]/30"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#7056B2] hover:text-[#55389B] transition-colors"
-              >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
-            </div>
-
-            <div className="flex items-center justify-between py-2">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <div 
-                  onClick={() => setRememberMe(!rememberMe)}
-                  className={`w-5 h-5 rounded flex items-center justify-center transition-colors ${rememberMe ? 'bg-[#7056B2]' : 'bg-[#f4f0fa] border border-[#A8A3C1]'}`}
-                >
-                  {rememberMe && <Check className="w-3 h-3 text-white" />}
-                </div>
-                <span className="text-sm text-[#747384]">Remember Me</span>
-              </label>
-              <button type="button" className="text-sm text-[#7056B2] font-medium hover:underline">
-                Forgot Password ?
-              </button>
-            </div>
-
-            {error && (
-              <div className="text-sm text-red-600 bg-red-50 p-3 rounded-xl text-center">
-                {error}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full h-14 bg-gradient-to-r from-[#55389B] to-[#7056B2] hover:from-[#7056B2] hover:to-[#8462E1] text-white text-lg font-semibold rounded-full shadow-lg shadow-[#7056B2]/30 transition-all duration-300 disabled:opacity-70"
-            >
-              {isLoading ? "Logging in..." : "Login"}
-            </button>
-          </form>
-
-          <p className="text-center mt-6 text-[#747384]">
-            Don't have account? <span className="text-[#7056B2] font-semibold underline cursor-pointer">Sign up</span>
-          </p>
-
-          <div className="mt-8 pt-6 border-t border-[#e2e0ec]">
-            <p className="text-center text-xs text-[#A8A3C1] mb-3">Demo Credentials</p>
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="bg-[#f4f0fa] p-3 rounded-xl text-center">
-                <p className="font-semibold text-[#7056B2]">Admin</p>
-                <p className="text-[#747384]">admin / 12345</p>
-              </div>
-              <div className="bg-[#f4f0fa] p-3 rounded-xl text-center">
-                <p className="font-semibold text-[#D975BB]">User</p>
-                <p className="text-[#747384]">user / 12345</p>
-              </div>
+            <div className="bg-white p-3 rounded-xl text-center border border-[#e5e7eb]">
+              <p className="font-semibold text-[#7056B2]">User</p>
+              <p className="text-[#747384]">user / 12345</p>
             </div>
           </div>
         </div>
