@@ -10,7 +10,7 @@ export default function Home() {
         <nav className="flex items-center justify-between mb-16">
           <div className="flex items-center gap-2">
             <Wallet className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold">StudentBank</span>
+            <span className="text-2xl font-bold tracking-tight">JDSA STUDENTS BANK</span>
           </div>
           <Link href="/admin/login">
             <Button variant="outline">Admin Login</Button>
@@ -40,7 +40,7 @@ export default function Home() {
 
       {/* Features Section */}
       <section className="container mx-auto px-4 py-20">
-        <h2 className="text-3xl font-bold text-center mb-12">Why Choose StudentBank?</h2>
+        <h2 className="text-3xl font-bold text-center mb-12">Why Choose JDSA Students Bank?</h2>
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           <div className="bg-card rounded-lg p-8 border shadow-sm">
             <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
@@ -115,9 +115,9 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
               <Wallet className="h-6 w-6 text-primary" />
-              <span className="font-semibold">StudentBank</span>
+              <span className="font-semibold">JDSA Students Bank</span>
             </div>
-            <p className="text-sm text-muted-foreground">© 2025 StudentBank. All rights reserved.</p>
+            <p className="text-sm text-muted-foreground">© 2025 JDSA Students Bank. All rights reserved.</p>
           </div>
         </div>
       </footer>

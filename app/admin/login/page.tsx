@@ -33,14 +33,14 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4">
-      <Card className="w-full max-w-md shadow-xl">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f8f7fc] via-[#f4f3f8] to-[#e8e5f5] p-4">
+      <Card className="w-full max-w-md shadow-xl border-[#e2e0ec]">
         <CardHeader className="space-y-3 text-center">
-          <div className="mx-auto w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center">
+          <div className="mx-auto w-16 h-16 bg-gradient-to-br from-[#7056B2] to-[#55389B] rounded-2xl flex items-center justify-center">
             <Building2 className="w-8 h-8 text-white" />
           </div>
-          <CardTitle className="text-3xl font-bold">Student Bank System</CardTitle>
-          <CardDescription className="text-base">Admin Portal Login</CardDescription>
+          <CardTitle className="text-3xl font-bold text-[#171532]">JDSA Students Bank</CardTitle>
+          <CardDescription className="text-base text-[#747384]">Admin Portal Login</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-5">
