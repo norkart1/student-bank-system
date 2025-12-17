@@ -114,7 +114,7 @@ export default function AdminDashboard() {
             </div>
             <div>
               <p className="text-white/70 text-sm">Total Balance</p>
-              <p className="text-2xl font-bold text-white">${totalBalance.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-white">₹{totalBalance.toFixed(2)}</p>
             </div>
           </div>
           
@@ -126,7 +126,7 @@ export default function AdminDashboard() {
                 </div>
                 <p className="text-white/70 text-xs">Deposited</p>
               </div>
-              <p className="text-lg font-bold text-white">${totalDeposited.toFixed(2)}</p>
+              <p className="text-lg font-bold text-white">₹{totalDeposited.toFixed(2)}</p>
             </div>
             
             <div className="bg-white/10 rounded-xl p-3">
@@ -136,7 +136,7 @@ export default function AdminDashboard() {
                 </div>
                 <p className="text-white/70 text-xs">Withdrawn</p>
               </div>
-              <p className="text-lg font-bold text-white">${totalWithdrawn.toFixed(2)}</p>
+              <p className="text-lg font-bold text-white">₹{totalWithdrawn.toFixed(2)}</p>
             </div>
           </div>
         </div>
@@ -193,7 +193,7 @@ export default function AdminDashboard() {
                   {student.name.charAt(0)}
                 </div>
                 <p className="text-xs font-medium text-[#171532] text-center truncate w-full">{student.name.split(' ')[0]}</p>
-                <p className="text-[10px] text-[#10B981] text-center font-medium">${student.balance.toFixed(2)}</p>
+                <p className="text-[10px] text-[#10B981] text-center font-medium">₹{student.balance.toFixed(2)}</p>
               </div>
             ))}
           </div>

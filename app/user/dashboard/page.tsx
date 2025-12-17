@@ -65,7 +65,7 @@ export default function UserDashboard() {
         <Card className="mb-6 border-0 bg-gradient-to-br from-[#7056B2] to-[#55389B] text-white shadow-xl">
           <CardContent className="p-6">
             <p className="text-white/70 text-sm font-medium mb-1">Current Balance</p>
-            <p className="text-4xl font-bold">${userData.balance?.toFixed(2) || "0.00"}</p>
+            <p className="text-4xl font-bold">₹{userData.balance?.toFixed(2) || "0.00"}</p>
             <div className="flex gap-3 mt-6">
               <Button className="flex-1 bg-white/20 hover:bg-white/30 text-white border-0 gap-2">
                 <ArrowDownRight className="w-4 h-4" />
@@ -127,7 +127,7 @@ export default function UserDashboard() {
                       </div>
                     </div>
                     <p className={`font-semibold ${t.type === 'deposit' ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
-                      {t.type === 'deposit' ? '+' : '-'}${t.amount?.toFixed(2)}
+                      {t.type === 'deposit' ? '+' : '-'}₹{t.amount?.toFixed(2)}
                     </p>
                   </div>
                 ))}
