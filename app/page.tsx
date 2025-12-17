@@ -64,13 +64,10 @@ export default function Home() {
         </div>
 
         <div className="text-center mb-8 px-4">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#171532] mb-4 leading-tight">
-            Banking Made Simple<br />
-            <span className="text-[#7056B2]">For Students</span>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#171532] leading-tight">
+            JDSA<br />
+            <span className="text-[#7056B2]">Students Bank</span>
           </h1>
-          <p className="text-[#747384] text-base md:text-lg max-w-sm mx-auto">
-            Connect your student account and get access to easy deposits, withdrawals, and savings management.
-          </p>
         </div>
 
         <Link href="/login" className="w-full max-w-xs">
