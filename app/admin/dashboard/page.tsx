@@ -2,18 +2,13 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Users, DollarSign, TrendingUp, Activity, LogOut, Plus, Home, Trophy, BarChart3, Search, Bot } from "lucide-react"
-import { StudentList } from "@/components/student-list"
-import { AddStudentDialog } from "@/components/add-student-dialog"
+import { Home, Users, CreditCard, MoreHorizontal, Send, Receipt, Banknote, QrCode, Bell, Grid3X3 } from "lucide-react"
 
 export default function AdminDashboard() {
   const router = useRouter()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [students, setStudents] = useState<any[]>([])
-  const [showAddStudent, setShowAddStudent] = useState(false)
   const [activeTab, setActiveTab] = useState("home")
+  const [currentDate, setCurrentDate] = useState("")
 
   useEffect(() => {
     const auth = localStorage.getItem("isAdminAuthenticated")
@@ -22,208 +17,177 @@ export default function AdminDashboard() {
       router.push("/login")
     } else {
       setIsAuthenticated(true)
-      // Load students from localStorage
-      const savedStudents = localStorage.getItem("students")
-      if (savedStudents) {
-        setStudents(JSON.parse(savedStudents))
-      }
     }
+    
+    const now = new Date()
+    const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }
+    setCurrentDate(now.toLocaleDateString('en-US', options))
   }, [router])
-
-  const handleLogout = () => {
-    localStorage.removeItem("isAdminAuthenticated")
-    localStorage.removeItem("userRole")
-    router.push("/login")
-  }
-
-  const handleAddStudent = (student: any) => {
-    const newStudent = {
-      ...student,
-      id: Date.now().toString(),
-      balance: Number.parseFloat(student.balance) || 0,
-      transactions: [],
-    }
-    const updatedStudents = [...students, newStudent]
-    setStudents(updatedStudents)
-    localStorage.setItem("students", JSON.stringify(updatedStudents))
-    setShowAddStudent(false)
-  }
-
-  const handleUpdateStudent = (updatedStudent: any) => {
-    const updatedStudents = students.map((s) => (s.id === updatedStudent.id ? updatedStudent : s))
-    setStudents(updatedStudents)
-    localStorage.setItem("students", JSON.stringify(updatedStudents))
-  }
-
-  const handleDeleteStudent = (studentId: string) => {
-    const updatedStudents = students.filter((s) => s.id !== studentId)
-    setStudents(updatedStudents)
-    localStorage.setItem("students", JSON.stringify(updatedStudents))
-  }
 
   if (!isAuthenticated) {
     return null
   }
 
-  const totalStudents = students.length
-  const totalBalance = students.reduce((sum, s) => sum + s.balance, 0)
-  const totalTransactions = students.reduce((sum, s) => sum + (s.transactions?.length || 0), 0)
-  const averageBalance = totalStudents > 0 ? totalBalance / totalStudents : 0
+  const recentUsers = [
+    { name: "Jam Vana", account: "1234-0987-123", color: "bg-orange-100" },
+    { name: "Smart", account: "098-123-456", color: "bg-red-100" },
+    { name: "Sovannaphum", account: "123-123-456", color: "bg-yellow-100" },
+    { name: "Smart", account: "098-123-456", color: "bg-red-100" },
+  ]
 
   return (
-    <div className="min-h-screen bg-[#f8f7fc] pb-24">
-      {/* Header */}
-      <header className="bg-white border-b border-[#e2e0ec] sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#7056B2] to-[#55389B] rounded-xl flex items-center justify-center">
-                <Activity className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-[#171532]">JDSA Students Bank</h1>
-                <p className="text-sm text-[#747384]">Admin Dashboard</p>
-              </div>
+    <div className="min-h-screen bg-white pb-24">
+      <div className="px-5 pt-6">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#4a6670] to-[#3d565e] flex items-center justify-center text-white font-bold text-lg">
+              A
             </div>
-            <Button variant="outline" onClick={handleLogout} className="gap-2 bg-transparent">
-              <LogOut className="w-4 h-4" />
-              Logout
-            </Button>
+            <div>
+              <h1 className="text-xl font-bold text-[#171532]">Morning, Admin!</h1>
+              <p className="text-xs text-[#747384]">{currentDate}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <button className="w-10 h-10 bg-[#f0f0f0] rounded-lg flex items-center justify-center">
+              <Bell className="w-5 h-5 text-[#4a6670]" />
+            </button>
           </div>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Total Students</CardTitle>
-              <Users className="w-5 h-5 text-[#7056B2]" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-gray-900">{totalStudents}</div>
-              <p className="text-xs text-gray-500 mt-1">Active accounts</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Total Balance</CardTitle>
-              <DollarSign className="w-5 h-5 text-[#D975BB]" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-gray-900">${totalBalance.toFixed(2)}</div>
-              <p className="text-xs text-gray-500 mt-1">Across all accounts</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Transactions</CardTitle>
-              <TrendingUp className="w-5 h-5 text-[#8462E1]" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-gray-900">{totalTransactions}</div>
-              <p className="text-xs text-gray-500 mt-1">Total processed</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Average Balance</CardTitle>
-              <Activity className="w-5 h-5 text-[#55389B]" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-gray-900">${averageBalance.toFixed(2)}</div>
-              <p className="text-xs text-gray-500 mt-1">Per student</p>
-            </CardContent>
-          </Card>
+        <div className="bg-white rounded-2xl border border-[#e5e7eb] p-4 mb-6 shadow-sm">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <p className="text-sm text-[#747384]">Account Name</p>
+                <div className="w-4 h-4 rounded-full bg-[#e5e7eb] flex items-center justify-center">
+                  <span className="text-[8px]">●</span>
+                </div>
+              </div>
+              <p className="text-sm font-medium text-[#171532] mb-3">1234-5678-90</p>
+              <div className="inline-block px-3 py-1 bg-[#4a6670] rounded-full">
+                <span className="text-xs text-white font-medium">Primary</span>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="w-14 h-14 bg-[#e8f5f2] rounded-xl flex items-center justify-center mb-2">
+                <svg className="w-8 h-8 text-[#4a6670]" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L2 7v2h20V7L12 2zm0 2.5L18.5 7h-13L12 4.5zM4 10v9h3v-7h2v7h2v-7h2v7h2v-7h2v7h3v-9H4zm-2 11v2h20v-2H2z"/>
+                </svg>
+              </div>
+              <p className="text-xs text-[#747384]">Available Balance</p>
+              <p className="text-2xl font-bold text-[#171532]">$2,749.00</p>
+            </div>
+          </div>
         </div>
 
-        {/* Students Section */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle>Student Accounts</CardTitle>
-                <CardDescription>Manage student bank accounts and transactions</CardDescription>
-              </div>
-              <Button onClick={() => setShowAddStudent(true)} className="gap-2">
-                <Plus className="w-4 h-4" />
-                Add Student
-              </Button>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold text-[#171532]">Services</h2>
+          <button className="text-[#747384]">
+            <Grid3X3 className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <button className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all">
+            <div className="w-12 h-12 bg-[#e8f5f2] rounded-xl flex items-center justify-center mb-3">
+              <Send className="w-6 h-6 text-[#4a6670]" />
             </div>
-          </CardHeader>
-          <CardContent>
-            <StudentList
-              students={students}
-              onUpdateStudent={handleUpdateStudent}
-              onDeleteStudent={handleDeleteStudent}
-            />
-          </CardContent>
-        </Card>
-      </main>
+            <span className="text-sm font-medium text-[#171532]">Transfer</span>
+          </button>
+          
+          <button className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all">
+            <div className="w-12 h-12 bg-[#e8f5f2] rounded-xl flex items-center justify-center mb-3">
+              <Receipt className="w-6 h-6 text-[#4a6670]" />
+            </div>
+            <span className="text-sm font-medium text-[#171532]">Payment</span>
+          </button>
+          
+          <button className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all">
+            <div className="w-12 h-12 bg-[#e8f5f2] rounded-xl flex items-center justify-center mb-3">
+              <Banknote className="w-6 h-6 text-[#4a6670]" />
+            </div>
+            <span className="text-sm font-medium text-[#171532]">Withdraw</span>
+          </button>
+          
+          <button className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all">
+            <div className="w-12 h-12 bg-[#e8f5f2] rounded-xl flex items-center justify-center mb-3">
+              <QrCode className="w-6 h-6 text-[#4a6670]" />
+            </div>
+            <span className="text-sm font-medium text-[#171532]">Scan Pay</span>
+          </button>
+        </div>
 
-      <AddStudentDialog open={showAddStudent} onOpenChange={setShowAddStudent} onAddStudent={handleAddStudent} />
+        <div className="flex items-center gap-2 justify-center mb-6">
+          <div className="w-2 h-2 rounded-full bg-[#c9c9ce]"></div>
+          <div className="w-6 h-2 rounded-full bg-[#4a6670]"></div>
+          <div className="w-2 h-2 rounded-full bg-[#c9c9ce]"></div>
+        </div>
 
-      {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 px-4 pb-4 z-20">
-        <div className="max-w-md mx-auto bg-gradient-to-r from-[#e8f4f8] to-[#d4eef5] rounded-2xl px-4 py-3 flex items-center justify-between shadow-lg">
+        <div className="mb-4">
+          <h2 className="text-lg font-bold text-[#171532] mb-4">Recent</h2>
+          <div className="flex gap-4 overflow-x-auto pb-2">
+            {recentUsers.map((user, index) => (
+              <div key={index} className="flex flex-col items-center min-w-[70px]">
+                <div className={`w-14 h-14 rounded-full ${user.color} flex items-center justify-center mb-2 text-lg font-bold text-[#4a6670]`}>
+                  {user.name.charAt(0)}
+                </div>
+                <p className="text-xs font-medium text-[#171532] text-center truncate w-full">{user.name}</p>
+                <p className="text-[10px] text-[#747384] text-center">{user.account}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 px-4 pb-4 z-20 bg-gradient-to-t from-white via-white to-transparent pt-4">
+        <div className="max-w-md mx-auto bg-gradient-to-r from-[#e8f4f8] to-[#d4eef5] rounded-2xl px-6 py-3 flex items-center justify-between shadow-lg">
           <button
             onClick={() => setActiveTab("home")}
-            className={`p-3 rounded-xl transition-all ${
+            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${
               activeTab === "home"
-                ? "bg-[#c17f59] text-white shadow-md"
-                : "text-[#4a6670] hover:bg-white/50"
+                ? "bg-[#c17f59] text-white shadow-md px-4"
+                : "text-[#4a6670]"
             }`}
           >
-            <Home className="w-6 h-6" />
+            <Home className="w-5 h-5" />
+            <span className="text-[10px] font-medium">Home</span>
           </button>
           
           <button
-            onClick={() => setActiveTab("rewards")}
-            className={`p-3 rounded-xl transition-all ${
-              activeTab === "rewards"
-                ? "bg-[#c17f59] text-white shadow-md"
-                : "text-[#4a6670] hover:bg-white/50"
+            onClick={() => setActiveTab("accounts")}
+            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${
+              activeTab === "accounts"
+                ? "bg-[#c17f59] text-white shadow-md px-4"
+                : "text-[#4a6670]"
             }`}
           >
-            <Trophy className="w-6 h-6" />
+            <Users className="w-5 h-5" />
+            <span className="text-[10px] font-medium">Accounts</span>
           </button>
           
           <button
-            onClick={() => setActiveTab("stats")}
-            className={`p-3 rounded-xl transition-all ${
-              activeTab === "stats"
-                ? "bg-[#c17f59] text-white shadow-md"
-                : "text-[#4a6670] hover:bg-white/50"
+            onClick={() => setActiveTab("cards")}
+            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${
+              activeTab === "cards"
+                ? "bg-[#c17f59] text-white shadow-md px-4"
+                : "text-[#4a6670]"
             }`}
           >
-            <BarChart3 className="w-6 h-6" />
+            <CreditCard className="w-5 h-5" />
+            <span className="text-[10px] font-medium">Cards</span>
           </button>
           
           <button
-            onClick={() => setActiveTab("search")}
-            className={`p-3 rounded-xl transition-all ${
-              activeTab === "search"
-                ? "bg-[#c17f59] text-white shadow-md"
-                : "text-[#4a6670] hover:bg-white/50"
+            onClick={() => setActiveTab("more")}
+            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${
+              activeTab === "more"
+                ? "bg-[#c17f59] text-white shadow-md px-4"
+                : "text-[#4a6670]"
             }`}
           >
-            <Search className="w-6 h-6" />
-          </button>
-          
-          <button
-            onClick={() => setActiveTab("bot")}
-            className={`p-3 rounded-xl transition-all ${
-              activeTab === "bot"
-                ? "bg-[#c17f59] text-white shadow-md"
-                : "text-[#4a6670] hover:bg-white/50"
-            }`}
-          >
-            <Bot className="w-6 h-6" />
+            <MoreHorizontal className="w-5 h-5" />
+            <span className="text-[10px] font-medium">More</span>
           </button>
         </div>
       </div>
