@@ -261,85 +261,85 @@ export default function AdminDashboard() {
       </div>
 
       {showCreateForm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between p-4 border-b border-[#e5e7eb]">
-              <h3 className="text-lg font-bold text-[#171532]">Create Account</h3>
-              <button onClick={() => setShowCreateForm(false)} className="text-[#747384]">
-                <X className="w-5 h-5" />
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end sm:items-center justify-center z-50">
+          <div className="bg-white rounded-t-3xl sm:rounded-2xl w-full sm:max-w-md max-h-[85vh] overflow-y-auto shadow-2xl animate-in slide-in-from-bottom duration-300">
+            <div className="sticky top-0 bg-white flex items-center justify-between px-6 py-5 border-b border-[#f0f0f0]">
+              <h3 className="text-xl font-bold text-[#171532]">Create Account</h3>
+              <button onClick={() => setShowCreateForm(false)} className="w-8 h-8 flex items-center justify-center rounded-full bg-[#f5f5f5] text-[#747384] hover:bg-[#e5e5e5] transition-colors">
+                <X className="w-4 h-4" />
               </button>
             </div>
             
-            <div className="p-4 space-y-4">
-              <div className="flex justify-center mb-4">
+            <div className="px-6 py-6 space-y-5">
+              <div className="flex justify-center pb-2">
                 <div className="relative">
-                  <div className="w-20 h-20 bg-[#e8f5f2] rounded-full flex items-center justify-center">
-                    <Camera className="w-8 h-8 text-[#4a6670]" />
+                  <div className="w-24 h-24 bg-gradient-to-br from-[#e8f5f2] to-[#d4eef5] rounded-full flex items-center justify-center shadow-inner">
+                    <Camera className="w-10 h-10 text-[#4a6670]" />
                   </div>
-                  <button className="absolute bottom-0 right-0 w-6 h-6 bg-[#4a6670] rounded-full flex items-center justify-center">
+                  <button className="absolute bottom-1 right-1 w-7 h-7 bg-[#4a6670] rounded-full flex items-center justify-center shadow-lg hover:bg-[#3d565e] transition-colors">
                     <Plus className="w-4 h-4 text-white" />
                   </button>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#171532] mb-1">Full Name *</label>
+                <label className="block text-sm font-semibold text-[#171532] mb-2">Full Name <span className="text-red-400">*</span></label>
                 <input
                   type="text"
                   value={newStudent.name}
                   onChange={(e) => setNewStudent({...newStudent, name: e.target.value})}
-                  className="w-full px-4 py-3 border border-[#e5e7eb] rounded-xl focus:outline-none focus:border-[#4a6670]"
+                  className="w-full px-4 py-3.5 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:bg-white focus:ring-2 focus:ring-[#4a6670]/10 transition-all text-[#171532] placeholder:text-[#a0a0a0]"
                   placeholder="Enter full name"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#171532] mb-1">Mobile Number *</label>
+                <label className="block text-sm font-semibold text-[#171532] mb-2">Mobile Number <span className="text-red-400">*</span></label>
                 <input
                   type="tel"
                   value={newStudent.mobile}
                   onChange={(e) => setNewStudent({...newStudent, mobile: e.target.value})}
-                  className="w-full px-4 py-3 border border-[#e5e7eb] rounded-xl focus:outline-none focus:border-[#4a6670]"
+                  className="w-full px-4 py-3.5 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:bg-white focus:ring-2 focus:ring-[#4a6670]/10 transition-all text-[#171532] placeholder:text-[#a0a0a0]"
                   placeholder="Enter mobile number"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#171532] mb-1">Email ID *</label>
+                <label className="block text-sm font-semibold text-[#171532] mb-2">Email ID <span className="text-red-400">*</span></label>
                 <input
                   type="email"
                   value={newStudent.email}
                   onChange={(e) => setNewStudent({...newStudent, email: e.target.value})}
-                  className="w-full px-4 py-3 border border-[#e5e7eb] rounded-xl focus:outline-none focus:border-[#4a6670]"
+                  className="w-full px-4 py-3.5 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:bg-white focus:ring-2 focus:ring-[#4a6670]/10 transition-all text-[#171532] placeholder:text-[#a0a0a0]"
                   placeholder="Enter email address"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#171532] mb-1">Username *</label>
+                <label className="block text-sm font-semibold text-[#171532] mb-2">Username <span className="text-red-400">*</span></label>
                 <input
                   type="text"
                   value={newStudent.username}
                   onChange={(e) => setNewStudent({...newStudent, username: e.target.value})}
-                  className="w-full px-4 py-3 border border-[#e5e7eb] rounded-xl focus:outline-none focus:border-[#4a6670]"
+                  className="w-full px-4 py-3.5 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:bg-white focus:ring-2 focus:ring-[#4a6670]/10 transition-all text-[#171532] placeholder:text-[#a0a0a0]"
                   placeholder="Enter username"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#171532] mb-1">Password *</label>
+                <label className="block text-sm font-semibold text-[#171532] mb-2">Password <span className="text-red-400">*</span></label>
                 <input
                   type="password"
                   value={newStudent.password}
                   onChange={(e) => setNewStudent({...newStudent, password: e.target.value})}
-                  className="w-full px-4 py-3 border border-[#e5e7eb] rounded-xl focus:outline-none focus:border-[#4a6670]"
+                  className="w-full px-4 py-3.5 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:bg-white focus:ring-2 focus:ring-[#4a6670]/10 transition-all text-[#171532] placeholder:text-[#a0a0a0]"
                   placeholder="Enter password"
                 />
               </div>
 
               <button
                 onClick={handleCreateAccount}
-                className="w-full bg-[#4a6670] text-white py-3 rounded-xl font-medium hover:bg-[#3d565e] transition-all"
+                className="w-full bg-[#4a6670] text-white py-4 rounded-xl font-semibold hover:bg-[#3d565e] transition-all shadow-lg shadow-[#4a6670]/20 mt-2"
               >
                 Create Account
               </button>
