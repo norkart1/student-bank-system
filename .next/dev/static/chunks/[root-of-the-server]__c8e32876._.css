@@ -810,10 +810,6 @@
     height: calc(100% - 1px);
   }
 
-  .h-auto {
-    height: auto;
-  }
-
   .max-h-48 {
     max-height: calc(var(--spacing) * 48);
   }
@@ -852,10 +848,6 @@
 
   .w-14 {
     width: calc(var(--spacing) * 14);
-  }
-
-  .w-auto {
-    width: auto;
   }
 
   .w-fit {
@@ -1321,10 +1313,6 @@
   .to-transparent {
     --tw-gradient-to: transparent;
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-  }
-
-  .object-contain {
-    object-fit: contain;
   }
 
   .p-2 {

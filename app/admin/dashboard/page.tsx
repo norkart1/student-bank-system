@@ -151,23 +151,23 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-2 gap-4 mb-6">
           <button className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all">
             <div className="w-12 h-12 bg-[#e8f5f2] rounded-xl flex items-center justify-center mb-3">
+              <ArrowDownRight className="w-6 h-6 text-[#10B981]" />
+            </div>
+            <span className="text-sm font-medium text-[#171532]">Deposit</span>
+          </button>
+          
+          <button className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all">
+            <div className="w-12 h-12 bg-[#e8f5f2] rounded-xl flex items-center justify-center mb-3">
+              <ArrowUpRight className="w-6 h-6 text-[#EF4444]" />
+            </div>
+            <span className="text-sm font-medium text-[#171532]">Withdraw</span>
+          </button>
+          
+          <button className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all">
+            <div className="w-12 h-12 bg-[#e8f5f2] rounded-xl flex items-center justify-center mb-3">
               <Send className="w-6 h-6 text-[#4a6670]" />
             </div>
             <span className="text-sm font-medium text-[#171532]">Transfer</span>
-          </button>
-          
-          <button className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all">
-            <div className="w-12 h-12 bg-[#e8f5f2] rounded-xl flex items-center justify-center mb-3">
-              <Receipt className="w-6 h-6 text-[#4a6670]" />
-            </div>
-            <span className="text-sm font-medium text-[#171532]">Payment</span>
-          </button>
-          
-          <button className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all">
-            <div className="w-12 h-12 bg-[#e8f5f2] rounded-xl flex items-center justify-center mb-3">
-              <Banknote className="w-6 h-6 text-[#4a6670]" />
-            </div>
-            <span className="text-sm font-medium text-[#171532]">Withdraw</span>
           </button>
           
           <button className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all">

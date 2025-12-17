@@ -26,7 +26,10 @@ function Home() {
                         alt: "Students",
                         width: 320,
                         height: 320,
-                        className: "object-contain w-auto h-auto",
+                        style: {
+                            width: 'auto',
+                            height: 'auto'
+                        },
                         priority: true
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
