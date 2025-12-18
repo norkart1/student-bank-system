@@ -598,15 +598,15 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            <div className="space-y-3">
-              <div className="bg-white border border-[#e5e7eb] rounded-2xl p-4">
-                <p className="text-xs font-semibold text-[#747384] mb-2">Admin Name</p>
-                <p className="text-lg font-bold text-[#171532]">{adminName}</p>
+            <div className="space-y-2 bg-white border border-[#e5e7eb] rounded-2xl p-3">
+              <div>
+                <p className="text-xs font-semibold text-[#747384] mb-1">Admin Name</p>
+                <p className="text-sm font-bold text-[#171532]">{adminName}</p>
               </div>
 
-              <div className="bg-white border border-[#e5e7eb] rounded-2xl p-4">
-                <p className="text-xs font-semibold text-[#747384] mb-2">Username</p>
-                <p className="text-lg font-bold text-[#171532]">@{adminUsername}</p>
+              <div className="pt-2 border-t border-[#e5e7eb]">
+                <p className="text-xs font-semibold text-[#747384] mb-1">Username</p>
+                <p className="text-sm font-bold text-[#171532]">@{adminUsername}</p>
               </div>
             </div>
 
