@@ -316,25 +316,6 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-white pb-24">
       <div className="px-5 pt-6">
-        {activeTab !== "home" && (
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#4a6670] to-[#3d565e] flex items-center justify-center text-white font-bold text-lg">
-                A
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-[#171532]">Admin Dashboard</h1>
-                <p className="text-xs text-[#747384]">{currentDate}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <button className="w-10 h-10 bg-[#f0f0f0] rounded-lg flex items-center justify-center">
-                <Bell className="w-5 h-5 text-[#4a6670]" />
-              </button>
-            </div>
-          </div>
-        )}
-
         {activeTab === "home" && renderHomeTab()}
         {activeTab === "accounts" && renderAccountsTab()}
         {activeTab === "cards" && (
