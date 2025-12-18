@@ -565,10 +565,6 @@
     margin-top: calc(var(--spacing) * 6);
   }
 
-  .mr-3 {
-    margin-right: calc(var(--spacing) * 3);
-  }
-
   .mr-4 {
     margin-right: calc(var(--spacing) * 4);
   }
@@ -1808,6 +1804,12 @@
   }
 
   @media (hover: hover) {
+    .hover\:border-\[\#4a6670\]:hover {
+      border-color: #4a6670;
+    }
+  }
+
+  @media (hover: hover) {
     .hover\:border-\[\#7056B2\]:hover {
       border-color: #7056b2;
     }
@@ -1954,6 +1956,13 @@
   @media (hover: hover) {
     .hover\:opacity-100:hover {
       opacity: 1;
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:shadow-md:hover {
+      --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, #0000001a), 0 2px 4px -2px var(--tw-shadow-color, #0000001a);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
   }
 

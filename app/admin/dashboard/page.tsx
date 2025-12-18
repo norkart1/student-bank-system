@@ -43,6 +43,7 @@ export default function AdminDashboard() {
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [showEditForm, setShowEditForm] = useState(false)
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
+  const [viewingIndex, setViewingIndex] = useState<number | null>(null)
   const [newStudent, setNewStudent] = useState({
     name: "",
     mobile: "",
@@ -298,6 +299,77 @@ export default function AdminDashboard() {
     )
   }
 
+  const renderAccountDetailView = () => {
+    if (viewingIndex === null) return null
+    const student = students[viewingIndex]
+    return (
+      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end sm:items-center justify-center z-50">
+        <div className="bg-white rounded-t-3xl sm:rounded-2xl w-full sm:max-w-md max-h-[85vh] overflow-y-auto shadow-2xl animate-in slide-in-from-bottom duration-300">
+          <div className="sticky top-0 bg-white flex items-center justify-between px-6 py-5 border-b border-[#f0f0f0]">
+            <h3 className="text-xl font-bold text-[#171532]">Account Details</h3>
+            <button onClick={() => setViewingIndex(null)} className="w-8 h-8 flex items-center justify-center rounded-full bg-[#f5f5f5] text-[#747384] hover:bg-[#e5e5e5] transition-colors">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          
+          <div className="px-6 py-6 space-y-5">
+            <div className="flex justify-center pb-4">
+              <div className={`w-24 h-24 rounded-full ${avatarColors[viewingIndex % avatarColors.length]} flex items-center justify-center text-3xl font-bold text-[#4a6670]`}>
+                {student.name.charAt(0)}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-[#747384] mb-1">Full Name</label>
+                <p className="text-lg font-semibold text-[#171532]">{student.name}</p>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-[#747384] mb-1">Username</label>
+                <p className="text-lg font-semibold text-[#171532]">@{student.username || 'N/A'}</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-[#747384] mb-1">Balance</label>
+                  <p className="text-lg font-bold text-[#10B981]">₹{student.balance.toFixed(2)}</p>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-[#747384] mb-1">Transactions</label>
+                  <p className="text-lg font-semibold text-[#171532]">{student.transactions.length}</p>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-6 border-t border-[#e5e7eb]">
+                <button
+                  onClick={() => {
+                    setViewingIndex(null)
+                    handleEditAccount(viewingIndex)
+                  }}
+                  className="flex-1 flex items-center justify-center gap-2 bg-blue-100 text-blue-600 py-3 rounded-xl font-semibold hover:bg-blue-200 transition-colors"
+                >
+                  <Edit className="w-4 h-4" />
+                  Edit
+                </button>
+                <button
+                  onClick={() => {
+                    setViewingIndex(null)
+                    handleDeleteAccount(viewingIndex)
+                  }}
+                  className="flex-1 flex items-center justify-center gap-2 bg-red-100 text-red-600 py-3 rounded-xl font-semibold hover:bg-red-200 transition-colors"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   const renderAccountsTab = () => (
     <>
       <div className="flex items-center justify-between mb-4">
@@ -313,7 +385,11 @@ export default function AdminDashboard() {
 
       <div className="space-y-3 mb-6">
         {students.map((student, index) => (
-          <div key={index} className="bg-white border border-[#e5e7eb] rounded-xl p-4 shadow-sm">
+          <div 
+            key={index} 
+            onClick={() => setViewingIndex(index)}
+            className="bg-white border border-[#e5e7eb] rounded-xl p-4 shadow-sm cursor-pointer hover:shadow-md hover:border-[#4a6670] transition-all"
+          >
             <div className="flex items-center gap-3">
               <div className={`w-12 h-12 rounded-full ${avatarColors[index % avatarColors.length]} flex items-center justify-center text-lg font-bold text-[#4a6670]`}>
                 {student.name.charAt(0)}
@@ -323,30 +399,16 @@ export default function AdminDashboard() {
                 <p className="text-xs text-[#747384]">{student.mobile || 'No mobile'}</p>
                 <p className="text-xs text-[#747384]">{student.email || 'No email'}</p>
               </div>
-              <div className="text-right mr-3">
+              <div className="text-right">
                 <p className="text-lg font-bold text-[#10B981]">₹{student.balance.toFixed(2)}</p>
                 <p className="text-xs text-[#747384]">@{student.username || 'no_username'}</p>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleEditAccount(index)}
-                  className="p-2 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors"
-                  title="Edit account"
-                >
-                  <Edit className="w-4 h-4 text-blue-600" />
-                </button>
-                <button
-                  onClick={() => handleDeleteAccount(index)}
-                  className="p-2 bg-red-100 rounded-lg hover:bg-red-200 transition-colors"
-                  title="Delete account"
-                >
-                  <Trash2 className="w-4 h-4 text-red-600" />
-                </button>
               </div>
             </div>
           </div>
         ))}
       </div>
+
+      {viewingIndex !== null && renderAccountDetailView()}
 
       {(showCreateForm || showEditForm) && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end sm:items-center justify-center z-50">
