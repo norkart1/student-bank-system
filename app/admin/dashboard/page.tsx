@@ -44,6 +44,8 @@ export default function AdminDashboard() {
   const [showEditForm, setShowEditForm] = useState(false)
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
   const [viewingIndex, setViewingIndex] = useState<number | null>(null)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deletingIndex, setDeletingIndex] = useState<number | null>(null)
   const [newStudent, setNewStudent] = useState({
     name: "",
     mobile: "",
@@ -97,12 +99,25 @@ export default function AdminDashboard() {
   }
 
   const handleDeleteAccount = (index: number) => {
-    if (confirm(`Are you sure you want to delete ${students[index].name}?`)) {
-      const updatedStudents = students.filter((_, i) => i !== index)
+    setDeletingIndex(index)
+    setShowDeleteConfirm(true)
+  }
+
+  const confirmDeleteAccount = () => {
+    if (deletingIndex !== null) {
+      const updatedStudents = students.filter((_, i) => i !== deletingIndex)
       setStudents(updatedStudents)
       localStorage.setItem("students", JSON.stringify(updatedStudents))
       calculateTotals(updatedStudents)
+      setShowDeleteConfirm(false)
+      setDeletingIndex(null)
+      setViewingIndex(null)
     }
+  }
+
+  const cancelDeleteAccount = () => {
+    setShowDeleteConfirm(false)
+    setDeletingIndex(null)
   }
 
   const calculateTotals = (studentList: Student[]) => {
@@ -177,6 +192,44 @@ export default function AdminDashboard() {
     
     setNewStudent({ name: "", mobile: "", email: "", username: "", password: "", profileImage: "" })
     setShowCreateForm(false)
+  }
+
+  const renderDeleteConfirmModal = () => {
+    if (!showDeleteConfirm || deletingIndex === null) return null
+    const studentName = students[deletingIndex]?.name
+    return (
+      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[100]">
+        <div className="bg-white rounded-2xl w-full max-w-sm mx-4 shadow-2xl animate-in scale-in duration-200">
+          <div className="px-6 py-6 space-y-4">
+            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 mx-auto">
+              <Trash2 className="w-6 h-6 text-red-600" />
+            </div>
+            
+            <div className="text-center">
+              <h3 className="text-xl font-bold text-[#171532] mb-2">Delete Account</h3>
+              <p className="text-sm text-[#747384]">
+                Are you sure you want to delete <span className="font-semibold text-[#171532]">{studentName}</span>? This action cannot be undone.
+              </p>
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <button
+                onClick={cancelDeleteAccount}
+                className="flex-1 py-3 rounded-xl font-semibold text-[#171532] bg-[#f0f0f0] hover:bg-[#e5e5e5] transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeleteAccount}
+                className="flex-1 py-3 rounded-xl font-semibold text-white bg-red-600 hover:bg-red-700 transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   if (!isAuthenticated) {
@@ -401,6 +454,7 @@ export default function AdminDashboard() {
       </div>
 
       {viewingIndex !== null && renderAccountDetailView()}
+      {showDeleteConfirm && renderDeleteConfirmModal()}
 
       {(showCreateForm || showEditForm) && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end sm:items-center justify-center z-50">
