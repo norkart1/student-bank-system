@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info } from "lucide-react"
+import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft } from "lucide-react"
 
 interface Transaction {
   type: string
@@ -334,13 +334,17 @@ export default function AdminDashboard() {
           </div>
           <span className="text-sm font-medium text-[#171532]">Chats</span>
         </button>
-        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+        <button 
+          onClick={() => setActiveTab("accounts")}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
             <Users className="w-5 h-5 text-white" />
           </div>
           <span className="text-sm font-medium text-[#171532]">Accounts</span>
         </button>
-        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+        <button 
+          onClick={() => setActiveTab("leaderboard")}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
             <Trophy className="w-5 h-5 text-white" />
           </div>
@@ -354,10 +358,15 @@ export default function AdminDashboard() {
     const sortedStudents = [...students].sort((a, b) => (b.balance || 0) - (a.balance || 0))
     return (
       <>
-        <h2 className="text-lg font-bold text-[#171532] mb-4 flex items-center gap-2">
-          <Trophy className="w-5 h-5 text-[#c17f59]" />
-          Top Richest Students
-        </h2>
+        <div className="flex items-center gap-3 mb-4">
+          <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
+            <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+          </button>
+          <h2 className="text-lg font-bold text-[#171532] flex items-center gap-2">
+            <Trophy className="w-5 h-5 text-[#c17f59]" />
+            Top Richest Students
+          </h2>
+        </div>
         <div className="space-y-3">
           {sortedStudents.map((student, index) => (
             <div key={index} className={`p-4 rounded-xl flex items-center gap-3 ${
@@ -461,7 +470,12 @@ export default function AdminDashboard() {
   const renderAccountsTab = () => (
     <>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-[#171532]">All Accounts</h2>
+        <div className="flex items-center gap-3">
+          <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
+            <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+          </button>
+          <h2 className="text-lg font-bold text-[#171532]">All Accounts</h2>
+        </div>
         <button 
           onClick={() => setShowCreateForm(true)}
           className="flex items-center gap-2 bg-[#4a6670] text-white px-4 py-2 rounded-xl text-sm font-medium"

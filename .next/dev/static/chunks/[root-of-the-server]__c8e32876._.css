@@ -2059,6 +2059,12 @@
   }
 
   @media (hover: hover) {
+    .hover\:bg-\[\#f0f0f0\]:hover {
+      background-color: #f0f0f0;
+    }
+  }
+
+  @media (hover: hover) {
     .hover\:bg-\[\#f8f9fa\]:hover {
       background-color: #f8f9fa;
     }
