@@ -165,64 +165,6 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
-
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-[#171532]">Services</h2>
-        <button className="text-[#747384]">
-          <Grid3X3 className="w-5 h-5" />
-        </button>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all">
-          <div className="w-12 h-12 bg-[#e8f5f2] rounded-xl flex items-center justify-center mb-3">
-            <ArrowDownRight className="w-6 h-6 text-[#10B981]" />
-          </div>
-          <span className="text-sm font-medium text-[#171532]">Deposit</span>
-        </button>
-        
-        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all">
-          <div className="w-12 h-12 bg-[#e8f5f2] rounded-xl flex items-center justify-center mb-3">
-            <ArrowUpRight className="w-6 h-6 text-[#EF4444]" />
-          </div>
-          <span className="text-sm font-medium text-[#171532]">Withdraw</span>
-        </button>
-        
-        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all">
-          <div className="w-12 h-12 bg-[#e8f5f2] rounded-xl flex items-center justify-center mb-3">
-            <Send className="w-6 h-6 text-[#4a6670]" />
-          </div>
-          <span className="text-sm font-medium text-[#171532]">Transfer</span>
-        </button>
-        
-        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all">
-          <div className="w-12 h-12 bg-[#e8f5f2] rounded-xl flex items-center justify-center mb-3">
-            <QrCode className="w-6 h-6 text-[#4a6670]" />
-          </div>
-          <span className="text-sm font-medium text-[#171532]">Scan Pay</span>
-        </button>
-      </div>
-
-      <div className="flex items-center gap-2 justify-center mb-6">
-        <div className="w-2 h-2 rounded-full bg-[#c9c9ce]"></div>
-        <div className="w-6 h-2 rounded-full bg-[#4a6670]"></div>
-        <div className="w-2 h-2 rounded-full bg-[#c9c9ce]"></div>
-      </div>
-
-      <div className="mb-4">
-        <h2 className="text-lg font-bold text-[#171532] mb-4">Accounts</h2>
-        <div className="flex gap-4 overflow-x-auto pb-2">
-          {students.slice(0, 5).map((student, index) => (
-            <div key={index} className="flex flex-col items-center min-w-[80px]">
-              <div className={`w-14 h-14 rounded-full ${avatarColors[index % avatarColors.length]} flex items-center justify-center mb-2 text-lg font-bold text-[#4a6670]`}>
-                {student.name.charAt(0)}
-              </div>
-              <p className="text-xs font-medium text-[#171532] text-center truncate w-full">{student.name.split(' ')[0]}</p>
-              <p className="text-[10px] text-[#10B981] text-center font-medium">₹{student.balance.toFixed(2)}</p>
-            </div>
-          ))}
-        </div>
-      </div>
     </>
   )
 
@@ -390,7 +332,7 @@ export default function AdminDashboard() {
         <div className="max-w-md mx-auto bg-gradient-to-r from-[#e8f4f8] to-[#d4eef5] rounded-2xl px-6 py-3 flex items-center justify-between shadow-lg">
           <button
             onClick={() => setActiveTab("home")}
-            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${
+            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 ${
               activeTab === "home"
                 ? "bg-[#c17f59] text-white shadow-md px-4"
                 : "text-[#4a6670]"
@@ -402,7 +344,7 @@ export default function AdminDashboard() {
           
           <button
             onClick={() => setActiveTab("accounts")}
-            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${
+            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 ${
               activeTab === "accounts"
                 ? "bg-[#c17f59] text-white shadow-md px-4"
                 : "text-[#4a6670]"
@@ -410,30 +352,6 @@ export default function AdminDashboard() {
           >
             <Users className="w-5 h-5" />
             <span className="text-[10px] font-medium">Accounts</span>
-          </button>
-          
-          <button
-            onClick={() => setActiveTab("cards")}
-            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${
-              activeTab === "cards"
-                ? "bg-[#c17f59] text-white shadow-md px-4"
-                : "text-[#4a6670]"
-            }`}
-          >
-            <CreditCard className="w-5 h-5" />
-            <span className="text-[10px] font-medium">Cards</span>
-          </button>
-          
-          <button
-            onClick={() => setActiveTab("more")}
-            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${
-              activeTab === "more"
-                ? "bg-[#c17f59] text-white shadow-md px-4"
-                : "text-[#4a6670]"
-            }`}
-          >
-            <MoreHorizontal className="w-5 h-5" />
-            <span className="text-[10px] font-medium">More</span>
           </button>
         </div>
       </div>
