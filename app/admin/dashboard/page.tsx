@@ -538,11 +538,11 @@ export default function AdminDashboard() {
     
     return (
       <>
-        <div className="flex items-center gap-3 mb-2">
+        <div className="flex items-center gap-3 mb-6">
           <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors flex-shrink-0">
             <ChevronLeft className="w-5 h-5 text-[#4a6670]" />
           </button>
-          <div className="flex-1">
+          <div>
             <h1 className="text-2xl font-bold text-[#171532]">Hi there, <span className="text-orange-600">{adminName.split(' ')[0]}</span></h1>
             <p className="text-sm text-[#747384]">What can I help with?</p>
           </div>
@@ -551,31 +551,35 @@ export default function AdminDashboard() {
         <p className="text-sm text-[#747384] mb-6">Start a conversation below or pick a topic.</p>
         
         {aiMessages.length === 0 ? (
-          <div className="space-y-3 mb-6">
+          <div className="space-y-3 mb-8">
             <button 
               onClick={() => handleSendMessage("Live Scoreboard - Who is leading?")}
-              className="w-full bg-gradient-to-br from-white to-[#f8f9fa] border-2 border-[#e5e7eb] rounded-2xl p-4 text-left hover:border-purple-300 hover:shadow-lg hover:from-[#f8f9fa] transition-all active:scale-98 flex items-start justify-between gap-3"
+              className="w-full bg-white border-2 border-[#e5e7eb] rounded-2xl p-4 text-left hover:border-purple-300 hover:shadow-lg hover:bg-[#f8f9fa] transition-all active:scale-98"
             >
-              <div className="flex-1">
-                <h3 className="font-bold text-[#171532] mb-1 text-base">📊 Live Scoreboard</h3>
-                <p className="text-sm text-[#747384]">Who is leading the scoreboard?</p>
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <h3 className="font-bold text-[#171532] mb-1">📊 Live Scoreboard</h3>
+                  <p className="text-sm text-[#747384]">Who is leading the scoreboard?</p>
+                </div>
+                <Trophy className="w-5 h-5 text-purple-400 flex-shrink-0 mt-1" />
               </div>
-              <Trophy className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
             </button>
             
             <button 
               onClick={() => handleSendMessage("Sponsor Request - Generate sponsorship email")}
-              className="w-full bg-gradient-to-br from-white to-[#f8f9fa] border-2 border-[#e5e7eb] rounded-2xl p-4 text-left hover:border-purple-300 hover:shadow-lg hover:from-[#f8f9fa] transition-all active:scale-98 flex items-start justify-between gap-3"
+              className="w-full bg-white border-2 border-[#e5e7eb] rounded-2xl p-4 text-left hover:border-purple-300 hover:shadow-lg hover:bg-[#f8f9fa] transition-all active:scale-98"
             >
-              <div className="flex-1">
-                <h3 className="font-bold text-[#171532] mb-1 text-base">📧 Sponsor Request</h3>
-                <p className="text-sm text-[#747384]">Generate an email for sponsorship.</p>
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <h3 className="font-bold text-[#171532] mb-1">📧 Sponsor Request</h3>
+                  <p className="text-sm text-[#747384]">Generate an email for sponsorship.</p>
+                </div>
+                <Share2 className="w-5 h-5 text-purple-400 flex-shrink-0 mt-1" />
               </div>
-              <Share2 className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
             </button>
           </div>
         ) : (
-          <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-4 mb-6 max-h-72 overflow-y-auto border-2 border-purple-200 space-y-3">
+          <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-4 mb-6 max-h-64 overflow-y-auto border-2 border-purple-200 space-y-3">
             {aiMessages.map((msg, idx) => (
               <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div className={`max-w-xs rounded-xl px-4 py-2.5 text-sm break-words ${msg.role === "user" ? "bg-gradient-to-r from-[#4a6670] to-[#3d565e] text-white shadow-md" : "bg-white border-2 border-purple-200 text-[#171532]"}`}>
@@ -595,9 +599,9 @@ export default function AdminDashboard() {
           </div>
         )}
         
-        <div className="bg-white border-2 border-[#e5e7eb] rounded-2xl p-5 mb-8">
-          <p className="text-xs font-bold text-[#4a6670] mb-3 tracking-wide">✨ ASK JDSA AI</p>
-          <div className="flex gap-2 items-stretch">
+        <div className="space-y-3">
+          <p className="text-xs font-bold text-[#4a6670] tracking-wide">✨ ASK JDSA AI</p>
+          <div className="bg-white border-2 border-[#e5e7eb] rounded-2xl p-4 flex gap-2 items-stretch">
             <input
               type="text"
               value={aiInput}
@@ -605,7 +609,7 @@ export default function AdminDashboard() {
               onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
               placeholder="Type your question..."
               disabled={aiLoading}
-              className="flex-1 px-4 py-3 bg-[#f8f9fa] border-2 border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#b0b0b0] focus:outline-none focus:border-purple-400 focus:bg-white disabled:opacity-50 transition-all text-sm font-medium"
+              className="flex-1 px-4 py-3 bg-[#f8f9fa] border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#b0b0b0] focus:outline-none focus:border-purple-400 focus:bg-white disabled:opacity-50 transition-all text-sm"
             />
             <button
               onClick={() => handleSendMessage()}
@@ -613,7 +617,7 @@ export default function AdminDashboard() {
               className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-4 py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:shadow-xl hover:shadow-purple-300 transition-all disabled:opacity-50 disabled:shadow-none active:scale-95 flex items-center justify-center gap-2 flex-shrink-0"
             >
               <Send className="w-4 h-4" />
-              <span className="text-sm hidden sm:inline">Send</span>
+              <span className="text-sm">Send</span>
             </button>
           </div>
         </div>
