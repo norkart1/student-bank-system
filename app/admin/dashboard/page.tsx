@@ -630,6 +630,7 @@ export default function AdminDashboard() {
       <div className="px-5 pt-6">
         {activeTab === "home" && renderHomeTab()}
         {activeTab === "accounts" && renderAccountsTab()}
+        {activeTab === "leaderboard" && renderLeaderboardTab()}
         {activeTab === "profile" && (
           <div className="space-y-5">
             <h2 className="text-lg font-bold text-[#171532]">Admin Profile</h2>
