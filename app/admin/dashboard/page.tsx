@@ -250,18 +250,6 @@ export default function AdminDashboard() {
           </div>
           <span className="text-sm font-medium text-[#171532]">Withdraw</span>
         </button>
-        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
-            <Send className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-sm font-medium text-[#171532]">Transfer</span>
-        </button>
-        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
-            <QrCode className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-sm font-medium text-[#171532]">Scan Pay</span>
-        </button>
       </div>
     </>
   )
