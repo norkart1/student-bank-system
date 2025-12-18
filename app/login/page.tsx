@@ -40,17 +40,14 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-[#f5f5f7] flex flex-col md:flex-row">
       {/* Image Section */}
-      <div className="hidden md:flex w-1/2 bg-gradient-to-b from-[#2a5f6f] to-[#1a3f4f] items-center justify-center p-8">
-        <div className="relative w-full h-full flex items-center justify-center">
-          <Image
-            src="/islamic-mosque.jpg"
-            alt="Islamic artwork"
-            width={600}
-            height={800}
-            className="object-cover rounded-2xl shadow-2xl max-h-96"
-            priority
-          />
-        </div>
+      <div className="hidden md:block w-1/2 relative overflow-hidden">
+        <Image
+          src="/islamic-login-bg.png"
+          alt="Islamic banking background"
+          fill
+          className="object-cover"
+          priority
+        />
       </div>
 
       {/* Form Section */}
