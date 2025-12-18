@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy } from "lucide-react"
+import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2 } from "lucide-react"
 
 interface Transaction {
   type: string
@@ -41,6 +41,8 @@ export default function AdminDashboard() {
   const [totalWithdrawn, setTotalWithdrawn] = useState(0)
   const [students, setStudents] = useState<Student[]>([])
   const [showCreateForm, setShowCreateForm] = useState(false)
+  const [showEditForm, setShowEditForm] = useState(false)
+  const [editingIndex, setEditingIndex] = useState<number | null>(null)
   const [newStudent, setNewStudent] = useState({
     name: "",
     mobile: "",
@@ -58,6 +60,47 @@ export default function AdminDashboard() {
         setNewStudent({...newStudent, profileImage: reader.result as string})
       }
       reader.readAsDataURL(file)
+    }
+  }
+
+  const handleEditAccount = (index: number) => {
+    setNewStudent(students[index])
+    setEditingIndex(index)
+    setShowEditForm(true)
+  }
+
+  const handleUpdateAccount = () => {
+    if (!newStudent.name || !newStudent.username || !newStudent.password) {
+      alert("Please fill all required fields")
+      return
+    }
+
+    if (editingIndex !== null) {
+      const updatedStudents = [...students]
+      updatedStudents[editingIndex] = {
+        name: newStudent.name,
+        username: newStudent.username,
+        password: newStudent.password,
+        profileImage: newStudent.profileImage,
+        balance: updatedStudents[editingIndex].balance,
+        transactions: updatedStudents[editingIndex].transactions
+      }
+      setStudents(updatedStudents)
+      localStorage.setItem("students", JSON.stringify(updatedStudents))
+      calculateTotals(updatedStudents)
+      
+      setNewStudent({ name: "", mobile: "", email: "", username: "", password: "", profileImage: "" })
+      setEditingIndex(null)
+      setShowEditForm(false)
+    }
+  }
+
+  const handleDeleteAccount = (index: number) => {
+    if (confirm(`Are you sure you want to delete ${students[index].name}?`)) {
+      const updatedStudents = students.filter((_, i) => i !== index)
+      setStudents(updatedStudents)
+      localStorage.setItem("students", JSON.stringify(updatedStudents))
+      calculateTotals(updatedStudents)
     }
   }
 
@@ -280,21 +323,37 @@ export default function AdminDashboard() {
                 <p className="text-xs text-[#747384]">{student.mobile || 'No mobile'}</p>
                 <p className="text-xs text-[#747384]">{student.email || 'No email'}</p>
               </div>
-              <div className="text-right">
+              <div className="text-right mr-3">
                 <p className="text-lg font-bold text-[#10B981]">₹{student.balance.toFixed(2)}</p>
                 <p className="text-xs text-[#747384]">@{student.username || 'no_username'}</p>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleEditAccount(index)}
+                  className="p-2 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors"
+                  title="Edit account"
+                >
+                  <Edit className="w-4 h-4 text-blue-600" />
+                </button>
+                <button
+                  onClick={() => handleDeleteAccount(index)}
+                  className="p-2 bg-red-100 rounded-lg hover:bg-red-200 transition-colors"
+                  title="Delete account"
+                >
+                  <Trash2 className="w-4 h-4 text-red-600" />
+                </button>
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      {showCreateForm && (
+      {(showCreateForm || showEditForm) && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end sm:items-center justify-center z-50">
           <div className="bg-white rounded-t-3xl sm:rounded-2xl w-full sm:max-w-md max-h-[85vh] overflow-y-auto shadow-2xl animate-in slide-in-from-bottom duration-300">
             <div className="sticky top-0 bg-white flex items-center justify-between px-6 py-5 border-b border-[#f0f0f0]">
-              <h3 className="text-xl font-bold text-[#171532]">Create Account</h3>
-              <button onClick={() => setShowCreateForm(false)} className="w-8 h-8 flex items-center justify-center rounded-full bg-[#f5f5f5] text-[#747384] hover:bg-[#e5e5e5] transition-colors">
+              <h3 className="text-xl font-bold text-[#171532]">{showEditForm ? 'Edit Account' : 'Create Account'}</h3>
+              <button onClick={() => {setShowCreateForm(false); setShowEditForm(false); setEditingIndex(null); setNewStudent({ name: "", mobile: "", email: "", username: "", password: "", profileImage: "" })}} className="w-8 h-8 flex items-center justify-center rounded-full bg-[#f5f5f5] text-[#747384] hover:bg-[#e5e5e5] transition-colors">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -356,10 +415,10 @@ export default function AdminDashboard() {
               </div>
 
               <button
-                onClick={handleCreateAccount}
+                onClick={showEditForm ? handleUpdateAccount : handleCreateAccount}
                 className="w-full bg-[#4a6670] text-white py-4 rounded-xl font-semibold hover:bg-[#3d565e] transition-all shadow-lg shadow-[#4a6670]/20 mt-2"
               >
-                Create Account
+                {showEditForm ? 'Update Account' : 'Create Account'}
               </button>
             </div>
           </div>
