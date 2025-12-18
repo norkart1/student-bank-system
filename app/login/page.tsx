@@ -54,52 +54,17 @@ export default function LoginPage() {
       </div>
 
       {/* Form Section */}
-      <div className="w-full md:w-1/2 flex flex-col px-6 md:px-12 py-8 md:py-16 justify-start md:justify-center relative overflow-hidden">
-        {/* Islamic geometric pattern background - subtle */}
-        <div className="absolute top-0 right-0 w-64 h-64 opacity-5 pointer-events-none">
-          <svg viewBox="0 0 200 200" className="text-[#4a6670]">
-            <defs>
-              <pattern id="islamic-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                <circle cx="10" cy="10" r="2" fill="currentColor" />
-                <circle cx="20" cy="10" r="2" fill="currentColor" />
-                <circle cx="30" cy="10" r="2" fill="currentColor" />
-                <circle cx="10" cy="20" r="2" fill="currentColor" />
-                <circle cx="30" cy="20" r="2" fill="currentColor" />
-                <circle cx="20" cy="30" r="2" fill="currentColor" />
-                <line x1="10" y1="10" x2="20" y2="20" stroke="currentColor" strokeWidth="0.5" />
-                <line x1="20" y1="10" x2="30" y2="20" stroke="currentColor" strokeWidth="0.5" />
-                <line x1="20" y1="30" x2="30" y2="20" stroke="currentColor" strokeWidth="0.5" />
-              </pattern>
-            </defs>
-            <rect width="200" height="200" fill="url(#islamic-pattern)" />
-          </svg>
-        </div>
-
-        {/* Islamic decorative top border */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#4a6670] to-transparent opacity-30"></div>
-
-        {/* Islamic crescent and star decoration - top right */}
-        <div className="hidden md:block absolute top-8 right-8 text-[#4a6670] opacity-20">
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="currentColor">
-            <path d="M20 5 L24 15 L35 15 L27 22 L30 32 L20 26 L10 32 L13 22 L5 15 L16 15 Z" />
-            <circle cx="15" cy="18" r="3" fill="#4a6670" opacity="0.5" />
-          </svg>
-        </div>
-
-        {/* Islamic arch decoration - mobile only */}
-        <div className="md:hidden absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-[#4a6670]/5 to-transparent rounded-b-3xl"></div>
-
+      <div className="w-full md:w-1/2 flex flex-col px-6 md:px-12 py-8 md:py-16 justify-start md:justify-center">
         <Link href="/">
-          <div className="w-10 h-10 bg-[#4a6670] rounded-full flex items-center justify-center hover:bg-[#3d565e] transition-colors mb-8 relative z-10">
+          <div className="w-10 h-10 bg-[#4a6670] rounded-full flex items-center justify-center hover:bg-[#3d565e] transition-colors mb-8">
             <ArrowLeft className="w-5 h-5 text-white" />
           </div>
         </Link>
 
-        <div className="mb-10 relative z-10">
+        <div className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-[#171532] leading-tight">
             Hey,<br />Welcome Back
           </h1>
-          <p className="text-sm text-[#4a6670] mt-2 opacity-70">Islamic Banking Solutions</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4 max-w-md">
