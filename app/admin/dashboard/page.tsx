@@ -506,17 +506,27 @@ export default function AdminDashboard() {
   }
 
   const renderAITab = () => {
-    const handleSendMessage = async () => {
-      if (!aiInput.trim()) return
-      const userMessage = aiInput
+    const topStudent = students.length > 0 ? [...students].sort((a, b) => (b.balance || 0) - (a.balance || 0))[0] : null
+    
+    const handleSendMessage = async (message?: string) => {
+      const msg = message || aiInput
+      if (!msg.trim()) return
       setAiInput("")
-      setAiMessages(prev => [...prev, { role: "user", text: userMessage }])
+      setAiMessages(prev => [...prev, { role: "user", text: msg }])
       setAiLoading(true)
+      
+      let prompt = msg
+      if (msg.includes("Live Scoreboard")) {
+        prompt = `Show me the live scoreboard. The top student is ${topStudent?.name} with ₹${topStudent?.balance.toFixed(2)}. Generate a formatted summary of the top 3 students by balance: ${[...students].sort((a, b) => (b.balance || 0) - (a.balance || 0)).slice(0, 3).map((s, i) => `${i + 1}. ${s.name}: ₹${s.balance.toFixed(2)}`).join(", ")}`
+      } else if (msg.includes("Sponsor Request")) {
+        prompt = `Generate a professional sponsorship request email for JDSA Students Bank. Include information about our student banking platform and request sponsorship support.`
+      }
+      
       try {
         const response = await fetch("/api/gemini", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: userMessage })
+          body: JSON.stringify({ message: prompt })
         })
         const data = await response.json()
         setAiMessages(prev => [...prev, { role: "assistant", text: data.response || "No response" }])
@@ -525,51 +535,73 @@ export default function AdminDashboard() {
       }
       setAiLoading(false)
     }
+    
     return (
       <>
         <div className="flex items-center gap-3 mb-4">
           <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
             <ChevronLeft className="w-5 h-5 text-[#4a6670]" />
           </button>
-          <h2 className="text-lg font-bold text-[#171532] flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-purple-500" />
-            AI Assistant
-          </h2>
+          <div className="flex-1">
+            <h1 className="text-2xl font-bold text-[#171532]">Hi there, <span className="text-orange-600">{adminName.split(' ')[0]}</span></h1>
+            <p className="text-purple-600 font-semibold text-sm">What can I help with?</p>
+          </div>
+          <Bell className="w-6 h-6 text-yellow-500 bg-yellow-100 rounded-full p-1" />
         </div>
-        <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-4 mb-4 h-96 overflow-y-auto border border-purple-200 space-y-3">
-          {aiMessages.length === 0 ? (
-            <div className="text-center text-[#747384] py-12">
-              <Sparkles className="w-12 h-12 mx-auto mb-3 text-purple-300" />
-              <p>Start a conversation with AI!</p>
-            </div>
-          ) : (
-            aiMessages.map((msg, idx) => (
+        
+        <p className="text-sm text-[#747384] mb-4">Start a conversation below or pick a topic.</p>
+        
+        {aiMessages.length === 0 ? (
+          <div className="space-y-3 mb-6">
+            <button 
+              onClick={() => handleSendMessage("Live Scoreboard - Who is leading?")}
+              className="w-full bg-white border border-[#e5e7eb] rounded-2xl p-4 text-left hover:border-purple-300 hover:shadow-md transition-all"
+            >
+              <h3 className="font-bold text-[#171532] mb-1">Live Scoreboard</h3>
+              <p className="text-sm text-[#747384]">Who is leading the scoreboard?</p>
+            </button>
+            
+            <button 
+              onClick={() => handleSendMessage("Sponsor Request - Generate sponsorship email")}
+              className="w-full bg-white border border-[#e5e7eb] rounded-2xl p-4 text-left hover:border-purple-300 hover:shadow-md transition-all"
+            >
+              <h3 className="font-bold text-[#171532] mb-1">Sponsor Request</h3>
+              <p className="text-sm text-[#747384]">Generate an email for sponsorship.</p>
+            </button>
+          </div>
+        ) : (
+          <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-4 mb-4 h-80 overflow-y-auto border border-purple-200 space-y-3">
+            {aiMessages.map((msg, idx) => (
               <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-xs px-4 py-2 rounded-lg ${msg.role === "user" ? "bg-[#4a6670] text-white" : "bg-white border border-purple-200 text-[#171532]"}`}>
-                  <p className="text-sm">{msg.text}</p>
+                <div className={`max-w-xs px-4 py-2 rounded-lg text-sm ${msg.role === "user" ? "bg-[#4a6670] text-white" : "bg-white border border-purple-200 text-[#171532]"}`}>
+                  {msg.text}
                 </div>
               </div>
-            ))
-          )}
-          {aiLoading && <div className="flex justify-start"><div className="bg-white border border-purple-200 px-4 py-2 rounded-lg"><p className="text-sm text-[#747384]">AI is thinking...</p></div></div>}
-        </div>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={aiInput}
-            onChange={(e) => setAiInput(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-            placeholder="Ask me anything..."
-            disabled={aiLoading}
-            className="flex-1 px-4 py-2.5 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#a0a0a0] focus:outline-none focus:border-purple-400 disabled:opacity-50"
-          />
-          <button
-            onClick={handleSendMessage}
-            disabled={aiLoading || !aiInput.trim()}
-            className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-4 py-2.5 rounded-xl font-medium hover:shadow-lg transition-all disabled:opacity-50"
-          >
-            <Send className="w-4 h-4" />
-          </button>
+            ))}
+            {aiLoading && <div className="flex justify-start"><div className="bg-white border border-purple-200 px-4 py-2 rounded-lg text-sm text-[#747384]">AI is thinking...</div></div>}
+          </div>
+        )}
+        
+        <div className="bg-white border border-[#e5e7eb] rounded-2xl p-4 space-y-3">
+          <p className="text-xs font-bold text-[#4a6670]">✨ ASK JDSA AI</p>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={aiInput}
+              onChange={(e) => setAiInput(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+              placeholder="Type your question..."
+              disabled={aiLoading}
+              className="flex-1 px-4 py-3 bg-[#f8f9fa] border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#c0c0c0] focus:outline-none focus:border-purple-400 disabled:opacity-50 text-sm"
+            />
+            <button
+              onClick={() => handleSendMessage()}
+              disabled={aiLoading || !aiInput.trim()}
+              className="bg-[#f0f0f0] text-[#4a6670] p-3 rounded-xl hover:bg-[#e5e5e5] transition-all disabled:opacity-50 flex items-center justify-center"
+            >
+              <Send className="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </>
     )
