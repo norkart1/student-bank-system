@@ -553,14 +553,21 @@ export default function AdminDashboard() {
     return (
       <div className="flex flex-col h-full pb-20">
         {/* Header */}
-        <div className="flex items-center gap-3 pb-4 border-b border-[#e5e7eb]">
-          <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors flex-shrink-0">
-            <ChevronLeft className="w-5 h-5 text-[#4a6670]" />
-          </button>
-          <div>
-            <h1 className="text-2xl font-bold text-[#171532]">Hi there, <span className="text-orange-600">{adminName.split(' ')[0]}</span></h1>
-            <p className="text-xs text-[#747384]">What can I help with?</p>
+        <div className="flex items-center justify-between gap-3 pb-4 border-b border-[#e5e7eb]">
+          <div className="flex items-center gap-3">
+            <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors flex-shrink-0">
+              <ChevronLeft className="w-5 h-5 text-[#4a6670]" />
+            </button>
+            <div>
+              <h1 className="text-2xl font-bold text-[#171532]">Hi there, <span className="text-orange-600">{adminName.split(' ')[0]}</span></h1>
+              <p className="text-xs text-[#747384]">What can I help with?</p>
+            </div>
           </div>
+          {aiMessages.length > 0 && (
+            <button onClick={() => setAiMessages([])} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors flex-shrink-0" title="Clear conversation">
+              <X className="w-5 h-5 text-[#4a6670]" />
+            </button>
+          )}
         </div>
         
         {/* Main Content */}
@@ -569,19 +576,6 @@ export default function AdminDashboard() {
           
           {aiMessages.length === 0 ? (
             <div className="space-y-3">
-              <button 
-                onClick={() => handleSendMessage("Live Scoreboard - Who is leading?")}
-                className="w-full bg-white border-2 border-[#e5e7eb] rounded-xl p-3 text-left hover:border-purple-300 hover:shadow-md hover:bg-[#f8f9fa] transition-all active:scale-95"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-[#171532] text-sm">📊 Live Scoreboard</h3>
-                    <p className="text-xs text-[#747384] mt-0.5">Who is leading?</p>
-                  </div>
-                  <Trophy className="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5" />
-                </div>
-              </button>
-              
               <button 
                 onClick={() => handleSendMessage("Total amount of all accounts")}
                 className="w-full bg-white border-2 border-[#e5e7eb] rounded-xl p-3 text-left hover:border-purple-300 hover:shadow-md hover:bg-[#f8f9fa] transition-all active:scale-95"
@@ -605,19 +599,6 @@ export default function AdminDashboard() {
                     <p className="text-xs text-[#747384] mt-0.5">Who is the richest?</p>
                   </div>
                   <Star className="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5" />
-                </div>
-              </button>
-              
-              <button 
-                onClick={() => handleSendMessage("Sponsor Request - Generate sponsorship email")}
-                className="w-full bg-white border-2 border-[#e5e7eb] rounded-xl p-3 text-left hover:border-purple-300 hover:shadow-md hover:bg-[#f8f9fa] transition-all active:scale-95"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-[#171532] text-sm">📧 Sponsor Request</h3>
-                    <p className="text-xs text-[#747384] mt-0.5">Generate email</p>
-                  </div>
-                  <Share2 className="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5" />
                 </div>
               </button>
             </div>
@@ -659,10 +640,9 @@ export default function AdminDashboard() {
             <button
               onClick={() => handleSendMessage()}
               disabled={aiLoading || !aiInput.trim()}
-              className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-3 py-2 rounded-lg font-semibold shadow-md shadow-purple-200 hover:shadow-lg hover:shadow-purple-300 transition-all disabled:opacity-50 disabled:shadow-none active:scale-95 flex items-center justify-center gap-1.5 flex-shrink-0 whitespace-nowrap text-xs h-10"
+              className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-3 py-2 rounded-lg font-semibold shadow-md shadow-purple-200 hover:shadow-lg hover:shadow-purple-300 transition-all disabled:opacity-50 disabled:shadow-none active:scale-95 flex items-center justify-center flex-shrink-0 h-10 w-10"
             >
-              <Send className="w-3.5 h-3.5" />
-              <span>Send</span>
+              <Send className="w-4 h-4" />
             </button>
           </div>
         </div>
