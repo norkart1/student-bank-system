@@ -314,9 +314,13 @@ export default function AdminDashboard() {
           
           <div className="px-6 py-6 space-y-5">
             <div className="flex justify-center pb-4">
-              <div className={`w-24 h-24 rounded-full ${avatarColors[viewingIndex % avatarColors.length]} flex items-center justify-center text-3xl font-bold text-[#4a6670]`}>
-                {student.name.charAt(0)}
-              </div>
+              {student.profileImage ? (
+                <img src={student.profileImage} alt={student.name} className="w-24 h-24 rounded-full object-cover shadow-lg" />
+              ) : (
+                <div className={`w-24 h-24 rounded-full ${avatarColors[viewingIndex % avatarColors.length]} flex items-center justify-center text-3xl font-bold text-[#4a6670]`}>
+                  {student.name.charAt(0)}
+                </div>
+              )}
             </div>
 
             <div className="space-y-4">
