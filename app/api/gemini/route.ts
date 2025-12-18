@@ -5,7 +5,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
 export async function POST(request: NextRequest) {
   try {
-    const { message } = await request.json();
+    const { message, studentContext, adminName } = await request.json();
 
     if (!message) {
       return NextResponse.json(
@@ -14,9 +14,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Build comprehensive context for AI
+    let fullContext = `You are an AI assistant for JDSA Students Bank admin dashboard. 
+Current Admin: ${adminName || "Admin"}
+
+System Information:
+${studentContext ? `Student Database: ${studentContext}` : ""}
+
+User Request: ${message}`;
+
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: message,
+      contents: fullContext,
     });
 
     const text = response.text || "No response from AI";
