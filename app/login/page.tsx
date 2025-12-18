@@ -38,20 +38,23 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f5f7] flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-[#f5f5f7] flex flex-col md:flex-row">
       {/* Image Section */}
-      <div className="hidden lg:flex lg:w-1/2 bg-cover bg-center relative h-screen items-center justify-center">
-        <Image
-          src="/islamic-login-bg.png"
-          alt="Islamic banking background"
-          fill
-          className="object-cover"
-          priority
-        />
+      <div className="hidden md:flex w-1/2 bg-gradient-to-b from-[#2a5f6f] to-[#1a3f4f] items-center justify-center p-8">
+        <div className="relative w-full h-full flex items-center justify-center">
+          <Image
+            src="/islamic-mosque.jpg"
+            alt="Islamic artwork"
+            width={600}
+            height={800}
+            className="object-cover rounded-2xl shadow-2xl max-h-96"
+            priority
+          />
+        </div>
       </div>
 
       {/* Form Section */}
-      <div className="w-full lg:w-1/2 flex flex-col px-4 sm:px-6 lg:px-12 py-8 lg:py-0 justify-center min-h-screen lg:h-auto">
+      <div className="w-full md:w-1/2 flex flex-col px-6 md:px-12 py-8 md:py-16 justify-start md:justify-center">
         <Link href="/">
           <div className="w-10 h-10 bg-[#4a6670] rounded-full flex items-center justify-center hover:bg-[#3d565e] transition-colors mb-8">
             <ArrowLeft className="w-5 h-5 text-white" />
