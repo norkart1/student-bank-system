@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare } from "lucide-react"
+import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings } from "lucide-react"
 
 interface Transaction {
   type: string
@@ -576,7 +576,22 @@ export default function AdminDashboard() {
       <div className="px-5 pt-6">
         {activeTab === "home" && renderHomeTab()}
         {activeTab === "accounts" && renderAccountsTab()}
-        {activeTab === "leaderboard" && renderLeaderboardTab()}
+        {activeTab === "profile" && (
+          <div className="space-y-6">
+            <h2 className="text-lg font-bold text-[#171532]">Admin Profile</h2>
+            <div className="bg-white border border-[#e5e7eb] rounded-2xl p-6">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#4a6670] to-[#3d565e] flex items-center justify-center text-white font-bold text-3xl">
+                  A
+                </div>
+                <div>
+                  <p className="text-lg font-bold text-[#171532]">Admin User</p>
+                  <p className="text-sm text-[#747384]">Administrator</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         {activeTab === "cards" && (
           <div className="text-center py-12 text-[#747384]">
             <CreditCard className="w-16 h-16 mx-auto mb-4 opacity-30" />
@@ -618,15 +633,15 @@ export default function AdminDashboard() {
           </button>
 
           <button
-            onClick={() => setActiveTab("leaderboard")}
+            onClick={() => setActiveTab("profile")}
             className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 ${
-              activeTab === "leaderboard"
+              activeTab === "profile"
                 ? "bg-[#c17f59] text-white shadow-md px-4"
                 : "text-[#4a6670]"
             }`}
           >
-            <Trophy className="w-5 h-5" />
-            <span className="text-[10px] font-medium">Top Rich</span>
+            <Settings className="w-5 h-5" />
+            <span className="text-[10px] font-medium">Admin Profile</span>
           </button>
         </div>
       </div>
