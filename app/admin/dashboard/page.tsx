@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera } from "lucide-react"
+import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy } from "lucide-react"
 
 interface Transaction {
   type: string
@@ -49,6 +49,17 @@ export default function AdminDashboard() {
     password: "",
     profileImage: ""
   })
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setNewStudent({...newStudent, profileImage: reader.result as string})
+      }
+      reader.readAsDataURL(file)
+    }
+  }
 
   const calculateTotals = (studentList: Student[]) => {
     let balance = 0
@@ -211,6 +222,39 @@ export default function AdminDashboard() {
     </>
   )
 
+  const renderLeaderboardTab = () => {
+    const sortedStudents = [...students].sort((a, b) => (b.balance || 0) - (a.balance || 0))
+    return (
+      <>
+        <h2 className="text-lg font-bold text-[#171532] mb-4 flex items-center gap-2">
+          <Trophy className="w-5 h-5 text-[#c17f59]" />
+          Top Richest Students
+        </h2>
+        <div className="space-y-3">
+          {sortedStudents.map((student, index) => (
+            <div key={index} className={`p-4 rounded-xl flex items-center gap-3 ${
+              index === 0 ? 'bg-yellow-100 border-2 border-yellow-400' :
+              index === 1 ? 'bg-gray-100 border-2 border-gray-400' :
+              index === 2 ? 'bg-orange-100 border-2 border-orange-400' :
+              'bg-white border border-[#e5e7eb]'
+            }`}>
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#4a6670] to-[#3d565e] flex items-center justify-center text-white font-bold text-lg">
+                {index + 1}
+              </div>
+              <div className="flex-1">
+                <p className="font-medium text-[#171532]">{student.name}</p>
+                <p className="text-xs text-[#747384]">@{student.username || 'no_username'}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-xl font-bold text-[#10B981]">₹{(student.balance || 0).toFixed(2)}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </>
+    )
+  }
+
   const renderAccountsTab = () => (
     <>
       <div className="flex items-center justify-between mb-4">
@@ -258,12 +302,23 @@ export default function AdminDashboard() {
             <div className="px-6 py-6 space-y-5">
               <div className="flex justify-center pb-2">
                 <div className="relative">
-                  <div className="w-24 h-24 bg-gradient-to-br from-[#e8f5f2] to-[#d4eef5] rounded-full flex items-center justify-center shadow-inner">
-                    <Camera className="w-10 h-10 text-[#4a6670]" />
+                  <div className="w-24 h-24 bg-gradient-to-br from-[#e8f5f2] to-[#d4eef5] rounded-full flex items-center justify-center shadow-inner overflow-hidden">
+                    {newStudent.profileImage ? (
+                      <img src={newStudent.profileImage} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      <Camera className="w-10 h-10 text-[#4a6670]" />
+                    )}
                   </div>
-                  <button className="absolute bottom-1 right-1 w-7 h-7 bg-[#4a6670] rounded-full flex items-center justify-center shadow-lg hover:bg-[#3d565e] transition-colors">
+                  <label htmlFor="profileImageInput" className="absolute bottom-1 right-1 w-7 h-7 bg-[#4a6670] rounded-full flex items-center justify-center shadow-lg hover:bg-[#3d565e] transition-colors cursor-pointer">
                     <Plus className="w-4 h-4 text-white" />
-                  </button>
+                  </label>
+                  <input
+                    id="profileImageInput"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
                 </div>
               </div>
 
@@ -318,6 +373,7 @@ export default function AdminDashboard() {
       <div className="px-5 pt-6">
         {activeTab === "home" && renderHomeTab()}
         {activeTab === "accounts" && renderAccountsTab()}
+        {activeTab === "leaderboard" && renderLeaderboardTab()}
         {activeTab === "cards" && (
           <div className="text-center py-12 text-[#747384]">
             <CreditCard className="w-16 h-16 mx-auto mb-4 opacity-30" />
@@ -356,6 +412,18 @@ export default function AdminDashboard() {
           >
             <Users className="w-5 h-5" />
             <span className="text-[10px] font-medium">Accounts</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("leaderboard")}
+            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 ${
+              activeTab === "leaderboard"
+                ? "bg-[#c17f59] text-white shadow-md px-4"
+                : "text-[#4a6670]"
+            }`}
+          >
+            <Trophy className="w-5 h-5" />
+            <span className="text-[10px] font-medium">Top Rich</span>
           </button>
         </div>
       </div>
