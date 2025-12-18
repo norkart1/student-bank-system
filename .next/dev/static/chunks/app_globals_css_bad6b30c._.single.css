@@ -1769,6 +1769,12 @@
   }
 
   @media (hover: hover) {
+    .hover\:bg-\[\#f8f9fa\]:hover {
+      background-color: #f8f9fa;
+    }
+  }
+
+  @media (hover: hover) {
     .hover\:bg-accent:hover {
       background-color: var(--accent);
     }

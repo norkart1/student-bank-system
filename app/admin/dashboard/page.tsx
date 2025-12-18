@@ -130,6 +130,23 @@ export default function AdminDashboard() {
 
   const renderHomeTab = () => (
     <>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#4a6670] to-[#3d565e] flex items-center justify-center text-white font-bold text-lg">
+            A
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-[#171532]">Morning, Admin!</h1>
+            <p className="text-xs text-[#747384]">{currentDate}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <button className="w-10 h-10 bg-[#f0f0f0] rounded-lg flex items-center justify-center">
+            <Bell className="w-5 h-5 text-[#4a6670]" />
+          </button>
+        </div>
+      </div>
+
       <div className="bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-2xl p-5 mb-6 shadow-lg">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
@@ -162,6 +179,34 @@ export default function AdminDashboard() {
             <p className="text-lg font-bold text-white">₹{totalWithdrawn.toFixed(2)}</p>
           </div>
         </div>
+      </div>
+
+      <h2 className="text-lg font-bold text-[#171532] mb-4">Services</h2>
+      <div className="grid grid-cols-2 gap-3 mb-6">
+        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <ArrowDownRight className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-sm font-medium text-[#171532]">Deposit</span>
+        </button>
+        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <ArrowUpRight className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-sm font-medium text-[#171532]">Withdraw</span>
+        </button>
+        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <Send className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-sm font-medium text-[#171532]">Transfer</span>
+        </button>
+        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <QrCode className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-sm font-medium text-[#171532]">Scan Pay</span>
+        </button>
       </div>
     </>
   )
@@ -271,22 +316,24 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-white pb-24">
       <div className="px-5 pt-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#4a6670] to-[#3d565e] flex items-center justify-center text-white font-bold text-lg">
-              A
+        {activeTab !== "home" && (
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#4a6670] to-[#3d565e] flex items-center justify-center text-white font-bold text-lg">
+                A
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-[#171532]">Admin Dashboard</h1>
+                <p className="text-xs text-[#747384]">{currentDate}</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl font-bold text-[#171532]">Morning, Admin!</h1>
-              <p className="text-xs text-[#747384]">{currentDate}</p>
+            <div className="flex items-center gap-2">
+              <button className="w-10 h-10 bg-[#f0f0f0] rounded-lg flex items-center justify-center">
+                <Bell className="w-5 h-5 text-[#4a6670]" />
+              </button>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button className="w-10 h-10 bg-[#f0f0f0] rounded-lg flex items-center justify-center">
-              <Bell className="w-5 h-5 text-[#4a6670]" />
-            </button>
-          </div>
-        </div>
+        )}
 
         {activeTab === "home" && renderHomeTab()}
         {activeTab === "accounts" && renderAccountsTab()}
