@@ -608,22 +608,6 @@ export default function AdminDashboard() {
                 <p className="text-xs font-semibold text-[#747384] mb-2">Username</p>
                 <p className="text-lg font-bold text-[#171532]">@{adminUsername}</p>
               </div>
-
-              <div className="bg-white border border-[#e5e7eb] rounded-2xl p-4">
-                <p className="text-xs font-semibold text-[#747384] mb-2">Rating</p>
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-5 h-5 ${
-                        i < adminRating
-                          ? "fill-[#fbbf24] text-[#fbbf24]"
-                          : "text-[#e5e7eb]"
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
             </div>
 
             <div className="space-y-2">
@@ -666,15 +650,8 @@ export default function AdminDashboard() {
               </button>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-              <div className="flex items-start gap-3">
-                <Info className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
-                <div>
-                  <p className="text-xs font-semibold text-blue-900 mb-1">Site Version</p>
-                  <p className="text-sm text-blue-700 font-medium">v1.0.0</p>
-                  <p className="text-xs text-blue-600 mt-1">JDSA Students Bank Admin Dashboard</p>
-                </div>
-              </div>
+            <div className="text-center pt-2 pb-4">
+              <p className="text-xs font-semibold text-[#747384]">v1.0.0</p>
             </div>
 
             {showPasswordReset && (
