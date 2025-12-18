@@ -290,7 +290,7 @@ export default function AdminDashboard() {
       </div>
 
       <h2 className="text-lg font-bold text-[#171532] mb-4">Options</h2>
-      <div className="grid grid-cols-3 gap-3 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
             <ArrowDownRight className="w-5 h-5 text-white" />
@@ -326,6 +326,18 @@ export default function AdminDashboard() {
             <MessageSquare className="w-5 h-5 text-white" />
           </div>
           <span className="text-sm font-medium text-[#171532]">Chats</span>
+        </button>
+        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <Users className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-sm font-medium text-[#171532]">Accounts</span>
+        </button>
+        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <Trophy className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-sm font-medium text-[#171532]">Top Rich</span>
         </button>
       </div>
     </>
