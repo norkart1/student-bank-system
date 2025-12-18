@@ -525,6 +525,11 @@ export default function AdminDashboard() {
         prompt = `Show me the live scoreboard with top 3 students: ${[...students].sort((a, b) => (b.balance || 0) - (a.balance || 0)).slice(0, 3).map((s, i) => `${i + 1}. ${s.name}: ₹${s.balance.toFixed(2)}`).join(", ")}`
       } else if (msg.includes("Sponsor Request")) {
         prompt = `Generate a professional sponsorship request email for JDSA Students Bank. Include that we have ${students.length} active students with total balance of ₹${totalBalance.toFixed(2)}.`
+      } else if (msg.includes("Total amount of all accounts")) {
+        prompt = `The total amount of all accounts combined is ₹${totalBalance.toFixed(2)}. This includes ${students.length} active student accounts with various balances.`
+      } else if (msg.includes("Top rich person")) {
+        const topRich = [...students].sort((a, b) => (b.balance || 0) - (a.balance || 0))[0]
+        prompt = `The richest person is ${topRich?.name || 'N/A'} who is leading in our bank rankings.`
       }
       
       try {
@@ -578,6 +583,32 @@ export default function AdminDashboard() {
               </button>
               
               <button 
+                onClick={() => handleSendMessage("Total amount of all accounts")}
+                className="w-full bg-white border-2 border-[#e5e7eb] rounded-xl p-3 text-left hover:border-purple-300 hover:shadow-md hover:bg-[#f8f9fa] transition-all active:scale-95"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-[#171532] text-sm">💰 Total Amount</h3>
+                    <p className="text-xs text-[#747384] mt-0.5">All accounts combined</p>
+                  </div>
+                  <Wallet className="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5" />
+                </div>
+              </button>
+              
+              <button 
+                onClick={() => handleSendMessage("Top rich person")}
+                className="w-full bg-white border-2 border-[#e5e7eb] rounded-xl p-3 text-left hover:border-purple-300 hover:shadow-md hover:bg-[#f8f9fa] transition-all active:scale-95"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-[#171532] text-sm">👑 Top Rich Person</h3>
+                    <p className="text-xs text-[#747384] mt-0.5">Who is the richest?</p>
+                  </div>
+                  <Star className="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5" />
+                </div>
+              </button>
+              
+              <button 
                 onClick={() => handleSendMessage("Sponsor Request - Generate sponsorship email")}
                 className="w-full bg-white border-2 border-[#e5e7eb] rounded-xl p-3 text-left hover:border-purple-300 hover:shadow-md hover:bg-[#f8f9fa] transition-all active:scale-95"
               >
@@ -615,7 +646,7 @@ export default function AdminDashboard() {
         {/* Input Section - Fixed at bottom */}
         <div className="fixed bottom-20 left-4 right-4 bg-white border-2 border-[#e5e7eb] rounded-xl p-3 space-y-2">
           <p className="text-xs font-bold text-[#4a6670]">✨ ASK JDSA AI</p>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <input
               type="text"
               value={aiInput}
@@ -628,7 +659,7 @@ export default function AdminDashboard() {
             <button
               onClick={() => handleSendMessage()}
               disabled={aiLoading || !aiInput.trim()}
-              className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-3 py-2 rounded-lg font-semibold shadow-md shadow-purple-200 hover:shadow-lg hover:shadow-purple-300 transition-all disabled:opacity-50 disabled:shadow-none active:scale-95 flex items-center justify-center gap-1.5 flex-shrink-0 whitespace-nowrap text-xs"
+              className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-3 py-2 rounded-lg font-semibold shadow-md shadow-purple-200 hover:shadow-lg hover:shadow-purple-300 transition-all disabled:opacity-50 disabled:shadow-none active:scale-95 flex items-center justify-center gap-1.5 flex-shrink-0 whitespace-nowrap text-xs h-10"
             >
               <Send className="w-3.5 h-3.5" />
               <span>Send</span>

@@ -177,7 +177,7 @@ const ai = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40
 });
 async function POST(request) {
     try {
-        const { message } = await request.json();
+        const { message, studentContext, adminName } = await request.json();
         if (!message) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 error: "Message is required"
@@ -185,9 +185,17 @@ async function POST(request) {
                 status: 400
             });
         }
+        // Build comprehensive context for AI
+        let fullContext = `You are an AI assistant for JDSA Students Bank admin dashboard. 
+Current Admin: ${adminName || "Admin"}
+
+System Information:
+${studentContext ? `Student Database: ${studentContext}` : ""}
+
+User Request: ${message}`;
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: message
+            contents: fullContext
         });
         const text = response.text || "No response from AI";
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
