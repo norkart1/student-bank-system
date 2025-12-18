@@ -60,6 +60,7 @@ export default function AdminDashboard() {
   const [showPasswordReset, setShowPasswordReset] = useState(false)
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -636,11 +637,7 @@ export default function AdminDashboard() {
               </button>
 
               <button
-                onClick={() => {
-                  localStorage.removeItem("isAdminAuthenticated")
-                  localStorage.removeItem("userRole")
-                  router.push("/login")
-                }}
+                onClick={() => setShowLogoutConfirm(true)}
                 className="w-full flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl p-4 hover:bg-red-100 transition-colors"
               >
                 <LogOut className="w-5 h-5 text-red-600" />
@@ -651,6 +648,44 @@ export default function AdminDashboard() {
             <div className="text-center pt-2 pb-4">
               <p className="text-xs font-semibold text-[#747384]">v1.0.0</p>
             </div>
+
+            {showLogoutConfirm && (
+              <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[100]">
+                <div className="bg-white rounded-2xl w-full max-w-sm mx-4 shadow-2xl animate-in scale-in duration-200">
+                  <div className="px-6 py-6 space-y-4">
+                    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 mx-auto">
+                      <LogOut className="w-6 h-6 text-red-600" />
+                    </div>
+                    
+                    <div className="text-center">
+                      <h3 className="text-xl font-bold text-[#171532] mb-2">Logout</h3>
+                      <p className="text-sm text-[#747384]">
+                        Are you sure you want to logout? You'll need to sign in again to access the admin dashboard.
+                      </p>
+                    </div>
+
+                    <div className="flex gap-3 pt-4">
+                      <button
+                        onClick={() => setShowLogoutConfirm(false)}
+                        className="flex-1 py-3 rounded-xl font-semibold text-[#171532] bg-[#f0f0f0] hover:bg-[#e5e5e5] transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={() => {
+                          localStorage.removeItem("isAdminAuthenticated")
+                          localStorage.removeItem("userRole")
+                          router.push("/login")
+                        }}
+                        className="flex-1 py-3 rounded-xl font-semibold text-white bg-red-600 hover:bg-red-700 transition-colors"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {showPasswordReset && (
               <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end sm:items-center justify-center z-50">
