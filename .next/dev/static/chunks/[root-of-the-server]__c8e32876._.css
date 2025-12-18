@@ -712,8 +712,8 @@
     bottom: calc(var(--spacing) * 1);
   }
 
-  .bottom-20 {
-    bottom: calc(var(--spacing) * 20);
+  .bottom-28 {
+    bottom: calc(var(--spacing) * 28);
   }
 
   .left-0 {

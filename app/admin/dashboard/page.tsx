@@ -625,7 +625,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Input Section - Fixed at bottom */}
-        <div className="fixed bottom-20 left-4 right-4 bg-white border-2 border-[#e5e7eb] rounded-xl p-3 space-y-2">
+        <div className="fixed bottom-28 left-4 right-4 bg-white border-2 border-[#e5e7eb] rounded-xl p-3 space-y-2">
           <p className="text-xs font-bold text-[#4a6670]">✨ ASK JDSA AI</p>
           <div className="flex items-center gap-2">
             <input
