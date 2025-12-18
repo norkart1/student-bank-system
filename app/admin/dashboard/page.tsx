@@ -356,9 +356,16 @@ export default function AdminDashboard() {
 
   const renderLeaderboardTab = () => {
     const sortedStudents = [...students].sort((a, b) => (b.balance || 0) - (a.balance || 0))
+    const getMedalIcon = (index: number) => {
+      if (index === 0) return '🥇'
+      if (index === 1) return '🥈'
+      if (index === 2) return '🥉'
+      return null
+    }
+    
     return (
       <>
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-3 mb-6">
           <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
             <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
           </button>
@@ -367,27 +374,53 @@ export default function AdminDashboard() {
             Top Richest Students
           </h2>
         </div>
-        <div className="space-y-3">
-          {sortedStudents.map((student, index) => (
-            <div key={index} className={`p-4 rounded-xl flex items-center gap-3 ${
-              index === 0 ? 'bg-yellow-100 border-2 border-yellow-400' :
-              index === 1 ? 'bg-gray-100 border-2 border-gray-400' :
-              index === 2 ? 'bg-orange-100 border-2 border-orange-400' :
-              'bg-white border border-[#e5e7eb]'
-            }`}>
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#4a6670] to-[#3d565e] flex items-center justify-center text-white font-bold text-lg">
-                {index + 1}
-              </div>
-              <div className="flex-1">
-                <p className="font-medium text-[#171532]">{student.name}</p>
-                <p className="text-xs text-[#747384]">@{student.username || 'no_username'}</p>
-              </div>
-              <div className="text-right">
-                <p className="text-xl font-bold text-[#10B981]">₹{(student.balance || 0).toFixed(2)}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+
+        {sortedStudents.length === 0 ? (
+          <div className="text-center py-12">
+            <Trophy className="w-16 h-16 mx-auto mb-4 text-[#e5e7eb]" />
+            <p className="text-[#747384]">No students yet</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {sortedStudents.map((student, index) => {
+              const medal = getMedalIcon(index)
+              const isTop3 = index < 3
+              return (
+                <div 
+                  key={index} 
+                  className={`p-4 rounded-2xl flex items-center gap-3 border-2 shadow-sm transition-all ${
+                    index === 0 ? 'bg-gradient-to-r from-yellow-50 to-yellow-100 border-yellow-300' :
+                    index === 1 ? 'bg-gradient-to-r from-gray-50 to-gray-100 border-gray-300' :
+                    index === 2 ? 'bg-gradient-to-r from-orange-50 to-orange-100 border-orange-300' :
+                    'bg-white border-[#e5e7eb]'
+                  }`}
+                >
+                  {isTop3 ? (
+                    <div className="text-2xl flex-shrink-0">{medal}</div>
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#4a6670] to-[#3d565e] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                      {index + 1}
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-[#171532] truncate">{student.name}</p>
+                    <p className="text-xs text-[#747384] truncate">@{student.username || 'no_username'}</p>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <p className={`font-bold ${
+                      index === 0 ? 'text-yellow-600 text-lg' :
+                      index === 1 ? 'text-gray-600 text-lg' :
+                      index === 2 ? 'text-orange-600 text-lg' :
+                      'text-[#10B981] text-base'
+                    }`}>
+                      ₹{(student.balance || 0).toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
       </>
     )
   }
