@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2 } from "lucide-react"
+import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare } from "lucide-react"
 
 interface Transaction {
   type: string
@@ -289,8 +289,8 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      <h2 className="text-lg font-bold text-[#171532] mb-4">Services</h2>
-      <div className="grid grid-cols-2 gap-3 mb-6">
+      <h2 className="text-lg font-bold text-[#171532] mb-4">Options</h2>
+      <div className="grid grid-cols-3 gap-3 mb-6">
         <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
             <ArrowDownRight className="w-5 h-5 text-white" />
@@ -302,6 +302,30 @@ export default function AdminDashboard() {
             <ArrowUpRight className="w-5 h-5 text-white" />
           </div>
           <span className="text-sm font-medium text-[#171532]">Withdraw</span>
+        </button>
+        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <BarChart3 className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-sm font-medium text-[#171532]">Reports</span>
+        </button>
+        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <Sparkles className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-sm font-medium text-[#171532]">AI</span>
+        </button>
+        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <HelpCircle className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-sm font-medium text-[#171532]">Support</span>
+        </button>
+        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <MessageSquare className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-sm font-medium text-[#171532]">Chats</span>
         </button>
       </div>
     </>
