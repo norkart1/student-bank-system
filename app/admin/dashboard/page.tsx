@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings } from "lucide-react"
+import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info } from "lucide-react"
 
 interface Transaction {
   type: string
@@ -54,6 +54,12 @@ export default function AdminDashboard() {
     password: "",
     profileImage: ""
   })
+  const [adminName, setAdminName] = useState("Admin User")
+  const [adminUsername, setAdminUsername] = useState("admin")
+  const [adminRating, setAdminRating] = useState(5)
+  const [showPasswordReset, setShowPasswordReset] = useState(false)
+  const [newPassword, setNewPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -577,19 +583,149 @@ export default function AdminDashboard() {
         {activeTab === "home" && renderHomeTab()}
         {activeTab === "accounts" && renderAccountsTab()}
         {activeTab === "profile" && (
-          <div className="space-y-6">
+          <div className="space-y-5">
             <h2 className="text-lg font-bold text-[#171532]">Admin Profile</h2>
-            <div className="bg-white border border-[#e5e7eb] rounded-2xl p-6">
-              <div className="flex flex-col items-center text-center space-y-4">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#4a6670] to-[#3d565e] flex items-center justify-center text-white font-bold text-3xl">
+            
+            <div className="bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-2xl p-8 text-white">
+              <div className="flex flex-col items-center text-center space-y-3">
+                <div className="w-24 h-24 rounded-full bg-white/20 flex items-center justify-center font-bold text-4xl">
                   A
                 </div>
                 <div>
-                  <p className="text-lg font-bold text-[#171532]">Admin User</p>
-                  <p className="text-sm text-[#747384]">Administrator</p>
+                  <p className="text-xl font-bold">{adminName}</p>
+                  <p className="text-sm text-white/70">@{adminUsername}</p>
                 </div>
               </div>
             </div>
+
+            <div className="space-y-3">
+              <div className="bg-white border border-[#e5e7eb] rounded-2xl p-4">
+                <p className="text-xs font-semibold text-[#747384] mb-2">Admin Name</p>
+                <p className="text-lg font-bold text-[#171532]">{adminName}</p>
+              </div>
+
+              <div className="bg-white border border-[#e5e7eb] rounded-2xl p-4">
+                <p className="text-xs font-semibold text-[#747384] mb-2">Username</p>
+                <p className="text-lg font-bold text-[#171532]">@{adminUsername}</p>
+              </div>
+
+              <div className="bg-white border border-[#e5e7eb] rounded-2xl p-4">
+                <p className="text-xs font-semibold text-[#747384] mb-2">Rating</p>
+                <div className="flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-5 h-5 ${
+                        i < adminRating
+                          ? "fill-[#fbbf24] text-[#fbbf24]"
+                          : "text-[#e5e7eb]"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <button
+                onClick={() => setShowPasswordReset(!showPasswordReset)}
+                className="w-full flex items-center gap-3 bg-white border border-[#e5e7eb] rounded-xl p-4 hover:bg-[#f8f9fa] transition-colors"
+              >
+                <Lock className="w-5 h-5 text-[#4a6670]" />
+                <span className="font-medium text-[#171532]">Reset Password</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  const text = `Check out JDSA Students Bank: ${window.location.origin}`
+                  if (navigator.share) {
+                    navigator.share({
+                      title: "JDSA Students Bank",
+                      text: text,
+                    })
+                  } else {
+                    alert(text)
+                  }
+                }}
+                className="w-full flex items-center gap-3 bg-white border border-[#e5e7eb] rounded-xl p-4 hover:bg-[#f8f9fa] transition-colors"
+              >
+                <Share2 className="w-5 h-5 text-[#4a6670]" />
+                <span className="font-medium text-[#171532]">Share Website</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  localStorage.removeItem("isAdminAuthenticated")
+                  localStorage.removeItem("userRole")
+                  router.push("/login")
+                }}
+                className="w-full flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl p-4 hover:bg-red-100 transition-colors"
+              >
+                <LogOut className="w-5 h-5 text-red-600" />
+                <span className="font-medium text-red-600">Logout</span>
+              </button>
+            </div>
+
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+              <div className="flex items-start gap-3">
+                <Info className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
+                <div>
+                  <p className="text-xs font-semibold text-blue-900 mb-1">Site Version</p>
+                  <p className="text-sm text-blue-700 font-medium">v1.0.0</p>
+                  <p className="text-xs text-blue-600 mt-1">JDSA Students Bank Admin Dashboard</p>
+                </div>
+              </div>
+            </div>
+
+            {showPasswordReset && (
+              <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end sm:items-center justify-center z-50">
+                <div className="bg-white rounded-t-3xl sm:rounded-2xl w-full sm:max-w-md shadow-2xl animate-in slide-in-from-bottom duration-300">
+                  <div className="sticky top-0 bg-white flex items-center justify-between px-6 py-5 border-b border-[#f0f0f0]">
+                    <h3 className="text-xl font-bold text-[#171532]">Reset Password</h3>
+                    <button onClick={() => setShowPasswordReset(false)} className="w-8 h-8 flex items-center justify-center rounded-full bg-[#f5f5f5] text-[#747384] hover:bg-[#e5e5e5] transition-colors">
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <div className="px-6 py-6 space-y-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-[#171532] mb-2">New Password</label>
+                      <input
+                        type="password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532]"
+                        placeholder="Enter new password"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-[#171532] mb-2">Confirm Password</label>
+                      <input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532]"
+                        placeholder="Confirm new password"
+                      />
+                    </div>
+                    <button
+                      onClick={() => {
+                        if (newPassword === confirmPassword && newPassword.length > 0) {
+                          alert("Password reset successfully!")
+                          setShowPasswordReset(false)
+                          setNewPassword("")
+                          setConfirmPassword("")
+                        } else {
+                          alert("Passwords do not match or are empty")
+                        }
+                      }}
+                      className="w-full bg-[#4a6670] text-white py-3 rounded-xl font-semibold hover:bg-[#3d565e] transition-colors"
+                    >
+                      Reset Password
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
         {activeTab === "cards" && (
