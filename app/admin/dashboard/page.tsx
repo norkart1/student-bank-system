@@ -101,15 +101,13 @@ export default function AdminDashboard() {
   }, [router])
 
   const handleCreateAccount = () => {
-    if (!newStudent.name || !newStudent.mobile || !newStudent.email || !newStudent.username || !newStudent.password) {
+    if (!newStudent.name || !newStudent.username || !newStudent.password) {
       alert("Please fill all required fields")
       return
     }
 
     const student: Student = {
       name: newStudent.name,
-      mobile: newStudent.mobile,
-      email: newStudent.email,
       username: newStudent.username,
       password: newStudent.password,
       profileImage: newStudent.profileImage,
@@ -232,28 +230,6 @@ export default function AdminDashboard() {
                   onChange={(e) => setNewStudent({...newStudent, name: e.target.value})}
                   className="w-full px-4 py-3.5 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:bg-white focus:ring-2 focus:ring-[#4a6670]/10 transition-all text-[#171532] placeholder:text-[#a0a0a0]"
                   placeholder="Enter full name"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-[#171532] mb-2">Mobile Number <span className="text-red-400">*</span></label>
-                <input
-                  type="tel"
-                  value={newStudent.mobile}
-                  onChange={(e) => setNewStudent({...newStudent, mobile: e.target.value})}
-                  className="w-full px-4 py-3.5 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:bg-white focus:ring-2 focus:ring-[#4a6670]/10 transition-all text-[#171532] placeholder:text-[#a0a0a0]"
-                  placeholder="Enter mobile number"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-[#171532] mb-2">Email ID <span className="text-red-400">*</span></label>
-                <input
-                  type="email"
-                  value={newStudent.email}
-                  onChange={(e) => setNewStudent({...newStudent, email: e.target.value})}
-                  className="w-full px-4 py-3.5 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:bg-white focus:ring-2 focus:ring-[#4a6670]/10 transition-all text-[#171532] placeholder:text-[#a0a0a0]"
-                  placeholder="Enter email address"
                 />
               </div>
 
