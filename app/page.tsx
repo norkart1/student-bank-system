@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
+import { ArrowRight } from "lucide-react"
 
 export default function Home() {
   return (
@@ -31,8 +32,9 @@ export default function Home() {
         </div>
 
         <Link href="/login" className="w-full">
-          <button className="w-full h-14 bg-[#4a6670] hover:bg-[#3d565e] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300">
+          <button className="w-full h-14 bg-[#4a6670] hover:bg-[#3d565e] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 flex items-center justify-center gap-2">
             Get Started
+            <ArrowRight className="w-5 h-5" />
           </button>
         </Link>
       </div>
