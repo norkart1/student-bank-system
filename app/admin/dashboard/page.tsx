@@ -502,64 +502,51 @@ export default function AdminDashboard() {
 
   const renderAccountsTab = () => (
     <>
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
           <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
-            <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+            <ChevronLeft className="w-5 h-5 text-[#4a6670]" />
           </button>
-          <h2 className="text-2xl font-bold text-[#171532]">All Accounts</h2>
+          <h2 className="text-lg font-bold text-[#171532]">All Accounts</h2>
         </div>
         <button 
           onClick={() => setShowCreateForm(true)}
-          className="flex items-center gap-2 bg-gradient-to-r from-[#4a6670] to-[#3d565e] text-white px-6 py-3 rounded-2xl text-sm font-bold shadow-lg shadow-[#4a6670]/20 hover:shadow-xl hover:shadow-[#4a6670]/30 transition-all active:scale-95"
+          className="flex items-center gap-1.5 bg-gradient-to-r from-[#4a6670] to-[#3d565e] text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-md shadow-[#4a6670]/20 hover:shadow-lg transition-all active:scale-95"
         >
-          <Plus className="w-5 h-5" />
-          Add Account
+          <Plus className="w-4 h-4" />
+          Add
         </button>
       </div>
 
       {students.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <Users className="w-16 h-16 text-[#e5e7eb] mb-4" />
-          <p className="text-[#747384] font-medium mb-1">No accounts yet</p>
-          <p className="text-xs text-[#a0a0a0]">Create your first student account to get started</p>
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <Users className="w-14 h-14 text-[#e5e7eb] mb-3" />
+          <p className="text-[#747384] font-medium text-sm mb-1">No accounts yet</p>
+          <p className="text-xs text-[#a0a0a0]">Create your first account</p>
         </div>
       ) : (
-        <div className="space-y-3 mb-6">
+        <div className="space-y-2 mb-6">
           {students.map((student, index) => (
             <div 
               key={index} 
               onClick={() => setViewingIndex(index)}
-              className="bg-gradient-to-r from-white to-[#f8f9fa] border-2 border-[#e5e7eb] rounded-2xl p-4 shadow-sm cursor-pointer hover:border-[#4a6670] hover:shadow-lg hover:from-[#f8f9fa] hover:to-white transition-all duration-300 active:scale-98"
+              className="bg-gradient-to-r from-white to-[#f8f9fa] border border-[#e5e7eb] rounded-lg p-3 shadow-sm cursor-pointer hover:border-[#4a6670] hover:shadow-md transition-all"
             >
-              <div className="flex items-center gap-4">
-                <div className={`w-14 h-14 rounded-full ${avatarColors[index % avatarColors.length]} flex items-center justify-center text-xl font-bold text-[#4a6670] shadow-md`}>
+              <div className="flex items-center gap-3">
+                <div className={`w-12 h-12 rounded-full ${avatarColors[index % avatarColors.length]} flex items-center justify-center text-base font-bold text-[#4a6670] flex-shrink-0`}>
                   {student.name.charAt(0)}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-bold text-[#171532] text-lg truncate">{student.name}</p>
-                  <div className="flex gap-3 mt-1">
-                    {student.mobile && (
-                      <div className="flex items-center gap-1 text-xs text-[#747384]">
-                        <div className="w-4 h-4 bg-[#e5e7eb] rounded-full flex items-center justify-center">
-                          <span className="text-[10px]">📱</span>
-                        </div>
-                        {student.mobile}
-                      </div>
-                    )}
-                    {student.email && (
-                      <div className="flex items-center gap-1 text-xs text-[#747384] truncate">
-                        <div className="w-4 h-4 bg-[#e5e7eb] rounded-full flex items-center justify-center">
-                          <span className="text-[10px]">✉️</span>
-                        </div>
-                        {student.email}
-                      </div>
-                    )}
-                  </div>
+                  <p className="font-bold text-[#171532] text-sm truncate">{student.name}</p>
+                  {(student.mobile || student.email) && (
+                    <p className="text-xs text-[#747384] truncate">
+                      {student.mobile && `${student.mobile}`}{student.mobile && student.email ? ' • ' : ''}{student.email && `${student.email}`}
+                    </p>
+                  )}
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <p className="text-lg font-bold text-[#10B981] mb-1">₹{student.balance.toFixed(2)}</p>
-                  <p className="text-xs text-[#4a6670] font-semibold bg-[#f0f0f0] px-2 py-1 rounded-lg">@{student.username || 'no_username'}</p>
+                  <p className="text-sm font-bold text-[#10B981]">₹{student.balance.toFixed(2)}</p>
+                  <p className="text-xs text-[#4a6670] font-semibold">@{(student.username || 'no_user').slice(0, 10)}</p>
                 </div>
               </div>
             </div>
