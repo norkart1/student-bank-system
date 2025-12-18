@@ -588,9 +588,7 @@ export default function AdminDashboard() {
             
             <div className="bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-2xl p-8 text-white">
               <div className="flex flex-col items-center text-center space-y-3">
-                <div className="w-24 h-24 rounded-full bg-white/20 flex items-center justify-center font-bold text-4xl">
-                  A
-                </div>
+                <img src="/admin-profile.jpg" alt="Admin Profile" className="w-32 h-32 rounded-full object-cover shadow-lg border-4 border-white/20" />
                 <div>
                   <p className="text-xl font-bold">{adminName}</p>
                   <p className="text-sm text-white/70">@{adminUsername}</p>
