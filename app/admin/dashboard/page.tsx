@@ -61,6 +61,9 @@ export default function AdminDashboard() {
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
+  const [aiMessages, setAiMessages] = useState<Array<{role: string, text: string}>>([])
+  const [aiInput, setAiInput] = useState("")
+  const [aiLoading, setAiLoading] = useState(false)
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -316,7 +319,9 @@ export default function AdminDashboard() {
           </div>
           <span className="text-sm font-medium text-[#171532]">Reports</span>
         </button>
-        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+        <button 
+          onClick={() => setActiveTab("ai")}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
             <Sparkles className="w-5 h-5 text-white" />
           </div>
@@ -500,6 +505,76 @@ export default function AdminDashboard() {
     )
   }
 
+  const renderAITab = () => {
+    const handleSendMessage = async () => {
+      if (!aiInput.trim()) return
+      const userMessage = aiInput
+      setAiInput("")
+      setAiMessages(prev => [...prev, { role: "user", text: userMessage }])
+      setAiLoading(true)
+      try {
+        const response = await fetch("/api/gemini", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: userMessage })
+        })
+        const data = await response.json()
+        setAiMessages(prev => [...prev, { role: "assistant", text: data.response || "No response" }])
+      } catch (error) {
+        setAiMessages(prev => [...prev, { role: "assistant", text: "Error: Failed to get response" }])
+      }
+      setAiLoading(false)
+    }
+    return (
+      <>
+        <div className="flex items-center gap-3 mb-4">
+          <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
+            <ChevronLeft className="w-5 h-5 text-[#4a6670]" />
+          </button>
+          <h2 className="text-lg font-bold text-[#171532] flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-purple-500" />
+            AI Assistant
+          </h2>
+        </div>
+        <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-4 mb-4 h-96 overflow-y-auto border border-purple-200 space-y-3">
+          {aiMessages.length === 0 ? (
+            <div className="text-center text-[#747384] py-12">
+              <Sparkles className="w-12 h-12 mx-auto mb-3 text-purple-300" />
+              <p>Start a conversation with AI!</p>
+            </div>
+          ) : (
+            aiMessages.map((msg, idx) => (
+              <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                <div className={`max-w-xs px-4 py-2 rounded-lg ${msg.role === "user" ? "bg-[#4a6670] text-white" : "bg-white border border-purple-200 text-[#171532]"}`}>
+                  <p className="text-sm">{msg.text}</p>
+                </div>
+              </div>
+            ))
+          )}
+          {aiLoading && <div className="flex justify-start"><div className="bg-white border border-purple-200 px-4 py-2 rounded-lg"><p className="text-sm text-[#747384]">AI is thinking...</p></div></div>}
+        </div>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={aiInput}
+            onChange={(e) => setAiInput(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+            placeholder="Ask me anything..."
+            disabled={aiLoading}
+            className="flex-1 px-4 py-2.5 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#a0a0a0] focus:outline-none focus:border-purple-400 disabled:opacity-50"
+          />
+          <button
+            onClick={handleSendMessage}
+            disabled={aiLoading || !aiInput.trim()}
+            className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-4 py-2.5 rounded-xl font-medium hover:shadow-lg transition-all disabled:opacity-50"
+          >
+            <Send className="w-4 h-4" />
+          </button>
+        </div>
+      </>
+    )
+  }
+
   const renderAccountsTab = () => (
     <>
       <div className="flex items-center justify-between mb-4">
@@ -642,6 +717,7 @@ export default function AdminDashboard() {
         {activeTab === "home" && renderHomeTab()}
         {activeTab === "accounts" && renderAccountsTab()}
         {activeTab === "leaderboard" && renderLeaderboardTab()}
+        {activeTab === "ai" && renderAITab()}
         {activeTab === "profile" && (
           <div className="space-y-5">
             <h2 className="text-lg font-bold text-[#171532]">Admin Profile</h2>
