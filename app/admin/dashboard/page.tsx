@@ -907,20 +907,15 @@ export default function AdminDashboard() {
   )
 
   const renderStatusTab = () => {
-    const transactionData = [
-      { name: 'Mon', success: 12000, failure: 2400 },
-      { name: 'Tue', success: 15000, failure: 2210 },
-      { name: 'Wed', success: 18000, failure: 2290 },
-      { name: 'Thu', success: 22000, failure: 2000 },
-      { name: 'Fri', success: 25000, failure: 2181 },
-      { name: 'Sat', success: 28000, failure: 2500 },
-      { name: 'Sun', success: 32000, failure: 2100 }
-    ]
+    // Calculate site strength from system metrics
+    const cpuHealth = 100 - (systemStatus?.cpu?.percentage || 25);
+    const mongoHealth = Math.max(0, 100 - (systemStatus?.mongodb?.percentage || 29));
+    const responseHealth = Math.max(0, 100 - Math.min((systemStatus?.responseTime || 95) / 2, 50));
+    const siteStrength = Math.round((cpuHealth + mongoHealth + responseHealth) / 3)
     
-    const successCount = 88354
-    const failureCount = 6548
-    const totalTransactions = successCount + failureCount
-    const successRate = Math.round((successCount / totalTransactions) * 100)
+    const uptime = systemStatus?.uptime || 86400;
+    const uptimeHours = Math.floor(uptime / 3600);
+    const uptimePercentage = Math.min(Math.round((uptimeHours / 168) * 100), 100); // Based on weekly uptime
     
     return (
       <>
@@ -967,11 +962,13 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {/* Current Conversion */}
+          {/* Site Strength */}
           <div className="bg-slate-700 rounded-2xl p-5">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-white font-bold text-sm">Current conversion</h3>
-              <span className="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">Normal</span>
+              <h3 className="text-white font-bold text-sm">Site strength</h3>
+              <span className={`text-white text-xs font-bold px-3 py-1 rounded-full ${siteStrength >= 80 ? 'bg-green-500' : siteStrength >= 60 ? 'bg-yellow-500' : 'bg-red-500'}`}>
+                {siteStrength >= 80 ? 'Excellent' : siteStrength >= 60 ? 'Good' : 'Fair'}
+              </span>
             </div>
             
             <div className="flex items-center gap-6">
@@ -987,34 +984,34 @@ export default function AdminDashboard() {
                       fill="none" 
                       stroke="#22c55e" 
                       strokeWidth="3"
-                      strokeDasharray={`${successRate * 2.83} 283`}
+                      strokeDasharray={`${siteStrength * 2.83} 283`}
                       strokeLinecap="round"
                     />
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-white font-bold text-2xl">{successRate}%</span>
+                    <span className="text-white font-bold text-2xl">{siteStrength}%</span>
                   </div>
                 </div>
               </div>
 
-              {/* Success/Failure Stats */}
+              {/* Health Stats */}
               <div className="flex-1 space-y-4">
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-300 text-sm">Success</span>
-                    <span className="text-white font-bold text-sm">{successCount.toLocaleString()}</span>
+                    <span className="text-gray-300 text-sm">CPU Health</span>
+                    <span className="text-white font-bold text-sm">{cpuHealth}%</span>
                   </div>
                   <div className="w-full h-2 bg-gray-600 rounded-full overflow-hidden">
-                    <div className="h-full bg-green-500" style={{width: `${successRate}%`}}></div>
+                    <div className="h-full bg-blue-500" style={{width: `${cpuHealth}%`}}></div>
                   </div>
                 </div>
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-300 text-sm">Failure</span>
-                    <span className="text-white font-bold text-sm">{failureCount.toLocaleString()}</span>
+                    <span className="text-gray-300 text-sm">Storage Health</span>
+                    <span className="text-white font-bold text-sm">{mongoHealth}%</span>
                   </div>
                   <div className="w-full h-2 bg-gray-600 rounded-full overflow-hidden">
-                    <div className="h-full bg-red-500" style={{width: `${100 - successRate}%`}}></div>
+                    <div className="h-full bg-orange-500" style={{width: `${mongoHealth}%`}}></div>
                   </div>
                 </div>
               </div>
