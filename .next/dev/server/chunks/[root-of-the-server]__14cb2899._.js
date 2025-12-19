@@ -88,36 +88,43 @@ async function GET() {
         const cpuPercentage = 100 - Math.round(totalIdle / totalTick * 100);
         // Get MongoDB storage stats (real data from actual database)
         let mongoDbStorage = {
-            used: 0.15,
+            used: 0.150,
             total: 0.512,
             percentage: 29
         };
         try {
             const mongoUri = process.env.MONGODB_URI;
             if (mongoUri) {
-                const client = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](mongoUri);
-                await client.connect();
-                // Get admin database stats
-                const adminDb = client.db('admin');
-                const stats = await adminDb.command({
-                    dbStats: 1
+                const client = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](mongoUri, {
+                    serverSelectionTimeoutMS: 5000
                 });
-                // Calculate storage in GB (free tier is 512 MB = 0.512 GB)
-                const usedMB = (stats.dataSize || 0) / (1024 * 1024);
-                const usedGB = usedMB / 1024;
-                const totalGB = 0.512; // Free tier limit
-                mongoDbStorage = {
-                    used: Math.min(parseFloat(usedGB.toFixed(3)), totalGB),
-                    total: totalGB,
-                    percentage: Math.round(usedGB / totalGB * 100)
-                };
-                await client.close();
+                await client.connect();
+                try {
+                    // Get database stats from 'test' database (default)
+                    const testDb = client.db('test');
+                    const stats = await testDb.command({
+                        dbStats: 1
+                    });
+                    // Calculate storage in MB (free tier is 512 MB)
+                    const usedMB = (stats.dataSize || 0) / (1024 * 1024);
+                    const usedGB = usedMB / 1024;
+                    const totalGB = 0.512; // Free tier limit in GB
+                    // Ensure at least 0.1 MB is shown if database has data
+                    const displayMB = Math.max(usedMB, 0.1);
+                    mongoDbStorage = {
+                        used: parseFloat((displayMB / 1024).toFixed(3)),
+                        total: totalGB,
+                        percentage: Math.min(Math.round(usedGB / totalGB * 100), 100)
+                    };
+                } finally{
+                    await client.close();
+                }
             }
         } catch (mongoError) {
             console.error('Failed to fetch MongoDB stats:', mongoError);
             // Fallback to demo data
             mongoDbStorage = {
-                used: 0.15,
+                used: 0.150,
                 total: 0.512,
                 percentage: 29
             };
@@ -168,7 +175,7 @@ async function GET() {
                 percentage: 31
             },
             mongodb: {
-                used: 0.15,
+                used: 0.150,
                 total: 0.512,
                 percentage: 29,
                 unit: 'GB'

@@ -1022,17 +1022,10 @@ export default function AdminDashboard() {
           </div>
 
           {/* System Resources */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-slate-700 rounded-lg p-3">
-              <p className="text-gray-400 text-xs mb-1">RAM Usage</p>
-              <p className="text-white font-bold text-sm mb-2">{systemStatus?.ram?.used?.toFixed(1) || '2.5'} GB</p>
-              <div className="w-full h-1.5 bg-gray-600 rounded-full overflow-hidden">
-                <div className="h-full bg-purple-500" style={{width: `${systemStatus?.ram?.percentage || 31}%`}}></div>
-              </div>
-            </div>
+          <div className="grid grid-cols-2 gap-3 mb-8">
             <div className="bg-slate-700 rounded-lg p-3">
               <p className="text-gray-400 text-xs mb-1">MongoDB</p>
-              <p className="text-white font-bold text-sm mb-2">{(systemStatus?.mongodb?.used * 1024).toFixed(0) || 150} MB</p>
+              <p className="text-white font-bold text-sm mb-2">{Math.max((systemStatus?.mongodb?.used * 1024 || 0)).toFixed(1)} MB</p>
               <div className="w-full h-1.5 bg-gray-600 rounded-full overflow-hidden">
                 <div className="h-full bg-orange-500" style={{width: `${systemStatus?.mongodb?.percentage || 29}%`}}></div>
               </div>
@@ -1044,7 +1037,7 @@ export default function AdminDashboard() {
                 <div className="h-full bg-blue-500" style={{width: `${systemStatus?.cpu?.percentage || 25}%`}}></div>
               </div>
             </div>
-            <div className="bg-slate-700 rounded-lg p-3">
+            <div className="bg-slate-700 rounded-lg p-3 col-span-2">
               <p className="text-gray-400 text-xs mb-1">Response Time</p>
               <p className="text-white font-bold text-sm">{systemStatus?.responseTime || 95}ms</p>
             </div>
