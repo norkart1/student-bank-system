@@ -953,11 +953,11 @@ export default function AdminDashboard() {
         
         <div className="bg-orange-100 border border-orange-300 rounded-lg p-3">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-[#171532]">Storage</p>
+            <p className="text-xs font-bold text-[#171532]">MongoDB</p>
             <div className="text-right">
-              <p className="text-xs font-bold text-orange-600">{systemStatus?.mongodb?.used || 6.2} GB / {systemStatus?.mongodb?.total || 10} GB</p>
+              <p className="text-xs font-bold text-orange-600">{(systemStatus?.mongodb?.used * 1024).toFixed(0) || 150} MB / {(systemStatus?.mongodb?.total * 1024).toFixed(0) || 512} MB</p>
               <div className="w-20 h-1.5 bg-orange-300 rounded-full mt-0.5 overflow-hidden">
-                <div className="h-full bg-orange-600" style={{width: `${systemStatus?.mongodb?.percentage || 62}%`}}></div>
+                <div className="h-full bg-orange-600" style={{width: `${systemStatus?.mongodb?.percentage || 29}%`}}></div>
               </div>
             </div>
           </div>

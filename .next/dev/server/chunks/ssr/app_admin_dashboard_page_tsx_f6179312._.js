@@ -2830,7 +2830,7 @@ function AdminDashboard() {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         className: "text-xs font-bold text-[#171532]",
-                                        children: "Storage"
+                                        children: "MongoDB"
                                     }, void 0, false, {
                                         fileName: "[project]/app/admin/dashboard/page.tsx",
                                         lineNumber: 956,
@@ -2842,10 +2842,10 @@ function AdminDashboard() {
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                 className: "text-xs font-bold text-orange-600",
                                                 children: [
-                                                    systemStatus?.mongodb?.used || 6.2,
-                                                    " GB / ",
-                                                    systemStatus?.mongodb?.total || 10,
-                                                    " GB"
+                                                    (systemStatus?.mongodb?.used * 1024).toFixed(0) || 150,
+                                                    " MB / ",
+                                                    (systemStatus?.mongodb?.total * 1024).toFixed(0) || 512,
+                                                    " MB"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/admin/dashboard/page.tsx",
@@ -2857,7 +2857,7 @@ function AdminDashboard() {
                                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "h-full bg-orange-600",
                                                     style: {
-                                                        width: `${systemStatus?.mongodb?.percentage || 62}%`
+                                                        width: `${systemStatus?.mongodb?.percentage || 29}%`
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/dashboard/page.tsx",
