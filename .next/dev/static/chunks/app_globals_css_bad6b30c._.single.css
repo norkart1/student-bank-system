@@ -82,6 +82,8 @@
     --color-orange-100: #ffedd5;
     --color-orange-300: #ffb96d;
     --color-orange-600: #f05100;
+    --color-amber-100: #fef3c6;
+    --color-amber-700: #b75000;
     --color-yellow-50: #fefce8;
     --color-yellow-100: #fef9c2;
     --color-yellow-300: #ffe02a;
@@ -94,7 +96,6 @@
     --color-blue-200: #bedbff;
     --color-blue-500: #3080ff;
     --color-blue-600: #155dfc;
-    --color-purple-50: #faf5ff;
     --color-purple-100: #f3e8ff;
     --color-purple-200: #e9d5ff;
     --color-purple-300: #d9b3ff;
@@ -162,6 +163,8 @@
       --color-orange-100: lab(94.7127% 3.58394 14.3151);
       --color-orange-300: lab(80.8059% 21.7313 50.4455);
       --color-orange-600: lab(57.1026% 64.2584 89.8886);
+      --color-amber-100: lab(95.916% -1.21653 23.111);
+      --color-amber-700: lab(47.2709% 42.9082 69.2966);
       --color-yellow-50: lab(98.6846% -1.79055 9.7766);
       --color-yellow-100: lab(97.3564% -4.51407 27.344);
       --color-yellow-300: lab(89.7033% -.480294 84.4917);
@@ -174,7 +177,6 @@
       --color-blue-200: lab(86.15% -4.04379 -21.0797);
       --color-blue-500: lab(54.1736% 13.3369 -74.6839);
       --color-blue-600: lab(44.0605% 29.0279 -86.0352);
-      --color-purple-50: lab(97.1627% 2.99937 -4.13398);
       --color-purple-100: lab(93.3333% 6.97437 -9.83434);
       --color-purple-200: lab(87.8405% 13.4282 -18.7159);
       --color-purple-300: lab(78.3298% 26.2195 -34.9499);
@@ -1066,12 +1068,12 @@
     border-top-right-radius: var(--radius-3xl);
   }
 
-  .rounded-br-none {
-    border-bottom-right-radius: 0;
+  .rounded-br-3xl {
+    border-bottom-right-radius: var(--radius-3xl);
   }
 
-  .rounded-bl-none {
-    border-bottom-left-radius: 0;
+  .rounded-bl-3xl {
+    border-bottom-left-radius: var(--radius-3xl);
   }
 
   .border {
@@ -1138,10 +1140,6 @@
 
   .border-orange-300 {
     border-color: var(--color-orange-300);
-  }
-
-  .border-purple-200 {
-    border-color: var(--color-purple-200);
   }
 
   .border-red-200 {
@@ -1218,6 +1216,14 @@
     background-color: #f8f9fa;
   }
 
+  .bg-amber-100 {
+    background-color: var(--color-amber-100);
+  }
+
+  .bg-amber-700 {
+    background-color: var(--color-amber-700);
+  }
+
   .bg-background {
     background-color: var(--background);
   }
@@ -1262,6 +1268,10 @@
     background-color: var(--color-gray-50);
   }
 
+  .bg-gray-400 {
+    background-color: var(--color-gray-400);
+  }
+
   .bg-green-100 {
     background-color: var(--color-green-100);
   }
@@ -1288,10 +1298,6 @@
 
   .bg-purple-100 {
     background-color: var(--color-purple-100);
-  }
-
-  .bg-purple-500 {
-    background-color: var(--color-purple-500);
   }
 
   .bg-red-50 {
@@ -1398,11 +1404,6 @@
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
 
-  .from-purple-50 {
-    --tw-gradient-from: var(--color-purple-50);
-    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-  }
-
   .from-purple-500 {
     --tw-gradient-from: var(--color-purple-500);
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
@@ -1451,11 +1452,6 @@
 
   .to-\[\#f8f9fa\] {
     --tw-gradient-to: #f8f9fa;
-    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-  }
-
-  .to-blue-50 {
-    --tw-gradient-to: var(--color-blue-50);
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
 
@@ -1755,6 +1751,10 @@
 
   .text-\[\#e5e7eb\] {
     color: #e5e7eb;
+  }
+
+  .text-amber-700 {
+    color: var(--color-amber-700);
   }
 
   .text-blue-600 {

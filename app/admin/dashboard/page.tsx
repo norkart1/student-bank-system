@@ -603,20 +603,28 @@ export default function AdminDashboard() {
               </button>
             </div>
           ) : (
-            <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-4 space-y-3 border-2 border-purple-200 shadow-sm">
+            <div className="space-y-3 pb-4">
               {aiMessages.map((msg, idx) => (
-                <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                  <div className={`max-w-xs px-4 py-3 rounded-xl text-xs break-words ${msg.role === "user" ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-md rounded-br-none font-medium" : "bg-white text-[#171532] border-2 border-purple-200 shadow-sm rounded-bl-none"}`}>
+                <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} gap-2`}>
+                  {msg.role === "assistant" && (
+                    <div className="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0 mt-1">
+                      <Sparkles className="w-4 h-4 text-amber-700" />
+                    </div>
+                  )}
+                  <div className={`max-w-xs px-4 py-3 rounded-2xl text-sm break-words ${msg.role === "user" ? "bg-amber-700 text-white rounded-br-3xl" : "bg-white text-[#171532] border border-gray-200 rounded-bl-3xl shadow-sm"}`}>
                     {msg.text}
                   </div>
                 </div>
               ))}
               {aiLoading && (
-                <div className="flex justify-start pt-2">
-                  <div className="bg-white border-2 border-purple-200 px-4 py-3 rounded-xl flex items-center gap-1.5 shadow-sm">
-                    <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                    <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                <div className="flex justify-start gap-2 items-center pt-2">
+                  <div className="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="w-4 h-4 text-amber-700" />
+                  </div>
+                  <div className="bg-white border border-gray-200 px-4 py-3 rounded-2xl rounded-bl-3xl flex items-center gap-2 shadow-sm">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
                   </div>
                 </div>
               )}
