@@ -74,16 +74,24 @@ export default function AdminDashboard() {
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
   const [transactionAmount, setTransactionAmount] = useState("")
   const [selectedStudentIndex, setSelectedStudentIndex] = useState<number | null>(null)
+  const [notification, setNotification] = useState<{type: 'success' | 'error', message: string} | null>(null)
 
   const handleDeposit = () => {
     if (!transactionAmount || isNaN(parseFloat(transactionAmount)) || parseFloat(transactionAmount) <= 0) {
-      alert("Please enter a valid amount")
+      setNotification({ type: 'error', message: 'Please enter a valid amount' })
+      setTimeout(() => setNotification(null), 3000)
+      return
+    }
+    
+    if (selectedStudentIndex === null) {
+      setNotification({ type: 'error', message: 'Please select a student' })
+      setTimeout(() => setNotification(null), 3000)
       return
     }
     
     const amount = parseFloat(transactionAmount)
     const updatedStudents = [...students]
-    const student = updatedStudents[selectedStudentIndex!]
+    const student = updatedStudents[selectedStudentIndex]
     
     student.balance += amount
     student.transactions.push({
@@ -99,21 +107,30 @@ export default function AdminDashboard() {
     setShowDepositModal(false)
     setTransactionAmount("")
     setSelectedStudentIndex(null)
-    alert(`Deposit of ₹${amount.toFixed(2)} successful!`)
+    setNotification({ type: 'success', message: `Deposit of ₹${amount.toFixed(2)} successful!` })
+    setTimeout(() => setNotification(null), 3000)
   }
 
   const handleWithdraw = () => {
     if (!transactionAmount || isNaN(parseFloat(transactionAmount)) || parseFloat(transactionAmount) <= 0) {
-      alert("Please enter a valid amount")
+      setNotification({ type: 'error', message: 'Please enter a valid amount' })
+      setTimeout(() => setNotification(null), 3000)
+      return
+    }
+    
+    if (selectedStudentIndex === null) {
+      setNotification({ type: 'error', message: 'Please select a student' })
+      setTimeout(() => setNotification(null), 3000)
       return
     }
     
     const amount = parseFloat(transactionAmount)
     const updatedStudents = [...students]
-    const student = updatedStudents[selectedStudentIndex!]
+    const student = updatedStudents[selectedStudentIndex]
     
     if (student.balance < amount) {
-      alert(`Insufficient balance. Available: ₹${student.balance.toFixed(2)}`)
+      setNotification({ type: 'error', message: `Insufficient balance. Available: ₹${student.balance.toFixed(2)}` })
+      setTimeout(() => setNotification(null), 3000)
       return
     }
     
@@ -131,7 +148,34 @@ export default function AdminDashboard() {
     setShowWithdrawModal(false)
     setTransactionAmount("")
     setSelectedStudentIndex(null)
-    alert(`Withdrawal of ₹${amount.toFixed(2)} successful!`)
+    setNotification({ type: 'success', message: `Withdrawal of ₹${amount.toFixed(2)} successful!` })
+    setTimeout(() => setNotification(null), 3000)
+  }
+
+  const renderNotification = () => {
+    if (!notification) return null
+    return (
+      <div className="fixed top-6 right-6 z-[60] animate-in fade-in slide-in-from-top-2 duration-300">
+        <div className={`rounded-xl px-6 py-4 shadow-xl backdrop-blur-sm border ${
+          notification.type === 'success' 
+            ? 'bg-[#10B981]/95 border-[#10B981] text-white' 
+            : 'bg-[#EF4444]/95 border-[#EF4444] text-white'
+        }`}>
+          <div className="flex items-center gap-3">
+            {notification.type === 'success' ? (
+              <div className="w-5 h-5 rounded-full bg-white/30 flex items-center justify-center">
+                <span className="text-sm font-bold">✓</span>
+              </div>
+            ) : (
+              <div className="w-5 h-5 rounded-full bg-white/30 flex items-center justify-center">
+                <span className="text-sm font-bold">!</span>
+              </div>
+            )}
+            <p className="font-medium text-sm">{notification.message}</p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   const renderDepositModal = () => {
@@ -1252,6 +1296,7 @@ export default function AdminDashboard() {
   return (
     <div className={`min-h-screen pb-24 ${activeTab === "status" ? "bg-white dark:bg-slate-800" : "bg-white dark:bg-slate-900"}`}>
       <div className={`px-5 pt-6 ${activeTab === "status" ? "text-[#171532] dark:text-white" : ""}`}>
+        {renderNotification()}
         {showDepositModal && renderDepositModal()}
         {showWithdrawModal && renderWithdrawModal()}
         {activeTab === "home" && renderHomeTab()}
