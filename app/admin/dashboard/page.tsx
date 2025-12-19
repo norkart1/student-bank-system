@@ -64,6 +64,30 @@ export default function AdminDashboard() {
   const [aiMessages, setAiMessages] = useState<Array<{role: string, text: string}>>([])
   const [aiInput, setAiInput] = useState("")
   const [aiLoading, setAiLoading] = useState(false)
+  const [calcDisplay, setCalcDisplay] = useState("0")
+  const [calcExpression, setCalcExpression] = useState("")
+
+  const handleCalcInput = (value: string) => {
+    if (value === "=") {
+      try {
+        const result = eval(calcExpression || calcDisplay)
+        setCalcDisplay(String(result))
+        setCalcExpression("")
+      } catch {
+        setCalcDisplay("Error")
+      }
+    } else if (value === "C") {
+      setCalcDisplay("0")
+      setCalcExpression("")
+    } else if (value === "←") {
+      setCalcDisplay(calcDisplay.slice(0, -1) || "0")
+    } else if (["+", "-", "*", "/"].includes(value)) {
+      setCalcExpression(calcDisplay + value)
+      setCalcDisplay("0")
+    } else {
+      setCalcDisplay(calcDisplay === "0" ? value : calcDisplay + value)
+    }
+  }
 
   const renderMessageWithHighlight = (text: string) => {
     const parts = text.split(/(\*\*[^*]+\*\*)/g)
@@ -365,13 +389,17 @@ export default function AdminDashboard() {
           </div>
           <span className="text-sm font-medium text-[#171532]">Top Rich</span>
         </button>
-        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+        <button 
+          onClick={() => setActiveTab("calculator")}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
             <Calculator className="w-5 h-5 text-white" />
           </div>
           <span className="text-sm font-medium text-[#171532]">Calculator</span>
         </button>
-        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+        <button 
+          onClick={() => setActiveTab("status")}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
             <Activity className="w-5 h-5 text-white" />
           </div>
@@ -816,6 +844,150 @@ export default function AdminDashboard() {
     </>
   )
 
+  const renderCalculatorTab = () => (
+    <>
+      <div className="flex items-center gap-3 mb-6">
+        <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
+          <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+        </button>
+        <h2 className="text-lg font-bold text-[#171532]">Calculator</h2>
+      </div>
+      
+      <div className="bg-white border border-[#e5e7eb] rounded-2xl p-4 max-w-sm mx-auto shadow-md">
+        <div className="bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl p-4 text-white mb-4">
+          <p className="text-xs text-white/60">Display</p>
+          <p className="text-3xl font-bold truncate">{calcExpression}{calcDisplay}</p>
+        </div>
+        
+        <div className="grid grid-cols-4 gap-2">
+          <button onClick={() => handleCalcInput("C")} className="bg-red-500 text-white py-3 rounded-lg font-bold hover:bg-red-600">C</button>
+          <button onClick={() => handleCalcInput("←")} className="bg-orange-500 text-white py-3 rounded-lg font-bold hover:bg-orange-600">←</button>
+          <button onClick={() => handleCalcInput("/")} className="bg-blue-500 text-white py-3 rounded-lg font-bold hover:bg-blue-600">/</button>
+          <button onClick={() => handleCalcInput("*")} className="bg-blue-500 text-white py-3 rounded-lg font-bold hover:bg-blue-600">*</button>
+          
+          {["7", "8", "9"].map(n => <button key={n} onClick={() => handleCalcInput(n)} className="bg-[#f0f0f0] text-[#171532] py-3 rounded-lg font-bold hover:bg-[#e0e0e0]">{n}</button>)}
+          <button onClick={() => handleCalcInput("-")} className="bg-blue-500 text-white py-3 rounded-lg font-bold hover:bg-blue-600">-</button>
+          
+          {["4", "5", "6"].map(n => <button key={n} onClick={() => handleCalcInput(n)} className="bg-[#f0f0f0] text-[#171532] py-3 rounded-lg font-bold hover:bg-[#e0e0e0]">{n}</button>)}
+          <button onClick={() => handleCalcInput("+")} className="bg-blue-500 text-white py-3 rounded-lg font-bold hover:bg-blue-600">+</button>
+          
+          {["1", "2", "3"].map(n => <button key={n} onClick={() => handleCalcInput(n)} className="bg-[#f0f0f0] text-[#171532] py-3 rounded-lg font-bold hover:bg-[#e0e0e0]">{n}</button>)}
+          <button onClick={() => handleCalcInput("=")} className="bg-green-500 text-white py-3 rounded-lg font-bold hover:bg-green-600 row-span-2">=</button>
+          
+          <button onClick={() => handleCalcInput("0")} className="bg-[#f0f0f0] text-[#171532] py-3 rounded-lg font-bold col-span-2 hover:bg-[#e0e0e0]">0</button>
+          <button onClick={() => handleCalcInput(".")} className="bg-[#f0f0f0] text-[#171532] py-3 rounded-lg font-bold hover:bg-[#e0e0e0]">.</button>
+        </div>
+      </div>
+    </>
+  )
+
+  const renderStatusTab = () => (
+    <>
+      <div className="flex items-center gap-3 mb-6">
+        <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
+          <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+        </button>
+        <h2 className="text-lg font-bold text-[#171532]">System Status</h2>
+      </div>
+      
+      <div className="space-y-3">
+        <div className="bg-gradient-to-r from-green-50 to-green-100 border-2 border-green-300 rounded-xl p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-[#171532]">Website Status</p>
+              <p className="text-xs text-[#747384]">Server health</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+              <p className="text-lg font-bold text-green-600">UP</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 border-2 border-blue-300 rounded-xl p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-[#171532]">API Status</p>
+              <p className="text-xs text-[#747384]">All endpoints active</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+              <p className="text-lg font-bold text-blue-600">ACTIVE</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-gradient-to-r from-purple-50 to-purple-100 border-2 border-purple-300 rounded-xl p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-[#171532]">RAM Usage</p>
+              <p className="text-xs text-[#747384]">System memory</p>
+            </div>
+            <div className="text-right">
+              <p className="text-lg font-bold text-purple-600">45%</p>
+              <div className="w-32 h-2 bg-purple-300 rounded-full mt-1 overflow-hidden">
+                <div className="h-full bg-purple-600 w-[45%]"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-gradient-to-r from-orange-50 to-orange-100 border-2 border-orange-300 rounded-xl p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-[#171532]">MongoDB Storage</p>
+              <p className="text-xs text-[#747384]">Database usage</p>
+            </div>
+            <div className="text-right">
+              <p className="text-lg font-bold text-orange-600">62%</p>
+              <div className="w-32 h-2 bg-orange-300 rounded-full mt-1 overflow-hidden">
+                <div className="h-full bg-orange-600 w-[62%]"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-gradient-to-r from-indigo-50 to-indigo-100 border-2 border-indigo-300 rounded-xl p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-[#171532]">CPU Usage</p>
+              <p className="text-xs text-[#747384]">Processor load</p>
+            </div>
+            <div className="text-right">
+              <p className="text-lg font-bold text-indigo-600">28%</p>
+              <div className="w-32 h-2 bg-indigo-300 rounded-full mt-1 overflow-hidden">
+                <div className="h-full bg-indigo-600 w-[28%]"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-cyan-50 to-cyan-100 border-2 border-cyan-300 rounded-xl p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-[#171532]">Network Status</p>
+              <p className="text-xs text-[#747384]">Connection health</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+              <p className="text-lg font-bold text-cyan-600">STABLE</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-teal-50 to-teal-100 border-2 border-teal-300 rounded-xl p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-[#171532]">Response Time</p>
+              <p className="text-xs text-[#747384]">Average latency</p>
+            </div>
+            <p className="text-lg font-bold text-teal-600">142ms</p>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+
   return (
     <div className="min-h-screen bg-white pb-24">
       <div className="px-5 pt-6">
@@ -823,6 +995,8 @@ export default function AdminDashboard() {
         {activeTab === "accounts" && renderAccountsTab()}
         {activeTab === "leaderboard" && renderLeaderboardTab()}
         {activeTab === "ai" && renderAITab()}
+        {activeTab === "calculator" && renderCalculatorTab()}
+        {activeTab === "status" && renderStatusTab()}
         {activeTab === "profile" && (
           <div className="space-y-5">
             <h2 className="text-lg font-bold text-[#171532]">Admin Profile</h2>
