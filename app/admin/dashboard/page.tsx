@@ -61,6 +61,7 @@ export default function AdminDashboard() {
   })
   const [adminName, setAdminName] = useState("Admin User")
   const [adminUsername, setAdminUsername] = useState("admin")
+  const [adminPassword, setAdminPassword] = useState("admin@123")
   const [adminRating, setAdminRating] = useState(5)
   const [showPasswordReset, setShowPasswordReset] = useState(false)
   const [newPassword, setNewPassword] = useState("")
@@ -1640,15 +1641,20 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            <div className="space-y-2 bg-white border border-[#e5e7eb] rounded-2xl p-3">
+            <div className="space-y-2 bg-white dark:bg-slate-800 border border-[#e5e7eb] dark:border-slate-700 rounded-2xl p-3">
               <div>
-                <p className="text-xs font-semibold text-[#747384] mb-1">Admin Name</p>
-                <p className="text-sm font-bold text-[#171532]">{adminName}</p>
+                <p className="text-xs font-semibold text-[#747384] dark:text-gray-400 mb-1">Admin Name</p>
+                <p className="text-sm font-bold text-[#171532] dark:text-white">{adminName}</p>
               </div>
 
-              <div className="pt-2 border-t border-[#e5e7eb]">
-                <p className="text-xs font-semibold text-[#747384] mb-1">Username</p>
-                <p className="text-sm font-bold text-[#171532]">@{adminUsername}</p>
+              <div className="pt-2 border-t border-[#e5e7eb] dark:border-slate-700">
+                <p className="text-xs font-semibold text-[#747384] dark:text-gray-400 mb-1">Username</p>
+                <p className="text-sm font-bold text-[#171532] dark:text-white">@{adminUsername}</p>
+              </div>
+
+              <div className="pt-2 border-t border-[#e5e7eb] dark:border-slate-700">
+                <p className="text-xs font-semibold text-[#747384] dark:text-gray-400 mb-1">Password</p>
+                <p className="text-sm font-bold text-[#171532] dark:text-white">{adminPassword}</p>
               </div>
             </div>
 
