@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Calculator, Activity } from "lucide-react"
+import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Calculator, Activity, Moon, Sun } from "lucide-react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
+import { useTheme } from "next-themes"
 
 interface Transaction {
   type: string
@@ -34,6 +35,7 @@ const avatarColors = ['bg-orange-100', 'bg-blue-100', 'bg-green-100', 'bg-purple
 
 export default function AdminDashboard() {
   const router = useRouter()
+  const { theme, setTheme } = useTheme()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [activeTab, setActiveTab] = useState("home")
   const [currentDate, setCurrentDate] = useState("")
@@ -72,7 +74,8 @@ export default function AdminDashboard() {
   const handleCalcInput = (value: string) => {
     if (value === "=") {
       try {
-        const result = eval(calcExpression || calcDisplay)
+        const expr = calcExpression + calcDisplay
+        const result = eval(expr)
         setCalcDisplay(String(result))
         setCalcExpression("")
       } catch {
@@ -82,10 +85,15 @@ export default function AdminDashboard() {
       setCalcDisplay("0")
       setCalcExpression("")
     } else if (value === "←") {
-      setCalcDisplay(calcDisplay.slice(0, -1) || "0")
+      if (calcExpression) {
+        setCalcExpression(calcExpression.slice(0, -1))
+      } else {
+        setCalcDisplay(calcDisplay.slice(0, -1) || "0")
+      }
     } else if (["+", "-", "*", "/"].includes(value)) {
-      setCalcExpression(calcDisplay + value)
-      setCalcDisplay("0")
+      const expr = calcExpression + calcDisplay
+      setCalcExpression(expr + value)
+      setCalcDisplay("")
     } else {
       setCalcDisplay(calcDisplay === "0" ? value : calcDisplay + value)
     }
@@ -919,33 +927,45 @@ export default function AdminDashboard() {
     
     return (
       <>
-        <div className="flex items-center gap-3 mb-6">
-          <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-gray-200 rounded-lg transition-colors">
-            <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+        <div className="flex items-center justify-between gap-3 mb-6">
+          <div className="flex items-center gap-3">
+            <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors">
+              <ChevronLeft className="w-6 h-6 text-[#4a6670] dark:text-gray-300" />
+            </button>
+            <h2 className="text-xl font-bold text-[#171532] dark:text-white">System Status</h2>
+          </div>
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="p-2 rounded-lg bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors"
+          >
+            {theme === "dark" ? (
+              <Sun className="w-5 h-5 text-yellow-500" />
+            ) : (
+              <Moon className="w-5 h-5 text-gray-600" />
+            )}
           </button>
-          <h2 className="text-xl font-bold text-white">System Status</h2>
         </div>
         
         <div className="space-y-4">
           {/* Service Statuses & System Status */}
           <div className="grid grid-cols-2 gap-4">
             {/* Service Statuses */}
-            <div className="bg-slate-700 rounded-2xl p-5">
-              <h3 className="text-white font-bold text-sm mb-4">Service statuses</h3>
+            <div className="bg-white dark:bg-slate-700 rounded-2xl p-5 border border-gray-200 dark:border-slate-600">
+              <h3 className="text-[#171532] dark:text-white font-bold text-sm mb-4">Service statuses</h3>
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                  <span className="text-gray-300 text-sm">Start</span>
+                  <span className="text-[#747384] dark:text-gray-300 text-sm">Start</span>
                   <div className="flex-1 h-0.5 border-b border-dotted border-gray-500"></div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                  <span className="text-gray-300 text-sm">Scoring</span>
+                  <span className="text-[#747384] dark:text-gray-300 text-sm">Scoring</span>
                   <div className="flex-1 h-0.5 border-b border-dotted border-gray-500"></div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                  <span className="text-gray-300 text-sm">Receipt</span>
+                  <span className="text-[#747384] dark:text-gray-300 text-sm">Receipt</span>
                   <div className="flex-1 h-0.5 border-b border-dotted border-gray-500"></div>
                 </div>
               </div>
@@ -963,9 +983,9 @@ export default function AdminDashboard() {
           </div>
 
           {/* Site Strength */}
-          <div className="bg-slate-700 rounded-2xl p-5">
+          <div className="bg-white dark:bg-slate-700 rounded-2xl p-5 border border-gray-200 dark:border-slate-600">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-white font-bold text-sm">Site strength</h3>
+              <h3 className="text-[#171532] dark:text-white font-bold text-sm">Site strength</h3>
               <span className={`text-white text-xs font-bold px-3 py-1 rounded-full ${siteStrength >= 80 ? 'bg-green-500' : siteStrength >= 60 ? 'bg-yellow-500' : 'bg-red-500'}`}>
                 {siteStrength >= 80 ? 'Excellent' : siteStrength >= 60 ? 'Good' : 'Fair'}
               </span>
@@ -989,7 +1009,7 @@ export default function AdminDashboard() {
                     />
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-white font-bold text-2xl">{siteStrength}%</span>
+                    <span className="text-[#171532] dark:text-white font-bold text-2xl">{siteStrength}%</span>
                   </div>
                 </div>
               </div>
@@ -998,19 +1018,19 @@ export default function AdminDashboard() {
               <div className="flex-1 space-y-4">
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-300 text-sm">CPU Health</span>
-                    <span className="text-white font-bold text-sm">{cpuHealth}%</span>
+                    <span className="text-[#747384] dark:text-gray-300 text-sm">CPU Health</span>
+                    <span className="text-[#171532] dark:text-white font-bold text-sm">{cpuHealth}%</span>
                   </div>
-                  <div className="w-full h-2 bg-gray-600 rounded-full overflow-hidden">
+                  <div className="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
                     <div className="h-full bg-blue-500" style={{width: `${cpuHealth}%`}}></div>
                   </div>
                 </div>
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-300 text-sm">Storage Health</span>
-                    <span className="text-white font-bold text-sm">{mongoHealth}%</span>
+                    <span className="text-[#747384] dark:text-gray-300 text-sm">Storage Health</span>
+                    <span className="text-[#171532] dark:text-white font-bold text-sm">{mongoHealth}%</span>
                   </div>
-                  <div className="w-full h-2 bg-gray-600 rounded-full overflow-hidden">
+                  <div className="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
                     <div className="h-full bg-orange-500" style={{width: `${mongoHealth}%`}}></div>
                   </div>
                 </div>
@@ -1020,23 +1040,23 @@ export default function AdminDashboard() {
 
           {/* System Resources */}
           <div className="grid grid-cols-2 gap-3 mb-8">
-            <div className="bg-slate-700 rounded-lg p-3">
-              <p className="text-gray-400 text-xs mb-1">MongoDB</p>
-              <p className="text-white font-bold text-sm mb-2">{Math.max((systemStatus?.mongodb?.used * 1024 || 0)).toFixed(1)} MB</p>
-              <div className="w-full h-1.5 bg-gray-600 rounded-full overflow-hidden">
+            <div className="bg-white dark:bg-slate-700 rounded-lg p-3 border border-gray-200 dark:border-slate-600">
+              <p className="text-[#747384] dark:text-gray-400 text-xs mb-1">MongoDB</p>
+              <p className="text-[#171532] dark:text-white font-bold text-sm mb-2">{Math.max((systemStatus?.mongodb?.used * 1024 || 0)).toFixed(1)} MB</p>
+              <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
                 <div className="h-full bg-orange-500" style={{width: `${systemStatus?.mongodb?.percentage || 29}%`}}></div>
               </div>
             </div>
-            <div className="bg-slate-700 rounded-lg p-3">
-              <p className="text-gray-400 text-xs mb-1">CPU Usage</p>
-              <p className="text-white font-bold text-sm mb-2">{systemStatus?.cpu?.percentage || 25}%</p>
-              <div className="w-full h-1.5 bg-gray-600 rounded-full overflow-hidden">
+            <div className="bg-white dark:bg-slate-700 rounded-lg p-3 border border-gray-200 dark:border-slate-600">
+              <p className="text-[#747384] dark:text-gray-400 text-xs mb-1">CPU Usage</p>
+              <p className="text-[#171532] dark:text-white font-bold text-sm mb-2">{systemStatus?.cpu?.percentage || 25}%</p>
+              <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
                 <div className="h-full bg-blue-500" style={{width: `${systemStatus?.cpu?.percentage || 25}%`}}></div>
               </div>
             </div>
-            <div className="bg-slate-700 rounded-lg p-3 col-span-2">
-              <p className="text-gray-400 text-xs mb-1">Response Time</p>
-              <p className="text-white font-bold text-sm">{systemStatus?.responseTime || 95}ms</p>
+            <div className="bg-white dark:bg-slate-700 rounded-lg p-3 col-span-2 border border-gray-200 dark:border-slate-600">
+              <p className="text-[#747384] dark:text-gray-400 text-xs mb-1">Response Time</p>
+              <p className="text-[#171532] dark:text-white font-bold text-sm">{systemStatus?.responseTime || 95}ms</p>
             </div>
           </div>
         </div>
@@ -1045,8 +1065,8 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className={`min-h-screen pb-24 ${activeTab === "status" ? "bg-slate-800" : "bg-white"}`}>
-      <div className={`px-5 pt-6 ${activeTab === "status" ? "text-white" : ""}`}>
+    <div className={`min-h-screen pb-24 ${activeTab === "status" ? "bg-white dark:bg-slate-800" : "bg-white dark:bg-slate-900"}`}>
+      <div className={`px-5 pt-6 ${activeTab === "status" ? "text-[#171532] dark:text-white" : ""}`}>
         {activeTab === "home" && renderHomeTab()}
         {activeTab === "accounts" && renderAccountsTab()}
         {activeTab === "leaderboard" && renderLeaderboardTab()}
