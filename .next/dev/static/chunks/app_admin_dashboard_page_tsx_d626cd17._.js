@@ -1633,12 +1633,12 @@ function AdminDashboard() {
                             lineNumber: 578,
                             columnNumber: 13
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl p-3 space-y-2 border border-purple-200",
+                            className: "bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-4 space-y-3 border-2 border-purple-200 shadow-sm",
                             children: [
                                 aiMessages.map((msg, idx)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: `flex ${msg.role === "user" ? "justify-end" : "justify-start"}`,
                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: `max-w-xs px-3 py-2 rounded-lg text-xs break-words ${msg.role === "user" ? "bg-gradient-to-r from-[#4a6670] to-[#3d565e] text-white" : "bg-white text-[#171532] border border-purple-200"}`,
+                                            className: `max-w-xs px-4 py-3 rounded-xl text-xs break-words ${msg.role === "user" ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-md rounded-br-none font-medium" : "bg-white text-[#171532] border-2 border-purple-200 shadow-sm rounded-bl-none"}`,
                                             children: msg.text
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/dashboard/page.tsx",
@@ -1651,26 +1651,32 @@ function AdminDashboard() {
                                         columnNumber: 17
                                     }, this)),
                                 aiLoading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex justify-start pt-1",
+                                    className: "flex justify-start pt-2",
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "bg-white border border-purple-200 px-3 py-2 rounded-lg flex items-center gap-1",
+                                        className: "bg-white border-2 border-purple-200 px-4 py-3 rounded-xl flex items-center gap-1.5 shadow-sm",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "w-1 h-1 bg-purple-400 rounded-full animate-bounce"
+                                                className: "w-2 h-2 bg-purple-500 rounded-full animate-bounce"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/admin/dashboard/page.tsx",
                                                 lineNumber: 617,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "w-1 h-1 bg-purple-400 rounded-full animate-bounce delay-100"
+                                                className: "w-2 h-2 bg-purple-500 rounded-full animate-bounce",
+                                                style: {
+                                                    animationDelay: '0.1s'
+                                                }
                                             }, void 0, false, {
                                                 fileName: "[project]/app/admin/dashboard/page.tsx",
                                                 lineNumber: 618,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "w-1 h-1 bg-purple-400 rounded-full animate-bounce delay-200"
+                                                className: "w-2 h-2 bg-purple-500 rounded-full animate-bounce",
+                                                style: {
+                                                    animationDelay: '0.2s'
+                                                }
                                             }, void 0, false, {
                                                 fileName: "[project]/app/admin/dashboard/page.tsx",
                                                 lineNumber: 619,

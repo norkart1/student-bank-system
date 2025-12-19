@@ -603,20 +603,20 @@ export default function AdminDashboard() {
               </button>
             </div>
           ) : (
-            <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl p-3 space-y-2 border border-purple-200">
+            <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-4 space-y-3 border-2 border-purple-200 shadow-sm">
               {aiMessages.map((msg, idx) => (
                 <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                  <div className={`max-w-xs px-3 py-2 rounded-lg text-xs break-words ${msg.role === "user" ? "bg-gradient-to-r from-[#4a6670] to-[#3d565e] text-white" : "bg-white text-[#171532] border border-purple-200"}`}>
+                  <div className={`max-w-xs px-4 py-3 rounded-xl text-xs break-words ${msg.role === "user" ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-md rounded-br-none font-medium" : "bg-white text-[#171532] border-2 border-purple-200 shadow-sm rounded-bl-none"}`}>
                     {msg.text}
                   </div>
                 </div>
               ))}
               {aiLoading && (
-                <div className="flex justify-start pt-1">
-                  <div className="bg-white border border-purple-200 px-3 py-2 rounded-lg flex items-center gap-1">
-                    <div className="w-1 h-1 bg-purple-400 rounded-full animate-bounce"></div>
-                    <div className="w-1 h-1 bg-purple-400 rounded-full animate-bounce delay-100"></div>
-                    <div className="w-1 h-1 bg-purple-400 rounded-full animate-bounce delay-200"></div>
+                <div className="flex justify-start pt-2">
+                  <div className="bg-white border-2 border-purple-200 px-4 py-3 rounded-xl flex items-center gap-1.5 shadow-sm">
+                    <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                    <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
                   </div>
                 </div>
               )}

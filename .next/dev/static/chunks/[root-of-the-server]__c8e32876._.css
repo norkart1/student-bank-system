@@ -889,10 +889,6 @@
     height: calc(var(--spacing) * 10);
   }
 
-  .h-1 {
-    height: calc(var(--spacing) * 1);
-  }
-
   .h-2 {
     height: calc(var(--spacing) * 2);
   }
@@ -967,10 +963,6 @@
 
   .min-h-screen {
     min-height: 100vh;
-  }
-
-  .w-1 {
-    width: calc(var(--spacing) * 1);
   }
 
   .w-1\/2 {
@@ -1255,6 +1247,14 @@
     border-top-right-radius: var(--radius-3xl);
   }
 
+  .rounded-br-none {
+    border-bottom-right-radius: 0;
+  }
+
+  .rounded-bl-none {
+    border-bottom-left-radius: 0;
+  }
+
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;
@@ -1471,8 +1471,8 @@
     background-color: var(--color-purple-100);
   }
 
-  .bg-purple-400 {
-    background-color: var(--color-purple-400);
+  .bg-purple-500 {
+    background-color: var(--color-purple-500);
   }
 
   .bg-red-50 {
@@ -1759,10 +1759,6 @@
 
   .py-12 {
     padding-block: calc(var(--spacing) * 12);
-  }
-
-  .pt-1 {
-    padding-top: calc(var(--spacing) * 1);
   }
 
   .pt-2 {
@@ -2149,14 +2145,6 @@
     transition-duration: var(--tw-duration, var(--default-transition-duration));
   }
 
-  .delay-100 {
-    transition-delay: .1s;
-  }
-
-  .delay-200 {
-    transition-delay: .2s;
-  }
-
   .duration-200 {
     --tw-duration: .2s;
     transition-duration: .2s;
@@ -2165,16 +2153,6 @@
   .duration-300 {
     --tw-duration: .3s;
     transition-duration: .3s;
-  }
-
-  .delay-100 {
-    --tw-animation-delay: .1s;
-    animation-delay: .1s;
-  }
-
-  .delay-200 {
-    --tw-animation-delay: .2s;
-    animation-delay: .2s;
   }
 
   .outline-none {
