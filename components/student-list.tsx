@@ -19,6 +19,7 @@ interface Student {
     amount: number
     description: string
     date: string
+    reason?: string
   }>
 }
 
@@ -40,7 +41,7 @@ export function StudentList({ students, onUpdateStudent, onDeleteStudent }: Stud
       student.studentId.toLowerCase().includes(searchTerm.toLowerCase()),
   )
 
-  const handleTransaction = (type: "deposit" | "withdraw", amount: number, description: string) => {
+  const handleTransaction = (type: "deposit" | "withdraw", amount: number, description: string, date: string, reason: string) => {
     if (!selectedStudent) return
 
     const transaction = {
@@ -48,7 +49,8 @@ export function StudentList({ students, onUpdateStudent, onDeleteStudent }: Stud
       type,
       amount,
       description,
-      date: new Date().toISOString(),
+      date,
+      reason: reason || undefined,
     }
 
     const newBalance = type === "deposit" ? selectedStudent.balance + amount : selectedStudent.balance - amount

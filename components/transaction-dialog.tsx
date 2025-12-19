@@ -14,21 +14,25 @@ interface TransactionDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   student: any | null
-  onTransaction: (type: "deposit" | "withdraw", amount: number, description: string) => void
+  onTransaction: (type: "deposit" | "withdraw", amount: number, description: string, date: string, reason: string) => void
 }
 
 export function TransactionDialog({ open, onOpenChange, student, onTransaction }: TransactionDialogProps) {
   const [amount, setAmount] = useState("")
   const [description, setDescription] = useState("")
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0])
+  const [reason, setReason] = useState("")
   const [activeTab, setActiveTab] = useState<"deposit" | "withdraw">("deposit")
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const parsedAmount = Number.parseFloat(amount)
     if (parsedAmount > 0) {
-      onTransaction(activeTab, parsedAmount, description)
+      onTransaction(activeTab, parsedAmount, description, date, reason)
       setAmount("")
       setDescription("")
+      setDate(new Date().toISOString().split('T')[0])
+      setReason("")
     }
   }
 
@@ -76,6 +80,16 @@ export function TransactionDialog({ open, onOpenChange, student, onTransaction }
                 />
               </div>
               <div className="space-y-2">
+                <Label htmlFor="deposit-date">Date</Label>
+                <Input
+                  id="deposit-date"
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="deposit-description">Description</Label>
                 <Input
                   id="deposit-description"
@@ -83,6 +97,15 @@ export function TransactionDialog({ open, onOpenChange, student, onTransaction }
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="deposit-reason">Reason (Optional)</Label>
+                <Input
+                  id="deposit-reason"
+                  placeholder="e.g., Scholarship, Gift"
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
                 />
               </div>
               <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">
@@ -104,6 +127,16 @@ export function TransactionDialog({ open, onOpenChange, student, onTransaction }
                 />
               </div>
               <div className="space-y-2">
+                <Label htmlFor="withdraw-date">Date</Label>
+                <Input
+                  id="withdraw-date"
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="withdraw-description">Description</Label>
                 <Input
                   id="withdraw-description"
@@ -111,6 +144,15 @@ export function TransactionDialog({ open, onOpenChange, student, onTransaction }
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="withdraw-reason">Reason (Optional)</Label>
+                <Input
+                  id="withdraw-reason"
+                  placeholder="e.g., School supplies, Emergency"
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
                 />
               </div>
               <Button type="submit" className="w-full bg-red-600 hover:bg-red-700">
