@@ -70,6 +70,187 @@ export default function AdminDashboard() {
   const [calcDisplay, setCalcDisplay] = useState("0")
   const [calcExpression, setCalcExpression] = useState("")
   const [systemStatus, setSystemStatus] = useState<any>(null)
+  const [showDepositModal, setShowDepositModal] = useState(false)
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false)
+  const [transactionAmount, setTransactionAmount] = useState("")
+  const [selectedStudentIndex, setSelectedStudentIndex] = useState<number | null>(null)
+
+  const handleDeposit = () => {
+    if (!transactionAmount || isNaN(parseFloat(transactionAmount)) || parseFloat(transactionAmount) <= 0) {
+      alert("Please enter a valid amount")
+      return
+    }
+    
+    const amount = parseFloat(transactionAmount)
+    const updatedStudents = [...students]
+    const student = updatedStudents[selectedStudentIndex!]
+    
+    student.balance += amount
+    student.transactions.push({
+      type: 'deposit',
+      amount: amount,
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    })
+    
+    setStudents(updatedStudents)
+    localStorage.setItem("students", JSON.stringify(updatedStudents))
+    calculateTotals(updatedStudents)
+    
+    setShowDepositModal(false)
+    setTransactionAmount("")
+    setSelectedStudentIndex(null)
+    alert(`Deposit of ₹${amount.toFixed(2)} successful!`)
+  }
+
+  const handleWithdraw = () => {
+    if (!transactionAmount || isNaN(parseFloat(transactionAmount)) || parseFloat(transactionAmount) <= 0) {
+      alert("Please enter a valid amount")
+      return
+    }
+    
+    const amount = parseFloat(transactionAmount)
+    const updatedStudents = [...students]
+    const student = updatedStudents[selectedStudentIndex!]
+    
+    if (student.balance < amount) {
+      alert(`Insufficient balance. Available: ₹${student.balance.toFixed(2)}`)
+      return
+    }
+    
+    student.balance -= amount
+    student.transactions.push({
+      type: 'withdraw',
+      amount: amount,
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    })
+    
+    setStudents(updatedStudents)
+    localStorage.setItem("students", JSON.stringify(updatedStudents))
+    calculateTotals(updatedStudents)
+    
+    setShowWithdrawModal(false)
+    setTransactionAmount("")
+    setSelectedStudentIndex(null)
+    alert(`Withdrawal of ₹${amount.toFixed(2)} successful!`)
+  }
+
+  const renderDepositModal = () => {
+    if (!showDepositModal) return null
+    return (
+      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md mx-4 shadow-2xl animate-in scale-in duration-200">
+          <div className="px-6 py-5 border-b border-gray-200 dark:border-slate-700">
+            <h3 className="text-xl font-bold text-[#171532] dark:text-white">Deposit Amount</h3>
+          </div>
+          
+          <div className="px-6 py-6 space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Select Student</label>
+              <select
+                value={selectedStudentIndex ?? ""}
+                onChange={(e) => setSelectedStudentIndex(parseInt(e.target.value))}
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#4a6670] text-[#171532] dark:text-white"
+              >
+                <option value="">Choose a student...</option>
+                {students.map((student, idx) => (
+                  <option key={idx} value={idx}>{student.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Amount (₹)</label>
+              <input
+                type="number"
+                value={transactionAmount}
+                onChange={(e) => setTransactionAmount(e.target.value)}
+                placeholder="Enter amount"
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532] dark:text-white placeholder:text-[#a0a0a0]"
+              />
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <button
+                onClick={() => {
+                  setShowDepositModal(false)
+                  setTransactionAmount("")
+                  setSelectedStudentIndex(null)
+                }}
+                className="flex-1 py-3 rounded-xl font-semibold text-[#171532] dark:text-white bg-[#f0f0f0] dark:bg-slate-700 hover:bg-[#e5e5e5] dark:hover:bg-slate-600 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeposit}
+                className="flex-1 py-3 rounded-xl font-semibold text-white bg-[#10B981] hover:bg-[#0fa06f] transition-colors"
+              >
+                Deposit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const renderWithdrawModal = () => {
+    if (!showWithdrawModal) return null
+    return (
+      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md mx-4 shadow-2xl animate-in scale-in duration-200">
+          <div className="px-6 py-5 border-b border-gray-200 dark:border-slate-700">
+            <h3 className="text-xl font-bold text-[#171532] dark:text-white">Withdraw Amount</h3>
+          </div>
+          
+          <div className="px-6 py-6 space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Select Student</label>
+              <select
+                value={selectedStudentIndex ?? ""}
+                onChange={(e) => setSelectedStudentIndex(parseInt(e.target.value))}
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#4a6670] text-[#171532] dark:text-white"
+              >
+                <option value="">Choose a student...</option>
+                {students.map((student, idx) => (
+                  <option key={idx} value={idx}>{student.name} (Balance: ₹{student.balance.toFixed(2)})</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Amount (₹)</label>
+              <input
+                type="number"
+                value={transactionAmount}
+                onChange={(e) => setTransactionAmount(e.target.value)}
+                placeholder="Enter amount"
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532] dark:text-white placeholder:text-[#a0a0a0]"
+              />
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <button
+                onClick={() => {
+                  setShowWithdrawModal(false)
+                  setTransactionAmount("")
+                  setSelectedStudentIndex(null)
+                }}
+                className="flex-1 py-3 rounded-xl font-semibold text-[#171532] dark:text-white bg-[#f0f0f0] dark:bg-slate-700 hover:bg-[#e5e5e5] dark:hover:bg-slate-600 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleWithdraw}
+                className="flex-1 py-3 rounded-xl font-semibold text-white bg-[#EF4444] hover:bg-[#dc2626] transition-colors"
+              >
+                Withdraw
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   const handleCalcInput = (value: string) => {
     if (value === "=") {
@@ -359,13 +540,17 @@ export default function AdminDashboard() {
 
       <h2 className="text-lg font-bold text-[#171532] mb-4">Options</h2>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+        <button 
+          onClick={() => setShowDepositModal(true)}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
             <ArrowDownRight className="w-5 h-5 text-white" />
           </div>
           <span className="text-sm font-medium text-[#171532]">Deposit</span>
         </button>
-        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+        <button 
+          onClick={() => setShowWithdrawModal(true)}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
             <ArrowUpRight className="w-5 h-5 text-white" />
           </div>
@@ -1067,6 +1252,8 @@ export default function AdminDashboard() {
   return (
     <div className={`min-h-screen pb-24 ${activeTab === "status" ? "bg-white dark:bg-slate-800" : "bg-white dark:bg-slate-900"}`}>
       <div className={`px-5 pt-6 ${activeTab === "status" ? "text-[#171532] dark:text-white" : ""}`}>
+        {showDepositModal && renderDepositModal()}
+        {showWithdrawModal && renderWithdrawModal()}
         {activeTab === "home" && renderHomeTab()}
         {activeTab === "accounts" && renderAccountsTab()}
         {activeTab === "leaderboard" && renderLeaderboardTab()}

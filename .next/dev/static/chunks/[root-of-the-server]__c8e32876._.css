@@ -1420,6 +1420,10 @@
     background-color: #4a6670;
   }
 
+  .bg-\[\#10B981\] {
+    background-color: #10b981;
+  }
+
   .bg-\[\#10B981\]\/10 {
     background-color: #10b9811a;
     background-color: lab(66.6921% -50.6677 17.059 / .1);
@@ -1428,6 +1432,10 @@
   .bg-\[\#10B981\]\/20 {
     background-color: #10b98133;
     background-color: lab(66.6921% -50.6677 17.059 / .2);
+  }
+
+  .bg-\[\#EF4444\] {
+    background-color: #ef4444;
   }
 
   .bg-\[\#EF4444\]\/10 {
@@ -2412,8 +2420,20 @@
   }
 
   @media (hover: hover) {
+    .hover\:bg-\[\#0fa06f\]:hover {
+      background-color: #0fa06f;
+    }
+  }
+
+  @media (hover: hover) {
     .hover\:bg-\[\#3d565e\]:hover {
       background-color: #3d565e;
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:bg-\[\#dc2626\]:hover {
+      background-color: #dc2626;
     }
   }
 
