@@ -1021,20 +1021,6 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {/* Transaction Schedule */}
-          <div className="bg-slate-700 rounded-2xl p-5">
-            <h3 className="text-white font-bold text-sm mb-4">Transaction schedule</h3>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={transactionData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#555" />
-                <XAxis dataKey="name" stroke="#999" />
-                <YAxis stroke="#999" />
-                <Bar dataKey="success" stackId="a" fill="#22c55e" />
-                <Bar dataKey="failure" stackId="a" fill="#ef4444" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-
           {/* System Resources */}
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-slate-700 rounded-lg p-3">
