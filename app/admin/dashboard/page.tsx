@@ -12,6 +12,7 @@ interface Transaction {
   type: string
   amount: number
   date?: string
+  reason?: string
 }
 
 interface Student {
@@ -76,6 +77,8 @@ export default function AdminDashboard() {
   const [showDepositModal, setShowDepositModal] = useState(false)
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
   const [transactionAmount, setTransactionAmount] = useState("")
+  const [transactionDate, setTransactionDate] = useState(new Date().toISOString().split('T')[0])
+  const [transactionReason, setTransactionReason] = useState("")
   const [selectedStudentIndex, setSelectedStudentIndex] = useState<number | null>(null)
   const [notification, setNotification] = useState<{type: 'success' | 'error', message: string} | null>(null)
   const [showDepositDropdown, setShowDepositDropdown] = useState(false)
@@ -108,7 +111,8 @@ export default function AdminDashboard() {
     student.transactions.push({
       type: 'deposit',
       amount: amount,
-      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      date: new Date(transactionDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      reason: transactionReason || undefined
     })
     
     setStudents(updatedStudents)
@@ -117,6 +121,8 @@ export default function AdminDashboard() {
     
     setShowDepositModal(false)
     setTransactionAmount("")
+    setTransactionDate(new Date().toISOString().split('T')[0])
+    setTransactionReason("")
     setSelectedStudentIndex(null)
     setNotification({ type: 'success', message: `Deposit of ₹${amount.toFixed(2)} successful!` })
     setTimeout(() => setNotification(null), 3000)
@@ -149,7 +155,8 @@ export default function AdminDashboard() {
     student.transactions.push({
       type: 'withdraw',
       amount: amount,
-      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      date: new Date(transactionDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      reason: transactionReason || undefined
     })
     
     setStudents(updatedStudents)
@@ -158,6 +165,8 @@ export default function AdminDashboard() {
     
     setShowWithdrawModal(false)
     setTransactionAmount("")
+    setTransactionDate(new Date().toISOString().split('T')[0])
+    setTransactionReason("")
     setSelectedStudentIndex(null)
     setNotification({ type: 'success', message: `Withdrawal of ₹${amount.toFixed(2)} successful!` })
     setTimeout(() => setNotification(null), 3000)
