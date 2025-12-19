@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Calculator, Activity, Moon, Sun } from "lucide-react"
+import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Calculator, Activity, Moon, Sun, Download } from "lucide-react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 import { useTheme } from "next-themes"
+import jsPDF from "jspdf"
+import * as XLSX from "xlsx"
 
 interface Transaction {
   type: string
@@ -77,6 +79,12 @@ export default function AdminDashboard() {
   const [notification, setNotification] = useState<{type: 'success' | 'error', message: string} | null>(null)
   const [showDepositDropdown, setShowDepositDropdown] = useState(false)
   const [showWithdrawDropdown, setShowWithdrawDropdown] = useState(false)
+  const [reportType, setReportType] = useState<'date' | 'monthly' | 'yearly' | 'personal'>('date')
+  const [startDate, setStartDate] = useState(new Date(2025, 11, 1).toISOString().split('T')[0])
+  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0])
+  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7))
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString())
+  const [selectedPersonalStudent, setSelectedPersonalStudent] = useState<number | null>(null)
 
   const handleDeposit = () => {
     if (!transactionAmount || isNaN(parseFloat(transactionAmount)) || parseFloat(transactionAmount) <= 0) {
@@ -153,6 +161,265 @@ export default function AdminDashboard() {
     setNotification({ type: 'success', message: `Withdrawal of ₹${amount.toFixed(2)} successful!` })
     setTimeout(() => setNotification(null), 3000)
   }
+
+  const filterTransactionsByDate = (student: Student, start: Date, end: Date) => {
+    return student.transactions.filter(t => {
+      if (!t.date) return false
+      const tDate = new Date(t.date)
+      return tDate >= start && tDate <= end
+    })
+  }
+
+  const generateDateReport = () => {
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+    const reportData: any[] = []
+    
+    students.forEach(student => {
+      const filtered = filterTransactionsByDate(student, start, end)
+      const deposits = filtered.filter(t => t.type === 'deposit').reduce((sum, t) => sum + t.amount, 0)
+      const withdraws = filtered.filter(t => t.type === 'withdraw').reduce((sum, t) => sum + t.amount, 0)
+      
+      reportData.push({
+        'Student': student.name,
+        'Username': student.username,
+        'Deposits': deposits.toFixed(2),
+        'Withdrawals': withdraws.toFixed(2),
+        'Net Change': (deposits - withdraws).toFixed(2),
+        'Final Balance': student.balance.toFixed(2)
+      })
+    })
+    return reportData
+  }
+
+  const generateMonthlyReport = () => {
+    const [year, month] = selectedMonth.split('-')
+    const start = new Date(parseInt(year), parseInt(month) - 1, 1)
+    const end = new Date(parseInt(year), parseInt(month), 0)
+    return generateDateReport()
+  }
+
+  const generateYearlyReport = () => {
+    const year = parseInt(selectedYear)
+    const start = new Date(year, 0, 1)
+    const end = new Date(year, 11, 31)
+    setStartDate(start.toISOString().split('T')[0])
+    setEndDate(end.toISOString().split('T')[0])
+    return generateDateReport()
+  }
+
+  const generatePersonalReport = () => {
+    if (selectedPersonalStudent === null) return []
+    const student = students[selectedPersonalStudent]
+    if (!student) return []
+    
+    return student.transactions.map((t, idx) => ({
+      'S.No': (idx + 1).toString(),
+      'Type': t.type.charAt(0).toUpperCase() + t.type.slice(1),
+      'Amount': t.amount.toFixed(2),
+      'Date': t.date || 'N/A'
+    }))
+  }
+
+  const getReportData = () => {
+    if (reportType === 'date') return generateDateReport()
+    if (reportType === 'monthly') return generateMonthlyReport()
+    if (reportType === 'yearly') return generateYearlyReport()
+    if (reportType === 'personal') return generatePersonalReport()
+    return []
+  }
+
+  const downloadPDF = () => {
+    const data = getReportData()
+    if (data.length === 0) {
+      setNotification({ type: 'error', message: 'No data available for this report' })
+      setTimeout(() => setNotification(null), 3000)
+      return
+    }
+
+    const doc = new jsPDF()
+    const pageHeight = doc.internal.pageSize.getHeight()
+    const pageWidth = doc.internal.pageSize.getWidth()
+    const margin = 10
+    const lineHeight = 7
+    let yPosition = 20
+
+    doc.setFontSize(16)
+    doc.text('JDSA Students Bank Report', margin, yPosition)
+    yPosition += 10
+
+    doc.setFontSize(10)
+    const reportTitle = reportType === 'date' ? `Date Range: ${startDate} to ${endDate}` :
+                       reportType === 'monthly' ? `Monthly Report: ${selectedMonth}` :
+                       reportType === 'yearly' ? `Yearly Report: ${selectedYear}` :
+                       `Personal Report: ${students[selectedPersonalStudent!]?.name || 'N/A'}`
+    doc.text(reportTitle, margin, yPosition)
+    yPosition += 8
+
+    const columns = Object.keys(data[0])
+    const rows = data.map(item => Object.values(item).map(v => String(v)))
+
+    doc.setFontSize(9)
+    let colWidth = (pageWidth - 2 * margin) / columns.length
+    
+    columns.forEach((col, idx) => {
+      doc.text(col, margin + idx * colWidth, yPosition)
+    })
+    yPosition += lineHeight
+
+    doc.setFontSize(8)
+    rows.forEach(row => {
+      if (yPosition + lineHeight > pageHeight - margin) {
+        doc.addPage()
+        yPosition = margin
+      }
+      row.forEach((cell, idx) => {
+        doc.text(String(cell).substring(0, 10), margin + idx * colWidth, yPosition)
+      })
+      yPosition += lineHeight
+    })
+
+    doc.save(`JDSA_Report_${reportType}_${new Date().toISOString().split('T')[0]}.pdf`)
+    setNotification({ type: 'success', message: 'PDF downloaded successfully!' })
+    setTimeout(() => setNotification(null), 3000)
+  }
+
+  const downloadExcel = () => {
+    const data = getReportData()
+    if (data.length === 0) {
+      setNotification({ type: 'error', message: 'No data available for this report' })
+      setTimeout(() => setNotification(null), 3000)
+      return
+    }
+
+    const ws = XLSX.utils.json_to_sheet(data)
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, 'Report')
+    XLSX.writeFile(wb, `JDSA_Report_${reportType}_${new Date().toISOString().split('T')[0]}.xlsx`)
+    
+    setNotification({ type: 'success', message: 'Excel file downloaded successfully!' })
+    setTimeout(() => setNotification(null), 3000)
+  }
+
+  const renderReportsTab = () => (
+    <>
+      <div className="flex items-center gap-3 mb-6">
+        <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] dark:hover:bg-slate-700 rounded-lg transition-colors">
+          <ChevronLeft className="w-5 h-5 text-[#4a6670] dark:text-gray-300" />
+        </button>
+        <h2 className="text-lg font-bold text-[#171532] dark:text-white">Reports</h2>
+      </div>
+
+      <div className="space-y-6">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700">
+          <h3 className="text-lg font-bold text-[#171532] dark:text-white mb-4">Report Type</h3>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { id: 'date', label: 'Date Range' },
+              { id: 'monthly', label: 'Monthly' },
+              { id: 'yearly', label: 'Yearly' },
+              { id: 'personal', label: 'Personal Account' }
+            ].map(type => (
+              <button
+                key={type.id}
+                onClick={() => setReportType(type.id as any)}
+                className={`px-4 py-3 rounded-xl font-semibold transition-all ${
+                  reportType === type.id
+                    ? 'bg-[#4a6670] text-white shadow-lg'
+                    : 'bg-[#f0f0f0] dark:bg-slate-700 text-[#171532] dark:text-white hover:bg-[#e0e0e0] dark:hover:bg-slate-600'
+                }`}
+              >
+                {type.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {reportType === 'date' && (
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700 space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Start Date</label>
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">End Date</label>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
+              />
+            </div>
+          </div>
+        )}
+
+        {reportType === 'monthly' && (
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700">
+            <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Select Month</label>
+            <input
+              type="month"
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
+            />
+          </div>
+        )}
+
+        {reportType === 'yearly' && (
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700">
+            <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Select Year</label>
+            <select
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(e.target.value)}
+              className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
+            >
+              {[2024, 2025, 2026].map(year => (
+                <option key={year} value={year}>{year}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {reportType === 'personal' && (
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700">
+            <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Select Student</label>
+            <select
+              value={selectedPersonalStudent ?? ""}
+              onChange={(e) => setSelectedPersonalStudent(parseInt(e.target.value))}
+              className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
+            >
+              <option value="">Choose a student...</option>
+              {students.map((student, idx) => (
+                <option key={idx} value={idx}>{student.name}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <div className="flex gap-3">
+          <button
+            onClick={downloadPDF}
+            className="flex-1 flex items-center justify-center gap-2 bg-[#EF4444] hover:bg-[#dc2626] text-white px-6 py-4 rounded-xl font-semibold transition-colors shadow-lg"
+          >
+            <Download className="w-5 h-5" />
+            Download PDF
+          </button>
+          <button
+            onClick={downloadExcel}
+            className="flex-1 flex items-center justify-center gap-2 bg-[#10B981] hover:bg-[#0fa06f] text-white px-6 py-4 rounded-xl font-semibold transition-colors shadow-lg"
+          >
+            <Download className="w-5 h-5" />
+            Download Excel
+          </button>
+        </div>
+      </div>
+    </>
+  )
 
   const renderNotification = () => {
     if (!notification) return null
@@ -639,7 +906,9 @@ export default function AdminDashboard() {
           </div>
           <span className="text-sm font-medium text-[#171532]">Withdraw</span>
         </button>
-        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+        <button 
+          onClick={() => setActiveTab("reports")}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
             <BarChart3 className="w-5 h-5 text-white" />
           </div>
@@ -1339,6 +1608,7 @@ export default function AdminDashboard() {
         {showDepositModal && renderDepositModal()}
         {showWithdrawModal && renderWithdrawModal()}
         {activeTab === "home" && renderHomeTab()}
+        {activeTab === "reports" && renderReportsTab()}
         {activeTab === "accounts" && renderAccountsTab()}
         {activeTab === "leaderboard" && renderLeaderboardTab()}
         {activeTab === "ai" && renderAITab()}
