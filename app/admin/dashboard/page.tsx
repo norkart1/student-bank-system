@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft } from "lucide-react"
+import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Calculator, Activity } from "lucide-react"
 
 interface Transaction {
   type: string
@@ -64,6 +64,16 @@ export default function AdminDashboard() {
   const [aiMessages, setAiMessages] = useState<Array<{role: string, text: string}>>([])
   const [aiInput, setAiInput] = useState("")
   const [aiLoading, setAiLoading] = useState(false)
+
+  const renderMessageWithHighlight = (text: string) => {
+    const parts = text.split(/(\*\*[^*]+\*\*)/g)
+    return parts.map((part, idx) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={idx} className="font-bold">{part.slice(2, -2)}</strong>
+      }
+      return part
+    })
+  }
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -355,6 +365,18 @@ export default function AdminDashboard() {
           </div>
           <span className="text-sm font-medium text-[#171532]">Top Rich</span>
         </button>
+        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <Calculator className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-sm font-medium text-[#171532]">Calculator</span>
+        </button>
+        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <Activity className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-sm font-medium text-[#171532]">Status</span>
+        </button>
       </div>
     </>
   )
@@ -612,7 +634,7 @@ export default function AdminDashboard() {
                     </div>
                   )}
                   <div className={`max-w-xs px-4 py-3 rounded-2xl text-sm break-words ${msg.role === "user" ? "bg-amber-700 text-white rounded-br-3xl" : "bg-white text-[#171532] border border-gray-200 rounded-bl-3xl shadow-sm"}`}>
-                    {msg.text}
+                    {msg.role === "assistant" ? renderMessageWithHighlight(msg.text) : msg.text}
                   </div>
                 </div>
               ))}
