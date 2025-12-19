@@ -271,6 +271,7 @@
     --color-yellow-50: #fefce8;
     --color-yellow-100: #fef9c2;
     --color-yellow-300: #ffe02a;
+    --color-yellow-400: #fac800;
     --color-yellow-500: #edb200;
     --color-yellow-600: #cd8900;
     --color-green-100: #dcfce7;
@@ -367,6 +368,7 @@
       --color-yellow-50: lab(98.6846% -1.79055 9.7766);
       --color-yellow-100: lab(97.3564% -4.51407 27.344);
       --color-yellow-300: lab(89.7033% -.480294 84.4917);
+      --color-yellow-400: lab(83.2664% 8.65132 106.895);
       --color-yellow-500: lab(76.3898% 14.5258 98.4589);
       --color-yellow-600: lab(62.7799% 22.4197 86.1544);
       --color-green-100: lab(96.1861% -13.8464 6.52365);
@@ -1363,6 +1365,11 @@
     border-style: dotted;
   }
 
+  .border-\[\#5a7680\]\/50 {
+    border-color: #5a768080;
+    border-color: lab(47.7146% -8.60015 -8.99942 / .5);
+  }
+
   .border-\[\#e2e0ec\] {
     border-color: #e2e0ec;
   }
@@ -2190,6 +2197,10 @@
     }
   }
 
+  .text-yellow-400 {
+    color: var(--color-yellow-400);
+  }
+
   .text-yellow-600 {
     color: var(--color-yellow-600);
   }
@@ -2561,6 +2572,18 @@
   @media (hover: hover) {
     .hover\:bg-slate-600:hover {
       background-color: var(--color-slate-600);
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:bg-white\/20:hover {
+      background-color: #fff3;
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:bg-white\/20:hover {
+        background-color: color-mix(in oklab, var(--color-white) 20%, transparent);
+      }
     }
   }
 

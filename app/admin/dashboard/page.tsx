@@ -436,12 +436,12 @@ export default function AdminDashboard() {
     
     return (
       <>
-        <div className="flex items-center gap-3 mb-6">
-          <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
-            <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+        <div className="flex items-center gap-3 mb-6 bg-gradient-to-r from-[#4a6670] to-[#3d565e] text-white rounded-2xl p-4 border-2 border-[#5a7680]/50 shadow-md">
+          <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-white/20 rounded-lg transition-colors">
+            <ChevronLeft className="w-6 h-6 text-white" />
           </button>
-          <h2 className="text-lg font-bold text-[#171532] flex items-center gap-2">
-            <Trophy className="w-5 h-5 text-[#c17f59]" />
+          <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <Trophy className="w-5 h-5 text-yellow-400" />
             Top Richest Students
           </h2>
         </div>
@@ -619,19 +619,19 @@ export default function AdminDashboard() {
     return (
       <div className="flex flex-col h-full pb-20">
         {/* Header */}
-        <div className="flex items-center justify-between gap-3 pb-4 border-b border-[#e5e7eb]">
+        <div className="flex items-center justify-between gap-3 pb-4 bg-gradient-to-r from-[#4a6670] to-[#3d565e] text-white rounded-2xl p-4 mb-4 border-2 border-[#5a7680]/50 shadow-md">
           <div className="flex items-center gap-3">
-            <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors flex-shrink-0">
-              <ChevronLeft className="w-5 h-5 text-[#4a6670]" />
+            <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-white/20 rounded-lg transition-colors flex-shrink-0">
+              <ChevronLeft className="w-5 h-5 text-white" />
             </button>
             <div>
-              <h1 className="text-2xl font-bold text-[#171532]">Hi there, <span className="text-orange-600">{adminName.split(' ')[0]}</span></h1>
-              <p className="text-xs text-[#747384]">What can I help with?</p>
+              <h1 className="text-2xl font-bold text-white">Hi there, <span className="text-yellow-400">{adminName.split(' ')[0]}</span></h1>
+              <p className="text-xs text-white/70">What can I help with?</p>
             </div>
           </div>
           {aiMessages.length > 0 && (
-            <button onClick={() => setAiMessages([])} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors flex-shrink-0" title="Clear conversation">
-              <X className="w-5 h-5 text-[#4a6670]" />
+            <button onClick={() => setAiMessages([])} className="p-2 hover:bg-white/20 rounded-lg transition-colors flex-shrink-0" title="Clear conversation">
+              <X className="w-5 h-5 text-white" />
             </button>
           )}
         </div>
