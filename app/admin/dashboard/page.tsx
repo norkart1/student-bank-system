@@ -853,29 +853,38 @@ export default function AdminDashboard() {
         <h2 className="text-lg font-bold text-[#171532]">Calculator</h2>
       </div>
       
-      <div className="bg-white border border-[#e5e7eb] rounded-2xl p-4 max-w-sm mx-auto shadow-md">
-        <div className="bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl p-4 text-white mb-4">
-          <p className="text-xs text-white/60">Display</p>
-          <p className="text-3xl font-bold truncate">{calcExpression}{calcDisplay}</p>
-        </div>
-        
-        <div className="grid grid-cols-4 gap-2">
-          <button onClick={() => handleCalcInput("C")} className="bg-red-500 text-white py-3 rounded-lg font-bold hover:bg-red-600">C</button>
-          <button onClick={() => handleCalcInput("←")} className="bg-orange-500 text-white py-3 rounded-lg font-bold hover:bg-orange-600">←</button>
-          <button onClick={() => handleCalcInput("/")} className="bg-blue-500 text-white py-3 rounded-lg font-bold hover:bg-blue-600">/</button>
-          <button onClick={() => handleCalcInput("*")} className="bg-blue-500 text-white py-3 rounded-lg font-bold hover:bg-blue-600">*</button>
+      <div className="max-w-sm mx-auto">
+        <div className="bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 rounded-3xl p-6 shadow-2xl border-4 border-white/30">
+          <div className="space-y-4">
+            <div className="text-right space-y-2">
+              <p className="text-white/50 text-sm">{calcExpression}</p>
+              <p className="text-5xl font-bold text-white tracking-tight">{calcDisplay}</p>
+            </div>
+          </div>
           
-          {["7", "8", "9"].map(n => <button key={n} onClick={() => handleCalcInput(n)} className="bg-[#f0f0f0] text-[#171532] py-3 rounded-lg font-bold hover:bg-[#e0e0e0]">{n}</button>)}
-          <button onClick={() => handleCalcInput("-")} className="bg-blue-500 text-white py-3 rounded-lg font-bold hover:bg-blue-600">-</button>
-          
-          {["4", "5", "6"].map(n => <button key={n} onClick={() => handleCalcInput(n)} className="bg-[#f0f0f0] text-[#171532] py-3 rounded-lg font-bold hover:bg-[#e0e0e0]">{n}</button>)}
-          <button onClick={() => handleCalcInput("+")} className="bg-blue-500 text-white py-3 rounded-lg font-bold hover:bg-blue-600">+</button>
-          
-          {["1", "2", "3"].map(n => <button key={n} onClick={() => handleCalcInput(n)} className="bg-[#f0f0f0] text-[#171532] py-3 rounded-lg font-bold hover:bg-[#e0e0e0]">{n}</button>)}
-          <button onClick={() => handleCalcInput("=")} className="bg-green-500 text-white py-3 rounded-lg font-bold hover:bg-green-600 row-span-2">=</button>
-          
-          <button onClick={() => handleCalcInput("0")} className="bg-[#f0f0f0] text-[#171532] py-3 rounded-lg font-bold col-span-2 hover:bg-[#e0e0e0]">0</button>
-          <button onClick={() => handleCalcInput(".")} className="bg-[#f0f0f0] text-[#171532] py-3 rounded-lg font-bold hover:bg-[#e0e0e0]">.</button>
+          <div className="grid grid-cols-4 gap-3 mt-6">
+            <button onClick={() => handleCalcInput("7")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">7</button>
+            <button onClick={() => handleCalcInput("8")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">8</button>
+            <button onClick={() => handleCalcInput("9")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">9</button>
+            <button onClick={() => handleCalcInput("+")} className="bg-blue-500 hover:bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">+</button>
+            
+            <button onClick={() => handleCalcInput("4")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">4</button>
+            <button onClick={() => handleCalcInput("5")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">5</button>
+            <button onClick={() => handleCalcInput("6")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">6</button>
+            <button onClick={() => handleCalcInput("-")} className="bg-blue-500 hover:bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">-</button>
+            
+            <button onClick={() => handleCalcInput("1")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">1</button>
+            <button onClick={() => handleCalcInput("2")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">2</button>
+            <button onClick={() => handleCalcInput("3")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">3</button>
+            <button onClick={() => handleCalcInput("*")} className="bg-blue-500 hover:bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">×</button>
+            
+            <button onClick={() => handleCalcInput("0")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg col-span-2 transition-colors">0</button>
+            <button onClick={() => handleCalcInput(".")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">.</button>
+            <button onClick={() => handleCalcInput("/")} className="bg-blue-500 hover:bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">÷</button>
+            
+            <button onClick={() => handleCalcInput("=")} className="bg-emerald-500 hover:bg-emerald-600 text-white py-4 rounded-2xl font-bold text-lg col-span-2 transition-colors">=</button>
+            <button onClick={() => handleCalcInput("C")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg col-span-2 transition-colors">C</button>
+          </div>
         </div>
       </div>
     </>
@@ -924,7 +933,8 @@ export default function AdminDashboard() {
               <p className="text-xs text-[#747384]">System memory</p>
             </div>
             <div className="text-right">
-              <p className="text-lg font-bold text-purple-600">45%</p>
+              <p className="text-lg font-bold text-purple-600">4.5 GB / 10 GB</p>
+              <p className="text-sm text-purple-600">45%</p>
               <div className="w-32 h-2 bg-purple-300 rounded-full mt-1 overflow-hidden">
                 <div className="h-full bg-purple-600 w-[45%]"></div>
               </div>
@@ -939,7 +949,8 @@ export default function AdminDashboard() {
               <p className="text-xs text-[#747384]">Database usage</p>
             </div>
             <div className="text-right">
-              <p className="text-lg font-bold text-orange-600">62%</p>
+              <p className="text-lg font-bold text-orange-600">6.2 GB / 10 GB</p>
+              <p className="text-sm text-orange-600">62%</p>
               <div className="w-32 h-2 bg-orange-300 rounded-full mt-1 overflow-hidden">
                 <div className="h-full bg-orange-600 w-[62%]"></div>
               </div>
