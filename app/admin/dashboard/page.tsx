@@ -416,16 +416,16 @@ export default function AdminDashboard() {
         <div className="flex gap-3">
           <button
             onClick={downloadPDF}
-            className="flex-1 flex items-center justify-center gap-2 bg-[#EF4444] hover:bg-[#dc2626] text-white px-6 py-4 rounded-xl font-semibold transition-colors shadow-lg"
+            className="flex-1 flex items-center justify-center gap-2 bg-[#EF4444] hover:bg-[#dc2626] text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-colors shadow-md"
           >
-            <Download className="w-5 h-5" />
+            <Download className="w-4 h-4" />
             Download PDF
           </button>
           <button
             onClick={downloadExcel}
-            className="flex-1 flex items-center justify-center gap-2 bg-[#10B981] hover:bg-[#0fa06f] text-white px-6 py-4 rounded-xl font-semibold transition-colors shadow-lg"
+            className="flex-1 flex items-center justify-center gap-2 bg-[#10B981] hover:bg-[#0fa06f] text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-colors shadow-md"
           >
-            <Download className="w-5 h-5" />
+            <Download className="w-4 h-4" />
             Download Excel
           </button>
         </div>
