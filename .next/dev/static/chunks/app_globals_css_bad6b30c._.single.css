@@ -77,46 +77,38 @@
     --color-red-100: #ffe2e2;
     --color-red-200: #ffcaca;
     --color-red-400: #ff6568;
+    --color-red-500: #fb2c36;
     --color-red-600: #e40014;
     --color-red-700: #bf000f;
     --color-orange-50: #fff7ed;
     --color-orange-100: #ffedd5;
     --color-orange-300: #ffb96d;
+    --color-orange-500: #fe6e00;
     --color-orange-600: #f05100;
     --color-amber-100: #fef3c6;
     --color-amber-700: #b75000;
     --color-yellow-50: #fefce8;
     --color-yellow-100: #fef9c2;
     --color-yellow-300: #ffe02a;
+    --color-yellow-500: #edb200;
     --color-yellow-600: #cd8900;
     --color-green-100: #dcfce7;
-    --color-green-300: #7bf1a8;
+    --color-green-400: #05df72;
     --color-green-500: #00c758;
     --color-green-600: #00a544;
     --color-green-700: #008138;
     --color-emerald-500: #00bb7f;
     --color-emerald-600: #009767;
-    --color-teal-100: #cbfbf1;
-    --color-teal-300: #46ecd5;
-    --color-teal-600: #009588;
-    --color-cyan-100: #cefafe;
-    --color-cyan-300: #53eafd;
-    --color-cyan-600: #0092b5;
     --color-blue-50: #eff6ff;
     --color-blue-100: #dbeafe;
     --color-blue-200: #bedbff;
-    --color-blue-300: #90c5ff;
     --color-blue-500: #3080ff;
     --color-blue-600: #155dfc;
-    --color-indigo-100: #e0e7ff;
-    --color-indigo-300: #a4b3ff;
-    --color-indigo-600: #4f39f6;
     --color-purple-100: #f3e8ff;
     --color-purple-200: #e9d5ff;
     --color-purple-300: #d9b3ff;
     --color-purple-400: #c07eff;
     --color-purple-500: #ac4bff;
-    --color-purple-600: #9810fa;
     --color-pink-100: #fce7f3;
     --color-slate-600: #45556c;
     --color-slate-700: #314158;
@@ -181,46 +173,38 @@
       --color-red-100: lab(92.243% 10.2865 3.83865);
       --color-red-200: lab(86.017% 19.8815 7.75869);
       --color-red-400: lab(63.7053% 60.745 31.3109);
+      --color-red-500: lab(55.4814% 75.0732 48.8528);
       --color-red-600: lab(48.4493% 77.4328 61.5452);
       --color-red-700: lab(40.4273% 67.2623 53.7441);
       --color-orange-50: lab(97.7008% 1.53735 5.90649);
       --color-orange-100: lab(94.7127% 3.58394 14.3151);
       --color-orange-300: lab(80.8059% 21.7313 50.4455);
+      --color-orange-500: lab(64.272% 57.1788 90.3583);
       --color-orange-600: lab(57.1026% 64.2584 89.8886);
       --color-amber-100: lab(95.916% -1.21653 23.111);
       --color-amber-700: lab(47.2709% 42.9082 69.2966);
       --color-yellow-50: lab(98.6846% -1.79055 9.7766);
       --color-yellow-100: lab(97.3564% -4.51407 27.344);
       --color-yellow-300: lab(89.7033% -.480294 84.4917);
+      --color-yellow-500: lab(76.3898% 14.5258 98.4589);
       --color-yellow-600: lab(62.7799% 22.4197 86.1544);
       --color-green-100: lab(96.1861% -13.8464 6.52365);
-      --color-green-300: lab(86.9953% -47.2691 25.0054);
+      --color-green-400: lab(78.503% -64.9265 39.7492);
       --color-green-500: lab(70.5521% -66.5147 45.8073);
       --color-green-600: lab(59.0978% -58.6621 41.2579);
       --color-green-700: lab(47.0329% -47.0239 31.4788);
       --color-emerald-500: lab(66.9756% -58.27 19.5419);
       --color-emerald-600: lab(55.0481% -49.9246 15.93);
-      --color-teal-100: lab(95.1845% -17.4212 -.425422);
-      --color-teal-300: lab(84.8977% -48.1516 -1.3321);
-      --color-teal-600: lab(55.0223% -41.0774 -3.90277);
-      --color-cyan-100: lab(95.3146% -13.8285 -6.84732);
-      --color-cyan-300: lab(85.3886% -36.7636 -21.5716);
-      --color-cyan-600: lab(55.1767% -26.7496 -30.5139);
       --color-blue-50: lab(96.492% -1.14644 -5.11479);
       --color-blue-100: lab(92.0301% -2.24757 -11.6453);
       --color-blue-200: lab(86.15% -4.04379 -21.0797);
-      --color-blue-300: lab(77.5052% -6.4629 -36.42);
       --color-blue-500: lab(54.1736% 13.3369 -74.6839);
       --color-blue-600: lab(44.0605% 29.0279 -86.0352);
-      --color-indigo-100: lab(91.6577% 1.04591 -12.7199);
-      --color-indigo-300: lab(74.0235% 8.54138 -41.6075);
-      --color-indigo-600: lab(38.4009% 52.6132 -92.3857);
       --color-purple-100: lab(93.3333% 6.97437 -9.83434);
       --color-purple-200: lab(87.8405% 13.4282 -18.7159);
       --color-purple-300: lab(78.3298% 26.2195 -34.9499);
       --color-purple-400: lab(63.6946% 47.6127 -59.2066);
       --color-purple-500: lab(52.0183% 66.11 -78.2316);
-      --color-purple-600: lab(43.0295% 75.21 -86.5669);
       --color-pink-100: lab(93.5864% 9.01193 -3.15079);
       --color-slate-600: lab(35.5623% -1.74978 -15.4316);
       --color-slate-700: lab(26.9569% -1.47016 -15.6993);
@@ -757,12 +741,20 @@
     height: calc(var(--spacing) * 10);
   }
 
+  .h-0\.5 {
+    height: calc(var(--spacing) * .5);
+  }
+
   .h-1\.5 {
     height: calc(var(--spacing) * 1.5);
   }
 
   .h-2 {
     height: calc(var(--spacing) * 2);
+  }
+
+  .h-3 {
+    height: calc(var(--spacing) * 3);
   }
 
   .h-4 {
@@ -813,6 +805,10 @@
     height: calc(var(--spacing) * 24);
   }
 
+  .h-28 {
+    height: calc(var(--spacing) * 28);
+  }
+
   .h-32 {
     height: calc(var(--spacing) * 32);
   }
@@ -843,6 +839,10 @@
 
   .w-2 {
     width: calc(var(--spacing) * 2);
+  }
+
+  .w-3 {
+    width: calc(var(--spacing) * 3);
   }
 
   .w-4 {
@@ -881,12 +881,12 @@
     width: calc(var(--spacing) * 16);
   }
 
-  .w-20 {
-    width: calc(var(--spacing) * 20);
-  }
-
   .w-24 {
     width: calc(var(--spacing) * 24);
+  }
+
+  .w-28 {
+    width: calc(var(--spacing) * 28);
   }
 
   .w-32 {
@@ -950,6 +950,10 @@
   .translate-y-\[-50\%\] {
     --tw-translate-y: -50%;
     translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+
+  .-rotate-90 {
+    rotate: -90deg;
   }
 
   .transform {
@@ -1173,6 +1177,11 @@
     border-bottom-width: 1px;
   }
 
+  .border-dotted {
+    --tw-border-style: dotted;
+    border-style: dotted;
+  }
+
   .border-\[\#e2e0ec\] {
     border-color: #e2e0ec;
   }
@@ -1193,14 +1202,6 @@
     border-color: var(--color-blue-200);
   }
 
-  .border-blue-300 {
-    border-color: var(--color-blue-300);
-  }
-
-  .border-cyan-300 {
-    border-color: var(--color-cyan-300);
-  }
-
   .border-gray-200 {
     border-color: var(--color-gray-200);
   }
@@ -1209,12 +1210,8 @@
     border-color: var(--color-gray-300);
   }
 
-  .border-green-300 {
-    border-color: var(--color-green-300);
-  }
-
-  .border-indigo-300 {
-    border-color: var(--color-indigo-300);
+  .border-gray-500 {
+    border-color: var(--color-gray-500);
   }
 
   .border-input {
@@ -1225,16 +1222,8 @@
     border-color: var(--color-orange-300);
   }
 
-  .border-purple-300 {
-    border-color: var(--color-purple-300);
-  }
-
   .border-red-200 {
     border-color: var(--color-red-200);
-  }
-
-  .border-teal-300 {
-    border-color: var(--color-teal-300);
   }
 
   .border-transparent {
@@ -1365,10 +1354,6 @@
     background-color: var(--card);
   }
 
-  .bg-cyan-100 {
-    background-color: var(--color-cyan-100);
-  }
-
   .bg-destructive {
     background-color: var(--destructive);
   }
@@ -1385,8 +1370,16 @@
     background-color: var(--color-gray-400);
   }
 
+  .bg-gray-600 {
+    background-color: var(--color-gray-600);
+  }
+
   .bg-green-100 {
     background-color: var(--color-green-100);
+  }
+
+  .bg-green-400 {
+    background-color: var(--color-green-400);
   }
 
   .bg-green-500 {
@@ -1397,18 +1390,6 @@
     background-color: var(--color-green-600);
   }
 
-  .bg-indigo-100 {
-    background-color: var(--color-indigo-100);
-  }
-
-  .bg-indigo-300 {
-    background-color: var(--color-indigo-300);
-  }
-
-  .bg-indigo-600 {
-    background-color: var(--color-indigo-600);
-  }
-
   .bg-muted {
     background-color: var(--muted);
   }
@@ -1417,12 +1398,8 @@
     background-color: var(--color-orange-100);
   }
 
-  .bg-orange-300 {
-    background-color: var(--color-orange-300);
-  }
-
-  .bg-orange-600 {
-    background-color: var(--color-orange-600);
+  .bg-orange-500 {
+    background-color: var(--color-orange-500);
   }
 
   .bg-pink-100 {
@@ -1437,12 +1414,8 @@
     background-color: var(--color-purple-100);
   }
 
-  .bg-purple-300 {
-    background-color: var(--color-purple-300);
-  }
-
-  .bg-purple-600 {
-    background-color: var(--color-purple-600);
+  .bg-purple-500 {
+    background-color: var(--color-purple-500);
   }
 
   .bg-red-50 {
@@ -1451,6 +1424,10 @@
 
   .bg-red-100 {
     background-color: var(--color-red-100);
+  }
+
+  .bg-red-500 {
+    background-color: var(--color-red-500);
   }
 
   .bg-red-600 {
@@ -1465,8 +1442,8 @@
     background-color: var(--color-slate-700);
   }
 
-  .bg-teal-100 {
-    background-color: var(--color-teal-100);
+  .bg-slate-800 {
+    background-color: var(--color-slate-800);
   }
 
   .bg-transparent {
@@ -1495,6 +1472,10 @@
     .bg-white\/20 {
       background-color: color-mix(in oklab, var(--color-white) 20%, transparent);
     }
+  }
+
+  .bg-yellow-500 {
+    background-color: var(--color-yellow-500);
   }
 
   .bg-gradient-to-b {
@@ -1944,12 +1925,12 @@
     color: var(--card-foreground);
   }
 
-  .text-cyan-600 {
-    color: var(--color-cyan-600);
-  }
-
   .text-foreground {
     color: var(--foreground);
+  }
+
+  .text-gray-300 {
+    color: var(--color-gray-300);
   }
 
   .text-gray-400 {
@@ -1976,10 +1957,6 @@
     color: var(--color-green-600);
   }
 
-  .text-indigo-600 {
-    color: var(--color-indigo-600);
-  }
-
   .text-muted-foreground {
     color: var(--muted-foreground);
   }
@@ -2000,10 +1977,6 @@
     color: var(--color-purple-400);
   }
 
-  .text-purple-600 {
-    color: var(--color-purple-600);
-  }
-
   .text-red-400 {
     color: var(--color-red-400);
   }
@@ -2014,10 +1987,6 @@
 
   .text-secondary-foreground {
     color: var(--secondary-foreground);
-  }
-
-  .text-teal-600 {
-    color: var(--color-teal-600);
   }
 
   .text-white {
@@ -2349,6 +2318,12 @@
   @media (hover: hover) {
     .hover\:bg-emerald-600:hover {
       background-color: var(--color-emerald-600);
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:bg-gray-200:hover {
+      background-color: var(--color-gray-200);
     }
   }
 

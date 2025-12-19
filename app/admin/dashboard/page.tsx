@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Calculator, Activity } from "lucide-react"
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 
 interface Transaction {
   type: string
@@ -905,99 +906,171 @@ export default function AdminDashboard() {
     </>
   )
 
-  const renderStatusTab = () => (
-    <>
-      <div className="flex items-center gap-3 mb-4">
-        <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
-          <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
-        </button>
-        <h2 className="text-lg font-bold text-[#171532]">System Status</h2>
-      </div>
-      
-      <div className="space-y-2">
-        <div className="bg-green-100 border border-green-300 rounded-lg p-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs font-bold text-[#171532]">Website Status</p>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <p className="text-sm font-bold text-green-600">{systemStatus?.website?.status || 'UP'}</p>
-            </div>
-          </div>
+  const renderStatusTab = () => {
+    const transactionData = [
+      { name: 'Mon', success: 12000, failure: 2400 },
+      { name: 'Tue', success: 15000, failure: 2210 },
+      { name: 'Wed', success: 18000, failure: 2290 },
+      { name: 'Thu', success: 22000, failure: 2000 },
+      { name: 'Fri', success: 25000, failure: 2181 },
+      { name: 'Sat', success: 28000, failure: 2500 },
+      { name: 'Sun', success: 32000, failure: 2100 }
+    ]
+    
+    const successCount = 88354
+    const failureCount = 6548
+    const totalTransactions = successCount + failureCount
+    const successRate = Math.round((successCount / totalTransactions) * 100)
+    
+    return (
+      <>
+        <div className="flex items-center gap-3 mb-6">
+          <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-gray-200 rounded-lg transition-colors">
+            <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+          </button>
+          <h2 className="text-xl font-bold text-white">System Status</h2>
         </div>
         
-        <div className="bg-blue-100 border border-blue-300 rounded-lg p-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs font-bold text-[#171532]">API Status</p>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <p className="text-sm font-bold text-blue-600">{systemStatus?.api?.status || 'ACTIVE'}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="bg-purple-100 border border-purple-300 rounded-lg p-3">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-[#171532]">RAM</p>
-            <div className="text-right">
-              <p className="text-xs font-bold text-purple-600">{systemStatus?.ram?.used?.toFixed(1) || '4.5'} GB / {systemStatus?.ram?.total || 10} GB</p>
-              <div className="w-20 h-1.5 bg-purple-300 rounded-full mt-0.5 overflow-hidden">
-                <div className="h-full bg-purple-600" style={{width: `${systemStatus?.ram?.percentage || 45}%`}}></div>
+        <div className="space-y-4">
+          {/* Service Statuses & System Status */}
+          <div className="grid grid-cols-2 gap-4">
+            {/* Service Statuses */}
+            <div className="bg-slate-700 rounded-2xl p-5">
+              <h3 className="text-white font-bold text-sm mb-4">Service statuses</h3>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                  <span className="text-gray-300 text-sm">Start</span>
+                  <div className="flex-1 h-0.5 border-b border-dotted border-gray-500"></div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                  <span className="text-gray-300 text-sm">Scoring</span>
+                  <div className="flex-1 h-0.5 border-b border-dotted border-gray-500"></div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                  <span className="text-gray-300 text-sm">Receipt</span>
+                  <div className="flex-1 h-0.5 border-b border-dotted border-gray-500"></div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        
-        <div className="bg-orange-100 border border-orange-300 rounded-lg p-3">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-[#171532]">MongoDB</p>
-            <div className="text-right">
-              <p className="text-xs font-bold text-orange-600">{(systemStatus?.mongodb?.used * 1024).toFixed(0) || 150} MB / {(systemStatus?.mongodb?.total * 1024).toFixed(0) || 512} MB</p>
-              <div className="w-20 h-1.5 bg-orange-300 rounded-full mt-0.5 overflow-hidden">
-                <div className="h-full bg-orange-600" style={{width: `${systemStatus?.mongodb?.percentage || 29}%`}}></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="bg-indigo-100 border border-indigo-300 rounded-lg p-3">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-[#171532]">CPU</p>
-            <div className="text-right">
-              <p className="text-xs font-bold text-indigo-600">{systemStatus?.cpu?.percentage || 28}%</p>
-              <div className="w-20 h-1.5 bg-indigo-300 rounded-full mt-0.5 overflow-hidden">
-                <div className="h-full bg-indigo-600" style={{width: `${systemStatus?.cpu?.percentage || 28}%`}}></div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div className="bg-cyan-100 border border-cyan-300 rounded-lg p-3">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-[#171532]">Network</p>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <p className="text-sm font-bold text-cyan-600">{systemStatus?.network?.status || 'STABLE'}</p>
+            {/* System Status Traffic Light */}
+            <div className="bg-green-500 rounded-2xl p-5 flex flex-col items-center justify-center">
+              <div className="flex flex-col gap-2 mb-3">
+                <div className="w-10 h-4 rounded-full bg-red-600 shadow-lg"></div>
+                <div className="w-10 h-4 rounded-full bg-yellow-500 shadow-lg"></div>
+                <div className="w-10 h-4 rounded-full bg-green-400 shadow-lg animate-pulse"></div>
+              </div>
+              <p className="text-white font-bold text-sm">System is stable</p>
+            </div>
+          </div>
+
+          {/* Current Conversion */}
+          <div className="bg-slate-700 rounded-2xl p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-white font-bold text-sm">Current conversion</h3>
+              <span className="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">Normal</span>
+            </div>
+            
+            <div className="flex items-center gap-6">
+              {/* Circular Progress */}
+              <div className="flex-shrink-0">
+                <div className="relative w-28 h-28">
+                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#374151" strokeWidth="3" />
+                    <circle 
+                      cx="50" 
+                      cy="50" 
+                      r="45" 
+                      fill="none" 
+                      stroke="#22c55e" 
+                      strokeWidth="3"
+                      strokeDasharray={`${successRate * 2.83} 283`}
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-white font-bold text-2xl">{successRate}%</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Success/Failure Stats */}
+              <div className="flex-1 space-y-4">
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-gray-300 text-sm">Success</span>
+                    <span className="text-white font-bold text-sm">{successCount.toLocaleString()}</span>
+                  </div>
+                  <div className="w-full h-2 bg-gray-600 rounded-full overflow-hidden">
+                    <div className="h-full bg-green-500" style={{width: `${successRate}%`}}></div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-gray-300 text-sm">Failure</span>
+                    <span className="text-white font-bold text-sm">{failureCount.toLocaleString()}</span>
+                  </div>
+                  <div className="w-full h-2 bg-gray-600 rounded-full overflow-hidden">
+                    <div className="h-full bg-red-500" style={{width: `${100 - successRate}%`}}></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Transaction Schedule */}
+          <div className="bg-slate-700 rounded-2xl p-5">
+            <h3 className="text-white font-bold text-sm mb-4">Transaction schedule</h3>
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={transactionData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#555" />
+                <XAxis dataKey="name" stroke="#999" />
+                <YAxis stroke="#999" />
+                <Bar dataKey="success" stackId="a" fill="#22c55e" />
+                <Bar dataKey="failure" stackId="a" fill="#ef4444" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* System Resources */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-slate-700 rounded-lg p-3">
+              <p className="text-gray-400 text-xs mb-1">RAM Usage</p>
+              <p className="text-white font-bold text-sm mb-2">{systemStatus?.ram?.used?.toFixed(1) || '2.5'} GB</p>
+              <div className="w-full h-1.5 bg-gray-600 rounded-full overflow-hidden">
+                <div className="h-full bg-purple-500" style={{width: `${systemStatus?.ram?.percentage || 31}%`}}></div>
+              </div>
+            </div>
+            <div className="bg-slate-700 rounded-lg p-3">
+              <p className="text-gray-400 text-xs mb-1">MongoDB</p>
+              <p className="text-white font-bold text-sm mb-2">{(systemStatus?.mongodb?.used * 1024).toFixed(0) || 150} MB</p>
+              <div className="w-full h-1.5 bg-gray-600 rounded-full overflow-hidden">
+                <div className="h-full bg-orange-500" style={{width: `${systemStatus?.mongodb?.percentage || 29}%`}}></div>
+              </div>
+            </div>
+            <div className="bg-slate-700 rounded-lg p-3">
+              <p className="text-gray-400 text-xs mb-1">CPU Usage</p>
+              <p className="text-white font-bold text-sm mb-2">{systemStatus?.cpu?.percentage || 25}%</p>
+              <div className="w-full h-1.5 bg-gray-600 rounded-full overflow-hidden">
+                <div className="h-full bg-blue-500" style={{width: `${systemStatus?.cpu?.percentage || 25}%`}}></div>
+              </div>
+            </div>
+            <div className="bg-slate-700 rounded-lg p-3">
+              <p className="text-gray-400 text-xs mb-1">Response Time</p>
+              <p className="text-white font-bold text-sm">{systemStatus?.responseTime || 95}ms</p>
             </div>
           </div>
         </div>
-
-        <div className="bg-teal-100 border border-teal-300 rounded-lg p-3">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-[#171532]">Response</p>
-            <p className="text-xs font-bold text-teal-600">{systemStatus?.responseTime || 142}ms</p>
-          </div>
-        </div>
-      </div>
-    </>
-  )
+      </>
+    )
+  }
 
   return (
-    <div className="min-h-screen bg-white pb-24">
-      <div className="px-5 pt-6">
+    <div className={`min-h-screen pb-24 ${activeTab === "status" ? "bg-slate-800" : "bg-white"}`}>
+      <div className={`px-5 pt-6 ${activeTab === "status" ? "text-white" : ""}`}>
         {activeTab === "home" && renderHomeTab()}
         {activeTab === "accounts" && renderAccountsTab()}
         {activeTab === "leaderboard" && renderLeaderboardTab()}
