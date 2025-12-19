@@ -2127,6 +2127,10 @@
     color: #e5e7eb;
   }
 
+  .text-\[\#f39c12\] {
+    color: #f39c12;
+  }
+
   .text-amber-700 {
     color: var(--color-amber-700);
   }
@@ -3093,6 +3097,10 @@
 
   .dark\:bg-slate-900:is(.dark *) {
     background-color: var(--color-slate-900);
+  }
+
+  .dark\:text-\[\#f39c12\]:is(.dark *) {
+    color: #f39c12;
   }
 
   .dark\:text-gray-300:is(.dark *) {

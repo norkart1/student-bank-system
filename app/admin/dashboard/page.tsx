@@ -303,11 +303,23 @@ export default function AdminDashboard() {
 
   const renderReportsTab = () => (
     <>
-      <div className="flex items-center gap-3 mb-6">
-        <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] dark:hover:bg-slate-700 rounded-lg transition-colors">
-          <ChevronLeft className="w-5 h-5 text-[#4a6670] dark:text-gray-300" />
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] dark:hover:bg-slate-700 rounded-lg transition-colors">
+            <ChevronLeft className="w-5 h-5 text-[#4a6670] dark:text-gray-300" />
+          </button>
+          <h2 className="text-lg font-bold text-[#171532] dark:text-white">Reports</h2>
+        </div>
+        <button 
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          className="p-2 hover:bg-[#f0f0f0] dark:hover:bg-slate-700 rounded-lg transition-colors"
+        >
+          {theme === 'dark' ? (
+            <Sun className="w-5 h-5 text-[#f39c12] dark:text-[#f39c12]" />
+          ) : (
+            <Moon className="w-5 h-5 text-[#4a6670]" />
+          )}
         </button>
-        <h2 className="text-lg font-bold text-[#171532] dark:text-white">Reports</h2>
       </div>
 
       <div className="space-y-6">
