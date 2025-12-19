@@ -75,6 +75,8 @@ export default function AdminDashboard() {
   const [transactionAmount, setTransactionAmount] = useState("")
   const [selectedStudentIndex, setSelectedStudentIndex] = useState<number | null>(null)
   const [notification, setNotification] = useState<{type: 'success' | 'error', message: string} | null>(null)
+  const [showDepositDropdown, setShowDepositDropdown] = useState(false)
+  const [showWithdrawDropdown, setShowWithdrawDropdown] = useState(false)
 
   const handleDeposit = () => {
     if (!transactionAmount || isNaN(parseFloat(transactionAmount)) || parseFloat(transactionAmount) <= 0) {
@@ -190,16 +192,34 @@ export default function AdminDashboard() {
           <div className="px-6 py-6 space-y-4">
             <div>
               <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Select Student</label>
-              <select
-                value={selectedStudentIndex ?? ""}
-                onChange={(e) => setSelectedStudentIndex(parseInt(e.target.value))}
-                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#4a6670] text-[#171532] dark:text-white"
-              >
-                <option value="">Choose a student...</option>
-                {students.map((student, idx) => (
-                  <option key={idx} value={idx}>{student.name}</option>
-                ))}
-              </select>
+              <div className="relative">
+                <button
+                  onClick={() => setShowDepositDropdown(!showDepositDropdown)}
+                  className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white text-left flex items-center justify-between hover:border-[#4a6670] dark:hover:border-slate-500 transition-colors"
+                >
+                  <span>{selectedStudentIndex !== null ? students[selectedStudentIndex]?.name : 'Choose a student...'}</span>
+                  <svg className={`w-5 h-5 transition-transform ${showDepositDropdown ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                </button>
+                
+                {showDepositDropdown && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl shadow-lg z-10 max-h-64 overflow-y-auto">
+                    {students.map((student, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          setSelectedStudentIndex(idx)
+                          setShowDepositDropdown(false)
+                        }}
+                        className="w-full px-4 py-3 text-left hover:bg-[#f0f0f0] dark:hover:bg-slate-600 border-b border-gray-100 dark:border-slate-600 last:border-b-0 transition-colors text-[#171532] dark:text-white"
+                      >
+                        <div className="font-medium">{student.name}</div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div>
@@ -249,16 +269,35 @@ export default function AdminDashboard() {
           <div className="px-6 py-6 space-y-4">
             <div>
               <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Select Student</label>
-              <select
-                value={selectedStudentIndex ?? ""}
-                onChange={(e) => setSelectedStudentIndex(parseInt(e.target.value))}
-                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#4a6670] text-[#171532] dark:text-white"
-              >
-                <option value="">Choose a student...</option>
-                {students.map((student, idx) => (
-                  <option key={idx} value={idx}>{student.name} (Balance: ₹{student.balance.toFixed(2)})</option>
-                ))}
-              </select>
+              <div className="relative">
+                <button
+                  onClick={() => setShowWithdrawDropdown(!showWithdrawDropdown)}
+                  className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white text-left flex items-center justify-between hover:border-[#4a6670] dark:hover:border-slate-500 transition-colors"
+                >
+                  <span>{selectedStudentIndex !== null ? students[selectedStudentIndex]?.name : 'Choose a student...'}</span>
+                  <svg className={`w-5 h-5 transition-transform ${showWithdrawDropdown ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                </button>
+                
+                {showWithdrawDropdown && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl shadow-lg z-10 max-h-64 overflow-y-auto">
+                    {students.map((student, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          setSelectedStudentIndex(idx)
+                          setShowWithdrawDropdown(false)
+                        }}
+                        className="w-full px-4 py-3 text-left hover:bg-[#f0f0f0] dark:hover:bg-slate-600 border-b border-gray-100 dark:border-slate-600 last:border-b-0 transition-colors text-[#171532] dark:text-white"
+                      >
+                        <div className="font-medium">{student.name}</div>
+                        <div className="text-xs text-[#747384] dark:text-gray-400">Balance: ₹{student.balance.toFixed(2)}</div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div>
