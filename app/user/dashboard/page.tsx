@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Wallet, TrendingUp, LogOut, ArrowUpRight, ArrowDownRight, History, Mail, Phone, User } from "lucide-react"
+import { Wallet, ArrowUpRight, ArrowDownRight, History, Mail, Phone, User, Bell, Home, Settings } from "lucide-react"
 import { defaultStudents } from "@/lib/students"
 
 export default function UserDashboard() {
@@ -10,6 +10,7 @@ export default function UserDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [userData, setUserData] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState("home")
 
   useEffect(() => {
     const auth = localStorage.getItem("isUserAuthenticated")
@@ -68,6 +69,21 @@ export default function UserDashboard() {
     setIsLoading(false)
   }, [router])
 
+  const getTotalDeposited = () => {
+    return userData?.transactions?.reduce((sum: number, t: any) => t.type === 'deposit' ? sum + t.amount : sum, 0) || 0
+  }
+
+  const getTotalWithdrawn = () => {
+    return userData?.transactions?.reduce((sum: number, t: any) => t.type === 'withdraw' ? sum + t.amount : sum, 0) || 0
+  }
+
+  const getGreeting = () => {
+    const hour = new Date().getHours()
+    if (hour < 12) return "Morning"
+    if (hour < 18) return "Afternoon"
+    return "Evening"
+  }
+
   const handleLogout = () => {
     localStorage.removeItem("isUserAuthenticated")
     localStorage.removeItem("userRole")
@@ -93,55 +109,53 @@ export default function UserDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <header className="bg-gradient-to-r from-[#4a6670] to-[#3d565e] text-white sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                <Wallet className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-white">JDSA Students Bank</h1>
-                <p className="text-xs text-white/70">Welcome, {userData.name}</p>
-              </div>
-            </div>
-            <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white rounded-lg font-semibold transition-colors">
-              <LogOut className="w-4 h-4" />
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-white pb-24">
       <main className="max-w-7xl mx-auto px-4 md:px-6 py-6">
-        <div className="grid md:grid-cols-3 gap-4 mb-6">
-          <div className="md:col-span-2 bg-gradient-to-r from-[#4a6670] to-[#3d565e] rounded-2xl p-6 text-white shadow-lg border border-[#5a7680]/50">
-            <p className="text-white/70 text-sm font-medium mb-2">Current Balance</p>
-            <p className="text-5xl font-bold mb-6">₹{userData.balance?.toFixed(2) || "0.00"}</p>
-            <div className="flex gap-3">
-              <button className="flex-1 bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl font-semibold gap-2 flex items-center justify-center transition-colors">
-                <ArrowDownRight className="w-4 h-4" />
-                Deposit
-              </button>
-              <button className="flex-1 bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl font-semibold gap-2 flex items-center justify-center transition-colors">
-                <ArrowUpRight className="w-4 h-4" />
-                Withdraw
-              </button>
+        {/* Greeting Section with Notification */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 bg-[#4a6670] rounded-full flex items-center justify-center text-white font-bold text-lg">
+              {userData.name?.charAt(0).toUpperCase() || 'U'}
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-[#171532]">{getGreeting()}, {userData.name}!</h1>
+              <p className="text-xs text-[#747384]">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
             </div>
           </div>
+          <button className="p-3 hover:bg-[#f0f0f0] rounded-full transition-colors">
+            <Bell className="w-6 h-6 text-[#4a6670]" />
+          </button>
+        </div>
 
-          <div className="bg-white border border-[#e5e7eb] rounded-2xl p-6 shadow-sm">
-            <div className="flex items-center gap-3 pb-4 border-b border-[#e5e7eb]">
-              <History className="w-5 h-5 text-[#4a6670]" />
-              <h3 className="font-bold text-[#171532]">Activity</h3>
+        {/* Balance Card */}
+        <div className="bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-2xl p-6 text-white shadow-lg border border-[#5a7680]/50 mb-6">
+          <div className="flex items-start justify-between mb-6">
+            <div>
+              <p className="text-white/70 text-sm font-medium mb-2">Total Balance</p>
+              <p className="text-5xl font-bold">₹{userData.balance?.toFixed(2) || "0.00"}</p>
             </div>
-            <div className="mt-4">
-              <p className="text-3xl font-bold text-[#171532]">{userData.transactions?.length || 0}</p>
-              <p className="text-xs text-[#747384] mt-1">Total transactions</p>
+            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <Wallet className="w-6 h-6 text-white" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-white/10 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <ArrowDownRight className="w-4 h-4 text-[#10B981]" />
+                <p className="text-white/70 text-sm">Deposited</p>
+              </div>
+              <p className="text-2xl font-bold text-white">₹{getTotalDeposited().toFixed(2)}</p>
+            </div>
+            <div className="bg-white/10 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <ArrowUpRight className="w-4 h-4 text-[#EF4444]" />
+                <p className="text-white/70 text-sm">Withdrawn</p>
+              </div>
+              <p className="text-2xl font-bold text-white">₹{getTotalWithdrawn().toFixed(2)}</p>
             </div>
           </div>
         </div>
+
 
         <div className="bg-white border border-[#e5e7eb] rounded-2xl p-6 shadow-sm mb-6">
           <div className="flex items-center gap-3 pb-4 border-b border-[#e5e7eb] mb-4">
@@ -172,29 +186,6 @@ export default function UserDashboard() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4 mb-6">
-          <div className="bg-white border border-[#e5e7eb] rounded-2xl p-6 shadow-sm">
-            <div className="flex items-center gap-3 pb-4 border-b border-[#e5e7eb]">
-              <TrendingUp className="w-5 h-5 text-[#4a6670]" />
-              <h3 className="font-bold text-[#171532]">Status</h3>
-            </div>
-            <div className="mt-4">
-              <p className="text-3xl font-bold text-[#10B981]">Active</p>
-              <p className="text-xs text-[#747384] mt-1">Account in good standing</p>
-            </div>
-          </div>
-
-          <div className="bg-white border border-[#e5e7eb] rounded-2xl p-6 shadow-sm">
-            <div className="flex items-center gap-3 pb-4 border-b border-[#e5e7eb]">
-              <Wallet className="w-5 h-5 text-[#4a6670]" />
-              <h3 className="font-bold text-[#171532]">Balance</h3>
-            </div>
-            <div className="mt-4">
-              <p className="text-3xl font-bold text-[#10B981]">₹{userData.balance?.toFixed(2) || "0.00"}</p>
-              <p className="text-xs text-[#747384] mt-1">Current balance</p>
-            </div>
-          </div>
-        </div>
 
         <div className="bg-white border border-[#e5e7eb] rounded-2xl shadow-sm">
           <div className="px-6 py-4 border-b border-[#e5e7eb]">
@@ -234,6 +225,33 @@ export default function UserDashboard() {
           </div>
         </div>
       </main>
+
+      {/* Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-[#e5e7eb] px-4 py-3">
+        <div className="max-w-7xl mx-auto flex items-center justify-around">
+          <button 
+            onClick={() => setActiveTab("home")}
+            className={`flex flex-col items-center gap-1 py-2 px-6 rounded-2xl transition-colors ${activeTab === "home" ? "bg-[#c17f59] text-white" : "text-[#747384] hover:text-[#4a6670]"}`}
+          >
+            <Home className="w-5 h-5" />
+            <span className="text-xs font-semibold">Home</span>
+          </button>
+          <button 
+            onClick={() => setActiveTab("accounts")}
+            className={`flex flex-col items-center gap-1 py-2 px-6 rounded-2xl transition-colors ${activeTab === "accounts" ? "bg-[#c17f59] text-white" : "text-[#747384] hover:text-[#4a6670]"}`}
+          >
+            <Wallet className="w-5 h-5" />
+            <span className="text-xs font-semibold">Accounts</span>
+          </button>
+          <button 
+            onClick={() => setActiveTab("profile")}
+            className={`flex flex-col items-center gap-1 py-2 px-6 rounded-2xl transition-colors ${activeTab === "profile" ? "bg-[#c17f59] text-white" : "text-[#747384] hover:text-[#4a6670]"}`}
+          >
+            <Settings className="w-5 h-5" />
+            <span className="text-xs font-semibold">Profile</span>
+          </button>
+        </div>
+      </nav>
     </div>
   )
 }
