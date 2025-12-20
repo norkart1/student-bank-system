@@ -15,15 +15,34 @@ export default function UserDashboard() {
   useEffect(() => {
     const auth = localStorage.getItem("isUserAuthenticated")
     const role = localStorage.getItem("userRole")
-    const studentId = localStorage.getItem("studentId")
     
-    if (auth !== "true" || role !== "student") {
+    if (auth !== "true") {
       router.push("/login")
-    } else {
-      setIsAuthenticated(true)
+      return
+    }
+
+    setIsAuthenticated(true)
+
+    if (role === "student") {
+      const studentId = localStorage.getItem("studentId")
       if (studentId) {
         const student = defaultStudents.find((s) => s.id === studentId)
         setUserData(student || { name: "Student", balance: 0, transactions: [] })
+      }
+    } else if (role === "custom") {
+      const customAccountId = localStorage.getItem("customAccountId")
+      const customUsername = localStorage.getItem("customUsername")
+      if (customAccountId) {
+        const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
+        const account = customAccounts.find((acc: any) => acc.id === customAccountId)
+        if (account) {
+          setUserData({
+            ...account,
+            name: customUsername,
+            email: "Not set",
+            mobile: "Not set",
+          })
+        }
       }
     }
   }, [router])
@@ -33,6 +52,8 @@ export default function UserDashboard() {
     localStorage.removeItem("userRole")
     localStorage.removeItem("studentId")
     localStorage.removeItem("studentName")
+    localStorage.removeItem("customAccountId")
+    localStorage.removeItem("customUsername")
     router.push("/login")
   }
 

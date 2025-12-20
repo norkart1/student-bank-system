@@ -39,8 +39,21 @@ export default function LoginPage() {
           localStorage.setItem("studentName", student.name)
           router.push("/user/dashboard")
         } else {
-          setError("Invalid username or password")
-          setIsLoading(false)
+          // Check custom accounts created by users
+          const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
+          const customAccount = customAccounts.find(
+            (acc: any) => acc.username === username && acc.password === password
+          )
+          if (customAccount) {
+            localStorage.setItem("isUserAuthenticated", "true")
+            localStorage.setItem("userRole", "custom")
+            localStorage.setItem("customAccountId", customAccount.id)
+            localStorage.setItem("customUsername", customAccount.username)
+            router.push("/user/dashboard")
+          } else {
+            setError("Invalid username or password")
+            setIsLoading(false)
+          }
         }
       }
     }, 500)
@@ -122,6 +135,13 @@ export default function LoginPage() {
           >
             {isLoading ? "Logging in..." : "Login"}
           </button>
+
+          <p className="text-center text-[#747384] text-sm mt-4">
+            Don't have an account?{" "}
+            <Link href="/register" className="text-[#4a6670] font-semibold hover:underline">
+              Create one here
+            </Link>
+          </p>
         </form>
       </div>
     </div>
