@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Calculator, Activity, Moon, Sun, Download } from "lucide-react"
+import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Calculator, Activity, Moon, Sun, Download, Calendar, AlertCircle, Headphones, MessageCircle } from "lucide-react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 import { useTheme } from "next-themes"
 import jsPDF from "jspdf"
@@ -89,6 +89,9 @@ export default function AdminDashboard() {
   const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7))
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString())
   const [selectedPersonalStudent, setSelectedPersonalStudent] = useState<number | null>(null)
+  const [supportMessage, setSupportMessage] = useState("")
+  const [chatMessages, setChatMessages] = useState<Array<{role: string, text: string}>>([])
+  const [chatInput, setChatInput] = useState("")
 
   const handleDeposit = () => {
     if (!transactionAmount || isNaN(parseFloat(transactionAmount)) || parseFloat(transactionAmount) <= 0) {
@@ -933,6 +936,46 @@ export default function AdminDashboard() {
           <span className="text-sm font-bold text-[#171532]">Withdraw</span>
         </button>
         <button 
+          onClick={() => setActiveTab("calendar")}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <Calendar className="w-6 h-6 text-white" />
+          </div>
+          <span className="text-sm font-bold text-[#171532]">Calendar</span>
+        </button>
+        <button 
+          onClick={() => setActiveTab("calculator")}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <Calculator className="w-6 h-6 text-white" />
+          </div>
+          <span className="text-sm font-bold text-[#171532]">Calculator</span>
+        </button>
+        <button 
+          onClick={() => setActiveTab("status")}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <AlertCircle className="w-6 h-6 text-white" />
+          </div>
+          <span className="text-sm font-bold text-[#171532]">Status</span>
+        </button>
+        <button 
+          onClick={() => setActiveTab("support")}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <Headphones className="w-6 h-6 text-white" />
+          </div>
+          <span className="text-sm font-bold text-[#171532]">Support</span>
+        </button>
+        <button 
+          onClick={() => setActiveTab("chats")}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <MessageCircle className="w-6 h-6 text-white" />
+          </div>
+          <span className="text-sm font-bold text-[#171532]">Chats</span>
+        </button>
+        <button 
           onClick={() => setActiveTab("reports")}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
@@ -1433,6 +1476,74 @@ export default function AdminDashboard() {
     </>
   )
 
+  const renderCalendarTab = () => (
+    <>
+      <div className="flex items-center gap-3 mb-6">
+        <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
+          <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+        </button>
+        <h2 className="text-lg font-bold text-[#171532]">Calendar</h2>
+      </div>
+      <div className="bg-white border border-[#e5e7eb] rounded-2xl p-6 shadow-sm">
+        <div className="text-center space-y-4">
+          <p className="text-2xl font-bold text-[#171532]">{new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+          <div className="grid grid-cols-7 gap-2 mt-4">
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+              <div key={day} className="text-center text-sm font-bold text-[#4a6670]">{day}</div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  )
+
+  const renderSupportTab = () => (
+    <>
+      <div className="flex items-center gap-3 mb-6">
+        <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
+          <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+        </button>
+        <h2 className="text-lg font-bold text-[#171532]">Support</h2>
+      </div>
+      <div className="bg-white border border-[#e5e7eb] rounded-2xl p-6 space-y-4 shadow-sm">
+        <div className="bg-[#f8f9fa] rounded-xl p-4 border border-[#e5e7eb]">
+          <p className="text-sm font-semibold text-[#4a6670] mb-2">How can we help?</p>
+          <textarea value={supportMessage} onChange={(e) => setSupportMessage(e.target.value)} placeholder="Describe your issue..." className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:border-[#4a6670] text-[#171532]" rows={4}></textarea>
+        </div>
+        <button className="w-full bg-[#4a6670] text-white py-3 rounded-xl font-semibold hover:bg-[#3d565e] transition-all">Submit Ticket</button>
+      </div>
+    </>
+  )
+
+  const renderChatsTab = () => (
+    <>
+      <div className="flex items-center gap-3 mb-6">
+        <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
+          <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+        </button>
+        <h2 className="text-lg font-bold text-[#171532]">Chats</h2>
+      </div>
+      <div className="bg-white border border-[#e5e7eb] rounded-2xl p-4 shadow-sm flex flex-col h-[500px]">
+        <div className="flex-1 overflow-y-auto space-y-3 mb-4 pb-4 border-b border-[#e5e7eb]">
+          {chatMessages.length === 0 && (
+            <p className="text-center text-[#747384] py-8">No messages yet. Start a conversation!</p>
+          )}
+          {chatMessages.map((msg, idx) => (
+            <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div className={`px-4 py-2 rounded-lg max-w-xs ${msg.role === 'user' ? 'bg-[#4a6670] text-white' : 'bg-[#f0f0f0] text-[#171532]'}`}>
+                {msg.text}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex gap-2">
+          <input type="text" value={chatInput} onChange={(e) => setChatInput(e.target.value)} placeholder="Type a message..." className="flex-1 px-4 py-2 border border-[#e5e7eb] rounded-xl focus:outline-none focus:border-[#4a6670]" />
+          <button className="bg-[#4a6670] text-white px-6 py-2 rounded-xl font-semibold hover:bg-[#3d565e]">Send</button>
+        </div>
+      </div>
+    </>
+  )
+
   const renderStatusTab = () => {
     // Calculate site strength from system metrics
     const cpuHealth = 100 - (systemStatus?.cpu?.percentage || 25);
@@ -1594,8 +1705,11 @@ export default function AdminDashboard() {
         {activeTab === "accounts" && renderAccountsTab()}
         {activeTab === "leaderboard" && renderLeaderboardTab()}
         {activeTab === "ai" && renderAITab()}
+        {activeTab === "calendar" && renderCalendarTab()}
         {activeTab === "calculator" && renderCalculatorTab()}
         {activeTab === "status" && renderStatusTab()}
+        {activeTab === "support" && renderSupportTab()}
+        {activeTab === "chats" && renderChatsTab()}
         {activeTab === "profile" && (
           <div className="space-y-5">
             <h2 className="text-lg font-bold text-[#171532]">Admin Profile</h2>
