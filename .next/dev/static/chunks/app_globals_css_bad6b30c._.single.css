@@ -3313,6 +3313,22 @@
   --sidebar-ring: #8462e1;
 }
 
+input[type="date"] {
+  --lightningcss-light: initial;
+  --lightningcss-dark: ;
+  color-scheme: light;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0);
+  cursor: pointer;
+}
+
+input[type="date"] {
+  color: #171532;
+  background-color: #f8f9fa;
+}
+
 @property --tw-translate-x {
   syntax: "*";
   inherits: false;

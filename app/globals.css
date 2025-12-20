@@ -123,3 +123,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Light calendar date picker styling */
+input[type="date"] {
+  color-scheme: light;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0);
+  cursor: pointer;
+}
+
+/* Ensure date inputs have light background */
+input[type="date"] {
+  background-color: #f8f9fa;
+  color: #171532;
+}
