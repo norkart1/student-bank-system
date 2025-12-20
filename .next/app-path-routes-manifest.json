@@ -1,0 +1,11 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/admin/dashboard/page": "/admin/dashboard",
+  "/api/gemini/route": "/api/gemini",
+  "/api/system/status/route": "/api/system/status",
+  "/login/page": "/login",
+  "/page": "/",
+  "/register/page": "/register",
+  "/user/dashboard/page": "/user/dashboard"
+}
