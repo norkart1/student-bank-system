@@ -9,6 +9,7 @@ export default function UserDashboard() {
   const router = useRouter()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [userData, setUserData] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const auth = localStorage.getItem("isUserAuthenticated")
@@ -30,19 +31,34 @@ export default function UserDashboard() {
     } else if (role === "custom") {
       const customAccountId = localStorage.getItem("customAccountId")
       const customUsername = localStorage.getItem("customUsername")
-      if (customAccountId) {
+      if (customAccountId && customUsername) {
         const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
         const account = customAccounts.find((acc: any) => acc.id === customAccountId)
         if (account) {
           setUserData({
             ...account,
             name: customUsername,
+            username: customUsername,
             email: "Not set",
             mobile: "Not set",
+            balance: account.balance || 0,
+            transactions: account.transactions || [],
+          })
+        } else {
+          // Fallback if account not found
+          setUserData({
+            name: customUsername,
+            username: customUsername,
+            email: "Not set",
+            mobile: "Not set",
+            balance: 0,
+            transactions: [],
           })
         }
       }
     }
+    
+    setIsLoading(false)
   }, [router])
 
   const handleLogout = () => {
@@ -55,8 +71,18 @@ export default function UserDashboard() {
     router.push("/login")
   }
 
-  if (!isAuthenticated || !userData) {
+  if (!isAuthenticated || isLoading) {
     return null
+  }
+  
+  if (!userData) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-[#747384] mb-4">Loading your account...</p>
+        </div>
+      </div>
+    )
   }
 
   return (

@@ -232,11 +232,7 @@ export default function AdminDashboard() {
   }
 
   const getReportData = () => {
-    if (reportType === 'date') return generateDateReport()
-    if (reportType === 'monthly') return generateMonthlyReport()
-    if (reportType === 'yearly') return generateYearlyReport()
-    if (reportType === 'personal') return generatePersonalReport()
-    return []
+    return generatePersonalReport()
   }
 
   const downloadPDF = () => {
@@ -334,94 +330,18 @@ export default function AdminDashboard() {
 
       <div className="space-y-6">
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700">
-          <h3 className="text-lg font-bold text-[#171532] dark:text-white mb-4">Report Type</h3>
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { id: 'date', label: 'Date Range' },
-              { id: 'monthly', label: 'Monthly' },
-              { id: 'yearly', label: 'Yearly' },
-              { id: 'personal', label: 'Personal Account' }
-            ].map(type => (
-              <button
-                key={type.id}
-                onClick={() => setReportType(type.id as any)}
-                className={`px-4 py-3 rounded-xl font-semibold transition-all ${
-                  reportType === type.id
-                    ? 'bg-[#4a6670] text-white shadow-lg'
-                    : 'bg-[#f0f0f0] dark:bg-slate-700 text-[#171532] dark:text-white hover:bg-[#e0e0e0] dark:hover:bg-slate-600'
-                }`}
-              >
-                {type.label}
-              </button>
+          <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-3">Select Student</label>
+          <select
+            value={selectedPersonalStudent ?? ""}
+            onChange={(e) => setSelectedPersonalStudent(parseInt(e.target.value))}
+            className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
+          >
+            <option value="">Choose a student...</option>
+            {students.map((student, idx) => (
+              <option key={idx} value={idx}>{student.name}</option>
             ))}
-          </div>
+          </select>
         </div>
-
-        {reportType === 'date' && (
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700 space-y-4">
-            <div>
-              <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Start Date</label>
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">End Date</label>
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
-              />
-            </div>
-          </div>
-        )}
-
-        {reportType === 'monthly' && (
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700">
-            <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Select Month</label>
-            <input
-              type="month"
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-              className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
-            />
-          </div>
-        )}
-
-        {reportType === 'yearly' && (
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700">
-            <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Select Year</label>
-            <select
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
-              className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
-            >
-              {[2024, 2025, 2026].map(year => (
-                <option key={year} value={year}>{year}</option>
-              ))}
-            </select>
-          </div>
-        )}
-
-        {reportType === 'personal' && (
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700">
-            <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Select Student</label>
-            <select
-              value={selectedPersonalStudent ?? ""}
-              onChange={(e) => setSelectedPersonalStudent(parseInt(e.target.value))}
-              className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
-            >
-              <option value="">Choose a student...</option>
-              {students.map((student, idx) => (
-                <option key={idx} value={idx}>{student.name}</option>
-              ))}
-            </select>
-          </div>
-        )}
 
         <div className="flex gap-3">
           <button
@@ -995,82 +915,30 @@ export default function AdminDashboard() {
       </div>
 
       <h2 className="text-lg font-bold text-[#171532] mb-4">Options</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-        <button 
-          onClick={() => setShowDepositModal(true)}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
-            <ArrowDownRight className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-sm font-medium text-[#171532]">Deposit</span>
-        </button>
-        <button 
-          onClick={() => setShowWithdrawModal(true)}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
-            <ArrowUpRight className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-sm font-medium text-[#171532]">Withdraw</span>
-        </button>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
         <button 
           onClick={() => setActiveTab("reports")}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
-            <BarChart3 className="w-5 h-5 text-white" />
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <BarChart3 className="w-6 h-6 text-white" />
           </div>
-          <span className="text-sm font-medium text-[#171532]">Reports</span>
+          <span className="text-sm font-bold text-[#171532]">Reports</span>
         </button>
         <button 
           onClick={() => setActiveTab("ai")}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-white" />
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <Sparkles className="w-6 h-6 text-white" />
           </div>
-          <span className="text-sm font-medium text-[#171532]">AI</span>
-        </button>
-        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
-            <HelpCircle className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-sm font-medium text-[#171532]">Support</span>
-        </button>
-        <button className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
-            <MessageSquare className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-sm font-medium text-[#171532]">Chats</span>
-        </button>
-        <button 
-          onClick={() => setActiveTab("accounts")}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
-            <Users className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-sm font-medium text-[#171532]">Accounts</span>
-        </button>
-        <button 
-          onClick={() => setActiveTab("leaderboard")}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
-            <Trophy className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-sm font-medium text-[#171532]">Top Rich</span>
+          <span className="text-sm font-bold text-[#171532]">AI</span>
         </button>
         <button 
           onClick={() => setActiveTab("calculator")}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
-            <Calculator className="w-5 h-5 text-white" />
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <Calculator className="w-6 h-6 text-white" />
           </div>
-          <span className="text-sm font-medium text-[#171532]">Calculator</span>
-        </button>
-        <button 
-          onClick={() => setActiveTab("status")}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
-            <Activity className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-sm font-medium text-[#171532]">Status</span>
+          <span className="text-sm font-bold text-[#171532]">Calculator</span>
         </button>
       </div>
     </>
