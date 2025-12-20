@@ -235,6 +235,9 @@ export default function AdminDashboard() {
   }
 
   const getReportData = () => {
+    if (reportType === 'date') return generateDateReport()
+    if (reportType === 'monthly') return generateMonthlyReport()
+    if (reportType === 'yearly') return generateYearlyReport()
     return generatePersonalReport()
   }
 
@@ -333,33 +336,99 @@ export default function AdminDashboard() {
 
       <div className="space-y-6">
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700">
-          <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-3">Select Student</label>
+          <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-3">Report Type</label>
           <select
-            value={selectedPersonalStudent ?? ""}
-            onChange={(e) => setSelectedPersonalStudent(parseInt(e.target.value))}
+            value={reportType}
+            onChange={(e) => setReportType(e.target.value as any)}
             className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
           >
-            <option value="">Choose a student...</option>
-            {students.map((student, idx) => (
-              <option key={idx} value={idx}>{student.name}</option>
-            ))}
+            <option value="date">Selected Date Range</option>
+            <option value="monthly">Monthly Report</option>
+            <option value="yearly">Yearly Report</option>
+            <option value="personal">Individual Student</option>
           </select>
         </div>
 
-        <div className="flex gap-3">
+        {reportType === 'date' && (
+          <div className="grid grid-cols-2 gap-4 bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700">
+            <div>
+              <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Start Date</label>
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">End Date</label>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
+              />
+            </div>
+          </div>
+        )}
+
+        {reportType === 'monthly' && (
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700">
+            <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-3">Select Month</label>
+            <input
+              type="month"
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
+            />
+          </div>
+        )}
+
+        {reportType === 'yearly' && (
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700">
+            <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-3">Select Year</label>
+            <select
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(e.target.value)}
+              className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
+            >
+              {[2023, 2024, 2025].map(year => (
+                <option key={year} value={year}>{year}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {reportType === 'personal' && (
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700">
+            <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-3">Select Student</label>
+            <select
+              value={selectedPersonalStudent ?? ""}
+              onChange={(e) => setSelectedPersonalStudent(parseInt(e.target.value))}
+              className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
+            >
+              <option value="">Choose a student...</option>
+              {students.map((student, idx) => (
+                <option key={idx} value={idx}>{student.name}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <div className="grid grid-cols-2 gap-3">
           <button
             onClick={downloadPDF}
-            className="flex-1 flex items-center justify-center gap-2 bg-[#EF4444] hover:bg-[#dc2626] text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-colors shadow-md"
+            className="flex items-center justify-center gap-2 bg-[#EF4444] hover:bg-[#dc2626] text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-colors shadow-md"
           >
             <Download className="w-4 h-4" />
-            Download PDF
+            PDF
           </button>
           <button
             onClick={downloadExcel}
-            className="flex-1 flex items-center justify-center gap-2 bg-[#10B981] hover:bg-[#0fa06f] text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-colors shadow-md"
+            className="flex items-center justify-center gap-2 bg-[#10B981] hover:bg-[#0fa06f] text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-colors shadow-md"
           >
             <Download className="w-4 h-4" />
-            Download Excel
+            Excel
           </button>
         </div>
       </div>
