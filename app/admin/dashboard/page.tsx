@@ -917,6 +917,22 @@ export default function AdminDashboard() {
       <h2 className="text-lg font-bold text-[#171532] mb-4">Options</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
         <button 
+          onClick={() => setShowDepositModal(true)}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <ArrowDownRight className="w-6 h-6 text-white" />
+          </div>
+          <span className="text-sm font-bold text-[#171532]">Deposit</span>
+        </button>
+        <button 
+          onClick={() => setShowWithdrawModal(true)}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <ArrowUpRight className="w-6 h-6 text-white" />
+          </div>
+          <span className="text-sm font-bold text-[#171532]">Withdraw</span>
+        </button>
+        <button 
           onClick={() => setActiveTab("reports")}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
@@ -931,14 +947,6 @@ export default function AdminDashboard() {
             <Sparkles className="w-6 h-6 text-white" />
           </div>
           <span className="text-sm font-bold text-[#171532]">AI</span>
-        </button>
-        <button 
-          onClick={() => setActiveTab("calculator")}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
-            <Calculator className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-sm font-bold text-[#171532]">Calculator</span>
         </button>
       </div>
     </>
