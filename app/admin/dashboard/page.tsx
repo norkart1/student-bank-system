@@ -1509,62 +1509,87 @@ export default function AdminDashboard() {
       </div>
       
       <div className="max-w-sm mx-auto">
-        <div className="bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 rounded-3xl p-6 shadow-2xl border-4 border-white/30">
+        <div className="bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-3xl p-6 shadow-2xl border border-[#5a7680]/50">
           <div className="space-y-4">
             <div className="text-right space-y-2">
-              <p className="text-white/50 text-sm">{calcExpression}</p>
+              <p className="text-white/60 text-sm">{calcExpression}</p>
               <p className="text-5xl font-bold text-white tracking-tight">{calcDisplay}</p>
             </div>
           </div>
           
           <div className="grid grid-cols-4 gap-3 mt-6">
-            <button onClick={() => handleCalcInput("7")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">7</button>
-            <button onClick={() => handleCalcInput("8")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">8</button>
-            <button onClick={() => handleCalcInput("9")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">9</button>
-            <button onClick={() => handleCalcInput("+")} className="bg-blue-500 hover:bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">+</button>
+            <button onClick={() => handleCalcInput("7")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">7</button>
+            <button onClick={() => handleCalcInput("8")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">8</button>
+            <button onClick={() => handleCalcInput("9")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">9</button>
+            <button onClick={() => handleCalcInput("+")} className="bg-[#c17f59] hover:bg-[#d8956d] text-white py-4 rounded-2xl font-bold text-lg transition-colors">+</button>
             
-            <button onClick={() => handleCalcInput("4")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">4</button>
-            <button onClick={() => handleCalcInput("5")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">5</button>
-            <button onClick={() => handleCalcInput("6")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">6</button>
-            <button onClick={() => handleCalcInput("-")} className="bg-blue-500 hover:bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">-</button>
+            <button onClick={() => handleCalcInput("4")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">4</button>
+            <button onClick={() => handleCalcInput("5")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">5</button>
+            <button onClick={() => handleCalcInput("6")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">6</button>
+            <button onClick={() => handleCalcInput("-")} className="bg-[#c17f59] hover:bg-[#d8956d] text-white py-4 rounded-2xl font-bold text-lg transition-colors">−</button>
             
-            <button onClick={() => handleCalcInput("1")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">1</button>
-            <button onClick={() => handleCalcInput("2")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">2</button>
-            <button onClick={() => handleCalcInput("3")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">3</button>
-            <button onClick={() => handleCalcInput("*")} className="bg-blue-500 hover:bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">×</button>
+            <button onClick={() => handleCalcInput("1")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">1</button>
+            <button onClick={() => handleCalcInput("2")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">2</button>
+            <button onClick={() => handleCalcInput("3")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">3</button>
+            <button onClick={() => handleCalcInput("*")} className="bg-[#c17f59] hover:bg-[#d8956d] text-white py-4 rounded-2xl font-bold text-lg transition-colors">×</button>
             
-            <button onClick={() => handleCalcInput("0")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg col-span-2 transition-colors">0</button>
-            <button onClick={() => handleCalcInput(".")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">.</button>
-            <button onClick={() => handleCalcInput("/")} className="bg-blue-500 hover:bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg transition-colors">÷</button>
+            <button onClick={() => handleCalcInput("0")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg col-span-2 transition-colors">0</button>
+            <button onClick={() => handleCalcInput(".")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">.</button>
+            <button onClick={() => handleCalcInput("/")} className="bg-[#c17f59] hover:bg-[#d8956d] text-white py-4 rounded-2xl font-bold text-lg transition-colors">÷</button>
             
-            <button onClick={() => handleCalcInput("=")} className="bg-emerald-500 hover:bg-emerald-600 text-white py-4 rounded-2xl font-bold text-lg col-span-2 transition-colors">=</button>
-            <button onClick={() => handleCalcInput("C")} className="bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-2xl font-bold text-lg col-span-2 transition-colors">C</button>
+            <button onClick={() => handleCalcInput("=")} className="bg-[#10B981] hover:bg-[#0fa06f] text-white py-4 rounded-2xl font-bold text-lg col-span-2 transition-colors">=</button>
+            <button onClick={() => handleCalcInput("C")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg col-span-2 transition-colors">C</button>
           </div>
         </div>
       </div>
     </>
   )
 
-  const renderCalendarTab = () => (
-    <>
-      <div className="flex items-center gap-3 mb-6">
-        <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
-          <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
-        </button>
-        <h2 className="text-lg font-bold text-[#171532]">Calendar</h2>
-      </div>
-      <div className="bg-white border border-[#e5e7eb] rounded-2xl p-6 shadow-sm">
-        <div className="text-center space-y-4">
-          <p className="text-2xl font-bold text-[#171532]">{new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
-          <div className="grid grid-cols-7 gap-2 mt-4">
+  const renderCalendarTab = () => {
+    const today = new Date()
+    const year = today.getFullYear()
+    const month = today.getMonth()
+    const firstDay = new Date(year, month, 1).getDay()
+    const daysInMonth = new Date(year, month + 1, 0).getDate()
+    const days = []
+    
+    for (let i = 0; i < firstDay; i++) days.push(null)
+    for (let i = 1; i <= daysInMonth; i++) days.push(i)
+    
+    return (
+      <>
+        <div className="flex items-center gap-3 mb-6">
+          <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
+            <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+          </button>
+          <h2 className="text-lg font-bold text-[#171532]">Calendar</h2>
+        </div>
+        <div className="bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-2xl p-6 shadow-lg border border-[#5a7680]/50">
+          <div className="text-center mb-6">
+            <p className="text-2xl font-bold text-white">{today.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+          </div>
+          <div className="grid grid-cols-7 gap-2 mb-4">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-              <div key={day} className="text-center text-sm font-bold text-[#4a6670]">{day}</div>
+              <div key={day} className="text-center text-xs font-bold text-white/70 py-2">{day}</div>
+            ))}
+          </div>
+          <div className="grid grid-cols-7 gap-2">
+            {days.map((day, idx) => (
+              <div key={idx} className={`aspect-square flex items-center justify-center rounded-lg font-semibold transition-colors ${
+                day === today.getDate() 
+                  ? 'bg-[#c17f59] text-white shadow-md' 
+                  : day 
+                  ? 'bg-white/10 text-white hover:bg-white/20' 
+                  : 'text-transparent'
+              }`}>
+                {day}
+              </div>
             ))}
           </div>
         </div>
-      </div>
-    </>
-  )
+      </>
+    )
+  }
 
   const renderSupportTab = () => (
     <>
