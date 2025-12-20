@@ -26,13 +26,7 @@ interface Student {
   transactions: Transaction[]
 }
 
-const defaultStudents: Student[] = [
-  { name: "Dara Sok", mobile: "9876543210", email: "dara@example.com", username: "dara_sok", balance: 1250.00, transactions: [{ type: 'deposit', amount: 1500, date: 'Dec 15, 2025' }, { type: 'withdraw', amount: 250, date: 'Dec 16, 2025' }] },
-  { name: "Sophea Chan", mobile: "9876543211", email: "sophea@example.com", username: "sophea_chan", balance: 890.50, transactions: [{ type: 'deposit', amount: 1000, date: 'Dec 14, 2025' }, { type: 'withdraw', amount: 109.50, date: 'Dec 16, 2025' }] },
-  { name: "Visal Meng", mobile: "9876543212", email: "visal@example.com", username: "visal_meng", balance: 2100.00, transactions: [{ type: 'deposit', amount: 2500, date: 'Dec 12, 2025' }, { type: 'withdraw', amount: 400, date: 'Dec 15, 2025' }] },
-  { name: "Sreynich Phan", mobile: "9876543213", email: "sreynich@example.com", username: "sreynich_phan", balance: 675.25, transactions: [{ type: 'deposit', amount: 800, date: 'Dec 13, 2025' }, { type: 'withdraw', amount: 124.75, date: 'Dec 17, 2025' }] },
-  { name: "Ratanak Ly", mobile: "9876543214", email: "ratanak@example.com", username: "ratanak_ly", balance: 1580.00, transactions: [{ type: 'deposit', amount: 2000, date: 'Dec 10, 2025' }, { type: 'withdraw', amount: 420, date: 'Dec 14, 2025' }] },
-]
+const defaultStudents: Student[] = []
 
 const avatarColors = ['bg-orange-100', 'bg-blue-100', 'bg-green-100', 'bg-purple-100', 'bg-pink-100']
 
@@ -60,10 +54,10 @@ export default function AdminDashboard() {
     password: "",
     profileImage: ""
   })
-  const [adminName, setAdminName] = useState("Admin User")
-  const [adminUsername, setAdminUsername] = useState("admin")
-  const [adminPassword, setAdminPassword] = useState("admin@123")
-  const [adminRating, setAdminRating] = useState(5)
+  const [adminName, setAdminName] = useState("")
+  const [adminUsername, setAdminUsername] = useState("")
+  const [adminPassword, setAdminPassword] = useState("")
+  const [adminRating, setAdminRating] = useState(0)
   const [showPasswordReset, setShowPasswordReset] = useState(false)
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
