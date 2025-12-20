@@ -4,7 +4,8 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Wallet, TrendingUp, LogOut, ArrowUpRight, ArrowDownRight, History } from "lucide-react"
+import { Wallet, TrendingUp, LogOut, ArrowUpRight, ArrowDownRight, History, Mail, Phone, User } from "lucide-react"
+import { defaultStudents } from "@/lib/students"
 
 export default function UserDashboard() {
   const router = useRouter()
@@ -14,17 +15,15 @@ export default function UserDashboard() {
   useEffect(() => {
     const auth = localStorage.getItem("isUserAuthenticated")
     const role = localStorage.getItem("userRole")
-    if (auth !== "true" || role !== "user") {
+    const studentId = localStorage.getItem("studentId")
+    
+    if (auth !== "true" || role !== "student") {
       router.push("/login")
     } else {
       setIsAuthenticated(true)
-      const savedStudents = localStorage.getItem("students")
-      if (savedStudents) {
-        const students = JSON.parse(savedStudents)
-        const currentUser = students.find((s: any) => s.name === "Demo User") || students[0]
-        setUserData(currentUser || { name: "Demo User", balance: 0, transactions: [] })
-      } else {
-        setUserData({ name: "Demo User", balance: 500, transactions: [] })
+      if (studentId) {
+        const student = defaultStudents.find((s) => s.id === studentId)
+        setUserData(student || { name: "Student", balance: 0, transactions: [] })
       }
     }
   }, [router])
@@ -32,6 +31,8 @@ export default function UserDashboard() {
   const handleLogout = () => {
     localStorage.removeItem("isUserAuthenticated")
     localStorage.removeItem("userRole")
+    localStorage.removeItem("studentId")
+    localStorage.removeItem("studentName")
     router.push("/login")
   }
 
@@ -75,6 +76,39 @@ export default function UserDashboard() {
                 <ArrowUpRight className="w-4 h-4" />
                 Withdraw
               </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="mb-6 border-[#e2e0ec]">
+          <CardHeader>
+            <CardTitle className="text-[#171532] flex items-center gap-2">
+              <User className="w-5 h-5 text-[#7056B2]" />
+              Personal Information
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs text-[#747384] uppercase tracking-wide font-medium">Full Name</p>
+                <p className="text-lg font-semibold text-[#171532] mt-1">{userData.name}</p>
+              </div>
+              <div>
+                <p className="text-xs text-[#747384] uppercase tracking-wide font-medium flex items-center gap-1">
+                  <Mail className="w-3 h-3" /> Email
+                </p>
+                <p className="text-lg font-semibold text-[#171532] mt-1">{userData.email || "N/A"}</p>
+              </div>
+              <div>
+                <p className="text-xs text-[#747384] uppercase tracking-wide font-medium flex items-center gap-1">
+                  <Phone className="w-3 h-3" /> Mobile
+                </p>
+                <p className="text-lg font-semibold text-[#171532] mt-1">{userData.mobile || "N/A"}</p>
+              </div>
+              <div>
+                <p className="text-xs text-[#747384] uppercase tracking-wide font-medium">Username</p>
+                <p className="text-lg font-semibold text-[#171532] mt-1">{userData.username}</p>
+              </div>
             </div>
           </CardContent>
         </Card>

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import { defaultStudents } from "@/lib/students"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -26,13 +27,21 @@ export default function LoginPage() {
         localStorage.setItem("isAdminAuthenticated", "true")
         localStorage.setItem("userRole", "admin")
         router.push("/admin/dashboard")
-      } else if (username === "user" && password === "12345") {
-        localStorage.setItem("isUserAuthenticated", "true")
-        localStorage.setItem("userRole", "user")
-        router.push("/user/dashboard")
       } else {
-        setError("Invalid username or password")
-        setIsLoading(false)
+        // Check if username matches any student
+        const student = defaultStudents.find(
+          (s) => s.username === username && s.password === password
+        )
+        if (student) {
+          localStorage.setItem("isUserAuthenticated", "true")
+          localStorage.setItem("userRole", "student")
+          localStorage.setItem("studentId", student.id)
+          localStorage.setItem("studentName", student.name)
+          router.push("/user/dashboard")
+        } else {
+          setError("Invalid username or password")
+          setIsLoading(false)
+        }
       }
     }, 500)
   }
