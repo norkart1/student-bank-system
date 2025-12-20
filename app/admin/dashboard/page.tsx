@@ -522,11 +522,34 @@ export default function AdminDashboard() {
               />
             </div>
 
+            <div>
+              <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Date</label>
+              <input
+                type="date"
+                value={transactionDate}
+                onChange={(e) => setTransactionDate(e.target.value)}
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532] dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Reason (Optional)</label>
+              <input
+                type="text"
+                value={transactionReason}
+                onChange={(e) => setTransactionReason(e.target.value)}
+                placeholder="e.g., Scholarship, Gift"
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532] dark:text-white placeholder:text-[#a0a0a0]"
+              />
+            </div>
+
             <div className="flex gap-3 pt-4">
               <button
                 onClick={() => {
                   setShowDepositModal(false)
                   setTransactionAmount("")
+                  setTransactionDate(new Date().toISOString().split('T')[0])
+                  setTransactionReason("")
                   setSelectedStudentIndex(null)
                 }}
                 className="flex-1 py-3 rounded-xl font-semibold text-[#171532] dark:text-white bg-[#f0f0f0] dark:bg-slate-700 hover:bg-[#e5e5e5] dark:hover:bg-slate-600 transition-colors"
@@ -600,11 +623,34 @@ export default function AdminDashboard() {
               />
             </div>
 
+            <div>
+              <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Date</label>
+              <input
+                type="date"
+                value={transactionDate}
+                onChange={(e) => setTransactionDate(e.target.value)}
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532] dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-2">Reason (Optional)</label>
+              <input
+                type="text"
+                value={transactionReason}
+                onChange={(e) => setTransactionReason(e.target.value)}
+                placeholder="e.g., School supplies, Emergency"
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532] dark:text-white placeholder:text-[#a0a0a0]"
+              />
+            </div>
+
             <div className="flex gap-3 pt-4">
               <button
                 onClick={() => {
                   setShowWithdrawModal(false)
                   setTransactionAmount("")
+                  setTransactionDate(new Date().toISOString().split('T')[0])
+                  setTransactionReason("")
                   setSelectedStudentIndex(null)
                 }}
                 className="flex-1 py-3 rounded-xl font-semibold text-[#171532] dark:text-white bg-[#f0f0f0] dark:bg-slate-700 hover:bg-[#e5e5e5] dark:hover:bg-slate-600 transition-colors"
