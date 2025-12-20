@@ -136,12 +136,6 @@ export default function LoginPage() {
             {isLoading ? "Logging in..." : "Login"}
           </button>
 
-          <p className="text-center text-[#747384] text-sm mt-4">
-            Don't have an account?{" "}
-            <Link href="/register" className="text-[#4a6670] font-semibold hover:underline">
-              Create one here
-            </Link>
-          </p>
         </form>
       </div>
     </div>

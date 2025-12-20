@@ -732,6 +732,7 @@ export default function AdminDashboard() {
     }
 
     if (editingIndex !== null) {
+      const oldUsername = students[editingIndex].username
       const updatedStudents = [...students]
       updatedStudents[editingIndex] = {
         name: newStudent.name,
@@ -745,9 +746,23 @@ export default function AdminDashboard() {
       localStorage.setItem("students", JSON.stringify(updatedStudents))
       calculateTotals(updatedStudents)
       
+      // Update customAccounts as well
+      const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
+      const customIdx = customAccounts.findIndex((acc: any) => acc.username === oldUsername)
+      if (customIdx !== -1) {
+        customAccounts[customIdx] = {
+          ...customAccounts[customIdx],
+          username: newStudent.username,
+          password: newStudent.password
+        }
+        localStorage.setItem("customAccounts", JSON.stringify(customAccounts))
+      }
+      
       setNewStudent({ name: "", mobile: "", email: "", username: "", password: "", profileImage: "" })
       setEditingIndex(null)
       setShowEditForm(false)
+      setNotification({ type: 'success', message: 'Account updated successfully!' })
+      setTimeout(() => setNotification(null), 3000)
     }
   }
 
@@ -758,13 +773,22 @@ export default function AdminDashboard() {
 
   const confirmDeleteAccount = () => {
     if (deletingIndex !== null) {
+      const deletedStudent = students[deletingIndex]
       const updatedStudents = students.filter((_, i) => i !== deletingIndex)
       setStudents(updatedStudents)
       localStorage.setItem("students", JSON.stringify(updatedStudents))
       calculateTotals(updatedStudents)
+      
+      // Also remove from customAccounts if exists
+      const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
+      const updatedCustom = customAccounts.filter((acc: any) => acc.username !== deletedStudent.username)
+      localStorage.setItem("customAccounts", JSON.stringify(updatedCustom))
+      
       setShowDeleteConfirm(false)
       setDeletingIndex(null)
       setViewingIndex(null)
+      setNotification({ type: 'success', message: 'Account deleted successfully!' })
+      setTimeout(() => setNotification(null), 3000)
     }
   }
 
@@ -857,8 +881,22 @@ export default function AdminDashboard() {
     localStorage.setItem("students", JSON.stringify(updatedStudents))
     calculateTotals(updatedStudents)
     
+    // Also save to customAccounts for login system
+    const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
+    const newAccount = {
+      id: Date.now().toString(),
+      username: newStudent.username.trim(),
+      password: newStudent.password,
+      balance: 0,
+      transactions: []
+    }
+    customAccounts.push(newAccount)
+    localStorage.setItem("customAccounts", JSON.stringify(customAccounts))
+    
     setNewStudent({ name: "", mobile: "", email: "", username: "", password: "", profileImage: "" })
     setShowCreateForm(false)
+    setNotification({ type: 'success', message: `Account created for ${newStudent.name}!` })
+    setTimeout(() => setNotification(null), 3000)
   }
 
   const renderDeleteConfirmModal = () => {
