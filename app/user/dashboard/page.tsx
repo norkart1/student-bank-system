@@ -22,40 +22,47 @@ export default function UserDashboard() {
 
     setIsAuthenticated(true)
 
-    if (role === "student") {
-      const studentId = localStorage.getItem("studentId")
-      if (studentId) {
-        const student = defaultStudents.find((s) => s.id === studentId)
-        setUserData(student || { name: "Student", balance: 0, transactions: [] })
-      }
-    } else if (role === "custom") {
-      const customAccountId = localStorage.getItem("customAccountId")
-      const customUsername = localStorage.getItem("customUsername")
-      if (customAccountId && customUsername) {
+    try {
+      if (role === "student") {
+        const studentId = localStorage.getItem("studentId")
+        const student = studentId ? defaultStudents.find((s) => s.id === studentId) : null
+        
+        setUserData({
+          id: student?.id || studentId || "unknown",
+          name: student?.name || "Student",
+          username: student?.username || "student",
+          email: student?.email || "Not set",
+          mobile: student?.mobile || "Not set",
+          balance: student?.balance || 0,
+          transactions: student?.transactions || [],
+        })
+      } else if (role === "custom") {
+        const customAccountId = localStorage.getItem("customAccountId")
+        const customUsername = localStorage.getItem("customUsername")
+        
         const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
         const account = customAccounts.find((acc: any) => acc.id === customAccountId)
-        if (account) {
-          setUserData({
-            ...account,
-            name: customUsername,
-            username: customUsername,
-            email: "Not set",
-            mobile: "Not set",
-            balance: account.balance || 0,
-            transactions: account.transactions || [],
-          })
-        } else {
-          // Fallback if account not found
-          setUserData({
-            name: customUsername,
-            username: customUsername,
-            email: "Not set",
-            mobile: "Not set",
-            balance: 0,
-            transactions: [],
-          })
-        }
+        
+        setUserData({
+          id: account?.id || customAccountId || "unknown",
+          name: customUsername || "User",
+          username: customUsername || "user",
+          email: "Not set",
+          mobile: "Not set",
+          balance: account?.balance || 0,
+          transactions: account?.transactions || [],
+        })
       }
+    } catch (error) {
+      console.error("Error loading user data:", error)
+      setUserData({
+        name: "User",
+        username: "user",
+        email: "Not set",
+        mobile: "Not set",
+        balance: 0,
+        transactions: [],
+      })
     }
     
     setIsLoading(false)
