@@ -73,8 +73,6 @@
 
 @layer theme {
   :root, :host {
-    --font-sans: var(--font-poppins), "Poppins", system-ui, sans-serif;
-    --font-mono: "Geist Mono", "Geist Mono Fallback";
     --color-red-50: #fef2f2;
     --color-red-100: #ffe2e2;
     --color-red-200: #ffcaca;
@@ -160,10 +158,6 @@
     --tracking-tight: -.025em;
     --leading-tight: 1.25;
     --radius-xs: .125rem;
-    --radius-sm: calc(var(--radius)  - 4px);
-    --radius-md: calc(var(--radius)  - 2px);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius)  + 4px);
     --radius-2xl: 1rem;
     --radius-3xl: 1.5rem;
     --animate-pulse: pulse 2s cubic-bezier(.4, 0, .6, 1) infinite;
@@ -173,38 +167,6 @@
     --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
     --default-font-family: var(--font-poppins), "Poppins", system-ui, sans-serif;
     --default-mono-font-family: "Geist Mono", "Geist Mono Fallback";
-    --color-background: var(--background);
-    --color-foreground: var(--foreground);
-    --color-card: var(--card);
-    --color-card-foreground: var(--card-foreground);
-    --color-popover: var(--popover);
-    --color-popover-foreground: var(--popover-foreground);
-    --color-primary: var(--primary);
-    --color-primary-foreground: var(--primary-foreground);
-    --color-secondary: var(--secondary);
-    --color-secondary-foreground: var(--secondary-foreground);
-    --color-muted: var(--muted);
-    --color-muted-foreground: var(--muted-foreground);
-    --color-accent: var(--accent);
-    --color-accent-foreground: var(--accent-foreground);
-    --color-destructive: var(--destructive);
-    --color-destructive-foreground: var(--destructive-foreground);
-    --color-border: var(--border);
-    --color-input: var(--input);
-    --color-ring: var(--ring);
-    --color-chart-1: var(--chart-1);
-    --color-chart-2: var(--chart-2);
-    --color-chart-3: var(--chart-3);
-    --color-chart-4: var(--chart-4);
-    --color-chart-5: var(--chart-5);
-    --color-sidebar: var(--sidebar);
-    --color-sidebar-foreground: var(--sidebar-foreground);
-    --color-sidebar-primary: var(--sidebar-primary);
-    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-    --color-sidebar-accent: var(--sidebar-accent);
-    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-    --color-sidebar-border: var(--sidebar-border);
-    --color-sidebar-ring: var(--sidebar-ring);
   }
 
   @supports (color: lab(0% 0 0)) {
@@ -534,10 +496,6 @@
     container: card-header / inline-size;
   }
 
-  .visible {
-    visibility: visible;
-  }
-
   .sr-only {
     clip-path: inset(50%);
     white-space: nowrap;
@@ -748,10 +706,6 @@
 
   .hidden {
     display: none;
-  }
-
-  .inline {
-    display: inline;
   }
 
   .inline-flex {
@@ -1259,10 +1213,6 @@
 
   .border-blue-200 {
     border-color: var(--color-blue-200);
-  }
-
-  .border-border {
-    border-color: var(--border);
   }
 
   .border-gray-100 {
