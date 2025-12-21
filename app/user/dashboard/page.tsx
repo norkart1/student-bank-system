@@ -156,35 +156,41 @@ export default function UserDashboard() {
         </button>
       </div>
 
-      <div className="bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-2xl p-6 text-white shadow-lg border border-[#5a7680]/50 mb-6">
-        <div className="flex items-start justify-between mb-6">
-          <div>
-            <p className="text-white/70 text-sm font-medium mb-2">Total Balance</p>
-            <p className="text-5xl font-bold">₹{userData.balance?.toFixed(2) || "0.00"}</p>
-          </div>
+      <div className="bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-2xl p-5 mb-6 shadow-lg">
+        <div className="flex items-center gap-3 mb-4">
           <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
             <Wallet className="w-6 h-6 text-white" />
           </div>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-white/10 rounded-xl p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <ArrowDownRight className="w-4 h-4 text-[#10B981]" />
-              <p className="text-white/70 text-sm">Deposited</p>
-            </div>
-            <p className="text-2xl font-bold text-white">₹{getTotalDeposited().toFixed(2)}</p>
+          <div>
+            <p className="text-white/70 text-sm">Total Balance</p>
+            <p className="text-2xl font-bold text-white">₹{userData.balance?.toFixed(2) || "0.00"}</p>
           </div>
-          <div className="bg-white/10 rounded-xl p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <ArrowUpRight className="w-4 h-4 text-[#EF4444]" />
-              <p className="text-white/70 text-sm">Withdrawn</p>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-3">
+          <div className="bg-white/10 rounded-xl p-3">
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-8 h-8 bg-[#10B981]/20 rounded-lg flex items-center justify-center">
+                <ArrowDownRight className="w-4 h-4 text-[#10B981]" />
+              </div>
+              <p className="text-white/70 text-xs">Deposited</p>
             </div>
-            <p className="text-2xl font-bold text-white">₹{getTotalWithdrawn().toFixed(2)}</p>
+            <p className="text-lg font-bold text-white">₹{getTotalDeposited().toFixed(2)}</p>
+          </div>
+          
+          <div className="bg-white/10 rounded-xl p-3">
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-8 h-8 bg-[#EF4444]/20 rounded-lg flex items-center justify-center">
+                <ArrowUpRight className="w-4 h-4 text-[#EF4444]" />
+              </div>
+              <p className="text-white/70 text-xs">Withdrawn</p>
+            </div>
+            <p className="text-lg font-bold text-white">₹{getTotalWithdrawn().toFixed(2)}</p>
           </div>
         </div>
       </div>
 
-      <h2 className="text-lg font-bold text-[#171532] mb-4">Dashboard Options</h2>
+      <h2 className="text-lg font-bold text-[#171532] mb-4">Options</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
         <button onClick={() => setActiveTab("ai")} className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
