@@ -1245,6 +1245,10 @@
     gap: calc(var(--spacing) * 6);
   }
 
+  .gap-8 {
+    gap: calc(var(--spacing) * 8);
+  }
+
   :where(.space-y-2 > :not(:last-child)) {
     --tw-space-y-reverse: 0;
     margin-block-start: calc(calc(var(--spacing) * 2) * var(--tw-space-y-reverse));
@@ -1383,6 +1387,10 @@
 
   .border-\[\#EF4444\] {
     border-color: #ef4444;
+  }
+
+  .border-\[\#b8e6f0\] {
+    border-color: #b8e6f0;
   }
 
   .border-\[\#e5e7eb\] {
@@ -1713,6 +1721,11 @@
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
 
+  .from-\[\#d0f0f8\] {
+    --tw-gradient-from: #d0f0f8;
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+
   .from-\[\#e8f4f8\] {
     --tw-gradient-from: #e8f4f8;
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
@@ -1761,6 +1774,11 @@
 
   .to-\[\#3d565e\] {
     --tw-gradient-to: #3d565e;
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+
+  .to-\[\#c5eef5\] {
+    --tw-gradient-to: #c5eef5;
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
 
@@ -1849,6 +1867,10 @@
 
   .px-6 {
     padding-inline: calc(var(--spacing) * 6);
+  }
+
+  .px-8 {
+    padding-inline: calc(var(--spacing) * 8);
   }
 
   .py-0\.5 {
@@ -2585,12 +2607,6 @@
   @media (hover: hover) {
     .hover\:text-\[\#4a6670\]:hover {
       color: #4a6670;
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:text-\[\#EF4444\]:hover {
-      color: #ef4444;
     }
   }
 
