@@ -336,7 +336,6 @@
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
     --tracking-tight: -.025em;
-    --tracking-wide: .025em;
     --leading-tight: 1.25;
     --radius-xs: .125rem;
     --radius-2xl: 1rem;
@@ -2026,11 +2025,6 @@
     letter-spacing: var(--tracking-tight);
   }
 
-  .tracking-wide {
-    --tw-tracking: var(--tracking-wide);
-    letter-spacing: var(--tracking-wide);
-  }
-
   .break-words {
     overflow-wrap: break-word;
   }
@@ -2195,10 +2189,6 @@
     text-transform: capitalize;
   }
 
-  .uppercase {
-    text-transform: uppercase;
-  }
-
   .underline-offset-4 {
     text-underline-offset: 4px;
   }
@@ -2206,10 +2196,6 @@
   .antialiased {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-
-  .opacity-20 {
-    opacity: .2;
   }
 
   .opacity-30 {
@@ -2603,6 +2589,12 @@
   }
 
   @media (hover: hover) {
+    .hover\:text-\[\#EF4444\]:hover {
+      color: #ef4444;
+    }
+  }
+
+  @media (hover: hover) {
     .hover\:text-accent-foreground:hover {
       color: var(--accent-foreground);
     }
@@ -2915,12 +2907,6 @@
   @media (min-width: 48rem) {
     .md\:w-1\/2 {
       width: 50%;
-    }
-  }
-
-  @media (min-width: 48rem) {
-    .md\:grid-cols-2 {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
