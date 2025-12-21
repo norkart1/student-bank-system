@@ -7,6 +7,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 
 import { useTheme } from "next-themes"
 import jsPDF from "jspdf"
 import * as XLSX from "xlsx"
+import { defaultStudents } from "@/lib/students"
 
 interface Transaction {
   type: string
@@ -25,8 +26,6 @@ interface Student {
   balance: number
   transactions: Transaction[]
 }
-
-const defaultStudents: Student[] = []
 
 const avatarColors = ['bg-orange-100', 'bg-blue-100', 'bg-green-100', 'bg-purple-100', 'bg-pink-100']
 
@@ -1606,7 +1605,7 @@ export default function AdminDashboard() {
 
   const renderChatsTab = () => {
     const allAccounts = [
-      ...students.map(s => ({ id: s.id, name: s.name, username: s.username, type: 'student' })),
+      ...defaultStudents.map(s => ({ id: s.id, name: s.name, username: s.username, type: 'student' })),
       ...(() => {
         try {
           const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
