@@ -86,6 +86,7 @@ export default function AdminDashboard() {
   const [supportMessage, setSupportMessage] = useState("")
   const [chatMessages, setChatMessages] = useState<Array<{role: string, text: string}>>([])
   const [chatInput, setChatInput] = useState("")
+  const [selectedChatAccount, setSelectedChatAccount] = useState<string | null>(null)
 
   const handleDeposit = () => {
     if (!transactionAmount || isNaN(parseFloat(transactionAmount)) || parseFloat(transactionAmount) <= 0) {
@@ -1603,34 +1604,84 @@ export default function AdminDashboard() {
     </>
   )
 
-  const renderChatsTab = () => (
-    <>
-      <div className="flex items-center gap-3 mb-6">
-        <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
-          <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
-        </button>
-        <h2 className="text-lg font-bold text-[#171532]">Chats</h2>
-      </div>
-      <div className="bg-white border border-[#e5e7eb] rounded-2xl p-4 shadow-sm flex flex-col h-[500px]">
-        <div className="flex-1 overflow-y-auto space-y-3 mb-4 pb-4 border-b border-[#e5e7eb]">
-          {chatMessages.length === 0 && (
-            <p className="text-center text-[#747384] py-8">No messages yet. Start a conversation!</p>
-          )}
-          {chatMessages.map((msg, idx) => (
-            <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`px-4 py-2 rounded-lg max-w-xs ${msg.role === 'user' ? 'bg-[#4a6670] text-white' : 'bg-[#f0f0f0] text-[#171532]'}`}>
-                {msg.text}
-              </div>
+  const renderChatsTab = () => {
+    const allAccounts = [
+      ...students.map(s => ({ id: s.id, name: s.name, username: s.username, type: 'student' })),
+      ...(() => {
+        try {
+          const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
+          return customAccounts.map((acc: any) => ({ id: acc.id, name: acc.username, username: acc.username, type: 'custom' }))
+        } catch {
+          return []
+        }
+      })()
+    ]
+    
+    return (
+      <>
+        <div className="flex items-center gap-3 mb-6">
+          <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
+            <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+          </button>
+          <h2 className="text-lg font-bold text-[#171532]">Chats</h2>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* Accounts List */}
+          <div className="bg-white border border-[#e5e7eb] rounded-2xl p-4 shadow-sm h-[500px] overflow-y-auto">
+            <h3 className="font-semibold text-[#171532] mb-3 text-sm">All Accounts ({allAccounts.length})</h3>
+            <div className="space-y-2">
+              {allAccounts.map(acc => (
+                <button
+                  key={acc.id}
+                  onClick={() => setSelectedChatAccount(acc.id)}
+                  className={`w-full text-left p-3 rounded-lg transition-colors ${
+                    selectedChatAccount === acc.id
+                      ? 'bg-[#4a6670] text-white'
+                      : 'bg-[#f8f9fa] text-[#171532] hover:bg-[#f0f0f0]'
+                  }`}
+                >
+                  <p className="font-semibold text-sm">{acc.name}</p>
+                  <p className="text-xs text-[#747384] opacity-70">@{acc.username}</p>
+                </button>
+              ))}
             </div>
-          ))}
+          </div>
+          
+          {/* Chat Area */}
+          <div className="lg:col-span-2 bg-white border border-[#e5e7eb] rounded-2xl p-4 shadow-sm flex flex-col h-[500px]">
+            {!selectedChatAccount ? (
+              <div className="flex items-center justify-center flex-1">
+                <p className="text-center text-[#747384]">Select an account to start chatting</p>
+              </div>
+            ) : (
+              <>
+                <div className="pb-3 border-b border-[#e5e7eb] mb-3">
+                  <p className="font-semibold text-[#171532]">{allAccounts.find(a => a.id === selectedChatAccount)?.name}</p>
+                </div>
+                <div className="flex-1 overflow-y-auto space-y-3 mb-4 pb-4 border-b border-[#e5e7eb]">
+                  {chatMessages.length === 0 && (
+                    <p className="text-center text-[#747384] py-8">No messages yet. Start a conversation!</p>
+                  )}
+                  {chatMessages.map((msg, idx) => (
+                    <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`px-4 py-2 rounded-lg max-w-xs ${msg.role === 'user' ? 'bg-[#4a6670] text-white' : 'bg-[#f0f0f0] text-[#171532]'}`}>
+                        {msg.text}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <input type="text" value={chatInput} onChange={(e) => setChatInput(e.target.value)} placeholder="Type a message..." className="flex-1 px-4 py-2 border border-[#e5e7eb] rounded-xl focus:outline-none focus:border-[#4a6670]" />
+                  <button className="bg-[#4a6670] text-white px-6 py-2 rounded-xl font-semibold hover:bg-[#3d565e]">Send</button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
-        <div className="flex gap-2">
-          <input type="text" value={chatInput} onChange={(e) => setChatInput(e.target.value)} placeholder="Type a message..." className="flex-1 px-4 py-2 border border-[#e5e7eb] rounded-xl focus:outline-none focus:border-[#4a6670]" />
-          <button className="bg-[#4a6670] text-white px-6 py-2 rounded-xl font-semibold hover:bg-[#3d565e]">Send</button>
-        </div>
-      </div>
-    </>
-  )
+      </>
+    )
+  }
 
   const renderStatusTab = () => {
     // Calculate site strength from system metrics
