@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Wallet, ArrowUpRight, ArrowDownRight, History, Mail, Phone, User, Bell, Home, Settings, ChevronLeft, Calendar, Calculator, AlertCircle, Headphones, MessageCircle, BarChart3, Sparkles, Send, X, Moon, Sun } from "lucide-react"
+import { Wallet, ArrowUpRight, ArrowDownRight, History, Mail, Phone, User, Bell, Home, Settings, ChevronLeft, Calendar, Calculator, AlertCircle, Headphones, MessageCircle, BarChart3, Sparkles, Send, X, Moon, Sun, LogOut, Share2, Lock } from "lucide-react"
 import { useTheme } from "next-themes"
 import { defaultStudents } from "@/lib/students"
 
@@ -31,6 +31,7 @@ export default function UserDashboard() {
   const [supportMessage, setSupportMessage] = useState("")
   const [greeting, setGreeting] = useState("Good day")
   const [displayDate, setDisplayDate] = useState("")
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
   const loadUserData = () => {
     const auth = localStorage.getItem("isUserAuthenticated")
@@ -584,6 +585,113 @@ export default function UserDashboard() {
     )
   }
 
+  const renderProfileTab = () => {
+    const userInitial = userData.name?.charAt(0).toUpperCase() || "U"
+    
+    return (
+      <div className="space-y-5">
+        <h2 className="text-lg font-bold text-[#171532]">Profile</h2>
+        
+        <div className="bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-2xl p-8 text-white">
+          <div className="flex flex-col items-center text-center space-y-3">
+            <div className="w-32 h-32 rounded-full bg-[#c17f59] flex items-center justify-center shadow-lg border-4 border-white/20 text-4xl font-bold">
+              {userInitial}
+            </div>
+            <div>
+              <p className="text-xl font-bold">{userData.name}</p>
+              <p className="text-sm text-white/70">@{userData.username}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-2 bg-white border border-[#e5e7eb] rounded-2xl p-3">
+          <div>
+            <p className="text-xs font-semibold text-[#747384] mb-1">Full Name</p>
+            <p className="text-sm font-bold text-[#171532]">{userData.name}</p>
+          </div>
+
+          <div className="pt-2 border-t border-[#e5e7eb]">
+            <p className="text-xs font-semibold text-[#747384] mb-1">Username</p>
+            <p className="text-sm font-bold text-[#171532]">@{userData.username}</p>
+          </div>
+
+          <div className="pt-2 border-t border-[#e5e7eb]">
+            <p className="text-xs font-semibold text-[#747384] mb-1">Email</p>
+            <p className="text-sm font-bold text-[#171532]">{userData.email}</p>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <button
+            onClick={() => {
+              const text = `Check out JDSA Students Bank: ${window.location.origin}`
+              if (navigator.share) {
+                navigator.share({
+                  title: "JDSA Students Bank",
+                  text: text,
+                })
+              } else {
+                alert(text)
+              }
+            }}
+            className="w-full flex items-center gap-3 bg-white border border-[#e5e7eb] rounded-xl p-4 hover:bg-[#f8f9fa] transition-colors"
+          >
+            <Share2 className="w-5 h-5 text-[#4a6670]" />
+            <span className="font-medium text-[#171532]">Share Website</span>
+          </button>
+
+          <button
+            onClick={() => setShowLogoutConfirm(true)}
+            className="w-full flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl p-4 hover:bg-red-100 transition-colors"
+          >
+            <LogOut className="w-5 h-5 text-red-600" />
+            <span className="font-medium text-red-600">Logout</span>
+          </button>
+        </div>
+
+        <div className="text-center pt-2 pb-4">
+          <p className="text-xs font-semibold text-[#747384]">v1.0.0</p>
+        </div>
+
+        {showLogoutConfirm && (
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[100]">
+            <div className="bg-white rounded-2xl w-full max-w-sm mx-4 shadow-2xl animate-in scale-in duration-200">
+              <div className="px-6 py-6 space-y-4">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 mx-auto">
+                  <LogOut className="w-6 h-6 text-red-600" />
+                </div>
+                
+                <div className="text-center">
+                  <h3 className="text-xl font-bold text-[#171532] mb-2">Logout</h3>
+                  <p className="text-sm text-[#747384]">
+                    Are you sure you want to logout? You'll need to sign in again to access your account.
+                  </p>
+                </div>
+
+                <div className="flex gap-3 pt-4">
+                  <button
+                    onClick={() => setShowLogoutConfirm(false)}
+                    className="flex-1 py-3 rounded-xl font-semibold text-[#171532] bg-[#f0f0f0] hover:bg-[#e5e5e5] transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleLogout()
+                    }}
+                    className="flex-1 py-3 rounded-xl font-semibold text-white bg-red-600 hover:bg-red-700 transition-colors"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
+
   const handleLogout = () => {
     localStorage.removeItem("isUserAuthenticated")
     localStorage.removeItem("userRole")
@@ -604,6 +712,7 @@ export default function UserDashboard() {
         {activeTab === "support" && renderSupportTab()}
         {activeTab === "calculator" && renderCalculatorTab()}
         {activeTab === "calendar" && renderCalendarTab()}
+        {activeTab === "profile" && renderProfileTab()}
       </main>
 
       <div className="fixed bottom-0 left-0 right-0 px-4 pb-4 z-20 bg-gradient-to-t from-white via-white to-transparent pt-4">
