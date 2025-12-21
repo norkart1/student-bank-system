@@ -1381,10 +1381,6 @@
     border-color: #ef4444;
   }
 
-  .border-\[\#b8e6f0\] {
-    border-color: #b8e6f0;
-  }
-
   .border-\[\#e5e7eb\] {
     border-color: #e5e7eb;
   }
@@ -1713,11 +1709,6 @@
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
 
-  .from-\[\#d0f0f8\] {
-    --tw-gradient-from: #d0f0f8;
-    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-  }
-
   .from-\[\#e8f4f8\] {
     --tw-gradient-from: #e8f4f8;
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
@@ -1766,11 +1757,6 @@
 
   .to-\[\#3d565e\] {
     --tw-gradient-to: #3d565e;
-    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-  }
-
-  .to-\[\#c5eef5\] {
-    --tw-gradient-to: #c5eef5;
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
 

@@ -606,31 +606,45 @@ export default function UserDashboard() {
         {activeTab === "calendar" && renderCalendarTab()}
       </main>
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-white px-4 py-4 flex items-center justify-center">
-        <div className="bg-gradient-to-r from-[#d0f0f8] to-[#c5eef5] rounded-full px-2 py-3 flex items-center justify-center gap-2 shadow-lg border border-[#b8e6f0] max-w-md">
-          <button 
+      <div className="fixed bottom-0 left-0 right-0 px-4 pb-4 z-20 bg-gradient-to-t from-white via-white to-transparent pt-4">
+        <div className="max-w-md mx-auto bg-gradient-to-r from-[#e8f4f8] to-[#d4eef5] rounded-2xl px-6 py-3 flex items-center justify-between shadow-lg">
+          <button
             onClick={() => setActiveTab("home")}
-            className={`flex items-center gap-2 py-2 px-6 rounded-full transition-all font-semibold text-sm whitespace-nowrap ${activeTab === "home" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
+            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 ${
+              activeTab === "home"
+                ? "bg-[#c17f59] text-white shadow-md px-4"
+                : "text-[#4a6670]"
+            }`}
           >
             <Home className="w-5 h-5" />
-            <span>Home</span>
+            <span className="text-[10px] font-medium">Home</span>
           </button>
-          <button 
+          
+          <button
             onClick={() => setActiveTab("chats")}
-            className={`flex items-center gap-2 py-2 px-4 rounded-full transition-all text-sm whitespace-nowrap ${activeTab === "chats" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
+            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 ${
+              activeTab === "chats"
+                ? "bg-[#c17f59] text-white shadow-md px-4"
+                : "text-[#4a6670]"
+            }`}
           >
             <MessageCircle className="w-5 h-5" />
-            <span>Chats</span>
+            <span className="text-[10px] font-medium">Chats</span>
           </button>
-          <button 
+
+          <button
             onClick={() => setActiveTab("profile")}
-            className={`flex items-center gap-2 py-2 px-4 rounded-full transition-all text-sm whitespace-nowrap ${activeTab === "profile" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
+            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 ${
+              activeTab === "profile"
+                ? "bg-[#c17f59] text-white shadow-md px-4"
+                : "text-[#4a6670]"
+            }`}
           >
             <Settings className="w-5 h-5" />
-            <span>Profile</span>
+            <span className="text-[10px] font-medium">Profile</span>
           </button>
         </div>
-      </nav>
+      </div>
     </div>
   )
 }
