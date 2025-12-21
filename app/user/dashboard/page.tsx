@@ -29,6 +29,8 @@ export default function UserDashboard() {
   const [chatMessages, setChatMessages] = useState<Array<{role: string, text: string}>>([])
   const [chatInput, setChatInput] = useState("")
   const [supportMessage, setSupportMessage] = useState("")
+  const [greeting, setGreeting] = useState("Good day")
+  const [displayDate, setDisplayDate] = useState("")
 
   const loadUserData = () => {
     const auth = localStorage.getItem("isUserAuthenticated")
@@ -99,6 +101,17 @@ export default function UserDashboard() {
     loadUserData()
     setIsAuthenticated(true)
     setIsLoading(false)
+
+    // Set greeting and date to fix hydration mismatch
+    const hour = new Date().getHours()
+    if (hour < 12) {
+      setGreeting("Morning")
+    } else if (hour < 18) {
+      setGreeting("Afternoon")
+    } else {
+      setGreeting("Evening")
+    }
+    setDisplayDate(new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }))
 
     // Listen for storage changes to update balance in real-time
     const handleStorageChange = () => {
@@ -186,8 +199,8 @@ export default function UserDashboard() {
             {userData.name?.charAt(0).toUpperCase() || 'U'}
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-[#171532]">{getGreeting()}, {userData.name}!</h1>
-            <p className="text-xs text-[#747384]">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
+            <h1 className="text-2xl font-bold text-[#171532]">{greeting}, {userData.name}!</h1>
+            <p className="text-xs text-[#747384]">{displayDate}</p>
           </div>
         </div>
         <button className="p-3 hover:bg-[#f0f0f0] rounded-full transition-colors">
@@ -594,27 +607,27 @@ export default function UserDashboard() {
       </main>
 
       <nav className="fixed bottom-0 left-0 right-0 bg-white px-4 py-4 flex items-center justify-center">
-        <div className="bg-gradient-to-r from-[#d0f0f8] to-[#c5eef5] rounded-full px-6 py-3 flex items-center justify-center gap-12 shadow-lg border border-[#b8e6f0]">
+        <div className="bg-gradient-to-r from-[#d0f0f8] to-[#c5eef5] rounded-full px-2 py-3 flex items-center justify-center gap-2 shadow-lg border border-[#b8e6f0] max-w-md">
           <button 
             onClick={() => setActiveTab("home")}
-            className={`flex items-center gap-3 py-3 px-8 rounded-full transition-all font-semibold text-sm ${activeTab === "home" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
+            className={`flex items-center gap-2 py-2 px-6 rounded-full transition-all font-semibold text-sm whitespace-nowrap ${activeTab === "home" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
           >
             <Home className="w-5 h-5" />
-            <span className="whitespace-nowrap">Home</span>
+            <span>Home</span>
           </button>
           <button 
             onClick={() => setActiveTab("chats")}
-            className={`flex items-center gap-2 py-2 px-4 rounded-full transition-all text-sm ${activeTab === "chats" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
+            className={`flex items-center gap-2 py-2 px-4 rounded-full transition-all text-sm whitespace-nowrap ${activeTab === "chats" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
           >
             <MessageCircle className="w-5 h-5" />
-            <span className="whitespace-nowrap">Chats</span>
+            <span>Chats</span>
           </button>
           <button 
             onClick={() => setActiveTab("profile")}
-            className={`flex items-center gap-2 py-2 px-4 rounded-full transition-all text-sm ${activeTab === "profile" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
+            className={`flex items-center gap-2 py-2 px-4 rounded-full transition-all text-sm whitespace-nowrap ${activeTab === "profile" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
           >
             <Settings className="w-5 h-5" />
-            <span className="whitespace-nowrap">Profile</span>
+            <span>Profile</span>
           </button>
         </div>
       </nav>
