@@ -1110,6 +1110,10 @@
     min-width: calc(var(--spacing) * 0);
   }
 
+  .min-w-fit {
+    min-width: fit-content;
+  }
+
   .flex-1 {
     flex: 1;
   }
@@ -1201,10 +1205,6 @@
     align-items: flex-start;
   }
 
-  .justify-around {
-    justify-content: space-around;
-  }
-
   .justify-between {
     justify-content: space-between;
   }
@@ -1245,8 +1245,8 @@
     gap: calc(var(--spacing) * 6);
   }
 
-  .gap-12 {
-    gap: calc(var(--spacing) * 12);
+  .gap-8 {
+    gap: calc(var(--spacing) * 8);
   }
 
   :where(.space-y-2 > :not(:last-child)) {
@@ -1869,8 +1869,8 @@
     padding-inline: calc(var(--spacing) * 6);
   }
 
-  .px-10 {
-    padding-inline: calc(var(--spacing) * 10);
+  .px-8 {
+    padding-inline: calc(var(--spacing) * 8);
   }
 
   .py-0\.5 {

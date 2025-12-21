@@ -10,7 +10,15 @@ export default function UserDashboard() {
   const router = useRouter()
   const { theme, setTheme } = useTheme()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [userData, setUserData] = useState<any>(null)
+  const [userData, setUserData] = useState<any>({
+    id: "unknown",
+    name: "User",
+    username: "user",
+    email: "Not set",
+    mobile: "Not set",
+    balance: 0,
+    transactions: [],
+  })
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("home")
   const [aiMessages, setAiMessages] = useState<Array<{role: string, text: string}>>([])
@@ -22,7 +30,7 @@ export default function UserDashboard() {
   const [chatInput, setChatInput] = useState("")
   const [supportMessage, setSupportMessage] = useState("")
 
-  useEffect(() => {
+  const loadUserData = () => {
     const auth = localStorage.getItem("isUserAuthenticated")
     const role = localStorage.getItem("userRole")
     
@@ -30,8 +38,6 @@ export default function UserDashboard() {
       router.push("/login")
       return
     }
-
-    setIsAuthenticated(true)
 
     try {
       if (role === "student") {
@@ -54,15 +60,27 @@ export default function UserDashboard() {
         const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
         const account = customAccounts.find((acc: any) => acc.id === customAccountId)
         
-        setUserData({
-          id: account?.id || customAccountId || "unknown",
-          name: customUsername || "User",
-          username: customUsername || "user",
-          email: "Not set",
-          mobile: "Not set",
-          balance: account?.balance || 0,
-          transactions: account?.transactions || [],
-        })
+        if (account) {
+          setUserData({
+            id: account?.id || customAccountId || "unknown",
+            name: customUsername || "User",
+            username: customUsername || "user",
+            email: "Not set",
+            mobile: "Not set",
+            balance: account?.balance || 0,
+            transactions: account?.transactions || [],
+          })
+        } else {
+          setUserData({
+            id: customAccountId || "unknown",
+            name: customUsername || "User",
+            username: customUsername || "user",
+            email: "Not set",
+            mobile: "Not set",
+            balance: 0,
+            transactions: [],
+          })
+        }
       }
     } catch (error) {
       console.error("Error loading user data:", error)
@@ -75,9 +93,30 @@ export default function UserDashboard() {
         transactions: [],
       })
     }
-    
+  }
+
+  useEffect(() => {
+    loadUserData()
+    setIsAuthenticated(true)
     setIsLoading(false)
+
+    // Listen for storage changes to update balance in real-time
+    const handleStorageChange = () => {
+      loadUserData()
+    }
+
+    window.addEventListener("storage", handleStorageChange)
+    return () => window.removeEventListener("storage", handleStorageChange)
   }, [router])
+
+  // Refresh data every 2 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      loadUserData()
+    }, 2000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   const getTotalDeposited = () => {
     return userData?.transactions?.reduce((sum: number, t: any) => t.type === 'deposit' ? sum + t.amount : sum, 0) || 0
@@ -542,20 +581,6 @@ export default function UserDashboard() {
     router.push("/login")
   }
 
-  if (!isAuthenticated || isLoading) {
-    return null
-  }
-  
-  if (!userData) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-[#747384] mb-4">Loading your account...</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="min-h-screen bg-white pb-24">
       <main className="max-w-7xl mx-auto px-4 md:px-6 py-6">
@@ -568,28 +593,28 @@ export default function UserDashboard() {
         {activeTab === "calendar" && renderCalendarTab()}
       </main>
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-white px-4 py-4 flex items-center justify-center">
-        <div className="bg-gradient-to-r from-[#d0f0f8] to-[#c5eef5] rounded-3xl px-6 py-3 flex items-center justify-around gap-12 shadow-lg border border-[#b8e6f0]">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white px-4 py-3 flex items-center justify-center">
+        <div className="bg-gradient-to-r from-[#d0f0f8] to-[#c5eef5] rounded-3xl px-8 py-3 flex items-center justify-center gap-8 shadow-lg border border-[#b8e6f0] w-full max-w-xs">
           <button 
             onClick={() => setActiveTab("home")}
-            className={`flex flex-col items-center gap-2 py-3 px-10 rounded-3xl transition-all ${activeTab === "home" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
+            className={`flex flex-col items-center gap-1.5 py-2 px-6 rounded-3xl transition-all min-w-fit ${activeTab === "home" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
           >
-            <Home className="w-6 h-6" />
-            <span className="text-xs font-semibold">Home</span>
+            <Home className="w-5 h-5" />
+            <span className="text-xs font-semibold whitespace-nowrap">Home</span>
           </button>
           <button 
             onClick={() => setActiveTab("chats")}
-            className={`flex flex-col items-center gap-2 py-3 px-10 rounded-3xl transition-all ${activeTab === "chats" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
+            className={`flex flex-col items-center gap-1.5 py-2 px-6 rounded-3xl transition-all min-w-fit ${activeTab === "chats" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
           >
-            <MessageCircle className="w-6 h-6" />
-            <span className="text-xs font-semibold">Chats</span>
+            <MessageCircle className="w-5 h-5" />
+            <span className="text-xs font-semibold whitespace-nowrap">Chats</span>
           </button>
           <button 
             onClick={() => setActiveTab("profile")}
-            className={`flex flex-col items-center gap-2 py-3 px-10 rounded-3xl transition-all ${activeTab === "profile" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
+            className={`flex flex-col items-center gap-1.5 py-2 px-6 rounded-3xl transition-all min-w-fit ${activeTab === "profile" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
           >
-            <Settings className="w-6 h-6" />
-            <span className="text-xs font-semibold">Profile</span>
+            <Settings className="w-5 h-5" />
+            <span className="text-xs font-semibold whitespace-nowrap">Profile</span>
           </button>
         </div>
       </nav>
