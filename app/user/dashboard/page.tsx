@@ -593,28 +593,28 @@ export default function UserDashboard() {
         {activeTab === "calendar" && renderCalendarTab()}
       </main>
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-white px-4 py-3 flex items-center justify-center">
-        <div className="bg-gradient-to-r from-[#d0f0f8] to-[#c5eef5] rounded-3xl px-8 py-3 flex items-center justify-center gap-8 shadow-lg border border-[#b8e6f0] w-full max-w-xs">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white px-4 py-4 flex items-center justify-center">
+        <div className="bg-gradient-to-r from-[#d0f0f8] to-[#c5eef5] rounded-full px-6 py-3 flex items-center justify-center gap-12 shadow-lg border border-[#b8e6f0]">
           <button 
             onClick={() => setActiveTab("home")}
-            className={`flex flex-col items-center gap-1.5 py-2 px-6 rounded-3xl transition-all min-w-fit ${activeTab === "home" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
+            className={`flex items-center gap-3 py-3 px-8 rounded-full transition-all font-semibold text-sm ${activeTab === "home" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
           >
             <Home className="w-5 h-5" />
-            <span className="text-xs font-semibold whitespace-nowrap">Home</span>
+            <span className="whitespace-nowrap">Home</span>
           </button>
           <button 
             onClick={() => setActiveTab("chats")}
-            className={`flex flex-col items-center gap-1.5 py-2 px-6 rounded-3xl transition-all min-w-fit ${activeTab === "chats" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
+            className={`flex items-center gap-2 py-2 px-4 rounded-full transition-all text-sm ${activeTab === "chats" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
           >
             <MessageCircle className="w-5 h-5" />
-            <span className="text-xs font-semibold whitespace-nowrap">Chats</span>
+            <span className="whitespace-nowrap">Chats</span>
           </button>
           <button 
             onClick={() => setActiveTab("profile")}
-            className={`flex flex-col items-center gap-1.5 py-2 px-6 rounded-3xl transition-all min-w-fit ${activeTab === "profile" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
+            className={`flex items-center gap-2 py-2 px-4 rounded-full transition-all text-sm ${activeTab === "profile" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
           >
             <Settings className="w-5 h-5" />
-            <span className="text-xs font-semibold whitespace-nowrap">Profile</span>
+            <span className="whitespace-nowrap">Profile</span>
           </button>
         </div>
       </nav>

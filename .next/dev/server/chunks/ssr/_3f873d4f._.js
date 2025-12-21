@@ -1949,13 +1949,13 @@ function UserDashboard() {
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
-                className: "fixed bottom-0 left-0 right-0 bg-white px-4 py-3 flex items-center justify-center",
+                className: "fixed bottom-0 left-0 right-0 bg-white px-4 py-4 flex items-center justify-center",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "bg-gradient-to-r from-[#d0f0f8] to-[#c5eef5] rounded-3xl px-8 py-3 flex items-center justify-center gap-8 shadow-lg border border-[#b8e6f0] w-full max-w-xs",
+                    className: "bg-gradient-to-r from-[#d0f0f8] to-[#c5eef5] rounded-full px-6 py-3 flex items-center justify-center gap-12 shadow-lg border border-[#b8e6f0]",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             onClick: ()=>setActiveTab("home"),
-                            className: `flex flex-col items-center gap-1.5 py-2 px-6 rounded-3xl transition-all min-w-fit ${activeTab === "home" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`,
+                            className: `flex items-center gap-3 py-3 px-8 rounded-full transition-all font-semibold text-sm ${activeTab === "home" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`,
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$house$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Home$3e$__["Home"], {
                                     className: "w-5 h-5"
@@ -1965,7 +1965,7 @@ function UserDashboard() {
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    className: "text-xs font-semibold whitespace-nowrap",
+                                    className: "whitespace-nowrap",
                                     children: "Home"
                                 }, void 0, false, {
                                     fileName: "[project]/app/user/dashboard/page.tsx",
@@ -1980,7 +1980,7 @@ function UserDashboard() {
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             onClick: ()=>setActiveTab("chats"),
-                            className: `flex flex-col items-center gap-1.5 py-2 px-6 rounded-3xl transition-all min-w-fit ${activeTab === "chats" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`,
+                            className: `flex items-center gap-2 py-2 px-4 rounded-full transition-all text-sm ${activeTab === "chats" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`,
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$message$2d$circle$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MessageCircle$3e$__["MessageCircle"], {
                                     className: "w-5 h-5"
@@ -1990,7 +1990,7 @@ function UserDashboard() {
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    className: "text-xs font-semibold whitespace-nowrap",
+                                    className: "whitespace-nowrap",
                                     children: "Chats"
                                 }, void 0, false, {
                                     fileName: "[project]/app/user/dashboard/page.tsx",
@@ -2005,7 +2005,7 @@ function UserDashboard() {
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             onClick: ()=>setActiveTab("profile"),
-                            className: `flex flex-col items-center gap-1.5 py-2 px-6 rounded-3xl transition-all min-w-fit ${activeTab === "profile" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`,
+                            className: `flex items-center gap-2 py-2 px-4 rounded-full transition-all text-sm ${activeTab === "profile" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`,
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$settings$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Settings$3e$__["Settings"], {
                                     className: "w-5 h-5"
@@ -2015,7 +2015,7 @@ function UserDashboard() {
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    className: "text-xs font-semibold whitespace-nowrap",
+                                    className: "whitespace-nowrap",
                                     children: "Profile"
                                 }, void 0, false, {
                                     fileName: "[project]/app/user/dashboard/page.tsx",
