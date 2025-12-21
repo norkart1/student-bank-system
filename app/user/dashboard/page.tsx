@@ -569,24 +569,24 @@ export default function UserDashboard() {
       </main>
 
       <nav className="fixed bottom-0 left-0 right-0 bg-white px-4 py-4 flex items-center justify-center">
-        <div className="bg-gradient-to-r from-[#d0f0f8] to-[#c5eef5] rounded-full px-8 py-4 flex items-center justify-around gap-8 shadow-lg border border-[#b8e6f0]">
+        <div className="bg-gradient-to-r from-[#d0f0f8] to-[#c5eef5] rounded-3xl px-6 py-3 flex items-center justify-around gap-12 shadow-lg border border-[#b8e6f0]">
           <button 
             onClick={() => setActiveTab("home")}
-            className={`flex flex-col items-center gap-2 py-2 px-8 rounded-full transition-all ${activeTab === "home" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
+            className={`flex flex-col items-center gap-2 py-3 px-10 rounded-3xl transition-all ${activeTab === "home" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
           >
             <Home className="w-6 h-6" />
             <span className="text-xs font-semibold">Home</span>
           </button>
           <button 
             onClick={() => setActiveTab("chats")}
-            className={`flex flex-col items-center gap-2 py-2 px-8 rounded-full transition-all ${activeTab === "chats" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
+            className={`flex flex-col items-center gap-2 py-3 px-10 rounded-3xl transition-all ${activeTab === "chats" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
           >
             <MessageCircle className="w-6 h-6" />
             <span className="text-xs font-semibold">Chats</span>
           </button>
           <button 
             onClick={() => setActiveTab("profile")}
-            className={`flex flex-col items-center gap-2 py-2 px-8 rounded-full transition-all ${activeTab === "profile" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
+            className={`flex flex-col items-center gap-2 py-3 px-10 rounded-3xl transition-all ${activeTab === "profile" ? "bg-[#c17f59] text-white shadow-lg" : "text-[#4a6670]"}`}
           >
             <Settings className="w-6 h-6" />
             <span className="text-xs font-semibold">Profile</span>
