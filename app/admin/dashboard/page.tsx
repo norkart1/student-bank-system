@@ -856,11 +856,22 @@ export default function AdminDashboard() {
     fetchSystemStatus()
     const statusInterval = setInterval(fetchSystemStatus, 5000)
     
+    // Refresh students list every 2 seconds to get real-time updates
+    const refreshStudents = () => {
+      const updatedStudents = JSON.parse(localStorage.getItem("students") || "[]")
+      setStudents(updatedStudents)
+      calculateTotals(updatedStudents)
+    }
+    const studentRefreshInterval = setInterval(refreshStudents, 2000)
+    
     const now = new Date()
     const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }
     setCurrentDate(now.toLocaleDateString('en-US', options))
     
-    return () => clearInterval(statusInterval)
+    return () => {
+      clearInterval(statusInterval)
+      clearInterval(studentRefreshInterval)
+    }
   }, [])
 
   const handleCreateAccount = () => {
