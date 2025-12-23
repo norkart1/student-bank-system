@@ -165,7 +165,7 @@ function AdminDashboard() {
             }),
             reason: transactionReason || undefined
         });
-        // Keep only last 100 transactions to prevent localStorage quota exceeded
+        // Limit transactions to prevent excessive data
         if (student.transactions.length > 100) {
             student.transactions = student.transactions.slice(-100);
         }
@@ -239,7 +239,7 @@ function AdminDashboard() {
             }),
             reason: transactionReason || undefined
         });
-        // Keep only last 100 transactions to prevent localStorage quota exceeded
+        // Limit transactions to prevent excessive data
         if (student.transactions.length > 100) {
             student.transactions = student.transactions.slice(-100);
         }
