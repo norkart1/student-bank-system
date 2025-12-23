@@ -17,6 +17,7 @@ interface Transaction {
 }
 
 interface Student {
+  id?: string
   name: string
   mobile?: string
   email?: string
@@ -854,6 +855,7 @@ export default function AdminDashboard() {
     }
 
     const student: Student = {
+      id: Date.now().toString(),
       name: newStudent.name,
       username: newStudent.username,
       password: newStudent.password,
@@ -1604,17 +1606,12 @@ export default function AdminDashboard() {
   )
 
   const renderChatsTab = () => {
-    const allAccounts = [
-      ...defaultStudents.map(s => ({ id: s.id, name: s.name, username: s.username, type: 'student' })),
-      ...(() => {
-        try {
-          const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
-          return customAccounts.map((acc: any) => ({ id: acc.id, name: acc.username, username: acc.username, type: 'custom' }))
-        } catch {
-          return []
-        }
-      })()
-    ]
+    const allAccounts = students.map(s => ({ 
+      id: s.id || Date.now().toString(), 
+      name: s.name, 
+      username: s.username, 
+      type: 'student' 
+    }))
     
     return (
       <>

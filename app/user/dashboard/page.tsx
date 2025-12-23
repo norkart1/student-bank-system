@@ -448,17 +448,19 @@ export default function UserDashboard() {
   )
 
   const renderChatsTab = () => {
-    const allAccounts = [
-      ...defaultStudents.map(s => ({ id: s.id, name: s.name, username: s.username, type: 'student' })),
-      ...(() => {
-        try {
-          const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
-          return customAccounts.map((acc: any) => ({ id: acc.id, name: acc.username, username: acc.username, type: 'custom' }))
-        } catch {
-          return []
-        }
-      })()
-    ]
+    const allAccounts = (() => {
+      try {
+        const studentsData = JSON.parse(localStorage.getItem("students") || "[]")
+        return studentsData.map((s: any) => ({ 
+          id: s.id, 
+          name: s.name, 
+          username: s.username, 
+          type: 'student' 
+        }))
+      } catch {
+        return []
+      }
+    })()
     
     return (
       <>
