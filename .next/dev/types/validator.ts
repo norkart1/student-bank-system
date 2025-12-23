@@ -92,6 +92,24 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../app/api/admin/init/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/admin/init">> = Specific
+  const handler = {} as typeof import("../../../app/api/admin/init/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/admin/login/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/admin/login">> = Specific
+  const handler = {} as typeof import("../../../app/api/admin/login/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../app/api/gemini/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/gemini">> = Specific

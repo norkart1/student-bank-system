@@ -23,30 +23,41 @@ export default function LoginPage() {
     setIsLoading(true)
 
     try {
-      if (username.trim() === "admin" && password === "12345") {
+      // Try admin login first
+      const adminRes = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: username.trim(), password }),
+      })
+
+      if (adminRes.ok) {
+        const adminData = await adminRes.json()
         localStorage.setItem("isAdminAuthenticated", "true")
         localStorage.setItem("userRole", "admin")
+        localStorage.setItem("adminId", adminData.admin.id)
+        localStorage.setItem("adminName", adminData.admin.name)
         router.push("/admin/dashboard")
+        return
+      }
+
+      // Check MongoDB for student account
+      const res = await fetch("/api/students")
+      const students = await res.json()
+      
+      const student = students.find(
+        (s: any) => s.username === username.trim() && s.password === password
+      )
+      
+      if (student) {
+        localStorage.setItem("isUserAuthenticated", "true")
+        localStorage.setItem("userRole", "mongodb")
+        localStorage.setItem("studentId", student._id)
+        localStorage.setItem("studentName", student.name)
+        localStorage.setItem("studentUsername", student.username)
+        router.push("/user/dashboard")
       } else {
-        // Check MongoDB for user account
-        const res = await fetch("/api/students")
-        const students = await res.json()
-        
-        const student = students.find(
-          (s: any) => s.username === username.trim() && s.password === password
-        )
-        
-        if (student) {
-          localStorage.setItem("isUserAuthenticated", "true")
-          localStorage.setItem("userRole", "mongodb")
-          localStorage.setItem("studentId", student._id)
-          localStorage.setItem("studentName", student.name)
-          localStorage.setItem("studentUsername", student.username)
-          router.push("/user/dashboard")
-        } else {
-          setError("Invalid username or password")
-          setIsLoading(false)
-        }
+        setError("Invalid username or password")
+        setIsLoading(false)
       }
     } catch (err) {
       setError("Login error. Please try again.")
