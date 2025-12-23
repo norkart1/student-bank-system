@@ -25,8 +25,18 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     const { id } = await params;
     await connectDB();
     const data = await req.json();
-    const student = await Student.findByIdAndUpdate(id, data, { new: true });
-    if (!student) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    
+    // Only update allowed fields
+    const updateData: any = {};
+    if (data.name) updateData.name = data.name;
+    if (data.email !== undefined) updateData.email = data.email;
+    if (data.mobile !== undefined) updateData.mobile = data.mobile;
+    if (data.profileImage !== undefined) updateData.profileImage = data.profileImage;
+    if (data.balance !== undefined) updateData.balance = data.balance;
+    if (data.transactions !== undefined) updateData.transactions = data.transactions;
+    
+    const student = await Student.findByIdAndUpdate(id, updateData, { new: true });
+    if (!student) return NextResponse.json({ error: 'Student not found' }, { status: 404 });
     
     // Prevent caching to ensure fresh data
     const response = NextResponse.json(student);
@@ -35,7 +45,8 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     response.headers.set('Expires', '0');
     return response;
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to update student' }, { status: 500 });
+    console.error('PATCH error:', error);
+    return NextResponse.json({ error: 'Failed to update student', details: String(error) }, { status: 500 });
   }
 }
 

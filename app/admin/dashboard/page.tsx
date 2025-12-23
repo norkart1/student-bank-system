@@ -759,33 +759,53 @@ export default function AdminDashboard() {
 
     if (editingIndex !== null) {
       const updatedStudents = [...students]
+      const originalStudent = updatedStudents[editingIndex]
+      
+      // Preserve all fields and update with new values
       updatedStudents[editingIndex] = {
+        ...originalStudent,
         name: newStudent.name,
-        profileImage: newStudent.profileImage,
-        balance: updatedStudents[editingIndex].balance,
-        transactions: updatedStudents[editingIndex].transactions
+        email: newStudent.email || originalStudent.email,
+        mobile: newStudent.mobile || originalStudent.mobile,
+        profileImage: newStudent.profileImage || originalStudent.profileImage || ''
       }
+      
       setStudents(updatedStudents)
       calculateTotals(updatedStudents)
       
-      // Update in database
-      const res = await fetch(`/api/students/${updatedStudents[editingIndex]._id}`, {
-        method: 'PATCH',
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedStudents[editingIndex])
-      })
-      
-      if (!res.ok) {
+      try {
+        // Update in database
+        const updateData = {
+          name: newStudent.name,
+          email: newStudent.email || originalStudent.email || '',
+          mobile: newStudent.mobile || originalStudent.mobile || '',
+          profileImage: newStudent.profileImage || originalStudent.profileImage || ''
+        }
+        
+        const res = await fetch(`/api/students/${originalStudent._id}`, {
+          method: 'PATCH',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updateData)
+        })
+        
+        if (!res.ok) {
+          const errorData = await res.json()
+          console.error('Update error:', errorData)
+          setNotification({ type: 'error', message: 'Failed to update account: ' + (errorData.error || 'Unknown error') })
+          setTimeout(() => setNotification(null), 3000)
+          return
+        }
+        
+        setNewStudent({ name: "", mobile: "", email: "", profileImage: "" })
+        setEditingIndex(null)
+        setShowEditForm(false)
+        setNotification({ type: 'success', message: 'Account updated successfully!' })
+        setTimeout(() => setNotification(null), 3000)
+      } catch (error) {
+        console.error('Update error:', error)
         setNotification({ type: 'error', message: 'Failed to update account' })
         setTimeout(() => setNotification(null), 3000)
-        return
       }
-      
-      setNewStudent({ name: "", mobile: "", email: "", profileImage: "" })
-      setEditingIndex(null)
-      setShowEditForm(false)
-      setNotification({ type: 'success', message: 'Account updated successfully!' })
-      setTimeout(() => setNotification(null), 3000)
     }
   }
 
