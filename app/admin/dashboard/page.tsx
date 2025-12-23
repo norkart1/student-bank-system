@@ -1198,7 +1198,10 @@ export default function AdminDashboard() {
   }
 
   const renderAccountDetailView = () => {
-    if (viewingIndex === null) return null
+    if (viewingIndex === null || !students[viewingIndex]) {
+      setViewingIndex(null)
+      return null
+    }
     const student = students[viewingIndex]
     return (
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end sm:items-center justify-center z-50">
@@ -1212,11 +1215,11 @@ export default function AdminDashboard() {
           
           <div className="px-6 py-6 space-y-5">
             <div className="flex justify-center pb-4">
-              {student.profileImage ? (
-                <img src={student.profileImage} alt={student.name} className="w-24 h-24 rounded-full object-cover shadow-lg" />
+              {student?.profileImage ? (
+                <img src={student.profileImage} alt={student?.name || 'Student'} className="w-24 h-24 rounded-full object-cover shadow-lg" />
               ) : (
                 <div className={`w-24 h-24 rounded-full ${avatarColors[viewingIndex % avatarColors.length]} flex items-center justify-center text-3xl font-bold text-[#4a6670]`}>
-                  {student.name.charAt(0)}
+                  {student?.name?.charAt(0) || 'S'}
                 </div>
               )}
             </div>
@@ -1224,22 +1227,22 @@ export default function AdminDashboard() {
             <div className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-[#747384] mb-1">Full Name</label>
-                <p className="text-lg font-semibold text-[#171532]">{student.name}</p>
+                <p className="text-lg font-semibold text-[#171532]">{student?.name || 'N/A'}</p>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#747384] mb-1">Username</label>
-                <p className="text-lg font-semibold text-[#171532]">@{student.username || 'N/A'}</p>
+                <label className="block text-xs font-semibold text-[#747384] mb-1">Code</label>
+                <p className="text-lg font-semibold text-[#171532]">{student?.code || 'N/A'}</p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-[#747384] mb-1">Balance</label>
-                  <p className="text-lg font-bold text-[#10B981]">₹{student.balance.toFixed(2)}</p>
+                  <p className="text-lg font-bold text-[#10B981]">₹{(student?.balance || 0).toFixed(2)}</p>
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-[#747384] mb-1">Transactions</label>
-                  <p className="text-lg font-semibold text-[#171532]">{student.transactions.length}</p>
+                  <p className="text-lg font-semibold text-[#171532]">{student?.transactions?.length || 0}</p>
                 </div>
               </div>
 
