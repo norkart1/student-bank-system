@@ -44,9 +44,12 @@ export default function UserDashboard() {
     }
 
     try {
+      // Load all students from admin's storage
+      const allStudents = JSON.parse(localStorage.getItem("students") || "[]")
+      
       if (role === "student") {
         const studentId = localStorage.getItem("studentId")
-        const student = studentId ? defaultStudents.find((s) => s.id === studentId) : null
+        const student = studentId ? allStudents.find((s: any) => s.id === studentId) : null
         
         setUserData({
           id: student?.id || studentId || "unknown",
@@ -61,16 +64,16 @@ export default function UserDashboard() {
         const customAccountId = localStorage.getItem("customAccountId")
         const customUsername = localStorage.getItem("customUsername")
         
-        const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
-        const account = customAccounts.find((acc: any) => acc.id === customAccountId)
+        // Find account in the main students list
+        const account = allStudents.find((acc: any) => acc.id === customAccountId)
         
         if (account) {
           setUserData({
             id: account?.id || customAccountId || "unknown",
-            name: customUsername || "User",
-            username: customUsername || "user",
-            email: "Not set",
-            mobile: "Not set",
+            name: account?.name || customUsername || "User",
+            username: account?.username || customUsername || "user",
+            email: account?.email || "Not set",
+            mobile: account?.mobile || "Not set",
             balance: account?.balance || 0,
             transactions: account?.transactions || [],
           })
