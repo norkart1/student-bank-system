@@ -159,6 +159,7 @@
     --radius-xs: .125rem;
     --radius-2xl: 1rem;
     --radius-3xl: 1.5rem;
+    --animate-spin: spin 1s linear infinite;
     --animate-pulse: pulse 2s cubic-bezier(.4, 0, .6, 1) infinite;
     --animate-bounce: bounce 1s infinite;
     --blur-sm: 8px;
@@ -722,6 +723,10 @@
     display: none;
   }
 
+  .inline-block {
+    display: inline-block;
+  }
+
   .inline-flex {
     display: inline-flex;
   }
@@ -990,6 +995,10 @@
 
   .animate-pulse {
     animation: var(--animate-pulse);
+  }
+
+  .animate-spin {
+    animation: var(--animate-spin);
   }
 
   .cursor-pointer {
@@ -1300,6 +1309,10 @@
 
   .border-yellow-300 {
     border-color: var(--color-yellow-300);
+  }
+
+  .border-t-\[\#4a6670\] {
+    border-top-color: #4a6670;
   }
 
   .bg-\[\#4a6670\] {
@@ -3532,6 +3545,12 @@ input[type="date"] {
   syntax: "*";
   inherits: false;
   initial-value: 1;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes pulse {
