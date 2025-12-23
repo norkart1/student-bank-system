@@ -84,8 +84,14 @@ export default function RegisterPage() {
         transactions: [],
       }
 
+      // Add to both customAccounts and students arrays for consistency
       existingAccounts.push(newAccount)
       localStorage.setItem("customAccounts", JSON.stringify(existingAccounts))
+      
+      // Also add to students array so admin can manage deposits
+      const allStudents = JSON.parse(localStorage.getItem("students") || "[]")
+      allStudents.push(newAccount)
+      localStorage.setItem("students", JSON.stringify(allStudents))
 
       setSuccess("Account created successfully! Redirecting to login...")
       setTimeout(() => {

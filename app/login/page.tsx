@@ -45,12 +45,17 @@ export default function LoginPage() {
             (acc: any) => acc.username === username.trim() && acc.password === password
           )
           if (customAccount) {
+            // Sync with students array to get any admin-made deposits
+            const allStudents = JSON.parse(localStorage.getItem("students") || "[]")
+            const syncedAccount = allStudents.find((s: any) => s.id === customAccount.id)
+            const finalAccount = syncedAccount || customAccount
+            
             localStorage.setItem("isUserAuthenticated", "true")
             localStorage.setItem("userRole", "custom")
-            localStorage.setItem("customAccountId", customAccount.id)
-            localStorage.setItem("customUsername", customAccount.username)
-            localStorage.setItem("customFullName", customAccount.name || customAccount.username)
-            localStorage.setItem("customBalance", customAccount.balance || "0")
+            localStorage.setItem("customAccountId", finalAccount.id)
+            localStorage.setItem("customUsername", finalAccount.username)
+            localStorage.setItem("customFullName", finalAccount.name || finalAccount.username)
+            localStorage.setItem("customBalance", finalAccount.balance || "0")
             router.push("/user/dashboard")
           } else {
             setError("Invalid username or password")
