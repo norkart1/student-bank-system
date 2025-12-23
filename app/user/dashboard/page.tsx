@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Wallet, LogOut, User, ArrowUpRight, ArrowDownRight, History } from "lucide-react"
+import { Wallet, LogOut, User, ArrowUpRight, ArrowDownRight, History, QrCode, Download, Printer } from "lucide-react"
 import { useTheme } from "next-themes"
+import QRCode from "qrcode.react"
+import jsPDF from "jspdf"
+import * as XLSX from "xlsx"
 
 export default function UserDashboard() {
   const router = useRouter()
@@ -71,6 +74,111 @@ export default function UserDashboard() {
     router.push("/login")
   }
 
+  const downloadPDF = () => {
+    const doc = new jsPDF()
+    const pageHeight = doc.internal.pageSize.getHeight()
+    const pageWidth = doc.internal.pageSize.getWidth()
+    const margin = 10
+    let yPosition = 20
+
+    // Title
+    doc.setFontSize(18)
+    doc.text('Student Account Details', margin, yPosition)
+    yPosition += 12
+
+    // User Info
+    doc.setFontSize(11)
+    doc.text(`Name: ${userData?.name || 'N/A'}`, margin, yPosition)
+    yPosition += 8
+    doc.text(`Code: ${userData?.code || 'N/A'}`, margin, yPosition)
+    yPosition += 8
+    doc.text(`Balance: ₹${(userData?.balance || 0).toFixed(2)}`, margin, yPosition)
+    yPosition += 12
+
+    // Transactions Table
+    doc.setFontSize(12)
+    doc.text('Transaction History', margin, yPosition)
+    yPosition += 8
+
+    const columns = ['S.No', 'Date', 'Deposit', 'Withdraw', 'Balance']
+    const rows: any[] = []
+    let runningBalance = 0
+
+    userData?.transactions?.forEach((t: any, idx: number) => {
+      if (t.type === 'deposit') {
+        runningBalance += t.amount || 0
+      } else {
+        runningBalance -= t.amount || 0
+      }
+      rows.push([
+        (idx + 1).toString(),
+        t.date || '-',
+        t.type === 'deposit' ? `₹${t.amount?.toFixed(2)}` : '-',
+        t.type === 'withdraw' ? `₹${t.amount?.toFixed(2)}` : '-',
+        `₹${runningBalance.toFixed(2)}`
+      ])
+    })
+
+    doc.setFontSize(9)
+    let colWidth = (pageWidth - 2 * margin) / columns.length
+    
+    columns.forEach((col, idx) => {
+      doc.text(col, margin + idx * colWidth, yPosition)
+    })
+    yPosition += 6
+
+    rows.forEach(row => {
+      if (yPosition + 6 > pageHeight - margin) {
+        doc.addPage()
+        yPosition = margin
+      }
+      row.forEach((cell: string, idx: number) => {
+        doc.text(cell.substring(0, 10), margin + idx * colWidth, yPosition)
+      })
+      yPosition += 6
+    })
+
+    doc.save(`${userData?.name}_account_${new Date().toISOString().split('T')[0]}.pdf`)
+  }
+
+  const downloadExcel = () => {
+    const data: any[] = [
+      ['Account Details'],
+      ['Name', userData?.name || 'N/A'],
+      ['Code', userData?.code || 'N/A'],
+      ['Balance', `₹${(userData?.balance || 0).toFixed(2)}`],
+      [],
+      ['Transaction History'],
+    ]
+
+    let runningBalance = 0
+    data.push(['S.No', 'Date', 'Deposit', 'Withdraw', 'Balance'])
+
+    userData?.transactions?.forEach((t: any, idx: number) => {
+      if (t.type === 'deposit') {
+        runningBalance += t.amount || 0
+      } else {
+        runningBalance -= t.amount || 0
+      }
+      data.push([
+        idx + 1,
+        t.date || '-',
+        t.type === 'deposit' ? `₹${t.amount?.toFixed(2)}` : '-',
+        t.type === 'withdraw' ? `₹${t.amount?.toFixed(2)}` : '-',
+        `₹${runningBalance.toFixed(2)}`
+      ])
+    })
+
+    const ws = XLSX.utils.aoa_to_sheet(data)
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, 'Account')
+    XLSX.writeFile(wb, `${userData?.name}_account_${new Date().toISOString().split('T')[0]}.xlsx`)
+  }
+
+  const handlePrint = () => {
+    window.print()
+  }
+
   if (isLoading || !userData) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#f8f9fa] to-[#e8eef5] flex items-center justify-center p-4">
@@ -125,8 +233,8 @@ export default function UserDashboard() {
             <p className="text-3xl font-bold text-white">₹{(userData?.balance || 0)?.toFixed(2)}</p>
           </div>
 
-          {/* Profile Info */}
-          <div className="space-y-3">
+          {/* Profile Info and QR Code Section */}
+          <div className="space-y-4">
             <div className="flex items-center gap-3 p-3 bg-[#f8f9fa] rounded-lg">
               <User className="w-5 h-5 text-[#4a6670]" />
               <div>
@@ -134,6 +242,46 @@ export default function UserDashboard() {
                 <p className="font-semibold text-[#171532]">{userData?.name || 'User'}</p>
               </div>
             </div>
+
+            {/* QR Code Section */}
+            <div className="bg-[#f8f9fa] rounded-lg p-4 flex flex-col items-center">
+              <div className="flex items-center gap-2 mb-3 w-full">
+                <QrCode className="w-4 h-4 text-[#4a6670]" />
+                <p className="text-xs text-[#747384] font-medium">QR Code</p>
+              </div>
+              <div className="bg-white p-2 rounded border border-[#e5e7eb]">
+                <QRCode value={userData?.code || 'NA-0000'} size={120} level="H" includeMargin={true} />
+              </div>
+              <p className="text-xs text-[#747384] mt-2 text-center">Scan to verify account</p>
+            </div>
+          </div>
+
+          {/* Print and Export Buttons */}
+          <div className="mt-6 grid grid-cols-3 gap-2">
+            <button
+              onClick={handlePrint}
+              className="flex items-center justify-center gap-2 bg-[#4a6670] hover:bg-[#3d565e] text-white px-3 py-2 rounded-lg font-semibold text-xs transition-colors"
+              title="Print Dashboard"
+            >
+              <Printer className="w-4 h-4" />
+              <span className="hidden sm:inline">Print</span>
+            </button>
+            <button
+              onClick={downloadPDF}
+              className="flex items-center justify-center gap-2 bg-[#EF4444] hover:bg-[#dc2626] text-white px-3 py-2 rounded-lg font-semibold text-xs transition-colors"
+              title="Download PDF"
+            >
+              <Download className="w-4 h-4" />
+              <span className="hidden sm:inline">PDF</span>
+            </button>
+            <button
+              onClick={downloadExcel}
+              className="flex items-center justify-center gap-2 bg-[#10B981] hover:bg-[#0fa06f] text-white px-3 py-2 rounded-lg font-semibold text-xs transition-colors"
+              title="Download Excel"
+            >
+              <Download className="w-4 h-4" />
+              <span className="hidden sm:inline">Excel</span>
+            </button>
           </div>
 
           {/* Transactions Table Section */}
