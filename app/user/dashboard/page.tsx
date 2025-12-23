@@ -51,31 +51,43 @@ export default function UserDashboard() {
         const studentId = localStorage.getItem("studentId")
         const student = studentId ? allStudents.find((s: any) => s.id === studentId) : null
         
-        setUserData({
-          id: student?.id || studentId || "unknown",
-          name: student?.name || "Student",
-          username: student?.username || "student",
-          email: student?.email || "Not set",
-          mobile: student?.mobile || "Not set",
-          balance: student?.balance || 0,
-          transactions: student?.transactions || [],
-        })
+        if (student) {
+          setUserData({
+            id: student.id,
+            name: student.name,
+            username: student.username,
+            email: student.email || "Not set",
+            mobile: student.mobile || "Not set",
+            balance: student.balance || 0,
+            transactions: student.transactions || [],
+          })
+        } else {
+          setUserData({
+            id: studentId || "unknown",
+            name: "Student",
+            username: "student",
+            email: "Not set",
+            mobile: "Not set",
+            balance: 0,
+            transactions: [],
+          })
+        }
       } else if (role === "custom") {
         const customAccountId = localStorage.getItem("customAccountId")
         const customUsername = localStorage.getItem("customUsername")
         
-        // Find account in the main students list
+        // Find account in the main students list using custom ID
         const account = allStudents.find((acc: any) => acc.id === customAccountId)
         
         if (account) {
           setUserData({
-            id: account?.id || customAccountId || "unknown",
-            name: account?.name || customUsername || "User",
-            username: account?.username || customUsername || "user",
-            email: account?.email || "Not set",
-            mobile: account?.mobile || "Not set",
-            balance: account?.balance || 0,
-            transactions: account?.transactions || [],
+            id: account.id,
+            name: account.name || customUsername || "User",
+            username: account.username || customUsername || "user",
+            email: account.email || "Not set",
+            mobile: account.mobile || "Not set",
+            balance: account.balance || 0,
+            transactions: account.transactions || [],
           })
         } else {
           setUserData({

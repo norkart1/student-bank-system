@@ -34,6 +34,7 @@ export default function AdminDashboard() {
   const router = useRouter()
   const { theme, setTheme } = useTheme()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAuthLoading, setIsAuthLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("home")
   const [currentDate, setCurrentDate] = useState("")
   const [totalBalance, setTotalBalance] = useState(0)
@@ -820,43 +821,47 @@ export default function AdminDashboard() {
   useEffect(() => {
     const auth = localStorage.getItem("isAdminAuthenticated")
     const role = localStorage.getItem("userRole")
+    
     if (auth !== "true" || role !== "admin") {
       router.push("/login")
-    } else {
-      setIsAuthenticated(true)
-      
-      let savedStudents = localStorage.getItem("students")
-      let studentList: Student[]
-      
-      if (!savedStudents || JSON.parse(savedStudents).length === 0) {
-        localStorage.setItem("students", JSON.stringify(defaultStudents))
-        studentList = defaultStudents
-      } else {
-        studentList = JSON.parse(savedStudents)
-      }
-      
-      setStudents(studentList)
-      calculateTotals(studentList)
-      
-      // Fetch system status
-      const fetchSystemStatus = async () => {
-        try {
-          const res = await fetch('/api/system/status')
-          const data = await res.json()
-          setSystemStatus(data)
-        } catch (error) {
-          console.error('Failed to fetch system status:', error)
-        }
-      }
-      fetchSystemStatus()
-      const statusInterval = setInterval(fetchSystemStatus, 5000)
-      return () => clearInterval(statusInterval)
+      return
     }
+    
+    setIsAuthenticated(true)
+    setIsAuthLoading(false)
+    
+    let savedStudents = localStorage.getItem("students")
+    let studentList: Student[]
+    
+    if (!savedStudents || JSON.parse(savedStudents).length === 0) {
+      localStorage.setItem("students", JSON.stringify(defaultStudents))
+      studentList = defaultStudents
+    } else {
+      studentList = JSON.parse(savedStudents)
+    }
+    
+    setStudents(studentList)
+    calculateTotals(studentList)
+    
+    // Fetch system status
+    const fetchSystemStatus = async () => {
+      try {
+        const res = await fetch('/api/system/status')
+        const data = await res.json()
+        setSystemStatus(data)
+      } catch (error) {
+        console.error('Failed to fetch system status:', error)
+      }
+    }
+    fetchSystemStatus()
+    const statusInterval = setInterval(fetchSystemStatus, 5000)
     
     const now = new Date()
     const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }
     setCurrentDate(now.toLocaleDateString('en-US', options))
-  }, [router])
+    
+    return () => clearInterval(statusInterval)
+  }, [])
 
   const handleCreateAccount = () => {
     if (!newStudent.name || !newStudent.username || !newStudent.password) {
@@ -935,7 +940,7 @@ export default function AdminDashboard() {
     )
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || isAuthLoading) {
     return null
   }
 

@@ -2168,10 +2168,6 @@
     --tw-enter-opacity: 0;
   }
 
-  .running {
-    animation-play-state: running;
-  }
-
   .slide-in-from-bottom {
     --tw-enter-translate-y: 100%;
   }
