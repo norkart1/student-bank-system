@@ -51,8 +51,6 @@ export default function AdminDashboard() {
     name: "",
     mobile: "",
     email: "",
-    username: "",
-    password: "",
     profileImage: ""
   })
   const [adminName, setAdminName] = useState("")
@@ -724,18 +722,15 @@ export default function AdminDashboard() {
   }
 
   const handleUpdateAccount = () => {
-    if (!newStudent.name || !newStudent.username || !newStudent.password) {
-      alert("Please fill all required fields")
+    if (!newStudent.name) {
+      alert("Please fill in the full name")
       return
     }
 
     if (editingIndex !== null) {
-      const oldUsername = students[editingIndex].username
       const updatedStudents = [...students]
       updatedStudents[editingIndex] = {
         name: newStudent.name,
-        username: newStudent.username,
-        password: newStudent.password,
         profileImage: newStudent.profileImage,
         balance: updatedStudents[editingIndex].balance,
         transactions: updatedStudents[editingIndex].transactions
@@ -744,19 +739,7 @@ export default function AdminDashboard() {
       localStorage.setItem("students", JSON.stringify(updatedStudents))
       calculateTotals(updatedStudents)
       
-      // Update customAccounts as well
-      const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
-      const customIdx = customAccounts.findIndex((acc: any) => acc.username === oldUsername)
-      if (customIdx !== -1) {
-        customAccounts[customIdx] = {
-          ...customAccounts[customIdx],
-          username: newStudent.username,
-          password: newStudent.password
-        }
-        localStorage.setItem("customAccounts", JSON.stringify(customAccounts))
-      }
-      
-      setNewStudent({ name: "", mobile: "", email: "", username: "", password: "", profileImage: "" })
+      setNewStudent({ name: "", mobile: "", email: "", profileImage: "" })
       setEditingIndex(null)
       setShowEditForm(false)
       setNotification({ type: 'success', message: 'Account updated successfully!' })
@@ -874,43 +857,50 @@ export default function AdminDashboard() {
     }
   }, [])
 
-  const handleCreateAccount = () => {
-    if (!newStudent.name || !newStudent.username || !newStudent.password) {
-      alert("Please fill all required fields")
+  const handleCreateAccount = async () => {
+    if (!newStudent.name) {
+      alert("Please fill in the full name")
       return
     }
 
-    const student: Student = {
-      id: Date.now().toString(),
-      name: newStudent.name,
-      username: newStudent.username,
-      password: newStudent.password,
-      profileImage: newStudent.profileImage,
-      balance: 0,
-      transactions: []
-    }
+    try {
+      const generatedCode = `${newStudent.name
+        .split(' ')
+        .slice(0, 2)
+        .map((word: string) => word.charAt(0).toUpperCase())
+        .join('')}-${Math.floor(1000 + Math.random() * 8000)}`
 
-    const updatedStudents = [...students, student]
-    setStudents(updatedStudents)
-    localStorage.setItem("students", JSON.stringify(updatedStudents))
-    calculateTotals(updatedStudents)
-    
-    // Also save to customAccounts for login system
-    const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
-    const newAccount = {
-      id: Date.now().toString(),
-      username: newStudent.username.trim(),
-      password: newStudent.password,
-      balance: 0,
-      transactions: []
+      const res = await fetch("/api/students", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newStudent.name,
+          code: generatedCode,
+          profileImage: newStudent.profileImage,
+          balance: 0,
+          transactions: [],
+        }),
+      })
+
+      if (!res.ok) {
+        throw new Error("Failed to create account")
+      }
+
+      const createdStudent = await res.json()
+      setNewStudent({ name: "", mobile: "", email: "", profileImage: "" })
+      setShowCreateForm(false)
+      setNotification({ type: 'success', message: `Account created! Code: ${generatedCode}` })
+      setTimeout(() => setNotification(null), 5000)
+      
+      // Refresh students list
+      const studentsRes = await fetch("/api/students")
+      const updatedList = await studentsRes.json()
+      setStudents(updatedList)
+      calculateTotals(updatedList)
+    } catch (error) {
+      setNotification({ type: 'error', message: 'Failed to create account' })
+      setTimeout(() => setNotification(null), 3000)
     }
-    customAccounts.push(newAccount)
-    localStorage.setItem("customAccounts", JSON.stringify(customAccounts))
-    
-    setNewStudent({ name: "", mobile: "", email: "", username: "", password: "", profileImage: "" })
-    setShowCreateForm(false)
-    setNotification({ type: 'success', message: `Account created for ${newStudent.name}!` })
-    setTimeout(() => setNotification(null), 3000)
   }
 
   const renderDeleteConfirmModal = () => {
@@ -1456,7 +1446,7 @@ export default function AdminDashboard() {
           <div className="bg-white rounded-t-3xl sm:rounded-2xl w-full sm:max-w-md max-h-[85vh] overflow-y-auto shadow-2xl animate-in slide-in-from-bottom duration-300">
             <div className="sticky top-0 bg-white flex items-center justify-between px-6 py-5 border-b border-[#f0f0f0]">
               <h3 className="text-xl font-bold text-[#171532]">{showEditForm ? 'Edit Account' : 'Create Account'}</h3>
-              <button onClick={() => {setShowCreateForm(false); setShowEditForm(false); setEditingIndex(null); setNewStudent({ name: "", mobile: "", email: "", username: "", password: "", profileImage: "" })}} className="w-8 h-8 flex items-center justify-center rounded-full bg-[#f5f5f5] text-[#747384] hover:bg-[#e5e5e5] transition-colors">
+              <button onClick={() => {setShowCreateForm(false); setShowEditForm(false); setEditingIndex(null); setNewStudent({ name: "", mobile: "", email: "", profileImage: "" })}} className="w-8 h-8 flex items-center justify-center rounded-full bg-[#f5f5f5] text-[#747384] hover:bg-[#e5e5e5] transition-colors">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -1495,27 +1485,6 @@ export default function AdminDashboard() {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-[#171532] mb-2">Username <span className="text-red-400">*</span></label>
-                <input
-                  type="text"
-                  value={newStudent.username}
-                  onChange={(e) => setNewStudent({...newStudent, username: e.target.value})}
-                  className="w-full px-4 py-3.5 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:bg-white focus:ring-2 focus:ring-[#4a6670]/10 transition-all text-[#171532] placeholder:text-[#a0a0a0]"
-                  placeholder="Enter username"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-[#171532] mb-2">Password <span className="text-red-400">*</span></label>
-                <input
-                  type="password"
-                  value={newStudent.password}
-                  onChange={(e) => setNewStudent({...newStudent, password: e.target.value})}
-                  className="w-full px-4 py-3.5 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:bg-white focus:ring-2 focus:ring-[#4a6670]/10 transition-all text-[#171532] placeholder:text-[#a0a0a0]"
-                  placeholder="Enter password"
-                />
-              </div>
 
               <button
                 onClick={showEditForm ? handleUpdateAccount : handleCreateAccount}
