@@ -136,6 +136,12 @@ export default function SearchPage() {
         <p className="text-sm text-[#6b7280] mt-8">
           Don't have an account code? Contact administration for assistance.
         </p>
+
+        <div className="text-center mt-6">
+          <Link href="/admin-login" className="text-xs text-[#4a6670] hover:text-[#3d565e] underline transition-colors">
+            Admin Login
+          </Link>
+        </div>
       </div>
     </div>
   )
