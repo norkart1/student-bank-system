@@ -13,7 +13,7 @@ export default function UserDashboard() {
   const [userData, setUserData] = useState<any>({
     id: "unknown",
     name: "User",
-    username: "user",
+    code: "NA-0000",
     email: "Not set",
     mobile: "Not set",
     balance: 0,
@@ -58,7 +58,7 @@ export default function UserDashboard() {
         setUserData({
           id: student._id,
           name: student.name,
-          username: student.username,
+          code: student.code,
           email: student.email || "Not set",
           mobile: student.mobile || "Not set",
           balance: student.balance || 0,
@@ -71,7 +71,7 @@ export default function UserDashboard() {
       console.error("Error loading user data:", error)
       setUserData({
         name: "User",
-        username: "user",
+        code: "NA-0000",
         email: "Not set",
         mobile: "Not set",
         balance: 0,
@@ -457,7 +457,7 @@ export default function UserDashboard() {
           <div className="bg-white border border-[#e5e7eb] rounded-2xl p-4 shadow-sm h-[500px] overflow-y-auto">
             <h3 className="font-semibold text-[#171532] mb-3 text-sm">All Accounts ({allAccounts.length})</h3>
             <div className="space-y-2">
-              {allAccounts.map(acc => (
+              {allAccounts.map((acc: any) => (
                 <button
                   key={acc.id}
                   onClick={() => setSelectedChatAccount(acc.id)}
@@ -483,7 +483,7 @@ export default function UserDashboard() {
             ) : (
               <>
                 <div className="pb-3 border-b border-[#e5e7eb] mb-3">
-                  <p className="font-semibold text-[#171532]">{allAccounts.find(a => a.id === selectedChatAccount)?.name}</p>
+                  <p className="font-semibold text-[#171532]">{allAccounts.find((a: any) => a.id === selectedChatAccount)?.name}</p>
                 </div>
                 <div className="flex-1 overflow-y-auto space-y-3 mb-4 pb-4 border-b border-[#e5e7eb]">
                   {chatMessages.length === 0 && (

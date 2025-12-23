@@ -9,8 +9,7 @@ interface Transaction {
 
 export interface IStudent extends Document {
   name: string;
-  username: string;
-  password: string;
+  code: string;
   email?: string;
   mobile?: string;
   profileImage?: string;
@@ -30,8 +29,7 @@ const transactionSchema = new Schema({
 const studentSchema = new Schema<IStudent>(
   {
     name: { type: String, required: true },
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    code: { type: String, required: true, unique: true },
     email: { type: String },
     mobile: { type: String },
     profileImage: { type: String },

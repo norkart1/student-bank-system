@@ -1,68 +1,120 @@
-# JDSA Students Bank
+# JDSA Students Bank - Project Documentation
 
-## Overview
+## Project Overview
+A Next.js-based banking application for JDSA students with account management, transactions, AI assistant, and administrative dashboard.
 
-JDSA Students Bank is a web-based banking management system designed for educational institutions. It provides a dual-interface platform where administrators can manage student accounts and transactions, while students can view their balances, transaction history, and access various banking features. The application includes AI-powered assistance using Google's Gemini API.
+## Current Status
+- **Workflow**: Next.js Dev Server running on port 5000
+- **Database**: MongoDB (mongodb+srv://jdsa)
+- **Authentication**: Code-based identification (replacing password-based login)
 
-## User Preferences
+## Recent Changes (2025-12-23)
+1. ✅ Removed PostgreSQL database - using MongoDB only
+2. ✅ Implemented code-based user identification system
+   - Format: 2-letter prefix (from initials) + 4-digit code (e.g., MR-5774)
+   - Code automatically generated for each user
+3. ✅ Replaced login page with search page
+   - Users can search by account code (e.g., MR-5774)
+   - Users can search by full name
+4. ✅ Updated Student model
+   - Removed: `username`, `password` fields
+   - Added: `code` field (unique)
+5. ✅ Updated search API
+   - Supports searching by code or name
+   - Case-insensitive name search
+6. ✅ Updated user dashboard
+   - Displays student code instead of username
+   - All functionality maintained
 
-Preferred communication style: Simple, everyday language.
+## Project Structure
+```
+app/
+├── page.tsx                    # Home page with "Find Your Account" button
+├── login/
+│   └── page.tsx               # Search page (code/name-based lookup)
+├── user/
+│   └── dashboard/
+│       └── page.tsx           # User dashboard
+├── admin/
+│   └── dashboard/
+│       └── page.tsx           # Admin dashboard
+└── api/
+    ├── students/
+    │   ├── route.ts           # Student CRUD
+    │   ├── search/
+    │   │   └── route.ts       # Search by code or name
+    │   ├── [id]/
+    │   │   └── route.ts       # Student by ID
+    │   └── transaction/
+    │       └── route.ts       # Transaction operations
+    ├── admin/
+    │   ├── login/
+    │   │   └── route.ts       # Admin login
+    │   └── init/
+    │       └── route.ts       # Admin initialization
+    └── gemini/
+        └── route.ts           # AI assistant integration
 
-## System Architecture
+lib/
+├── mongodb.ts                 # MongoDB connection
+├── generateCode.ts            # Code generation utility
+├── models/
+│   ├── Student.ts             # Student schema (updated)
+│   └── Admin.ts               # Admin schema
+└── students.ts                # Sample data
 
-### Frontend Architecture
-- **Framework**: Next.js 14+ with App Router and React Server Components (RSC enabled)
-- **Language**: TypeScript with strict mode
-- **Styling**: Tailwind CSS v4 with custom CSS variables for theming (light/dark mode support)
-- **UI Components**: shadcn/ui component library (new-york style) built on Radix UI primitives
-- **Font**: Poppins (Google Fonts) with variable weights
+components/
+└── ui/                        # Radix UI components
 
-### Application Structure
-- **App Router Pattern**: Uses Next.js app directory with file-based routing
-- **Role-Based Access**: Two distinct user roles (admin and student) with separate dashboard experiences
-- **Authentication**: Client-side authentication using localStorage for session management
-- **State Management**: React useState/useEffect hooks for local component state
+public/
+├── students.png               # Hero image
+└── islamic-mosque.jpg         # Background image
 
-### Key Routes
-- `/` - Landing page with onboarding
-- `/login` - Unified login for admins and students
-- `/register` - Account registration for new users
-- `/admin/dashboard` - Admin panel for managing students and transactions
-- `/user/dashboard` - Student dashboard for viewing account details
+styles/
+└── globals.css                # Global styles
+```
 
-### Data Architecture
-- **Current Storage**: localStorage for client-side data persistence (students, accounts, transactions)
-- **Data Models**: Students have profiles with balance, transaction history, and credentials
-- **No Database Currently**: Application uses in-memory defaults and localStorage; ready for database integration
+## Key Features
+- **Search-Based Access**: Users find their accounts using auto-generated codes
+- **Account Management**: View balance, transactions, profile
+- **AI Assistant**: Gemini integration for banking queries
+- **Admin Dashboard**: Manage accounts and system status
+- **Real-time Updates**: 2-second refresh interval for balance updates
+- **Multiple Views**: Reports, transaction history, calculator, calendar
+- **Responsive Design**: Mobile and desktop optimized
 
-### API Routes
-- `/api/gemini` - AI assistant integration using Google Gemini 2.5 Flash model
-- `/api/system/status` - System health monitoring (RAM, CPU, MongoDB stats)
+## Environment Variables
+```
+MONGODB_URI=mongodb+srv://jdsa:673591@jdsa.vdl0vr8.mongodb.net/?retryWrites=true&w=majority
+```
 
-### Third-Party UI Libraries
-- Recharts for data visualization (bar charts)
-- html2canvas and jsPDF for PDF generation
-- xlsx for Excel export functionality
-- embla-carousel-react for carousel components
-- cmdk for command palette functionality
+## User Workflow
+1. User clicks "Find Your Account" on home page
+2. User enters either:
+   - Account code (e.g., MR-5774)
+   - Full name
+3. System searches MongoDB for matching account
+4. If found, user is authenticated and redirected to dashboard
+5. User can view balance, transactions, and use various tools
 
-## External Dependencies
+## Next Steps for Users
+1. Run the application with `npm run dev`
+2. Test the search functionality with existing student accounts
+3. Customize the application further as needed
+4. Consider adding more features like:
+   - Student profile editing
+   - Advanced analytics
+   - Push notifications
+   - Export reports
 
-### AI Integration
-- **Google Gemini API** (`@google/genai`): Powers the AI assistant feature for admin support
-- Requires `GEMINI_API_KEY` environment variable
+## Integration Notes
+- **Google Gemini**: Already configured for AI assistant
+- **Vercel Analytics**: Enabled for tracking
+- **Radix UI**: Component library for UI
+- **Mongoose**: MongoDB ODM for data modeling
 
-### Database (Optional/Future)
-- **MongoDB**: Referenced in system status API for storage monitoring
-- Requires `MONGODB_URI` environment variable when enabled
-
-### Analytics
-- **Vercel Analytics** (`@vercel/analytics`): Production analytics tracking
-
-### Document Generation
-- **jsPDF**: PDF report generation
-- **xlsx**: Excel spreadsheet export
-- **html2canvas**: Screen capture for exports
-
-### Theme Management
-- **next-themes**: Dark/light mode switching with system preference support
+## Important Notes
+- No user password/authentication needed - code-based identification only
+- All timestamps use MongoDB timestamps
+- Session stored in localStorage
+- Admin users still require login with username/password

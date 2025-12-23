@@ -4,63 +4,46 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
-import { Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react"
+import { Search, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { defaultStudents } from "@/lib/students"
 
-export default function LoginPage() {
+export default function SearchPage() {
   const router = useRouter()
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [searchType, setSearchType] = useState<"code" | "name">("code")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     setIsLoading(true)
 
     try {
-      // Try admin login first
-      const adminRes = await fetch("/api/admin/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: username.trim(), password }),
-      })
-
-      if (adminRes.ok) {
-        const adminData = await adminRes.json()
-        localStorage.setItem("isAdminAuthenticated", "true")
-        localStorage.setItem("userRole", "admin")
-        localStorage.setItem("adminId", adminData.admin.id)
-        localStorage.setItem("adminName", adminData.admin.name)
-        router.push("/admin/dashboard")
+      const query = searchType === "code" 
+        ? `code=${encodeURIComponent(searchQuery.toUpperCase())}` 
+        : `name=${encodeURIComponent(searchQuery)}`
+      
+      const res = await fetch(`/api/students/search?${query}`)
+      
+      if (!res.ok) {
+        setError("Account holder not found")
+        setIsLoading(false)
         return
       }
 
-      // Check MongoDB for student account
-      const res = await fetch("/api/students")
-      const students = await res.json()
+      const student = await res.json()
       
-      const student = students.find(
-        (s: any) => s.username === username.trim() && s.password === password
-      )
+      localStorage.setItem("isUserAuthenticated", "true")
+      localStorage.setItem("userRole", "user")
+      localStorage.setItem("studentId", student._id)
+      localStorage.setItem("studentName", student.name)
+      localStorage.setItem("studentCode", student.code)
       
-      if (student) {
-        localStorage.setItem("isUserAuthenticated", "true")
-        localStorage.setItem("userRole", "mongodb")
-        localStorage.setItem("studentId", student._id)
-        localStorage.setItem("studentName", student.name)
-        localStorage.setItem("studentUsername", student.username)
-        router.push("/user/dashboard")
-      } else {
-        setError("Invalid username or password")
-        setIsLoading(false)
-      }
+      router.push("/user/dashboard")
     } catch (err) {
-      setError("Login error. Please try again.")
+      setError("Search error. Please try again.")
       setIsLoading(false)
     }
   }
@@ -88,44 +71,51 @@ export default function LoginPage() {
 
         <div className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-[#171532] leading-tight">
-            Hey,<br />Welcome Back
+            Find Your<br />Account
           </h1>
+          <p className="text-[#6b7280] mt-2">Search by account code or full name</p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-4 max-w-md">
+        <form onSubmit={handleSearch} className="space-y-4 max-w-md">
+          {/* Search Type Toggle */}
+          <div className="flex gap-2 mb-6">
+            <button
+              type="button"
+              onClick={() => setSearchType("code")}
+              className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                searchType === "code"
+                  ? "bg-[#4a6670] text-white"
+                  : "bg-[#e5e7eb] text-[#171532] hover:bg-[#d1d5db]"
+              }`}
+            >
+              By Code
+            </button>
+            <button
+              type="button"
+              onClick={() => setSearchType("name")}
+              className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                searchType === "name"
+                  ? "bg-[#4a6670] text-white"
+                  : "bg-[#e5e7eb] text-[#171532] hover:bg-[#d1d5db]"
+              }`}
+            >
+              By Name
+            </button>
+          </div>
+
+          {/* Search Input */}
           <div className="relative">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]">
-              <Mail className="w-5 h-5" />
+              <Search className="w-5 h-5" />
             </div>
             <Input
               type="text"
-              placeholder="Enter your email"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              placeholder={searchType === "code" ? "e.g., MR-5774" : "Enter full name"}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               required
               className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#4a6670]/30 focus:border-[#4a6670]"
             />
-          </div>
-
-          <div className="relative">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]">
-              <Lock className="w-5 h-5" />
-            </div>
-            <Input
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="h-14 pl-12 pr-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#4a6670]/30 focus:border-[#4a6670]"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-[#4a6670] transition-colors"
-            >
-              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-            </button>
           </div>
 
           {error && (
@@ -139,10 +129,13 @@ export default function LoginPage() {
             disabled={isLoading}
             className="w-full h-14 bg-[#4a6670] hover:bg-[#3d565e] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 disabled:opacity-70 mt-6"
           >
-            {isLoading ? "Logging in..." : "Login"}
+            {isLoading ? "Searching..." : "Search"}
           </button>
-
         </form>
+
+        <p className="text-sm text-[#6b7280] mt-8">
+          Don't have an account code? Contact administration for assistance.
+        </p>
       </div>
     </div>
   )
