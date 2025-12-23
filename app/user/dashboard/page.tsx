@@ -76,11 +76,15 @@ export default function UserDashboard() {
         const customAccountId = localStorage.getItem("customAccountId")
         const customUsername = localStorage.getItem("customUsername")
         const customFullName = localStorage.getItem("customFullName")
-        const customBalance = localStorage.getItem("customBalance")
         
-        // Find account in custom accounts storage
-        const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
-        const customAccount = customAccounts.find((acc: any) => acc.id === customAccountId)
+        // Priority: Get account from students array (synced with admin deposits)
+        // Fallback: Get from customAccounts
+        let customAccount = allStudents.find((acc: any) => acc.id === customAccountId)
+        
+        if (!customAccount) {
+          const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
+          customAccount = customAccounts.find((acc: any) => acc.id === customAccountId)
+        }
         
         if (customAccount) {
           setUserData({
@@ -89,7 +93,7 @@ export default function UserDashboard() {
             username: customAccount.username || customUsername || "user",
             email: customAccount.email || "Not set",
             mobile: customAccount.mobile || "Not set",
-            balance: customAccount.balance || parseFloat(customBalance || "0"),
+            balance: customAccount.balance || 0,
             transactions: customAccount.transactions || [],
           })
         } else {
@@ -99,7 +103,7 @@ export default function UserDashboard() {
             username: customUsername || "user",
             email: "Not set",
             mobile: "Not set",
-            balance: parseFloat(customBalance || "0"),
+            balance: 0,
             transactions: [],
           })
         }
