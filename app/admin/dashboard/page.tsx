@@ -716,7 +716,13 @@ export default function AdminDashboard() {
   }
 
   const handleEditAccount = (index: number) => {
-    setNewStudent(students[index])
+    const student = students[index]
+    setNewStudent({
+      name: student.name || '',
+      mobile: student.mobile || '',
+      email: student.email || '',
+      profileImage: student.profileImage || ''
+    })
     setEditingIndex(index)
     setShowEditForm(true)
   }

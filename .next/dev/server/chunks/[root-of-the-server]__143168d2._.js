@@ -115,14 +115,10 @@ const studentSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mong
         type: String,
         required: true
     },
-    username: {
+    code: {
         type: String,
         required: true,
         unique: true
-    },
-    password: {
-        type: String,
-        required: true
     },
     email: {
         type: String
