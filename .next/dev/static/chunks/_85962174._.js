@@ -102,13 +102,13 @@ function LoginPage() {
         setError("");
         setIsLoading(true);
         setTimeout(()=>{
-            if (username === "admin" && password === "12345") {
+            if (username.trim() === "admin" && password === "12345") {
                 localStorage.setItem("isAdminAuthenticated", "true");
                 localStorage.setItem("userRole", "admin");
                 router.push("/admin/dashboard");
             } else {
                 // Check if username matches any student
-                const student = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$students$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["defaultStudents"].find((s)=>s.username === username && s.password === password);
+                const student = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$students$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["defaultStudents"].find((s)=>s.username === username.trim() && s.password === password);
                 if (student) {
                     localStorage.setItem("isUserAuthenticated", "true");
                     localStorage.setItem("userRole", "student");
@@ -118,7 +118,7 @@ function LoginPage() {
                 } else {
                     // Check custom accounts created by users
                     const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]");
-                    const customAccount = customAccounts.find((acc)=>acc.username === username && acc.password === password);
+                    const customAccount = customAccounts.find((acc)=>acc.username === username.trim() && acc.password === password);
                     if (customAccount) {
                         localStorage.setItem("isUserAuthenticated", "true");
                         localStorage.setItem("userRole", "custom");

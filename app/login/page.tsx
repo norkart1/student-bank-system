@@ -23,14 +23,14 @@ export default function LoginPage() {
     setIsLoading(true)
 
     setTimeout(() => {
-      if (username === "admin" && password === "12345") {
+      if (username.trim() === "admin" && password === "12345") {
         localStorage.setItem("isAdminAuthenticated", "true")
         localStorage.setItem("userRole", "admin")
         router.push("/admin/dashboard")
       } else {
         // Check if username matches any student
         const student = defaultStudents.find(
-          (s) => s.username === username && s.password === password
+          (s) => s.username === username.trim() && s.password === password
         )
         if (student) {
           localStorage.setItem("isUserAuthenticated", "true")
@@ -42,7 +42,7 @@ export default function LoginPage() {
           // Check custom accounts created by users
           const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
           const customAccount = customAccounts.find(
-            (acc: any) => acc.username === username && acc.password === password
+            (acc: any) => acc.username === username.trim() && acc.password === password
           )
           if (customAccount) {
             localStorage.setItem("isUserAuthenticated", "true")
