@@ -2,11 +2,15 @@ import { connectDB } from '@/lib/mongodb';
 import { Student } from '@/lib/models/Student';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(req: any) {
   try {
     await connectDB();
     const students = await Student.find({});
-    return NextResponse.json(students);
+    const response = NextResponse.json(students);
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+    response.headers.set('Pragma', 'no-cache');
+    response.headers.set('Expires', '0');
+    return response;
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch students' }, { status: 500 });
   }

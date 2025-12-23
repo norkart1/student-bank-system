@@ -15,16 +15,10 @@ export default function UserDashboard() {
   const loadUserData = async () => {
     try {
       const auth = localStorage.getItem("isUserAuthenticated")
-      const role = localStorage.getItem("userRole")
       const studentId = localStorage.getItem("studentId")
       
       if (auth !== "true" || !studentId) {
         router.push("/login")
-        return
-      }
-
-      if (role === "admin") {
-        router.push("/admin/dashboard")
         return
       }
 
@@ -47,6 +41,7 @@ export default function UserDashboard() {
         name: student.name || "User",
         code: student.code || "NA-0000",
         balance: student.balance || 0,
+        profileImage: student.profileImage || null,
         transactions: student.transactions || [],
       })
     } catch (error) {
@@ -108,9 +103,13 @@ export default function UserDashboard() {
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
           {/* Avatar and Name */}
           <div className="flex flex-col items-center mb-6">
-            <div className="w-20 h-20 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-full flex items-center justify-center text-white font-bold text-3xl mb-4">
-              {userData?.name?.charAt(0).toUpperCase() || 'U'}
-            </div>
+            {userData?.profileImage ? (
+              <img src={userData.profileImage} alt={userData?.name} className="w-20 h-20 rounded-full object-cover mb-4 shadow-md" />
+            ) : (
+              <div className="w-20 h-20 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-full flex items-center justify-center text-white font-bold text-3xl mb-4">
+                {userData?.name?.charAt(0).toUpperCase() || 'U'}
+              </div>
+            )}
             <h2 className="text-2xl font-bold text-[#171532] text-center">{userData?.name || 'User'}</h2>
             <p className="text-sm text-[#747384]">Code: {userData?.code || 'NA-0000'}</p>
           </div>
