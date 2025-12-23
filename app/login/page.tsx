@@ -49,6 +49,8 @@ export default function LoginPage() {
             localStorage.setItem("userRole", "custom")
             localStorage.setItem("customAccountId", customAccount.id)
             localStorage.setItem("customUsername", customAccount.username)
+            localStorage.setItem("customFullName", customAccount.name || customAccount.username)
+            localStorage.setItem("customBalance", customAccount.balance || "0")
             router.push("/user/dashboard")
           } else {
             setError("Invalid username or password")

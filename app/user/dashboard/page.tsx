@@ -75,28 +75,31 @@ export default function UserDashboard() {
       } else if (role === "custom") {
         const customAccountId = localStorage.getItem("customAccountId")
         const customUsername = localStorage.getItem("customUsername")
+        const customFullName = localStorage.getItem("customFullName")
+        const customBalance = localStorage.getItem("customBalance")
         
-        // Find account in the main students list using custom ID
-        const account = allStudents.find((acc: any) => acc.id === customAccountId)
+        // Find account in custom accounts storage
+        const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
+        const customAccount = customAccounts.find((acc: any) => acc.id === customAccountId)
         
-        if (account) {
+        if (customAccount) {
           setUserData({
-            id: account.id,
-            name: account.name || customUsername || "User",
-            username: account.username || customUsername || "user",
-            email: account.email || "Not set",
-            mobile: account.mobile || "Not set",
-            balance: account.balance || 0,
-            transactions: account.transactions || [],
+            id: customAccount.id,
+            name: customAccount.name || customFullName || customUsername || "User",
+            username: customAccount.username || customUsername || "user",
+            email: customAccount.email || "Not set",
+            mobile: customAccount.mobile || "Not set",
+            balance: customAccount.balance || parseFloat(customBalance || "0"),
+            transactions: customAccount.transactions || [],
           })
         } else {
           setUserData({
             id: customAccountId || "unknown",
-            name: customUsername || "User",
+            name: customFullName || customUsername || "User",
             username: customUsername || "user",
             email: "Not set",
             mobile: "Not set",
-            balance: 0,
+            balance: parseFloat(customBalance || "0"),
             transactions: [],
           })
         }

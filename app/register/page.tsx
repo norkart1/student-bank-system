@@ -10,6 +10,7 @@ import Image from "next/image"
 
 export default function RegisterPage() {
   const router = useRouter()
+  const [fullName, setFullName] = useState("")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -27,6 +28,12 @@ export default function RegisterPage() {
 
     setTimeout(() => {
       // Validation
+      if (!fullName.trim()) {
+        setError("Full name is required")
+        setIsLoading(false)
+        return
+      }
+
       if (!username.trim()) {
         setError("Username is required")
         setIsLoading(false)
@@ -61,7 +68,7 @@ export default function RegisterPage() {
       const existingAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
 
       // Check if username already exists
-      if (existingAccounts.some((acc: any) => acc.username === username)) {
+      if (existingAccounts.some((acc: any) => acc.username === username.trim())) {
         setError("Username already exists")
         setIsLoading(false)
         return
@@ -70,6 +77,7 @@ export default function RegisterPage() {
       // Create new account
       const newAccount = {
         id: Date.now().toString(),
+        name: fullName.trim(),
         username: username.trim(),
         password: password,
         balance: 0,
@@ -115,6 +123,20 @@ export default function RegisterPage() {
         </div>
 
         <form onSubmit={handleRegister} className="space-y-4 max-w-md">
+          <div className="relative">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]">
+              <Lock className="w-5 h-5" />
+            </div>
+            <Input
+              type="text"
+              placeholder="Enter your full name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+              className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#4a6670]/30 focus:border-[#4a6670]"
+            />
+          </div>
+
           <div className="relative">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]">
               <Lock className="w-5 h-5" />
