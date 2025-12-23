@@ -819,18 +819,30 @@ export default function AdminDashboard() {
     setIsAuthenticated(true)
     setIsAuthLoading(false)
     
-    let savedStudents = localStorage.getItem("students")
-    let studentList: Student[]
-    
-    if (!savedStudents || JSON.parse(savedStudents).length === 0) {
-      localStorage.setItem("students", JSON.stringify(defaultStudents))
-      studentList = defaultStudents
-    } else {
-      studentList = JSON.parse(savedStudents)
+    // Fetch students from MongoDB API
+    const fetchStudents = async () => {
+      try {
+        const res = await fetch('/api/students')
+        if (res.ok) {
+          const studentList = await res.json()
+          setStudents(studentList)
+          calculateTotals(studentList)
+          // Also sync to localStorage for backwards compatibility
+          localStorage.setItem("students", JSON.stringify(studentList))
+        }
+      } catch (error) {
+        console.error('Failed to fetch students:', error)
+        // Fallback to localStorage if API fails
+        const savedStudents = localStorage.getItem("students")
+        if (savedStudents) {
+          const studentList = JSON.parse(savedStudents)
+          setStudents(studentList)
+          calculateTotals(studentList)
+        }
+      }
     }
     
-    setStudents(studentList)
-    calculateTotals(studentList)
+    fetchStudents()
     
     // Fetch system status
     const fetchSystemStatus = async () => {
@@ -845,13 +857,8 @@ export default function AdminDashboard() {
     fetchSystemStatus()
     const statusInterval = setInterval(fetchSystemStatus, 5000)
     
-    // Refresh students list every 2 seconds to get real-time updates
-    const refreshStudents = () => {
-      const updatedStudents = JSON.parse(localStorage.getItem("students") || "[]")
-      setStudents(updatedStudents)
-      calculateTotals(updatedStudents)
-    }
-    const studentRefreshInterval = setInterval(refreshStudents, 2000)
+    // Refresh students list every 2 seconds to get real-time updates from API
+    const studentRefreshInterval = setInterval(fetchStudents, 2000)
     
     const now = new Date()
     const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }
