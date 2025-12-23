@@ -4,21 +4,17 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
-import { Lock, Eye, EyeOff, ArrowLeft } from "lucide-react"
+import { Lock, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 
 export default function RegisterPage() {
   const router = useRouter()
   const [fullName, setFullName] = useState("")
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
+  const [code, setCode] = useState("")
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -34,42 +30,8 @@ export default function RegisterPage() {
         return
       }
 
-      if (!username.trim()) {
-        setError("Username is required")
-        setIsLoading(false)
-        return
-      }
-
-      if (username.length < 3) {
-        setError("Username must be at least 3 characters")
-        setIsLoading(false)
-        return
-      }
-
-      if (!password) {
-        setError("Password is required")
-        setIsLoading(false)
-        return
-      }
-
-      if (password.length < 4) {
-        setError("Password must be at least 4 characters")
-        setIsLoading(false)
-        return
-      }
-
-      if (password !== confirmPassword) {
-        setError("Passwords do not match")
-        setIsLoading(false)
-        return
-      }
-
-      // Check if username already exists in MongoDB
-      const checkRes = await fetch("/api/students")
-      const existingStudents = await checkRes.json()
-      
-      if (existingStudents.some((s: any) => s.username === username.trim())) {
-        setError("Username already exists")
+      if (!code.trim()) {
+        setError("Student code is required")
         setIsLoading(false)
         return
       }
@@ -80,15 +42,13 @@ export default function RegisterPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: fullName.trim(),
-          username: username.trim(),
-          password: password,
-          balance: 0,
-          transactions: [],
+          code: code.trim().toUpperCase(),
         }),
       })
 
       if (!res.ok) {
-        throw new Error("Failed to create account")
+        const errorData = await res.json()
+        throw new Error(errorData.error || "Failed to create account")
       }
 
       setSuccess("Account created successfully! Redirecting to login...")
@@ -96,7 +56,7 @@ export default function RegisterPage() {
         router.push("/login")
       }, 2000)
     } catch (err) {
-      setError("Failed to create account. Please try again.")
+      setError((err as Error).message || "Failed to create account. Please try again.")
       setIsLoading(false)
     }
   }
@@ -150,54 +110,12 @@ export default function RegisterPage() {
             </div>
             <Input
               type="text"
-              placeholder="Choose a username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter your student code (e.g., MR-5774)"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
               required
               className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#4a6670]/30 focus:border-[#4a6670]"
             />
-          </div>
-
-          <div className="relative">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]">
-              <Lock className="w-5 h-5" />
-            </div>
-            <Input
-              type={showPassword ? "text" : "password"}
-              placeholder="Create a password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="h-14 pl-12 pr-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#4a6670]/30 focus:border-[#4a6670]"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-[#4a6670] transition-colors"
-            >
-              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-            </button>
-          </div>
-
-          <div className="relative">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]">
-              <Lock className="w-5 h-5" />
-            </div>
-            <Input
-              type={showConfirmPassword ? "text" : "password"}
-              placeholder="Confirm password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              className="h-14 pl-12 pr-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#4a6670]/30 focus:border-[#4a6670]"
-            />
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-[#4a6670] transition-colors"
-            >
-              {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-            </button>
           </div>
 
           {error && (

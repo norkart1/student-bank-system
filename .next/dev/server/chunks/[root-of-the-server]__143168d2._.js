@@ -188,9 +188,35 @@ async function POST(req) {
     try {
         await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$mongodb$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["connectDB"])();
         const data = await req.json();
-        if (!data.name || !data.username || !data.password) {
+        // Validate required fields
+        if (!data.name) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: 'Name, username, and password are required'
+                error: 'Name is required'
+            }, {
+                status: 400
+            });
+        }
+        if (!data.username) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: 'Username is required'
+            }, {
+                status: 400
+            });
+        }
+        if (!data.password) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: 'Password is required'
+            }, {
+                status: 400
+            });
+        }
+        // Check if username already exists
+        const existingStudent = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Student"].findOne({
+            username: data.username
+        });
+        if (existingStudent) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: 'Username already exists'
             }, {
                 status: 400
             });
@@ -206,15 +232,24 @@ async function POST(req) {
             balance: data.balance || 0,
             transactions: data.transactions || []
         });
-        await student.save();
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(student, {
+        const savedStudent = await student.save();
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(savedStudent, {
             status: 201
         });
     } catch (error) {
         console.error('Student creation error:', error);
+        // Handle duplicate key errors
+        if (error.code === 11000) {
+            const field = Object.keys(error.keyPattern)[0];
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: `${field} already exists`
+            }, {
+                status: 400
+            });
+        }
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             error: 'Failed to create student',
-            details: String(error)
+            details: String(error.message || error)
         }, {
             status: 500
         });
