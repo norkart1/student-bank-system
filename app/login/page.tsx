@@ -17,53 +17,41 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     setIsLoading(true)
 
-    setTimeout(() => {
+    try {
       if (username.trim() === "admin" && password === "12345") {
         localStorage.setItem("isAdminAuthenticated", "true")
         localStorage.setItem("userRole", "admin")
         router.push("/admin/dashboard")
       } else {
-        // Check if username matches any student
-        const student = defaultStudents.find(
-          (s) => s.username === username.trim() && s.password === password
+        // Check MongoDB for user account
+        const res = await fetch("/api/students")
+        const students = await res.json()
+        
+        const student = students.find(
+          (s: any) => s.username === username.trim() && s.password === password
         )
+        
         if (student) {
           localStorage.setItem("isUserAuthenticated", "true")
-          localStorage.setItem("userRole", "student")
-          localStorage.setItem("studentId", student.id)
+          localStorage.setItem("userRole", "mongodb")
+          localStorage.setItem("studentId", student._id)
           localStorage.setItem("studentName", student.name)
+          localStorage.setItem("studentUsername", student.username)
           router.push("/user/dashboard")
         } else {
-          // Check custom accounts created by users
-          const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
-          const customAccount = customAccounts.find(
-            (acc: any) => acc.username === username.trim() && acc.password === password
-          )
-          if (customAccount) {
-            // Sync with students array to get any admin-made deposits
-            const allStudents = JSON.parse(localStorage.getItem("students") || "[]")
-            const syncedAccount = allStudents.find((s: any) => s.id === customAccount.id)
-            const finalAccount = syncedAccount || customAccount
-            
-            localStorage.setItem("isUserAuthenticated", "true")
-            localStorage.setItem("userRole", "custom")
-            localStorage.setItem("customAccountId", finalAccount.id)
-            localStorage.setItem("customUsername", finalAccount.username)
-            localStorage.setItem("customFullName", finalAccount.name || finalAccount.username)
-            localStorage.setItem("customBalance", finalAccount.balance || "0")
-            router.push("/user/dashboard")
-          } else {
-            setError("Invalid username or password")
-            setIsLoading(false)
-          }
+          setError("Invalid username or password")
+          setIsLoading(false)
         }
       }
-    }, 500)
+    } catch (err) {
+      setError("Login error. Please try again.")
+      setIsLoading(false)
+    }
   }
 
   return (

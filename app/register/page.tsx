@@ -20,13 +20,13 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     setSuccess("")
     setIsLoading(true)
 
-    setTimeout(() => {
+    try {
       // Validation
       if (!fullName.trim()) {
         setError("Full name is required")
@@ -64,40 +64,41 @@ export default function RegisterPage() {
         return
       }
 
-      // Get existing accounts
-      const existingAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
-
-      // Check if username already exists
-      if (existingAccounts.some((acc: any) => acc.username === username.trim())) {
+      // Check if username already exists in MongoDB
+      const checkRes = await fetch("/api/students")
+      const existingStudents = await checkRes.json()
+      
+      if (existingStudents.some((s: any) => s.username === username.trim())) {
         setError("Username already exists")
         setIsLoading(false)
         return
       }
 
-      // Create new account
-      const newAccount = {
-        id: Date.now().toString(),
-        name: fullName.trim(),
-        username: username.trim(),
-        password: password,
-        balance: 0,
-        transactions: [],
-      }
+      // Create new account in MongoDB
+      const res = await fetch("/api/students", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: fullName.trim(),
+          username: username.trim(),
+          password: password,
+          balance: 0,
+          transactions: [],
+        }),
+      })
 
-      // Add to both customAccounts and students arrays for consistency
-      existingAccounts.push(newAccount)
-      localStorage.setItem("customAccounts", JSON.stringify(existingAccounts))
-      
-      // Also add to students array so admin can manage deposits
-      const allStudents = JSON.parse(localStorage.getItem("students") || "[]")
-      allStudents.push(newAccount)
-      localStorage.setItem("students", JSON.stringify(allStudents))
+      if (!res.ok) {
+        throw new Error("Failed to create account")
+      }
 
       setSuccess("Account created successfully! Redirecting to login...")
       setTimeout(() => {
         router.push("/login")
       }, 2000)
-    }, 500)
+    } catch (err) {
+      setError("Failed to create account. Please try again.")
+      setIsLoading(false)
+    }
   }
 
   return (

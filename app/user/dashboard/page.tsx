@@ -34,7 +34,7 @@ export default function UserDashboard() {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
   const [selectedChatAccount, setSelectedChatAccount] = useState<string | null>(null)
 
-  const loadUserData = () => {
+  const loadUserData = async () => {
     const auth = localStorage.getItem("isUserAuthenticated")
     const role = localStorage.getItem("userRole")
     
@@ -44,69 +44,28 @@ export default function UserDashboard() {
     }
 
     try {
-      // Load all students from admin's storage
-      const allStudents = JSON.parse(localStorage.getItem("students") || "[]")
-      
-      if (role === "student") {
+      if (role === "mongodb") {
         const studentId = localStorage.getItem("studentId")
-        const student = studentId ? allStudents.find((s: any) => s.id === studentId) : null
-        
-        if (student) {
-          setUserData({
-            id: student.id,
-            name: student.name,
-            username: student.username,
-            email: student.email || "Not set",
-            mobile: student.mobile || "Not set",
-            balance: student.balance || 0,
-            transactions: student.transactions || [],
-          })
-        } else {
-          setUserData({
-            id: studentId || "unknown",
-            name: "Student",
-            username: "student",
-            email: "Not set",
-            mobile: "Not set",
-            balance: 0,
-            transactions: [],
-          })
+        if (!studentId) {
+          router.push("/login")
+          return
         }
-      } else if (role === "custom") {
-        const customAccountId = localStorage.getItem("customAccountId")
-        const customUsername = localStorage.getItem("customUsername")
-        const customFullName = localStorage.getItem("customFullName")
+
+        const res = await fetch(`/api/students/${studentId}`)
+        if (!res.ok) throw new Error("Failed to fetch student")
         
-        // Priority: Get account from students array (synced with admin deposits)
-        // Fallback: Get from customAccounts
-        let customAccount = allStudents.find((acc: any) => acc.id === customAccountId)
-        
-        if (!customAccount) {
-          const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
-          customAccount = customAccounts.find((acc: any) => acc.id === customAccountId)
-        }
-        
-        if (customAccount) {
-          setUserData({
-            id: customAccount.id,
-            name: customAccount.name || customFullName || customUsername || "User",
-            username: customAccount.username || customUsername || "user",
-            email: customAccount.email || "Not set",
-            mobile: customAccount.mobile || "Not set",
-            balance: customAccount.balance || 0,
-            transactions: customAccount.transactions || [],
-          })
-        } else {
-          setUserData({
-            id: customAccountId || "unknown",
-            name: customFullName || customUsername || "User",
-            username: customUsername || "user",
-            email: "Not set",
-            mobile: "Not set",
-            balance: 0,
-            transactions: [],
-          })
-        }
+        const student = await res.json()
+        setUserData({
+          id: student._id,
+          name: student.name,
+          username: student.username,
+          email: student.email || "Not set",
+          mobile: student.mobile || "Not set",
+          balance: student.balance || 0,
+          transactions: student.transactions || [],
+        })
+      } else if (role === "admin") {
+        router.push("/admin/dashboard")
       }
     } catch (error) {
       console.error("Error loading user data:", error)
