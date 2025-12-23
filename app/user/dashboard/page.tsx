@@ -137,34 +137,62 @@ export default function UserDashboard() {
             </div>
           </div>
 
-          {/* Transactions Section */}
+          {/* Transactions Table Section */}
           {userData?.transactions && userData.transactions.length > 0 && (
             <div className="mt-6 pt-6 border-t border-[#e5e7eb]">
               <div className="flex items-center gap-2 mb-4">
                 <History className="w-5 h-5 text-[#4a6670]" />
-                <h3 className="font-semibold text-[#171532]">Recent Transactions</h3>
+                <h3 className="font-semibold text-[#171532]">Transaction Ledger</h3>
               </div>
-              <div className="space-y-2 max-h-64 overflow-y-auto">
-                {userData.transactions.slice().reverse().map((transaction: any, idx: number) => (
-                  <div key={idx} className="flex items-center justify-between p-3 bg-[#f8f9fa] rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${transaction.type === 'deposit' ? 'bg-[#10B981]/10' : 'bg-[#EF4444]/10'}`}>
-                        {transaction.type === 'deposit' ? (
-                          <ArrowDownRight className="w-4 h-4 text-[#10B981]" />
-                        ) : (
-                          <ArrowUpRight className="w-4 h-4 text-[#EF4444]" />
-                        )}
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-[#171532] capitalize">{transaction.type}</p>
-                        <p className="text-xs text-[#747384]">{transaction.date || 'Recent'}</p>
-                      </div>
-                    </div>
-                    <p className={`font-bold text-sm ${transaction.type === 'deposit' ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
-                      {transaction.type === 'deposit' ? '+' : '-'}₹{transaction.amount?.toFixed(2)}
-                    </p>
-                  </div>
-                ))}
+              <div className="overflow-x-auto max-h-80 overflow-y-auto">
+                <table className="w-full text-sm border-collapse">
+                  <thead>
+                    <tr className="bg-[#4a6670] text-white sticky top-0">
+                      <th className="border border-[#3d565e] px-2 py-2 text-left font-semibold">S.No</th>
+                      <th className="border border-[#3d565e] px-2 py-2 text-left font-semibold">Date</th>
+                      <th className="border border-[#3d565e] px-2 py-2 text-right font-semibold">Deposit</th>
+                      <th className="border border-[#3d565e] px-2 py-2 text-right font-semibold">Withdraw</th>
+                      <th className="border border-[#3d565e] px-2 py-2 text-right font-semibold">Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {userData.transactions.map((transaction: any, idx: number) => {
+                      // Calculate running balance
+                      let runningBalance = 0
+                      for (let i = 0; i <= idx; i++) {
+                        if (userData.transactions[i].type === 'deposit') {
+                          runningBalance += userData.transactions[i].amount || 0
+                        } else {
+                          runningBalance -= userData.transactions[i].amount || 0
+                        }
+                      }
+                      
+                      return (
+                        <tr key={idx} className={idx % 2 === 0 ? 'bg-[#f8f9fa]' : 'bg-white'}>
+                          <td className="border border-[#e5e7eb] px-2 py-2 font-semibold text-[#171532]">{idx + 1}</td>
+                          <td className="border border-[#e5e7eb] px-2 py-2 text-[#747384]">{transaction.date || '-'}</td>
+                          <td className="border border-[#e5e7eb] px-2 py-2 text-right">
+                            {transaction.type === 'deposit' ? (
+                              <span className="text-[#10B981] font-semibold">₹{transaction.amount?.toFixed(2)}</span>
+                            ) : (
+                              <span className="text-[#747384]">-</span>
+                            )}
+                          </td>
+                          <td className="border border-[#e5e7eb] px-2 py-2 text-right">
+                            {transaction.type === 'withdraw' ? (
+                              <span className="text-[#EF4444] font-semibold">₹{transaction.amount?.toFixed(2)}</span>
+                            ) : (
+                              <span className="text-[#747384]">-</span>
+                            )}
+                          </td>
+                          <td className="border border-[#e5e7eb] px-2 py-2 text-right font-bold text-[#4a6670]">
+                            ₹{runningBalance.toFixed(2)}
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
           )}
