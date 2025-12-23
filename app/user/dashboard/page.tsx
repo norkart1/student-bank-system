@@ -8,59 +8,56 @@ import { useTheme } from "next-themes"
 export default function UserDashboard() {
   const router = useRouter()
   const { theme, setTheme } = useTheme()
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [userData, setUserData] = useState<any>({
-    id: "unknown",
-    name: "User",
-    code: "NA-0000",
-    balance: 0,
-  })
+  const [isLoading, setIsLoading] = useState(true)
+  const [userData, setUserData] = useState<any>(null)
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
   const loadUserData = async () => {
-    const auth = localStorage.getItem("isUserAuthenticated")
-    const role = localStorage.getItem("userRole")
-    
-    if (auth !== "true") {
-      router.push("/login")
-      return
-    }
-
     try {
-      if (role === "mongodb") {
-        const studentId = localStorage.getItem("studentId")
-        if (!studentId) {
-          router.push("/login")
-          return
-        }
-
-        const res = await fetch(`/api/students/${studentId}`, {
-          cache: 'no-store',
-          headers: {
-            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0'
-          }
-        })
-        if (!res.ok) throw new Error("Failed to fetch student")
-        
-        const student = await res.json()
-        setUserData({
-          id: student._id,
-          name: student.name,
-          code: student.code,
-          balance: student.balance || 0,
-        })
-      } else if (role === "admin") {
-        router.push("/admin/dashboard")
+      const auth = localStorage.getItem("isUserAuthenticated")
+      const role = localStorage.getItem("userRole")
+      const studentId = localStorage.getItem("studentId")
+      
+      if (auth !== "true" || !studentId) {
+        router.push("/login")
+        return
       }
+
+      if (role === "admin") {
+        router.push("/admin/dashboard")
+        return
+      }
+
+      const res = await fetch(`/api/students/${studentId}`, {
+        method: 'GET',
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0'
+        }
+      })
+      
+      if (!res.ok) {
+        console.error("Failed to fetch student:", res.status)
+        return
+      }
+      
+      const student = await res.json()
+      setUserData({
+        id: student._id,
+        name: student.name || "User",
+        code: student.code || "NA-0000",
+        balance: student.balance || 0,
+      })
     } catch (error) {
       console.error("Error loading user data:", error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   useEffect(() => {
     loadUserData()
-    setIsAuthenticated(true)
-  }, [router])
+  }, [])
 
   // Refresh data every 2 seconds to get real-time balance updates
   useEffect(() => {
@@ -76,6 +73,19 @@ export default function UserDashboard() {
     localStorage.removeItem("userRole")
     localStorage.removeItem("studentId")
     router.push("/login")
+  }
+
+  if (isLoading || !userData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#f8f9fa] to-[#e8eef5] flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="inline-block">
+            <div className="w-12 h-12 border-4 border-[#e5e7eb] border-t-[#4a6670] rounded-full animate-spin"></div>
+          </div>
+          <p className="mt-4 text-[#747384]">Loading your profile...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -98,10 +108,10 @@ export default function UserDashboard() {
           {/* Avatar and Name */}
           <div className="flex flex-col items-center mb-6">
             <div className="w-20 h-20 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-full flex items-center justify-center text-white font-bold text-3xl mb-4">
-              {userData.name?.charAt(0).toUpperCase() || 'U'}
+              {userData?.name?.charAt(0).toUpperCase() || 'U'}
             </div>
-            <h2 className="text-2xl font-bold text-[#171532] text-center">{userData.name}</h2>
-            <p className="text-sm text-[#747384]">Code: {userData.code}</p>
+            <h2 className="text-2xl font-bold text-[#171532] text-center">{userData?.name || 'User'}</h2>
+            <p className="text-sm text-[#747384]">Code: {userData?.code || 'NA-0000'}</p>
           </div>
 
           {/* Balance Card */}
@@ -112,7 +122,7 @@ export default function UserDashboard() {
               </div>
               <p className="text-white/70 text-sm font-medium">Total Balance</p>
             </div>
-            <p className="text-3xl font-bold text-white">₹{userData.balance?.toFixed(2) || "0.00"}</p>
+            <p className="text-3xl font-bold text-white">₹{(userData?.balance || 0)?.toFixed(2)}</p>
           </div>
 
           {/* Profile Info */}
@@ -121,7 +131,7 @@ export default function UserDashboard() {
               <User className="w-5 h-5 text-[#4a6670]" />
               <div>
                 <p className="text-xs text-[#747384]">Full Name</p>
-                <p className="font-semibold text-[#171532]">{userData.name}</p>
+                <p className="font-semibold text-[#171532]">{userData?.name || 'User'}</p>
               </div>
             </div>
           </div>
