@@ -113,6 +113,11 @@ export default function AdminDashboard() {
       reason: transactionReason || undefined
     })
     
+    // Keep only last 100 transactions to prevent localStorage quota exceeded
+    if (student.transactions.length > 100) {
+      student.transactions = student.transactions.slice(-100)
+    }
+    
     setStudents(updatedStudents)
     localStorage.setItem("students", JSON.stringify(updatedStudents))
     calculateTotals(updatedStudents)
@@ -156,6 +161,11 @@ export default function AdminDashboard() {
       date: new Date(transactionDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
       reason: transactionReason || undefined
     })
+    
+    // Keep only last 100 transactions to prevent localStorage quota exceeded
+    if (student.transactions.length > 100) {
+      student.transactions = student.transactions.slice(-100)
+    }
     
     setStudents(updatedStudents)
     localStorage.setItem("students", JSON.stringify(updatedStudents))
