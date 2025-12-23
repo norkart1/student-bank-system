@@ -51,7 +51,12 @@ export default function UserDashboard() {
           return
         }
 
-        const res = await fetch(`/api/students/${studentId}`)
+        const res = await fetch(`/api/students/${studentId}`, {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0'
+          }
+        })
         if (!res.ok) throw new Error("Failed to fetch student")
         
         const student = await res.json()

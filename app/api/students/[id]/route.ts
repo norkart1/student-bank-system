@@ -8,7 +8,13 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     await connectDB();
     const student = await Student.findById(id);
     if (!student) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-    return NextResponse.json(student);
+    
+    // Prevent caching to ensure fresh data
+    const response = NextResponse.json(student);
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+    response.headers.set('Pragma', 'no-cache');
+    response.headers.set('Expires', '0');
+    return response;
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch student' }, { status: 500 });
   }
@@ -21,7 +27,13 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     const data = await req.json();
     const student = await Student.findByIdAndUpdate(id, data, { new: true });
     if (!student) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-    return NextResponse.json(student);
+    
+    // Prevent caching to ensure fresh data
+    const response = NextResponse.json(student);
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+    response.headers.set('Pragma', 'no-cache');
+    response.headers.set('Expires', '0');
+    return response;
   } catch (error) {
     return NextResponse.json({ error: 'Failed to update student' }, { status: 500 });
   }
