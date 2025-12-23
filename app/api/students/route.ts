@@ -17,18 +17,20 @@ export async function POST(req: NextRequest) {
     await connectDB();
     const data = await req.json();
     
-    if (!data.name || !data.code) {
-      return NextResponse.json({ error: 'Name and code are required' }, { status: 400 });
+    if (!data.name || !data.username || !data.password) {
+      return NextResponse.json({ error: 'Name, username, and password are required' }, { status: 400 });
     }
     
     const student = new Student({
       name: data.name,
-      code: data.code,
+      code: data.code || '',
+      username: data.username,
+      password: data.password,
       email: data.email || '',
       mobile: data.mobile || '',
       profileImage: data.profileImage || '',
-      balance: 0,
-      transactions: [],
+      balance: data.balance || 0,
+      transactions: data.transactions || [],
     });
     
     await student.save();
