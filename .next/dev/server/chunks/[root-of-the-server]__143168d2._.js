@@ -117,8 +117,17 @@ const studentSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mong
     },
     code: {
         type: String,
+        unique: true,
+        sparse: true
+    },
+    username: {
+        type: String,
         required: true,
         unique: true
+    },
+    password: {
+        type: String,
+        required: true
     },
     email: {
         type: String
@@ -179,14 +188,33 @@ async function POST(req) {
     try {
         await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$mongodb$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["connectDB"])();
         const data = await req.json();
-        const student = new __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Student"](data);
+        if (!data.name || !data.username || !data.password) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: 'Name, username, and password are required'
+            }, {
+                status: 400
+            });
+        }
+        const student = new __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Student"]({
+            name: data.name,
+            code: data.code || '',
+            username: data.username,
+            password: data.password,
+            email: data.email || '',
+            mobile: data.mobile || '',
+            profileImage: data.profileImage || '',
+            balance: data.balance || 0,
+            transactions: data.transactions || []
+        });
         await student.save();
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(student, {
             status: 201
         });
     } catch (error) {
+        console.error('Student creation error:', error);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: 'Failed to create student'
+            error: 'Failed to create student',
+            details: String(error)
         }, {
             status: 500
         });
