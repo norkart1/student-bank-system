@@ -1323,6 +1323,11 @@
     background-color: #10b981;
   }
 
+  .bg-\[\#10B981\]\/10 {
+    background-color: #10b9811a;
+    background-color: lab(66.6921% -50.6677 17.059 / .1);
+  }
+
   .bg-\[\#10B981\]\/20 {
     background-color: #10b98133;
     background-color: lab(66.6921% -50.6677 17.059 / .2);
@@ -1335,6 +1340,11 @@
 
   .bg-\[\#EF4444\] {
     background-color: #ef4444;
+  }
+
+  .bg-\[\#EF4444\]\/10 {
+    background-color: #ef44441a;
+    background-color: lab(55.7853% 65.6164 40.7976 / .1);
   }
 
   .bg-\[\#EF4444\]\/20 {
@@ -2058,6 +2068,10 @@
 
   .text-yellow-600 {
     color: var(--color-yellow-600);
+  }
+
+  .capitalize {
+    text-transform: capitalize;
   }
 
   .underline {

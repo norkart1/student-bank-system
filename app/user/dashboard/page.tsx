@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Wallet, LogOut, User } from "lucide-react"
+import { Wallet, LogOut, User, ArrowUpRight, ArrowDownRight, History } from "lucide-react"
 import { useTheme } from "next-themes"
 
 export default function UserDashboard() {
@@ -47,6 +47,7 @@ export default function UserDashboard() {
         name: student.name || "User",
         code: student.code || "NA-0000",
         balance: student.balance || 0,
+        transactions: student.transactions || [],
       })
     } catch (error) {
       console.error("Error loading user data:", error)
@@ -135,6 +136,38 @@ export default function UserDashboard() {
               </div>
             </div>
           </div>
+
+          {/* Transactions Section */}
+          {userData?.transactions && userData.transactions.length > 0 && (
+            <div className="mt-6 pt-6 border-t border-[#e5e7eb]">
+              <div className="flex items-center gap-2 mb-4">
+                <History className="w-5 h-5 text-[#4a6670]" />
+                <h3 className="font-semibold text-[#171532]">Recent Transactions</h3>
+              </div>
+              <div className="space-y-2 max-h-64 overflow-y-auto">
+                {userData.transactions.slice().reverse().map((transaction: any, idx: number) => (
+                  <div key={idx} className="flex items-center justify-between p-3 bg-[#f8f9fa] rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${transaction.type === 'deposit' ? 'bg-[#10B981]/10' : 'bg-[#EF4444]/10'}`}>
+                        {transaction.type === 'deposit' ? (
+                          <ArrowDownRight className="w-4 h-4 text-[#10B981]" />
+                        ) : (
+                          <ArrowUpRight className="w-4 h-4 text-[#EF4444]" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-[#171532] capitalize">{transaction.type}</p>
+                        <p className="text-xs text-[#747384]">{transaction.date || 'Recent'}</p>
+                      </div>
+                    </div>
+                    <p className={`font-bold text-sm ${transaction.type === 'deposit' ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
+                      {transaction.type === 'deposit' ? '+' : '-'}₹{transaction.amount?.toFixed(2)}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Logout Confirmation */}
