@@ -758,24 +758,35 @@ export default function AdminDashboard() {
     setShowDeleteConfirm(true)
   }
 
-  const confirmDeleteAccount = () => {
+  const confirmDeleteAccount = async () => {
     if (deletingIndex !== null) {
-      const deletedStudent = students[deletingIndex]
-      const updatedStudents = students.filter((_, i) => i !== deletingIndex)
-      setStudents(updatedStudents)
-      localStorage.setItem("students", JSON.stringify(updatedStudents))
-      calculateTotals(updatedStudents)
-      
-      // Also remove from customAccounts if exists
-      const customAccounts = JSON.parse(localStorage.getItem("customAccounts") || "[]")
-      const updatedCustom = customAccounts.filter((acc: any) => acc.username !== deletedStudent.username)
-      localStorage.setItem("customAccounts", JSON.stringify(updatedCustom))
-      
-      setShowDeleteConfirm(false)
-      setDeletingIndex(null)
-      setViewingIndex(null)
-      setNotification({ type: 'success', message: 'Account deleted successfully!' })
-      setTimeout(() => setNotification(null), 3000)
+      try {
+        const deletedStudent = students[deletingIndex]
+        
+        // Delete from MongoDB if student has an ID
+        if (deletedStudent._id) {
+          const res = await fetch(`/api/students/${deletedStudent._id}`, {
+            method: 'DELETE'
+          })
+          if (!res.ok) {
+            throw new Error('Failed to delete from database')
+          }
+        }
+        
+        const updatedStudents = students.filter((_, i) => i !== deletingIndex)
+        setStudents(updatedStudents)
+        localStorage.setItem("students", JSON.stringify(updatedStudents))
+        calculateTotals(updatedStudents)
+        
+        setShowDeleteConfirm(false)
+        setDeletingIndex(null)
+        setViewingIndex(null)
+        setNotification({ type: 'success', message: 'Account deleted successfully!' })
+        setTimeout(() => setNotification(null), 3000)
+      } catch (error) {
+        setNotification({ type: 'error', message: 'Failed to delete account' })
+        setTimeout(() => setNotification(null), 3000)
+      }
     }
   }
 
@@ -1417,9 +1428,8 @@ export default function AdminDashboard() {
           <div className="bg-white border border-[#e5e7eb] rounded-xl shadow-sm overflow-hidden">
             {/* Table Header */}
             <div className="grid grid-cols-12 gap-3 bg-[#f8f9fa] p-4 border-b border-[#e5e7eb] font-semibold text-xs text-[#747384] sticky top-0">
-              <div className="col-span-6">Name</div>
+              <div className="col-span-8">Name</div>
               <div className="col-span-4">Balance</div>
-              <div className="col-span-2">TXN</div>
             </div>
 
             {/* Table Body */}
@@ -1430,14 +1440,13 @@ export default function AdminDashboard() {
                   onClick={() => setViewingIndex(index)}
                   className="grid grid-cols-12 gap-3 p-4 hover:bg-[#f8f9fa] cursor-pointer transition-colors"
                 >
-                  <div className="col-span-6 flex items-center gap-2">
+                  <div className="col-span-8 flex items-center gap-2">
                     <div className={`w-8 h-8 rounded-full ${avatarColors[index % avatarColors.length]} flex items-center justify-center text-xs font-bold text-[#4a6670] flex-shrink-0`}>
                       {student.name.charAt(0)}
                     </div>
                     <span className="text-sm font-semibold text-[#171532] truncate">{student.name}</span>
                   </div>
                   <div className="col-span-4 text-sm font-bold text-[#10B981]">₹{student.balance.toFixed(2)}</div>
-                  <div className="col-span-2 text-sm text-[#4a6670] font-semibold text-center">{student.transactions?.length || 0}</div>
                 </div>
               ))}
             </div>
