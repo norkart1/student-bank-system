@@ -1417,12 +1417,9 @@ export default function AdminDashboard() {
           <div className="bg-white border border-[#e5e7eb] rounded-xl shadow-sm overflow-hidden">
             {/* Table Header */}
             <div className="grid grid-cols-12 gap-3 bg-[#f8f9fa] p-4 border-b border-[#e5e7eb] font-semibold text-xs text-[#747384] sticky top-0">
-              <div className="col-span-3">Name</div>
-              <div className="col-span-2">Username</div>
-              <div className="col-span-2">Email</div>
-              <div className="col-span-2">Phone</div>
-              <div className="col-span-2">Balance</div>
-              <div className="col-span-1">TXN</div>
+              <div className="col-span-6">Name</div>
+              <div className="col-span-4">Balance</div>
+              <div className="col-span-2">TXN</div>
             </div>
 
             {/* Table Body */}
@@ -1433,17 +1430,14 @@ export default function AdminDashboard() {
                   onClick={() => setViewingIndex(index)}
                   className="grid grid-cols-12 gap-3 p-4 hover:bg-[#f8f9fa] cursor-pointer transition-colors"
                 >
-                  <div className="col-span-3 flex items-center gap-2">
+                  <div className="col-span-6 flex items-center gap-2">
                     <div className={`w-8 h-8 rounded-full ${avatarColors[index % avatarColors.length]} flex items-center justify-center text-xs font-bold text-[#4a6670] flex-shrink-0`}>
                       {student.name.charAt(0)}
                     </div>
                     <span className="text-sm font-semibold text-[#171532] truncate">{student.name}</span>
                   </div>
-                  <div className="col-span-2 text-sm text-[#171532] truncate">@{student.username || 'N/A'}</div>
-                  <div className="col-span-2 text-sm text-[#747384] truncate">{student.email || 'N/A'}</div>
-                  <div className="col-span-2 text-sm text-[#747384] truncate">{student.mobile || 'N/A'}</div>
-                  <div className="col-span-2 text-sm font-bold text-[#10B981]">₹{student.balance.toFixed(2)}</div>
-                  <div className="col-span-1 text-sm text-[#4a6670] font-semibold text-center">{student.transactions?.length || 0}</div>
+                  <div className="col-span-4 text-sm font-bold text-[#10B981]">₹{student.balance.toFixed(2)}</div>
+                  <div className="col-span-2 text-sm text-[#4a6670] font-semibold text-center">{student.transactions?.length || 0}</div>
                 </div>
               ))}
             </div>
