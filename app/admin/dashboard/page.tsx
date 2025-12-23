@@ -87,7 +87,7 @@ export default function AdminDashboard() {
   const [chatInput, setChatInput] = useState("")
   const [selectedChatAccount, setSelectedChatAccount] = useState<string | null>(null)
 
-  const handleDeposit = () => {
+  const handleDeposit = async () => {
     if (!transactionAmount || isNaN(parseFloat(transactionAmount)) || parseFloat(transactionAmount) <= 0) {
       setNotification({ type: 'error', message: 'Please enter a valid amount' })
       setTimeout(() => setNotification(null), 3000)
@@ -118,8 +118,20 @@ export default function AdminDashboard() {
     }
     
     setStudents(updatedStudents)
-    localStorage.setItem("students", JSON.stringify(updatedStudents))
     calculateTotals(updatedStudents)
+    
+    // Update in database
+    const res = await fetch(`/api/students/${student._id}`, {
+      method: 'PATCH',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(student)
+    })
+    
+    if (!res.ok) {
+      setNotification({ type: 'error', message: 'Failed to save transaction' })
+      setTimeout(() => setNotification(null), 3000)
+      return
+    }
     
     setShowDepositModal(false)
     setTransactionAmount("")
@@ -130,7 +142,7 @@ export default function AdminDashboard() {
     setTimeout(() => setNotification(null), 3000)
   }
 
-  const handleWithdraw = () => {
+  const handleWithdraw = async () => {
     if (!transactionAmount || isNaN(parseFloat(transactionAmount)) || parseFloat(transactionAmount) <= 0) {
       setNotification({ type: 'error', message: 'Please enter a valid amount' })
       setTimeout(() => setNotification(null), 3000)
@@ -167,8 +179,20 @@ export default function AdminDashboard() {
     }
     
     setStudents(updatedStudents)
-    localStorage.setItem("students", JSON.stringify(updatedStudents))
     calculateTotals(updatedStudents)
+    
+    // Update in database
+    const res = await fetch(`/api/students/${student._id}`, {
+      method: 'PATCH',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(student)
+    })
+    
+    if (!res.ok) {
+      setNotification({ type: 'error', message: 'Failed to save transaction' })
+      setTimeout(() => setNotification(null), 3000)
+      return
+    }
     
     setShowWithdrawModal(false)
     setTransactionAmount("")
@@ -727,7 +751,7 @@ export default function AdminDashboard() {
     setShowEditForm(true)
   }
 
-  const handleUpdateAccount = () => {
+  const handleUpdateAccount = async () => {
     if (!newStudent.name) {
       alert("Please fill in the full name")
       return
@@ -742,8 +766,20 @@ export default function AdminDashboard() {
         transactions: updatedStudents[editingIndex].transactions
       }
       setStudents(updatedStudents)
-      localStorage.setItem("students", JSON.stringify(updatedStudents))
       calculateTotals(updatedStudents)
+      
+      // Update in database
+      const res = await fetch(`/api/students/${updatedStudents[editingIndex]._id}`, {
+        method: 'PATCH',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedStudents[editingIndex])
+      })
+      
+      if (!res.ok) {
+        setNotification({ type: 'error', message: 'Failed to update account' })
+        setTimeout(() => setNotification(null), 3000)
+        return
+      }
       
       setNewStudent({ name: "", mobile: "", email: "", profileImage: "" })
       setEditingIndex(null)
@@ -775,7 +811,6 @@ export default function AdminDashboard() {
         
         const updatedStudents = students.filter((_, i) => i !== deletingIndex)
         setStudents(updatedStudents)
-        localStorage.setItem("students", JSON.stringify(updatedStudents))
         calculateTotals(updatedStudents)
         
         setShowDeleteConfirm(false)
@@ -838,18 +873,9 @@ export default function AdminDashboard() {
           const studentList = await res.json()
           setStudents(studentList)
           calculateTotals(studentList)
-          // Also sync to localStorage for backwards compatibility
-          localStorage.setItem("students", JSON.stringify(studentList))
         }
       } catch (error) {
         console.error('Failed to fetch students:', error)
-        // Fallback to localStorage if API fails
-        const savedStudents = localStorage.getItem("students")
-        if (savedStudents) {
-          const studentList = JSON.parse(savedStudents)
-          setStudents(studentList)
-          calculateTotals(studentList)
-        }
       }
     }
     
