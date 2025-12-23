@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Wallet, LogOut, User, ArrowUpRight, ArrowDownRight, History, QrCode, Download, Printer } from "lucide-react"
 import { useTheme } from "next-themes"
-import QRCode from "qrcode.react"
+import { QRCodeSVG } from "qrcode.react"
 import jsPDF from "jspdf"
 import * as XLSX from "xlsx"
 
@@ -250,7 +250,7 @@ export default function UserDashboard() {
                 <p className="text-xs text-[#747384] font-medium">QR Code</p>
               </div>
               <div className="bg-white p-2 rounded border border-[#e5e7eb]">
-                <QRCode value={userData?.code || 'NA-0000'} size={120} level="H" includeMargin={true} />
+                <QRCodeSVG value={userData?.code || 'NA-0000'} size={120} level="H" includeMargin={true} />
               </div>
               <p className="text-xs text-[#747384] mt-2 text-center">Scan to verify account</p>
             </div>

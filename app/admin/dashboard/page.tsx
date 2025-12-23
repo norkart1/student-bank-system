@@ -731,9 +731,31 @@ export default function AdminDashboard() {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      // Limit image size to 500KB
+      if (file.size > 500000) {
+        alert("Image size must be less than 500KB")
+        return
+      }
       const reader = new FileReader()
       reader.onloadend = () => {
-        setNewStudent({...newStudent, profileImage: reader.result as string})
+        const result = reader.result as string
+        // Compress if image is too large as base64
+        if (result.length > 1000000) {
+          const canvas = document.createElement('canvas')
+          const img = new Image()
+          img.onload = () => {
+            canvas.width = img.width * 0.8
+            canvas.height = img.height * 0.8
+            const ctx = canvas.getContext('2d')
+            if (ctx) {
+              ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+              setNewStudent({...newStudent, profileImage: canvas.toDataURL('image/jpeg', 0.8)})
+            }
+          }
+          img.src = result
+        } else {
+          setNewStudent({...newStudent, profileImage: result})
+        }
       }
       reader.readAsDataURL(file)
     }
@@ -915,7 +937,12 @@ export default function AdminDashboard() {
     const statusInterval = setInterval(fetchSystemStatus, 5000)
     
     // Refresh students list every 2 seconds to get real-time updates from API
-    const studentRefreshInterval = setInterval(fetchStudents, 2000)
+    // Skip polling when forms are open to prevent state conflicts
+    const studentRefreshInterval = setInterval(() => {
+      if (!showCreateForm && !showEditForm && !showDeleteConfirm && !showDepositModal && !showWithdrawModal) {
+        fetchStudents()
+      }
+    }, 2000)
     
     const now = new Date()
     const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }
