@@ -1,0 +1,3 @@
+{
+  "/api/pusher/broadcast/route": "app/api/pusher/broadcast/route.js"
+}

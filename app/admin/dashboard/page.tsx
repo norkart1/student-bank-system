@@ -978,13 +978,8 @@ export default function AdminDashboard() {
     fetchSystemStatus()
     const statusInterval = setInterval(fetchSystemStatus, 5000)
     
-    // Refresh students list every 2 seconds to get real-time updates from API
-    // Skip polling when forms are open to prevent state conflicts
-    const studentRefreshInterval = setInterval(() => {
-      if (!showCreateForm && !showEditForm && !showDeleteConfirm && !showDepositModal && !showWithdrawModal) {
-        fetchStudents()
-      }
-    }, 2000)
+    // Refresh students list every 3 seconds to get updates (slower to prevent lag)
+    const studentRefreshInterval = setInterval(fetchStudents, 3000)
     
     const now = new Date()
     const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }
@@ -994,7 +989,7 @@ export default function AdminDashboard() {
       clearInterval(statusInterval)
       clearInterval(studentRefreshInterval)
     }
-  }, [showCreateForm, showEditForm, showDeleteConfirm, showDepositModal, showWithdrawModal])
+  }, [])
 
   // Use Pusher for real-time admin updates
   usePusherAdminUpdates((data) => {

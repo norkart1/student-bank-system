@@ -60,14 +60,14 @@ export default function UserDashboard() {
     loadUserData()
   }, [])
 
-  // Refresh data every 2 seconds to get real-time balance updates
+  // Refresh data every 5 seconds (slower polling to prevent lag)
   useEffect(() => {
     const interval = setInterval(() => {
       loadUserData()
-    }, 2000)
+    }, 5000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [isLoading])
 
   // Use Pusher for real-time updates
   usePusherUpdates(userData?.id, (data) => {
