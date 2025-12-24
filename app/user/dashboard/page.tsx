@@ -211,10 +211,6 @@ export default function UserDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#f8f9fa] to-[#e8eef5] p-4">
       <div className="max-w-md mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8 pt-6">
-          <h1 className="text-2xl font-bold text-[#171532]">Dashboard</h1>
-        </div>
 
         {/* Profile Card */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
