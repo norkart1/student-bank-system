@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Calculator, Activity, Moon, Sun, Download, Calendar, AlertCircle, Headphones, MessageCircle, Zap } from "lucide-react"
+import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Activity, Moon, Sun, Download, Calendar, AlertCircle, Zap } from "lucide-react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 import { useTheme } from "next-themes"
 import jsPDF from "jspdf"
@@ -62,11 +62,6 @@ export default function AdminDashboard() {
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
-  const [aiMessages, setAiMessages] = useState<Array<{role: string, text: string}>>([])
-  const [aiInput, setAiInput] = useState("")
-  const [aiLoading, setAiLoading] = useState(false)
-  const [calcDisplay, setCalcDisplay] = useState("0")
-  const [calcExpression, setCalcExpression] = useState("")
   const [systemStatus, setSystemStatus] = useState<any>(null)
   const [showDepositModal, setShowDepositModal] = useState(false)
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
@@ -83,11 +78,6 @@ export default function AdminDashboard() {
   const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7))
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString())
   const [selectedPersonalStudent, setSelectedPersonalStudent] = useState<number | null>(null)
-  const [supportMessage, setSupportMessage] = useState("")
-  const [chatMessages, setChatMessages] = useState<Array<{role: string, text: string}>>([])
-  const [chatInput, setChatInput] = useState("")
-  const [realTimeStatus, setRealTimeStatus] = useState(false)
-  const [selectedChatAccount, setSelectedChatAccount] = useState<string | null>(null)
 
   const handleDeposit = async () => {
     if (!transactionAmount || isNaN(parseFloat(transactionAmount)) || parseFloat(transactionAmount) <= 0) {
@@ -796,33 +786,6 @@ export default function AdminDashboard() {
     )
   }
 
-  const handleCalcInput = (value: string) => {
-    if (value === "=") {
-      try {
-        const expr = calcExpression + calcDisplay
-        const result = eval(expr)
-        setCalcDisplay(String(result))
-        setCalcExpression("")
-      } catch {
-        setCalcDisplay("Error")
-      }
-    } else if (value === "C") {
-      setCalcDisplay("0")
-      setCalcExpression("")
-    } else if (value === "←") {
-      if (calcExpression) {
-        setCalcExpression(calcExpression.slice(0, -1))
-      } else {
-        setCalcDisplay(calcDisplay.slice(0, -1) || "0")
-      }
-    } else if (["+", "-", "*", "/"].includes(value)) {
-      const expr = calcExpression + calcDisplay
-      setCalcExpression(expr + value)
-      setCalcDisplay("")
-    } else {
-      setCalcDisplay(calcDisplay === "0" ? value : calcDisplay + value)
-    }
-  }
 
   const renderMessageWithHighlight = (text: string) => {
     const parts = text.split(/(\*\*[^*]+\*\*)/g)
@@ -1244,36 +1207,12 @@ export default function AdminDashboard() {
           <span className="text-sm font-bold text-[#171532]">Calendar</span>
         </button>
         <button 
-          onClick={() => setActiveTab("calculator")}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
-            <Calculator className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-sm font-bold text-[#171532]">Calculator</span>
-        </button>
-        <button 
           onClick={() => setActiveTab("status")}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
             <AlertCircle className="w-6 h-6 text-white" />
           </div>
           <span className="text-sm font-bold text-[#171532]">Status</span>
-        </button>
-        <button 
-          onClick={() => setActiveTab("support")}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
-            <Headphones className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-sm font-bold text-[#171532]">Support</span>
-        </button>
-        <button 
-          onClick={() => setActiveTab("chats")}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
-            <MessageCircle className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-sm font-bold text-[#171532]">Chats</span>
         </button>
         <button 
           onClick={() => setActiveTab("reports")}
@@ -1713,51 +1652,6 @@ export default function AdminDashboard() {
     </>
   )
 
-  const renderCalculatorTab = () => (
-    <>
-      <div className="flex items-center gap-3 mb-6">
-        <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
-          <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
-        </button>
-        <h2 className="text-lg font-bold text-[#171532]">Calculator</h2>
-      </div>
-      
-      <div className="max-w-sm mx-auto">
-        <div className="bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-3xl p-6 shadow-2xl border border-[#5a7680]/50">
-          <div className="space-y-4">
-            <div className="text-right space-y-2">
-              <p className="text-white/60 text-sm">{calcExpression}</p>
-              <p className="text-5xl font-bold text-white tracking-tight">{calcDisplay}</p>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-4 gap-3 mt-6">
-            <button onClick={() => handleCalcInput("7")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">7</button>
-            <button onClick={() => handleCalcInput("8")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">8</button>
-            <button onClick={() => handleCalcInput("9")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">9</button>
-            <button onClick={() => handleCalcInput("+")} className="bg-[#c17f59] hover:bg-[#d8956d] text-white py-4 rounded-2xl font-bold text-lg transition-colors">+</button>
-            
-            <button onClick={() => handleCalcInput("4")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">4</button>
-            <button onClick={() => handleCalcInput("5")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">5</button>
-            <button onClick={() => handleCalcInput("6")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">6</button>
-            <button onClick={() => handleCalcInput("-")} className="bg-[#c17f59] hover:bg-[#d8956d] text-white py-4 rounded-2xl font-bold text-lg transition-colors">−</button>
-            
-            <button onClick={() => handleCalcInput("1")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">1</button>
-            <button onClick={() => handleCalcInput("2")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">2</button>
-            <button onClick={() => handleCalcInput("3")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">3</button>
-            <button onClick={() => handleCalcInput("*")} className="bg-[#c17f59] hover:bg-[#d8956d] text-white py-4 rounded-2xl font-bold text-lg transition-colors">×</button>
-            
-            <button onClick={() => handleCalcInput("0")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg col-span-2 transition-colors">0</button>
-            <button onClick={() => handleCalcInput(".")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg transition-colors">.</button>
-            <button onClick={() => handleCalcInput("/")} className="bg-[#c17f59] hover:bg-[#d8956d] text-white py-4 rounded-2xl font-bold text-lg transition-colors">÷</button>
-            
-            <button onClick={() => handleCalcInput("=")} className="bg-[#10B981] hover:bg-[#0fa06f] text-white py-4 rounded-2xl font-bold text-lg col-span-2 transition-colors">=</button>
-            <button onClick={() => handleCalcInput("C")} className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-bold text-lg col-span-2 transition-colors">C</button>
-          </div>
-        </div>
-      </div>
-    </>
-  )
 
   const renderCalendarTab = () => {
     const today = new Date()
@@ -1799,98 +1693,6 @@ export default function AdminDashboard() {
                 {day}
               </div>
             ))}
-          </div>
-        </div>
-      </>
-    )
-  }
-
-  const renderSupportTab = () => (
-    <>
-      <div className="flex items-center gap-3 mb-6">
-        <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
-          <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
-        </button>
-        <h2 className="text-lg font-bold text-[#171532]">Support</h2>
-      </div>
-      <div className="bg-white border border-[#e5e7eb] rounded-2xl p-6 space-y-4 shadow-sm">
-        <div className="bg-[#f8f9fa] rounded-xl p-4 border border-[#e5e7eb]">
-          <p className="text-sm font-semibold text-[#4a6670] mb-2">How can we help?</p>
-          <textarea value={supportMessage} onChange={(e) => setSupportMessage(e.target.value)} placeholder="Describe your issue..." className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:border-[#4a6670] text-[#171532]" rows={4}></textarea>
-        </div>
-        <button className="w-full bg-[#4a6670] text-white py-3 rounded-xl font-semibold hover:bg-[#3d565e] transition-all">Submit Ticket</button>
-      </div>
-    </>
-  )
-
-  const renderChatsTab = () => {
-    const allAccounts = students.map(s => ({ 
-      id: s.id || Date.now().toString(), 
-      name: s.name, 
-      username: s.username, 
-      type: 'student' 
-    }))
-    
-    return (
-      <>
-        <div className="flex items-center gap-3 mb-6">
-          <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
-            <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
-          </button>
-          <h2 className="text-lg font-bold text-[#171532]">Chats</h2>
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* Accounts List */}
-          <div className="bg-white border border-[#e5e7eb] rounded-2xl p-4 shadow-sm h-[500px] overflow-y-auto">
-            <h3 className="font-semibold text-[#171532] mb-3 text-sm">All Accounts ({allAccounts.length})</h3>
-            <div className="space-y-2">
-              {allAccounts.map(acc => (
-                <button
-                  key={acc.id}
-                  onClick={() => setSelectedChatAccount(acc.id)}
-                  className={`w-full text-left p-3 rounded-lg transition-colors ${
-                    selectedChatAccount === acc.id
-                      ? 'bg-[#4a6670] text-white'
-                      : 'bg-[#f8f9fa] text-[#171532] hover:bg-[#f0f0f0]'
-                  }`}
-                >
-                  <p className="font-semibold text-sm">{acc.name}</p>
-                  <p className="text-xs text-[#747384] opacity-70">@{acc.username}</p>
-                </button>
-              ))}
-            </div>
-          </div>
-          
-          {/* Chat Area */}
-          <div className="lg:col-span-2 bg-white border border-[#e5e7eb] rounded-2xl p-4 shadow-sm flex flex-col h-[500px]">
-            {!selectedChatAccount ? (
-              <div className="flex items-center justify-center flex-1">
-                <p className="text-center text-[#747384]">Select an account to start chatting</p>
-              </div>
-            ) : (
-              <>
-                <div className="pb-3 border-b border-[#e5e7eb] mb-3">
-                  <p className="font-semibold text-[#171532]">{allAccounts.find(a => a.id === selectedChatAccount)?.name}</p>
-                </div>
-                <div className="flex-1 overflow-y-auto space-y-3 mb-4 pb-4 border-b border-[#e5e7eb]">
-                  {chatMessages.length === 0 && (
-                    <p className="text-center text-[#747384] py-8">No messages yet. Start a conversation!</p>
-                  )}
-                  {chatMessages.map((msg, idx) => (
-                    <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`px-4 py-2 rounded-lg max-w-xs ${msg.role === 'user' ? 'bg-[#4a6670] text-white' : 'bg-[#f0f0f0] text-[#171532]'}`}>
-                        {msg.text}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex gap-2">
-                  <input type="text" value={chatInput} onChange={(e) => setChatInput(e.target.value)} placeholder="Type a message..." className="flex-1 px-4 py-2 border border-[#e5e7eb] rounded-xl focus:outline-none focus:border-[#4a6670]" />
-                  <button className="bg-[#4a6670] text-white px-6 py-2 rounded-xl font-semibold hover:bg-[#3d565e]">Send</button>
-                </div>
-              </>
-            )}
           </div>
         </div>
       </>
@@ -2060,10 +1862,7 @@ export default function AdminDashboard() {
         {activeTab === "leaderboard" && renderLeaderboardTab()}
         {activeTab === "ai" && renderAITab()}
         {activeTab === "calendar" && renderCalendarTab()}
-        {activeTab === "calculator" && renderCalculatorTab()}
         {activeTab === "status" && renderStatusTab()}
-        {activeTab === "support" && renderSupportTab()}
-        {activeTab === "chats" && renderChatsTab()}
         {activeTab === "profile" && (
           <div className="space-y-5">
             <h2 className="text-lg font-bold text-[#171532]">Admin Profile</h2>
