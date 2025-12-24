@@ -24,12 +24,29 @@ interface Student {
 
 export default function ReportsPage() {
   const [students, setStudents] = useState<Student[]>([]);
+  const [filteredStudents, setFilteredStudents] = useState<Student[]>([]);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchStudents();
   }, []);
+
+  useEffect(() => {
+    if (searchQuery.trim() === '') {
+      setFilteredStudents(students);
+    } else {
+      const query = searchQuery.toLowerCase();
+      setFilteredStudents(
+        students.filter(
+          (student) =>
+            student.name.toLowerCase().includes(query) ||
+            student.code.toLowerCase().includes(query)
+        )
+      );
+    }
+  }, [searchQuery, students]);
 
   const fetchStudents = async () => {
     try {
@@ -37,10 +54,13 @@ export default function ReportsPage() {
       const response = await fetch('/api/students');
       const data = await response.json();
       console.log('Fetched students:', data);
-      setStudents(Array.isArray(data) ? data : []);
+      const studentList = Array.isArray(data) ? data : [];
+      setStudents(studentList);
+      setFilteredStudents(studentList);
     } catch (error) {
       console.error('Failed to fetch students:', error);
       setStudents([]);
+      setFilteredStudents([]);
     } finally {
       setLoading(false);
     }
@@ -174,13 +194,38 @@ export default function ReportsPage() {
             </Select>
           </div>
 
+          {/* Search Section */}
+          <div className="mb-8">
+            <label className="block text-lg font-semibold text-gray-700 mb-3">Search Student</label>
+            <div className="flex gap-3">
+              <input
+                type="text"
+                placeholder="Search by name or student code..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 h-12 px-4 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+              />
+              <Button
+                onClick={() => setSearchQuery('')}
+                className="h-12 px-6 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg"
+              >
+                Clear
+              </Button>
+            </div>
+            {searchQuery && (
+              <p className="mt-2 text-sm text-gray-600">
+                Found {filteredStudents.length} student{filteredStudents.length !== 1 ? 's' : ''}
+              </p>
+            )}
+          </div>
+
           {/* Select Student Section */}
           <div className="mb-8">
             <label className="block text-lg font-semibold text-gray-700 mb-3">Select Student</label>
             <Select
               value={selectedStudent?._id || ''}
               onValueChange={(id: string) => {
-                const student = students.find((s) => s._id === id);
+                const student = filteredStudents.find((s) => s._id === id);
                 setSelectedStudent(student || null);
               }}
             >
@@ -188,13 +233,16 @@ export default function ReportsPage() {
                 <SelectValue placeholder="Choose a student" />
               </SelectTrigger>
               <SelectContent>
-                {students.map((student) => (
+                {filteredStudents.map((student) => (
                   <SelectItem key={student._id} value={student._id}>
                     {student.name}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
+            {filteredStudents.length === 0 && students.length > 0 && (
+              <p className="mt-2 text-sm text-red-500">No students match your search criteria.</p>
+            )}
           </div>
 
           {/* Export Buttons */}
