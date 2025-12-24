@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Wallet, LogOut, User, ArrowUpRight, ArrowDownRight, History, QrCode, Download, Printer, Zap } from "lucide-react"
+import { Wallet, User, ArrowUpRight, ArrowDownRight, History, QrCode, Download, Printer, Zap } from "lucide-react"
 import { useTheme } from "next-themes"
 import { QRCodeSVG } from "qrcode.react"
 import jsPDF from "jspdf"
@@ -14,7 +14,6 @@ export default function UserDashboard() {
   const { theme, setTheme } = useTheme()
   const [isLoading, setIsLoading] = useState(true)
   const [userData, setUserData] = useState<any>(null)
-  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
   const [realTimeStatus, setRealTimeStatus] = useState(false)
 
   const loadUserData = async () => {
@@ -62,6 +61,16 @@ export default function UserDashboard() {
     loadUserData()
   }, [])
 
+  // Auto-logout when user refreshes or navigates away
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      fetch('/api/auth/logout', { method: 'POST', keepalive: true })
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [])
+
   // Refresh data every 5 seconds (slower polling to prevent lag)
   useEffect(() => {
     const interval = setInterval(() => {
@@ -80,10 +89,6 @@ export default function UserDashboard() {
     }
   })
 
-  const handleLogout = () => {
-    fetch('/api/auth/logout', { method: 'POST' })
-    router.push("/login")
-  }
 
   const downloadPDF = () => {
     const doc = new jsPDF()
@@ -209,13 +214,6 @@ export default function UserDashboard() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8 pt-6">
           <h1 className="text-2xl font-bold text-[#171532]">Dashboard</h1>
-          <button 
-            onClick={() => setShowLogoutConfirm(true)}
-            className="p-2 hover:bg-white rounded-lg transition-colors"
-            title="Logout"
-          >
-            <LogOut className="w-5 h-5 text-[#4a6670]" />
-          </button>
         </div>
 
         {/* Profile Card */}
@@ -364,35 +362,6 @@ export default function UserDashboard() {
           )}
         </div>
 
-        {/* Logout Confirmation */}
-        {showLogoutConfirm && (
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-white rounded-2xl w-full max-w-sm mx-4 shadow-2xl animate-in scale-in duration-200">
-              <div className="px-6 py-5 border-b border-gray-200">
-                <h3 className="text-lg font-bold text-[#171532]">Logout</h3>
-              </div>
-              
-              <div className="px-6 py-6">
-                <p className="text-[#747384] mb-6">Are you sure you want to logout?</p>
-              </div>
-
-              <div className="px-6 py-4 border-t border-gray-200 flex gap-3">
-                <button
-                  onClick={() => setShowLogoutConfirm(false)}
-                  className="flex-1 px-4 py-2.5 bg-[#f8f9fa] hover:bg-[#f0f0f0] text-[#171532] rounded-lg font-semibold transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleLogout}
-                  className="flex-1 px-4 py-2.5 bg-[#EF4444] hover:bg-[#dc2626] text-white rounded-lg font-semibold transition-colors"
-                >
-                  Logout
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   )
