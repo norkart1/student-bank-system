@@ -573,17 +573,6 @@ export default function AdminDashboard() {
     )
   }
 
-  const renderRealTimeIndicator = () => {
-    if (!realTimeStatus) return null
-    return (
-      <div className="fixed top-6 left-6 z-[60] animate-in fade-in slide-in-from-top-2 duration-300">
-        <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg shadow-lg">
-          <Zap className="w-4 h-4 text-green-600 animate-pulse" />
-          <p className="text-xs text-green-700 font-medium">Real-time update received</p>
-        </div>
-      </div>
-    )
-  }
 
   const renderDepositModal = () => {
     if (!showDepositModal) return null
@@ -1853,7 +1842,6 @@ export default function AdminDashboard() {
     <div className={`min-h-screen pb-24 ${activeTab === "status" ? "bg-white dark:bg-slate-800" : "bg-white dark:bg-slate-900"}`}>
       <div className={`px-5 pt-6 ${activeTab === "status" ? "text-[#171532] dark:text-white" : ""}`}>
         {renderNotification()}
-        {renderRealTimeIndicator()}
         {showDepositModal && renderDepositModal()}
         {showWithdrawModal && renderWithdrawModal()}
         {activeTab === "home" && renderHomeTab()}
