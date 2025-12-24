@@ -1,11 +1,3 @@
 {
-  "/admin/dashboard/page": "app/admin/dashboard/page.js",
-  "/admin/reports/page": "app/admin/reports/page.js",
-  "/api/auth/verify/route": "app/api/auth/verify/route.js",
-  "/api/pusher/broadcast/route": "app/api/pusher/broadcast/route.js",
-  "/api/students/[id]/route": "app/api/students/[id]/route.js",
-  "/api/students/route": "app/api/students/route.js",
-  "/api/system/status/route": "app/api/system/status/route.js",
-  "/api/transactions/deposits/route": "app/api/transactions/deposits/route.js",
   "/page": "app/page.js"
 }
