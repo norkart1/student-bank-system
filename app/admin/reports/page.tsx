@@ -36,9 +36,11 @@ export default function ReportsPage() {
       setLoading(true);
       const response = await fetch('/api/students');
       const data = await response.json();
-      setStudents(data);
+      console.log('Fetched students:', data);
+      setStudents(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Failed to fetch students:', error);
+      setStudents([]);
     } finally {
       setLoading(false);
     }
@@ -220,57 +222,59 @@ export default function ReportsPage() {
           </div>
 
           {/* Transaction Ledger */}
-          {selectedStudent && selectedStudent.transactions.length > 0 && (
-            <Card className="p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Transaction Ledger</h2>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="bg-slate-700 text-white">
-                      <th className="px-4 py-3 text-left">S.No</th>
-                      <th className="px-4 py-3 text-left">Date</th>
-                      <th className="px-4 py-3 text-right">Deposit</th>
-                      <th className="px-4 py-3 text-right">Withdraw</th>
-                      <th className="px-4 py-3 text-right">Balance</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {selectedStudent.transactions.map((transaction, index) => (
-                      <tr key={index} className="border-b hover:bg-gray-50">
-                        <td className="px-4 py-3">{index + 1}</td>
-                        <td className="px-4 py-3">{transaction.date || 'N/A'}</td>
-                        <td className="px-4 py-3 text-right">
-                          {transaction.type === 'deposit' && (
-                            <span className="text-green-600 font-semibold">₹{transaction.amount.toFixed(2)}</span>
-                          )}
-                          {transaction.type !== 'deposit' && <span className="text-gray-400">–</span>}
-                        </td>
-                        <td className="px-4 py-3 text-right">
-                          {transaction.type === 'withdraw' && (
-                            <span className="text-red-600 font-semibold">₹{transaction.amount.toFixed(2)}</span>
-                          )}
-                          {transaction.type !== 'withdraw' && <span className="text-gray-400">–</span>}
-                        </td>
-                        <td className="px-4 py-3 text-right font-semibold">
-                          ₹{calculateBalance(selectedStudent.transactions, index).toFixed(2)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className="mt-4 text-right">
-                <p className="text-lg font-semibold text-gray-800">
-                  Current Balance: <span className="text-blue-600">₹{selectedStudent.balance.toFixed(2)}</span>
-                </p>
-              </div>
-            </Card>
-          )}
-
-          {selectedStudent && selectedStudent.transactions.length === 0 && (
-            <div className="text-center py-8 bg-gray-50 rounded-lg">
-              <p className="text-gray-600">No transactions found for this student.</p>
-            </div>
+          {selectedStudent && (
+            <>
+              {selectedStudent.transactions && selectedStudent.transactions.length > 0 ? (
+                <Card className="p-6">
+                  <h2 className="text-xl font-bold text-gray-800 mb-4">Transaction Ledger</h2>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="bg-slate-700 text-white">
+                          <th className="px-4 py-3 text-left">S.No</th>
+                          <th className="px-4 py-3 text-left">Date</th>
+                          <th className="px-4 py-3 text-right">Deposit</th>
+                          <th className="px-4 py-3 text-right">Withdraw</th>
+                          <th className="px-4 py-3 text-right">Balance</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedStudent.transactions.map((transaction, index) => (
+                          <tr key={index} className="border-b hover:bg-gray-50">
+                            <td className="px-4 py-3">{index + 1}</td>
+                            <td className="px-4 py-3">{transaction.date || 'N/A'}</td>
+                            <td className="px-4 py-3 text-right">
+                              {transaction.type === 'deposit' && (
+                                <span className="text-green-600 font-semibold">₹{transaction.amount.toFixed(2)}</span>
+                              )}
+                              {transaction.type !== 'deposit' && <span className="text-gray-400">–</span>}
+                            </td>
+                            <td className="px-4 py-3 text-right">
+                              {transaction.type === 'withdraw' && (
+                                <span className="text-red-600 font-semibold">₹{transaction.amount.toFixed(2)}</span>
+                              )}
+                              {transaction.type !== 'withdraw' && <span className="text-gray-400">–</span>}
+                            </td>
+                            <td className="px-4 py-3 text-right font-semibold">
+                              ₹{calculateBalance(selectedStudent.transactions, index).toFixed(2)}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="mt-4 text-right">
+                    <p className="text-lg font-semibold text-gray-800">
+                      Current Balance: <span className="text-blue-600">₹{selectedStudent.balance.toFixed(2)}</span>
+                    </p>
+                  </div>
+                </Card>
+              ) : (
+                <div className="text-center py-8 bg-gray-50 rounded-lg">
+                  <p className="text-gray-600">No transactions found for this student.</p>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
