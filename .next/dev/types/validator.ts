@@ -110,6 +110,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../app/api/admin/check-status/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/admin/check-status">> = Specific
+  const handler = {} as typeof import("../../../app/api/admin/check-status/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../app/api/admin/init-from-env/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/admin/init-from-env">> = Specific
