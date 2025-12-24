@@ -1,0 +1,3 @@
+{
+  "/api/admin/init-from-env/route": "app/api/admin/init-from-env/route.js"
+}
