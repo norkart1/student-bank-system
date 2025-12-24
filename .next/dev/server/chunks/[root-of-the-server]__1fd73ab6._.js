@@ -193,11 +193,19 @@ async function PATCH(req, { params }) {
         const { id } = await params;
         await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$mongodb$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["connectDB"])();
         const data = await req.json();
-        const student = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Student"].findByIdAndUpdate(id, data, {
+        // Only update allowed fields
+        const updateData = {};
+        if (data.name) updateData.name = data.name;
+        if (data.email !== undefined) updateData.email = data.email;
+        if (data.mobile !== undefined) updateData.mobile = data.mobile;
+        if (data.profileImage !== undefined) updateData.profileImage = data.profileImage;
+        if (data.balance !== undefined) updateData.balance = data.balance;
+        if (data.transactions !== undefined) updateData.transactions = data.transactions;
+        const student = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Student"].findByIdAndUpdate(id, updateData, {
             new: true
         });
         if (!student) return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: 'Not found'
+            error: 'Student not found'
         }, {
             status: 404
         });
@@ -208,8 +216,10 @@ async function PATCH(req, { params }) {
         response.headers.set('Expires', '0');
         return response;
     } catch (error) {
+        console.error('PATCH error:', error);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: 'Failed to update student'
+            error: 'Failed to update student',
+            details: String(error)
         }, {
             status: 500
         });
