@@ -1204,6 +1204,14 @@ export default function AdminDashboard() {
           <span className="text-sm font-bold text-[#171532]">Status</span>
         </button>
         <button 
+          onClick={() => window.location.href = '/admin/reports'}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <BarChart3 className="w-6 h-6 text-white" />
+          </div>
+          <span className="text-sm font-bold text-[#171532]">Reports</span>
+        </button>
+        <button 
           onClick={() => setActiveTab("ai")}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
