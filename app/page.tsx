@@ -37,20 +37,6 @@ export default function Home() {
             <ArrowRight className="w-5 h-5" />
           </button>
         </Link>
-
-        <div className="mt-6 pt-6 border-t border-gray-300 dark:border-slate-700 w-full">
-          <p className="text-center text-sm text-[#747384] mb-3">Admin Portal</p>
-          <Link href="/admin-setup" className="w-full block">
-            <button className="w-full h-12 bg-[#7056B2] hover:bg-[#5a4697] text-white font-semibold rounded-xl transition-all duration-300">
-              Admin Setup
-            </button>
-          </Link>
-          <Link href="/admin-login" className="w-full block mt-2">
-            <button className="w-full h-12 bg-[#6b7280] hover:bg-[#5a6270] text-white font-semibold rounded-xl transition-all duration-300">
-              Admin Login
-            </button>
-          </Link>
-        </div>
       </div>
     </div>
   )
