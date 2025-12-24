@@ -128,25 +128,86 @@ adminSchema.methods.comparePassword = async function(password) {
 };
 const Admin = __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__["default"].models.Admin || __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__["default"].model('Admin', adminSchema);
 }),
+"[project]/lib/models/Session.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "Session",
+    ()=>Session
+]);
+var __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/mongoose [external] (mongoose, cjs)");
+;
+const sessionSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__["Schema"]({
+    token: {
+        type: String,
+        required: true,
+        unique: true,
+        index: true
+    },
+    userId: {
+        type: String,
+        required: true,
+        index: true
+    },
+    userType: {
+        type: String,
+        enum: [
+            'admin',
+            'user'
+        ],
+        required: true
+    },
+    userData: {
+        id: {
+            type: String,
+            required: true
+        },
+        name: {
+            type: String,
+            required: true
+        },
+        username: {
+            type: String
+        },
+        code: {
+            type: String
+        }
+    },
+    expiresAt: {
+        type: Date,
+        required: true,
+        index: true
+    }
+}, {
+    timestamps: true
+});
+// Auto-delete expired sessions
+sessionSchema.index({
+    expiresAt: 1
+}, {
+    expireAfterSeconds: 0
+});
+const Session = __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__["default"].models.Session || __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__["default"].model('Session', sessionSchema);
+}),
 "[externals]/next/dist/server/app-render/after-task-async-storage.external.js [external] (next/dist/server/app-render/after-task-async-storage.external.js, cjs)", ((__turbopack_context__, module, exports) => {
 
 const mod = __turbopack_context__.x("next/dist/server/app-render/after-task-async-storage.external.js", () => require("next/dist/server/app-render/after-task-async-storage.external.js"));
 
 module.exports = mod;
 }),
-"[project]/app/api/admin/init-from-env/route.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
+"[project]/app/api/admin/login/route.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
-    "GET",
-    ()=>GET,
     "POST",
     ()=>POST
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$mongodb$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/mongodb.ts [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Admin$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/models/Admin.ts [app-route] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Session$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/models/Session.ts [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/server.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcryptjs$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/bcryptjs/index.js [app-route] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$externals$5d2f$crypto__$5b$external$5d$__$28$crypto$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/crypto [external] (crypto, cjs)");
+;
 ;
 ;
 ;
@@ -154,49 +215,51 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcryptjs$2f$
 async function POST(req) {
     try {
         await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$mongodb$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["connectDB"])();
-        const username = process.env.ADMIN_USERNAME;
-        const password = process.env.ADMIN_PASSWORD;
+        const { username, password } = await req.json();
         if (!username || !password) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: 'ADMIN_USERNAME and ADMIN_PASSWORD environment variables not set'
+                error: 'Username and password required'
             }, {
                 status: 400
             });
         }
-        // Hash password directly
-        const salt = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcryptjs$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].genSalt(10);
-        const hashedPassword = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcryptjs$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].hash(password, salt);
-        // Check if admin already exists
-        const existingAdmin = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Admin$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Admin"].findOne({
+        const admin = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Admin$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Admin"].findOne({
             username
         });
-        if (existingAdmin) {
-            // Update password if admin exists - directly with hashed password
-            existingAdmin.password = hashedPassword;
-            // Prevent pre-save hook from double-hashing
-            existingAdmin.markModified('password');
-            await existingAdmin.save();
+        if (!admin) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                success: true,
-                message: 'Admin password updated',
-                admin: {
-                    id: existingAdmin._id,
-                    username: existingAdmin.username,
-                    name: existingAdmin.name
-                }
+                error: 'Invalid credentials'
+            }, {
+                status: 401
             });
         }
-        // Create new admin with hashed password
-        const admin = new __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Admin$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Admin"]({
-            username,
-            password: hashedPassword,
-            name: 'Administrator',
-            role: 'admin'
+        // Use the comparePassword method to check hashed password
+        const isPasswordValid = await admin.comparePassword(password);
+        if (!isPasswordValid) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: 'Invalid credentials'
+            }, {
+                status: 401
+            });
+        }
+        // Create session token
+        const token = __TURBOPACK__imported__module__$5b$externals$5d2f$crypto__$5b$external$5d$__$28$crypto$2c$__cjs$29$__["default"].randomBytes(32).toString('hex');
+        const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+        const session = new __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Session$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Session"]({
+            token,
+            userId: admin._id.toString(),
+            userType: 'admin',
+            userData: {
+                id: admin._id.toString(),
+                name: admin.name,
+                username: admin.username
+            },
+            expiresAt
         });
-        await admin.save();
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+        await session.save();
+        const response = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: true,
-            message: 'Admin account created successfully',
+            token,
             admin: {
                 id: admin._id,
                 username: admin.username,
@@ -204,21 +267,23 @@ async function POST(req) {
                 role: admin.role
             }
         });
+        response.cookies.set('auth_token', token, {
+            httpOnly: true,
+            secure: ("TURBOPACK compile-time value", "development") === 'production',
+            sameSite: 'lax',
+            maxAge: 7 * 24 * 60 * 60
+        });
+        return response;
     } catch (error) {
-        console.error('Admin initialization error:', error);
+        console.error('Admin login error:', error);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: 'Initialization failed',
-            details: String(error)
+            error: 'Login failed'
         }, {
             status: 500
         });
     }
 }
-async function GET(req) {
-    // Allow GET request to trigger initialization
-    return POST(req);
-}
 }),
 ];
 
-//# sourceMappingURL=%5Broot-of-the-server%5D__b45c064f._.js.map
+//# sourceMappingURL=%5Broot-of-the-server%5D__a22ef128._.js.map

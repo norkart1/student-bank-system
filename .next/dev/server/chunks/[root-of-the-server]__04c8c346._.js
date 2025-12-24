@@ -134,91 +134,55 @@ const mod = __turbopack_context__.x("next/dist/server/app-render/after-task-asyn
 
 module.exports = mod;
 }),
-"[project]/app/api/admin/init-from-env/route.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
+"[project]/app/api/admin/test-login/route.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
-    "GET",
-    ()=>GET,
     "POST",
     ()=>POST
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$mongodb$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/mongodb.ts [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Admin$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/models/Admin.ts [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/server.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcryptjs$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/bcryptjs/index.js [app-route] (ecmascript)");
-;
 ;
 ;
 ;
 async function POST(req) {
     try {
         await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$mongodb$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["connectDB"])();
-        const username = process.env.ADMIN_USERNAME;
-        const password = process.env.ADMIN_PASSWORD;
-        if (!username || !password) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: 'ADMIN_USERNAME and ADMIN_PASSWORD environment variables not set'
-            }, {
-                status: 400
-            });
-        }
-        // Hash password directly
-        const salt = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcryptjs$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].genSalt(10);
-        const hashedPassword = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcryptjs$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].hash(password, salt);
-        // Check if admin already exists
-        const existingAdmin = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Admin$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Admin"].findOne({
+        const username = process.env.ADMIN_USERNAME || 'admin';
+        const password = '12345'; // Test password
+        const admin = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Admin$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Admin"].findOne({
             username
         });
-        if (existingAdmin) {
-            // Update password if admin exists - directly with hashed password
-            existingAdmin.password = hashedPassword;
-            // Prevent pre-save hook from double-hashing
-            existingAdmin.markModified('password');
-            await existingAdmin.save();
+        if (!admin) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                success: true,
-                message: 'Admin password updated',
-                admin: {
-                    id: existingAdmin._id,
-                    username: existingAdmin.username,
-                    name: existingAdmin.name
-                }
+                success: false,
+                message: 'Admin not found',
+                username
             });
         }
-        // Create new admin with hashed password
-        const admin = new __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Admin$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Admin"]({
-            username,
-            password: hashedPassword,
-            name: 'Administrator',
-            role: 'admin'
-        });
-        await admin.save();
+        // Test password comparison
+        const isMatch = await admin.comparePassword(password);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            success: true,
-            message: 'Admin account created successfully',
-            admin: {
-                id: admin._id,
-                username: admin.username,
-                name: admin.name,
-                role: admin.role
-            }
+            success: isMatch,
+            message: isMatch ? 'Password matches!' : 'Password does not match',
+            username,
+            adminId: admin._id.toString(),
+            hashedPasswordLength: admin.password.length,
+            isMatch
         });
     } catch (error) {
-        console.error('Admin initialization error:', error);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: 'Initialization failed',
-            details: String(error)
+            success: false,
+            message: 'Test failed',
+            error: String(error)
         }, {
             status: 500
         });
     }
 }
-async function GET(req) {
-    // Allow GET request to trigger initialization
-    return POST(req);
-}
 }),
 ];
 
-//# sourceMappingURL=%5Broot-of-the-server%5D__b45c064f._.js.map
+//# sourceMappingURL=%5Broot-of-the-server%5D__04c8c346._.js.map

@@ -1,6 +1,7 @@
 import { connectDB } from '@/lib/mongodb';
 import { Admin } from '@/lib/models/Admin';
 import { NextRequest, NextResponse } from 'next/server';
+import bcrypt from 'bcryptjs';
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,12 +17,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Hash password directly
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     // Check if admin already exists
     const existingAdmin = await Admin.findOne({ username });
     
     if (existingAdmin) {
-      // Update password if admin exists
-      existingAdmin.password = password;
+      // Update password if admin exists - directly with hashed password
+      existingAdmin.password = hashedPassword;
+      // Prevent pre-save hook from double-hashing
+      existingAdmin.markModified('password');
       await existingAdmin.save();
       return NextResponse.json({
         success: true,
@@ -34,10 +41,10 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Create new admin
+    // Create new admin with hashed password
     const admin = new Admin({
       username,
-      password,
+      password: hashedPassword,
       name: 'Administrator',
       role: 'admin',
     });

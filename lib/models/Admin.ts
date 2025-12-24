@@ -23,20 +23,6 @@ const adminSchema = new Schema<IAdmin>(
   { timestamps: true }
 );
 
-// Hash password before saving - use function instead of arrow function for proper 'this' context
-adminSchema.pre<IAdmin>('save', async function(next) {
-  if (!this.isModified('password')) {
-    return next();
-  }
-
-  try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-  } catch (error) {
-    throw error;
-  }
-});
-
 // Method to compare passwords
 adminSchema.methods.comparePassword = async function(password: string): Promise<boolean> {
   return await bcrypt.compare(password, this.password);
