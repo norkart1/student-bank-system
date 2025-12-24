@@ -135,6 +135,20 @@ export default function AdminDashboard() {
       return
     }
     
+    // Save to deposits collection
+    await fetch('/api/transactions/deposits', {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        studentId: student._id,
+        studentName: student.name,
+        studentCode: student.code,
+        amount: amount,
+        date: transactionDate,
+        reason: transactionReason || undefined
+      })
+    }).catch(err => console.error('Deposit record error:', err))
+    
     // Broadcast real-time update to student
     await fetch('/api/pusher/broadcast', {
       method: 'POST',
@@ -209,6 +223,20 @@ export default function AdminDashboard() {
       setTimeout(() => setNotification(null), 3000)
       return
     }
+    
+    // Save to withdrawals collection
+    await fetch('/api/transactions/withdrawals', {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        studentId: student._id,
+        studentName: student.name,
+        studentCode: student.code,
+        amount: amount,
+        date: transactionDate,
+        reason: transactionReason || undefined
+      })
+    }).catch(err => console.error('Withdrawal record error:', err))
     
     // Broadcast real-time update to student
     await fetch('/api/pusher/broadcast', {
