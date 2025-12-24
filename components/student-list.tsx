@@ -41,7 +41,7 @@ export function StudentList({ students, onUpdateStudent, onDeleteStudent }: Stud
       student.studentId.toLowerCase().includes(searchTerm.toLowerCase()),
   )
 
-  const handleTransaction = (type: "deposit" | "withdraw", amount: number, description: string, date: string, reason: string) => {
+  const handleTransaction = (type: "deposit" | "withdraw", amount: number, description: string, date: string, reason: string, depositToAll?: boolean) => {
     if (!selectedStudent) return
 
     const transaction = {
@@ -53,15 +53,29 @@ export function StudentList({ students, onUpdateStudent, onDeleteStudent }: Stud
       reason: reason || undefined,
     }
 
-    const newBalance = type === "deposit" ? selectedStudent.balance + amount : selectedStudent.balance - amount
+    if (depositToAll && type === "deposit") {
+      // Apply deposit to all students
+      students.forEach((student) => {
+        const updatedStudent = {
+          ...student,
+          balance: student.balance + amount,
+          transactions: [...(student.transactions || []), { ...transaction, id: `${transaction.id}-${student.id}` }],
+        }
+        onUpdateStudent(updatedStudent)
+      })
+    } else {
+      // Apply to single student
+      const newBalance = type === "deposit" ? selectedStudent.balance + amount : selectedStudent.balance - amount
 
-    const updatedStudent = {
-      ...selectedStudent,
-      balance: newBalance,
-      transactions: [...(selectedStudent.transactions || []), transaction],
+      const updatedStudent = {
+        ...selectedStudent,
+        balance: newBalance,
+        transactions: [...(selectedStudent.transactions || []), transaction],
+      }
+
+      onUpdateStudent(updatedStudent)
     }
 
-    onUpdateStudent(updatedStudent)
     setShowTransactionDialog(false)
     setSelectedStudent(null)
   }
@@ -153,6 +167,7 @@ export function StudentList({ students, onUpdateStudent, onDeleteStudent }: Stud
         open={showTransactionDialog}
         onOpenChange={setShowTransactionDialog}
         student={selectedStudent}
+        allStudents={students}
         onTransaction={handleTransaction}
       />
     </>

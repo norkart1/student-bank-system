@@ -14,25 +14,28 @@ interface TransactionDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   student: any | null
-  onTransaction: (type: "deposit" | "withdraw", amount: number, description: string, date: string, reason: string) => void
+  allStudents?: any[]
+  onTransaction: (type: "deposit" | "withdraw", amount: number, description: string, date: string, reason: string, depositToAll?: boolean) => void
 }
 
-export function TransactionDialog({ open, onOpenChange, student, onTransaction }: TransactionDialogProps) {
+export function TransactionDialog({ open, onOpenChange, student, allStudents = [], onTransaction }: TransactionDialogProps) {
   const [amount, setAmount] = useState("")
   const [description, setDescription] = useState("")
   const [date, setDate] = useState(new Date().toISOString().split('T')[0])
   const [reason, setReason] = useState("")
   const [activeTab, setActiveTab] = useState<"deposit" | "withdraw">("deposit")
+  const [depositToAll, setDepositToAll] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const parsedAmount = Number.parseFloat(amount)
     if (parsedAmount > 0) {
-      onTransaction(activeTab, parsedAmount, description, date, reason)
+      onTransaction(activeTab, parsedAmount, description, date, reason, depositToAll)
       setAmount("")
       setDescription("")
       setDate(new Date().toISOString().split('T')[0])
       setReason("")
+      setDepositToAll(false)
     }
   }
 
@@ -44,14 +47,16 @@ export function TransactionDialog({ open, onOpenChange, student, onTransaction }
         <DialogHeader>
           <DialogTitle>Process Transaction</DialogTitle>
           <DialogDescription>
-            Student: {student.name} (ID: {student.studentId})
+            {depositToAll ? `All Students (${allStudents.length} students)` : `Student: ${student.name} (ID: ${student.studentId})`}
           </DialogDescription>
         </DialogHeader>
 
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-          <p className="text-sm text-gray-600 mb-1">Current Balance</p>
-          <p className="text-2xl font-bold text-gray-900">${student.balance.toFixed(2)}</p>
-        </div>
+        {!depositToAll && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+            <p className="text-sm text-gray-600 mb-1">Current Balance</p>
+            <p className="text-2xl font-bold text-gray-900">${student.balance.toFixed(2)}</p>
+          </div>
+        )}
 
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "deposit" | "withdraw")}>
           <TabsList className="grid w-full grid-cols-2">
@@ -67,6 +72,18 @@ export function TransactionDialog({ open, onOpenChange, student, onTransaction }
 
           <form onSubmit={handleSubmit}>
             <TabsContent value="deposit" className="space-y-4">
+              <div className="flex items-center space-x-2 bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
+                <input
+                  id="deposit-to-all"
+                  type="checkbox"
+                  checked={depositToAll}
+                  onChange={(e) => setDepositToAll(e.target.checked)}
+                  className="w-4 h-4 rounded"
+                />
+                <Label htmlFor="deposit-to-all" className="text-sm font-medium cursor-pointer mb-0">
+                  Deposit Cash to All Students
+                </Label>
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="deposit-amount">Amount</Label>
                 <Input
@@ -109,7 +126,7 @@ export function TransactionDialog({ open, onOpenChange, student, onTransaction }
                 />
               </div>
               <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">
-                Deposit ${amount || "0.00"}
+                {depositToAll ? `Deposit to All ($${amount || "0.00"})` : `Deposit $${amount || "0.00"}`}
               </Button>
             </TabsContent>
 
