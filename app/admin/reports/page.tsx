@@ -26,7 +26,11 @@ interface Student {
 export default function ReportsPage() {
   const [students, setStudents] = useState<Student[]>([]);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [reportType, setReportType] = useState<'individual' | 'monthly' | 'yearly'>('individual');
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
+  const [filteredTransactions, setFilteredTransactions] = useState<(Transaction & { index: number })[]>([]);
+  const [showResults, setShowResults] = useState(false);
 
   useEffect(() => {
     fetchStudents();
@@ -34,32 +38,52 @@ export default function ReportsPage() {
 
   const fetchStudents = async () => {
     try {
-      setLoading(true);
       const response = await fetch('/api/students');
       const data = await response.json();
       setStudents(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Failed to fetch students:', error);
       setStudents([]);
-    } finally {
-      setLoading(false);
     }
   };
 
-  const calculateBalance = (transactions: Transaction[], stopIndex: number) => {
+  const calculateBalance = (transactions: (Transaction & { index: number })[], stopIndex: number) => {
     let balance = 0;
     for (let i = 0; i <= stopIndex; i++) {
-      if (transactions[i].type === 'deposit') {
-        balance += transactions[i].amount;
+      const transaction = transactions[i];
+      if (transaction.type === 'deposit') {
+        balance += transaction.amount;
       } else {
-        balance -= transactions[i].amount;
+        balance -= transaction.amount;
       }
     }
     return balance;
   };
 
-  const exportPDF = () => {
+  const filterTransactions = () => {
     if (!selectedStudent) return;
+
+    let filtered = selectedStudent.transactions.map((t, idx) => ({ ...t, index: idx }));
+
+    if (reportType === 'monthly' && selectedMonth) {
+      filtered = filtered.filter((t) => {
+        const date = new Date(t.date || '');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        return month === selectedMonth;
+      });
+    } else if (reportType === 'yearly') {
+      filtered = filtered.filter((t) => {
+        const date = new Date(t.date || '');
+        return date.getFullYear().toString() === selectedYear;
+      });
+    }
+
+    setFilteredTransactions(filtered);
+    setShowResults(true);
+  };
+
+  const exportPDF = () => {
+    if (!selectedStudent || filteredTransactions.length === 0) return;
 
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -68,7 +92,10 @@ export default function ReportsPage() {
 
     // Title
     doc.setFontSize(18);
-    doc.text('Transaction Ledger', pageWidth / 2, yPosition, { align: 'center' });
+    const reportTitle = reportType === 'individual' ? 'Individual Report' : 
+                       reportType === 'monthly' ? `Monthly Report - ${selectedMonth}/2025` : 
+                       `Yearly Report - ${selectedYear}`;
+    doc.text(reportTitle, pageWidth / 2, yPosition, { align: 'center' });
     yPosition += 10;
 
     // Student Info
@@ -76,8 +103,6 @@ export default function ReportsPage() {
     doc.text(`Student: ${selectedStudent.name}`, 20, yPosition);
     yPosition += 7;
     doc.text(`Code: ${selectedStudent.code}`, 20, yPosition);
-    yPosition += 7;
-    doc.text(`Current Balance: ₹${selectedStudent.balance.toFixed(2)}`, 20, yPosition);
     yPosition += 15;
 
     // Table Headers
@@ -99,15 +124,15 @@ export default function ReportsPage() {
     doc.setTextColor(0, 0, 0);
 
     // Table Rows
-    selectedStudent.transactions.forEach((transaction, index) => {
+    filteredTransactions.forEach((transaction, displayIdx) => {
       if (yPosition > pageHeight - 20) {
         doc.addPage();
         yPosition = 20;
       }
 
       xPosition = 20;
-      const balance = calculateBalance(selectedStudent.transactions, index);
-      const sno = index + 1;
+      const balance = calculateBalance(filteredTransactions, displayIdx);
+      const sno = displayIdx + 1;
       const date = transaction.date || 'N/A';
       const deposit = transaction.type === 'deposit' ? `₹${transaction.amount.toFixed(2)}` : '–';
       const withdraw = transaction.type === 'withdraw' ? `₹${transaction.amount.toFixed(2)}` : '–';
@@ -125,18 +150,21 @@ export default function ReportsPage() {
       yPosition += 7;
     });
 
-    doc.save(`${selectedStudent.name}-report.pdf`);
+    const fileName = reportType === 'individual' ? `${selectedStudent.name}-report.pdf` :
+                    reportType === 'monthly' ? `${selectedStudent.name}-monthly-${selectedMonth}.pdf` :
+                    `${selectedStudent.name}-yearly-${selectedYear}.pdf`;
+    doc.save(fileName);
   };
 
   const exportExcel = () => {
-    if (!selectedStudent) return;
+    if (!selectedStudent || filteredTransactions.length === 0) return;
 
-    const data = selectedStudent.transactions.map((transaction, index) => ({
+    const data = filteredTransactions.map((transaction, index) => ({
       'S.No': index + 1,
       Date: transaction.date || 'N/A',
       Deposit: transaction.type === 'deposit' ? transaction.amount : '',
       Withdraw: transaction.type === 'withdraw' ? transaction.amount : '',
-      Balance: calculateBalance(selectedStudent.transactions, index),
+      Balance: calculateBalance(filteredTransactions, index),
       Reason: transaction.reason || '',
     }));
 
@@ -152,7 +180,11 @@ export default function ReportsPage() {
 
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Transactions');
-    XLSX.writeFile(wb, `${selectedStudent.name}-report.xlsx`);
+    
+    const fileName = reportType === 'individual' ? `${selectedStudent.name}-report.xlsx` :
+                    reportType === 'monthly' ? `${selectedStudent.name}-monthly-${selectedMonth}.xlsx` :
+                    `${selectedStudent.name}-yearly-${selectedYear}.xlsx`;
+    XLSX.writeFile(wb, fileName);
   };
 
   return (
@@ -170,57 +202,113 @@ export default function ReportsPage() {
             {/* Report Type */}
             <div>
               <label className="block text-lg font-semibold text-slate-100 mb-3">Report Type</label>
-              <Select defaultValue="individual">
+              <Select value={reportType} onValueChange={(value: any) => {
+                setReportType(value);
+                setShowResults(false);
+                setFilteredTransactions([]);
+              }}>
                 <SelectTrigger className="w-full h-12 border-slate-600 bg-slate-700 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="individual">Individual Student</SelectItem>
+                <SelectContent className="bg-slate-700 border-slate-600">
+                  <SelectItem value="individual">Individual Student Report</SelectItem>
+                  <SelectItem value="monthly">Monthly Report</SelectItem>
+                  <SelectItem value="yearly">Yearly Report</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            {/* Search and Select Student */}
+            {/* Student Selection */}
             <div>
-              <label className="block text-lg font-semibold text-slate-100 mb-3">Search Student</label>
+              <label className="block text-lg font-semibold text-slate-100 mb-3">Select Student</label>
               <Select
                 value={selectedStudent?._id || ''}
                 onValueChange={(id: string) => {
                   const student = students.find((s) => s._id === id);
                   setSelectedStudent(student || null);
+                  setShowResults(false);
+                  setFilteredTransactions([]);
                 }}
               >
                 <SelectTrigger className="w-full h-12 border-slate-600 bg-slate-700 text-white">
-                  <SelectValue placeholder="Search and select a student..." />
+                  <SelectValue placeholder="Select a student..." />
                 </SelectTrigger>
                 <SelectContent className="bg-slate-700 border-slate-600">
                   {students.map((student) => (
-                    <SelectItem key={student._id} value={student._id} className="text-white hover:bg-slate-600">
+                    <SelectItem key={student._id} value={student._id}>
                       {student.name} ({student.code})
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              {students.length === 0 && (
-                <p className="mt-2 text-sm text-slate-400">No students available.</p>
-              )}
             </div>
 
+            {/* Monthly Filter */}
+            {reportType === 'monthly' && (
+              <div>
+                <label className="block text-lg font-semibold text-slate-100 mb-3">Select Month</label>
+                <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+                  <SelectTrigger className="w-full h-12 border-slate-600 bg-slate-700 text-white">
+                    <SelectValue placeholder="Select month..." />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-700 border-slate-600">
+                    {[
+                      { value: '01', label: 'January' },
+                      { value: '02', label: 'February' },
+                      { value: '03', label: 'March' },
+                      { value: '04', label: 'April' },
+                      { value: '05', label: 'May' },
+                      { value: '06', label: 'June' },
+                      { value: '07', label: 'July' },
+                      { value: '08', label: 'August' },
+                      { value: '09', label: 'September' },
+                      { value: '10', label: 'October' },
+                      { value: '11', label: 'November' },
+                      { value: '12', label: 'December' },
+                    ].map((month) => (
+                      <SelectItem key={month.value} value={month.value}>
+                        {month.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {/* Yearly Filter */}
+            {reportType === 'yearly' && (
+              <div>
+                <label className="block text-lg font-semibold text-slate-100 mb-3">Select Year</label>
+                <Select value={selectedYear} onValueChange={setSelectedYear}>
+                  <SelectTrigger className="w-full h-12 border-slate-600 bg-slate-700 text-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-700 border-slate-600">
+                    {[2023, 2024, 2025, 2026].map((year) => (
+                      <SelectItem key={year} value={year.toString()}>
+                        {year}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
             {/* Search Button */}
-            {selectedStudent && (
+            {selectedStudent && (reportType === 'individual' || (reportType === 'monthly' && selectedMonth) || (reportType === 'yearly')) && (
               <Button
-                onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}
+                onClick={filterTransactions}
                 className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2"
               >
                 <Search className="w-5 h-5" />
-                View Report
+                Search Report
               </Button>
             )}
           </div>
         </Card>
 
         {/* Results Section */}
-        {selectedStudent && (
+        {showResults && selectedStudent && (
           <div className="space-y-8">
             {/* Student Info */}
             <Card className="bg-slate-800 border-slate-700 p-6">
@@ -235,17 +323,17 @@ export default function ReportsPage() {
                 </div>
                 <div>
                   <p className="text-slate-400 text-sm">Total Transactions</p>
-                  <p className="text-white text-lg font-semibold">{selectedStudent.transactions.length}</p>
+                  <p className="text-white text-lg font-semibold">{filteredTransactions.length}</p>
                 </div>
                 <div>
-                  <p className="text-slate-400 text-sm">Current Balance</p>
-                  <p className="text-blue-400 text-lg font-semibold">₹{selectedStudent.balance.toFixed(2)}</p>
+                  <p className="text-slate-400 text-sm">Report Type</p>
+                  <p className="text-blue-400 text-lg font-semibold capitalize">{reportType}</p>
                 </div>
               </div>
             </Card>
 
             {/* Transaction Ledger */}
-            {selectedStudent.transactions && selectedStudent.transactions.length > 0 ? (
+            {filteredTransactions.length > 0 ? (
               <Card className="bg-slate-800 border-slate-700 p-6">
                 <h2 className="text-2xl font-bold text-white mb-6">Transaction Ledger</h2>
                 <div className="overflow-x-auto">
@@ -260,7 +348,7 @@ export default function ReportsPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {selectedStudent.transactions.map((transaction, index) => (
+                      {filteredTransactions.map((transaction, index) => (
                         <tr key={index} className="border-b border-slate-700 hover:bg-slate-700/50 transition">
                           <td className="px-4 py-4 text-slate-300">{index + 1}</td>
                           <td className="px-4 py-4 text-slate-300">{transaction.date || 'N/A'}</td>
@@ -277,7 +365,7 @@ export default function ReportsPage() {
                             {transaction.type !== 'withdraw' && <span className="text-slate-500">–</span>}
                           </td>
                           <td className="px-4 py-4 text-right text-slate-200 font-semibold">
-                            ₹{calculateBalance(selectedStudent.transactions, index).toFixed(2)}
+                            ₹{calculateBalance(filteredTransactions, index).toFixed(2)}
                           </td>
                         </tr>
                       ))}
@@ -287,34 +375,36 @@ export default function ReportsPage() {
               </Card>
             ) : (
               <Card className="bg-slate-800 border-slate-700 p-8 text-center">
-                <p className="text-slate-300 text-lg">No transactions found for this student.</p>
+                <p className="text-slate-300 text-lg">No transactions found for the selected criteria.</p>
               </Card>
             )}
 
             {/* Download Buttons */}
-            <Card className="bg-slate-800 border-slate-700 p-6">
-              <h3 className="text-xl font-bold text-white mb-4">Download Report</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <Button
-                  onClick={exportPDF}
-                  className="h-14 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2 transition"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8m0 0l-4 4m4-4l4 4" />
-                  </svg>
-                  Download PDF
-                </Button>
-                <Button
-                  onClick={exportExcel}
-                  className="h-14 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2 transition"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8m0 0l-4 4m4-4l4 4" />
-                  </svg>
-                  Download Excel
-                </Button>
-              </div>
-            </Card>
+            {filteredTransactions.length > 0 && (
+              <Card className="bg-slate-800 border-slate-700 p-6">
+                <h3 className="text-xl font-bold text-white mb-4">Download Report</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <Button
+                    onClick={exportPDF}
+                    className="h-14 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2 transition"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8m0 0l-4 4m4-4l4 4" />
+                    </svg>
+                    Download PDF
+                  </Button>
+                  <Button
+                    onClick={exportExcel}
+                    className="h-14 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2 transition"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8m0 0l-4 4m4-4l4 4" />
+                    </svg>
+                    Download Excel
+                  </Button>
+                </div>
+              </Card>
+            )}
           </div>
         )}
       </div>

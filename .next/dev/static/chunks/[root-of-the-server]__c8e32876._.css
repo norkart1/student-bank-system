@@ -2445,6 +2445,10 @@
     color: var(--color-yellow-600);
   }
 
+  .capitalize {
+    text-transform: capitalize;
+  }
+
   .underline {
     text-decoration-line: underline;
   }
@@ -2852,12 +2856,6 @@
       .hover\:bg-secondary\/80:hover {
         background-color: color-mix(in oklab, var(--secondary) 80%, transparent);
       }
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-slate-600:hover {
-      background-color: var(--color-slate-600);
     }
   }
 
