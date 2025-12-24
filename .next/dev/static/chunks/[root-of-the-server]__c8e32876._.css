@@ -3279,8 +3279,16 @@
     }
   }
 
+  .dark\:border-amber-700:is(.dark *) {
+    border-color: var(--color-amber-700);
+  }
+
   .dark\:border-input:is(.dark *) {
     border-color: var(--input);
+  }
+
+  .dark\:border-red-700:is(.dark *) {
+    border-color: var(--color-red-700);
   }
 
   .dark\:border-slate-600:is(.dark *) {
