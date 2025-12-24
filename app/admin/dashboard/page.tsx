@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Calculator, Activity, Moon, Sun, Download, Calendar, AlertCircle, Headphones, MessageCircle } from "lucide-react"
+import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Calculator, Activity, Moon, Sun, Download, Calendar, AlertCircle, Headphones, MessageCircle, Zap } from "lucide-react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 import { useTheme } from "next-themes"
 import jsPDF from "jspdf"
 import * as XLSX from "xlsx"
 import { defaultStudents } from "@/lib/students"
+import { usePusherAdminUpdates } from "@/lib/hooks/usePusher"
 
 interface Transaction {
   type: string
@@ -85,6 +86,7 @@ export default function AdminDashboard() {
   const [supportMessage, setSupportMessage] = useState("")
   const [chatMessages, setChatMessages] = useState<Array<{role: string, text: string}>>([])
   const [chatInput, setChatInput] = useState("")
+  const [realTimeStatus, setRealTimeStatus] = useState(false)
   const [selectedChatAccount, setSelectedChatAccount] = useState<string | null>(null)
 
   const handleDeposit = async () => {
@@ -132,6 +134,20 @@ export default function AdminDashboard() {
       setTimeout(() => setNotification(null), 3000)
       return
     }
+    
+    // Broadcast real-time update to student
+    await fetch('/api/pusher/broadcast', {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: 'balance-update',
+        studentId: student._id,
+        update: {
+          balance: student.balance,
+          amount: amount
+        }
+      })
+    }).catch(err => console.error('Broadcast error:', err))
     
     setShowDepositModal(false)
     setTransactionAmount("")
@@ -193,6 +209,20 @@ export default function AdminDashboard() {
       setTimeout(() => setNotification(null), 3000)
       return
     }
+    
+    // Broadcast real-time update to student
+    await fetch('/api/pusher/broadcast', {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: 'balance-update',
+        studentId: student._id,
+        update: {
+          balance: student.balance,
+          amount: amount
+        }
+      })
+    }).catch(err => console.error('Broadcast error:', err))
     
     setShowWithdrawModal(false)
     setTransactionAmount("")
@@ -484,6 +514,18 @@ export default function AdminDashboard() {
             )}
             <p className="font-medium text-sm">{notification.message}</p>
           </div>
+        </div>
+      </div>
+    )
+  }
+
+  const renderRealTimeIndicator = () => {
+    if (!realTimeStatus) return null
+    return (
+      <div className="fixed top-6 left-6 z-[60] animate-in fade-in slide-in-from-top-2 duration-300">
+        <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg shadow-lg">
+          <Zap className="w-4 h-4 text-green-600 animate-pulse" />
+          <p className="text-xs text-green-700 font-medium">Real-time update received</p>
         </div>
       </div>
     )
@@ -952,7 +994,15 @@ export default function AdminDashboard() {
       clearInterval(statusInterval)
       clearInterval(studentRefreshInterval)
     }
-  }, [])
+  }, [showCreateForm, showEditForm, showDeleteConfirm, showDepositModal, showWithdrawModal])
+
+  // Use Pusher for real-time admin updates
+  usePusherAdminUpdates((data) => {
+    if (data.type === 'list-updated') {
+      setRealTimeStatus(true)
+      setTimeout(() => setRealTimeStatus(false), 2000)
+    }
+  })
 
   const handleCreateAccount = async () => {
     if (!newStudent.name) {
@@ -1929,6 +1979,7 @@ export default function AdminDashboard() {
     <div className={`min-h-screen pb-24 ${activeTab === "status" ? "bg-white dark:bg-slate-800" : "bg-white dark:bg-slate-900"}`}>
       <div className={`px-5 pt-6 ${activeTab === "status" ? "text-[#171532] dark:text-white" : ""}`}>
         {renderNotification()}
+        {renderRealTimeIndicator()}
         {showDepositModal && renderDepositModal()}
         {showWithdrawModal && renderWithdrawModal()}
         {activeTab === "home" && renderHomeTab()}

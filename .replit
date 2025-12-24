@@ -42,3 +42,7 @@ run = ["npm", "start"]
 
 [userenv.shared]
 MONGODB_URI = "mongodb+srv://jdsa:673591@jdsa.vdl0vr8.mongodb.net/?retryWrites=true&w=majority"
+NEXT_PUBLIC_PUSHER_KEY = "f9d7980c56db83a0605b"
+NEXT_PUBLIC_PUSHER_CLUSTER = "ap2"
+NEXT_PUBLIC_PUSHER_APP_ID = "2092245"
+PUSHER_SECRET = "50f575a2e63865c84f85"

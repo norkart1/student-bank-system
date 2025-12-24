@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Wallet, LogOut, User, ArrowUpRight, ArrowDownRight, History, QrCode, Download, Printer } from "lucide-react"
+import { Wallet, LogOut, User, ArrowUpRight, ArrowDownRight, History, QrCode, Download, Printer, Zap } from "lucide-react"
 import { useTheme } from "next-themes"
 import { QRCodeSVG } from "qrcode.react"
 import jsPDF from "jspdf"
 import * as XLSX from "xlsx"
+import { usePusherUpdates } from "@/lib/hooks/usePusher"
 
 export default function UserDashboard() {
   const router = useRouter()
@@ -14,6 +15,7 @@ export default function UserDashboard() {
   const [isLoading, setIsLoading] = useState(true)
   const [userData, setUserData] = useState<any>(null)
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
+  const [realTimeStatus, setRealTimeStatus] = useState(false)
 
   const loadUserData = async () => {
     try {
@@ -66,6 +68,15 @@ export default function UserDashboard() {
 
     return () => clearInterval(interval)
   }, [])
+
+  // Use Pusher for real-time updates
+  usePusherUpdates(userData?.id, (data) => {
+    if (data.type === 'balance-changed' || data.type === 'transaction-added') {
+      setRealTimeStatus(true)
+      loadUserData()
+      setTimeout(() => setRealTimeStatus(false), 2000)
+    }
+  })
 
   const handleLogout = () => {
     localStorage.removeItem("isUserAuthenticated")
@@ -283,6 +294,14 @@ export default function UserDashboard() {
               <span className="hidden sm:inline">Excel</span>
             </button>
           </div>
+
+          {/* Real-Time Status Indicator */}
+          {realTimeStatus && (
+            <div className="mt-4 flex items-center gap-2 p-2 bg-green-50 border border-green-200 rounded-lg">
+              <Zap className="w-4 h-4 text-green-600 animate-pulse" />
+              <p className="text-xs text-green-700 font-medium">Real-time update received</p>
+            </div>
+          )}
 
           {/* Transactions Table Section */}
           {userData?.transactions && userData.transactions.length > 0 && (

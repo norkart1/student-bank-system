@@ -1,120 +1,86 @@
-# JDSA Students Bank - Project Documentation
+# Student Banking/Account Management System
 
 ## Project Overview
-A Next.js-based banking application for JDSA students with account management, transactions, AI assistant, and administrative dashboard.
+A modern student banking system with separate admin and user dashboards for managing accounts, transactions, and real-time balance updates.
 
-## Current Status
-- **Workflow**: Next.js Dev Server running on port 5000
-- **Database**: MongoDB (mongodb+srv://jdsa)
-- **Authentication**: Code-based identification (replacing password-based login)
+## Current Features
 
-## Recent Changes (2025-12-23)
-1. ✅ Removed PostgreSQL database - using MongoDB only
-2. ✅ Implemented code-based user identification system
-   - Format: 2-letter prefix (from initials) + 4-digit code (e.g., MR-5774)
-   - Code automatically generated for each user
-3. ✅ Replaced login page with search page
-   - Users can search by account code (e.g., MR-5774)
-   - Users can search by full name
-4. ✅ Updated Student model
-   - Removed: `username`, `password` fields
-   - Added: `code` field (unique)
-5. ✅ Updated search API
-   - Supports searching by code or name
-   - Case-insensitive name search
-6. ✅ Updated user dashboard
-   - Displays student code instead of username
-   - All functionality maintained
+### User Dashboard
+- ✅ Profile management with avatar upload/display
+- ✅ Real-time balance display with 2-second polling
+- ✅ Ledger-style transaction history (S.No, Date, Deposit, Withdraw, Balance columns)
+- ✅ QR code generation for account verification
+- ✅ Print functionality for dashboard
+- ✅ PDF export with account details and transactions
+- ✅ Excel export with structured data
+- ✅ Real-time update notifications (Pusher integration)
+- ✅ Logout functionality with confirmation
 
-## Project Structure
+### Admin Dashboard
+- ✅ Student account management (Create, Read, Update, Delete)
+- ✅ Deposit/Withdraw transactions with reason and date
+- ✅ Real-time student list polling (2-second interval)
+- ✅ Transaction history tracking
+- ✅ Real-time update notifications (Pusher integration)
+- ✅ Profile image upload and compression
+- ✅ Form state management to prevent polling conflicts
+- ✅ Database persistence with MongoDB
+
+## Real-Time Features (Pusher Integration)
+- Channel-based architecture for balance updates
+- Automatic broadcast when deposits/withdrawals occur
+- Real-time status indicators on both dashboards
+- Prevents token conflicts between admin and user sessions
+
+## Technical Stack
+- **Frontend**: React, Next.js 16, TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes, MongoDB
+- **Real-Time**: Pusher (WebSocket-based)
+- **UI Components**: Radix UI, Lucide Icons
+- **Export**: jsPDF, XLSX
+- **QR Code**: qrcode.react
+
+## Key Files
+- `app/user/dashboard/page.tsx` - User dashboard
+- `app/admin/dashboard/page.tsx` - Admin dashboard
+- `app/api/students/route.ts` - Student CRUD endpoints
+- `app/api/students/[id]/route.ts` - Individual student endpoints
+- `app/api/pusher/auth/route.ts` - Pusher authentication
+- `app/api/pusher/broadcast/route.ts` - Real-time broadcasts
+- `lib/models/Student.ts` - MongoDB schema
+- `lib/pusher.ts` - Pusher configuration
+- `lib/hooks/usePusher.ts` - Pusher React hooks
+
+## Environment Variables (Required)
 ```
-app/
-├── page.tsx                    # Home page with "Find Your Account" button
-├── login/
-│   └── page.tsx               # Search page (code/name-based lookup)
-├── user/
-│   └── dashboard/
-│       └── page.tsx           # User dashboard
-├── admin/
-│   └── dashboard/
-│       └── page.tsx           # Admin dashboard
-└── api/
-    ├── students/
-    │   ├── route.ts           # Student CRUD
-    │   ├── search/
-    │   │   └── route.ts       # Search by code or name
-    │   ├── [id]/
-    │   │   └── route.ts       # Student by ID
-    │   └── transaction/
-    │       └── route.ts       # Transaction operations
-    ├── admin/
-    │   ├── login/
-    │   │   └── route.ts       # Admin login
-    │   └── init/
-    │       └── route.ts       # Admin initialization
-    └── gemini/
-        └── route.ts           # AI assistant integration
-
-lib/
-├── mongodb.ts                 # MongoDB connection
-├── generateCode.ts            # Code generation utility
-├── models/
-│   ├── Student.ts             # Student schema (updated)
-│   └── Admin.ts               # Admin schema
-└── students.ts                # Sample data
-
-components/
-└── ui/                        # Radix UI components
-
-public/
-├── students.png               # Hero image
-└── islamic-mosque.jpg         # Background image
-
-styles/
-└── globals.css                # Global styles
+MONGODB_URI=<connection_string>
+NEXT_PUBLIC_PUSHER_KEY=<pusher_key>
+NEXT_PUBLIC_PUSHER_CLUSTER=<cluster>
+NEXT_PUBLIC_PUSHER_APP_ID=<app_id>
+PUSHER_SECRET=<secret_key>
 ```
 
-## Key Features
-- **Search-Based Access**: Users find their accounts using auto-generated codes
-- **Account Management**: View balance, transactions, profile
-- **AI Assistant**: Gemini integration for banking queries
-- **Admin Dashboard**: Manage accounts and system status
-- **Real-time Updates**: 2-second refresh interval for balance updates
-- **Multiple Views**: Reports, transaction history, calculator, calendar
-- **Responsive Design**: Mobile and desktop optimized
+## Known Issues & Fixes Applied
+1. ✅ Fixed QRCode import (use QRCodeSVG instead of default export)
+2. ✅ Fixed admin auto-logout by disabling polling when forms are open
+3. ✅ Fixed profile image uploads with compression for large images
+4. ✅ Fixed authentication conflicts between admin and user sessions
+5. ✅ Added no-cache headers to prevent stale balance display
 
-## Environment Variables
-```
-MONGODB_URI=mongodb+srv://jdsa:673591@jdsa.vdl0vr8.mongodb.net/?retryWrites=true&w=majority
-```
+## Future Improvements
+- Firebase authentication (planned)
+- Multiple admin support
+- Transaction filters and search
+- Advanced reporting features
+- Mobile app version
 
-## User Workflow
-1. User clicks "Find Your Account" on home page
-2. User enters either:
-   - Account code (e.g., MR-5774)
-   - Full name
-3. System searches MongoDB for matching account
-4. If found, user is authenticated and redirected to dashboard
-5. User can view balance, transactions, and use various tools
+## User Preferences
+- Dark/Light theme toggle support
+- Responsive design for mobile devices
+- Ledger-style transaction display preferred
 
-## Next Steps for Users
-1. Run the application with `npm run dev`
-2. Test the search functionality with existing student accounts
-3. Customize the application further as needed
-4. Consider adding more features like:
-   - Student profile editing
-   - Advanced analytics
-   - Push notifications
-   - Export reports
-
-## Integration Notes
-- **Google Gemini**: Already configured for AI assistant
-- **Vercel Analytics**: Enabled for tracking
-- **Radix UI**: Component library for UI
-- **Mongoose**: MongoDB ODM for data modeling
-
-## Important Notes
-- No user password/authentication needed - code-based identification only
-- All timestamps use MongoDB timestamps
-- Session stored in localStorage
-- Admin users still require login with username/password
+## Deployment Configuration
+- Frontend: Next.js dev server on port 5000
+- Backend: API routes on /api/*
+- Database: MongoDB Atlas or local instance
+- Real-Time: Pusher service
