@@ -23,8 +23,8 @@ const adminSchema = new Schema<IAdmin>(
   { timestamps: true }
 );
 
-// Hash password before saving
-adminSchema.pre('save', async function (next) {
+// Hash password before saving - use function instead of arrow function for proper 'this' context
+adminSchema.pre<IAdmin>('save', async function(next) {
   if (!this.isModified('password')) {
     return next();
   }
@@ -33,13 +33,13 @@ adminSchema.pre('save', async function (next) {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     next();
-  } catch (error: any) {
-    next(error);
+  } catch (error) {
+    next(error as any);
   }
 });
 
 // Method to compare passwords
-adminSchema.methods.comparePassword = async function (password: string): Promise<boolean> {
+adminSchema.methods.comparePassword = async function(password: string): Promise<boolean> {
   return await bcrypt.compare(password, this.password);
 };
 
