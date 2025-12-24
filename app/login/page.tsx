@@ -1,12 +1,13 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
-import { Search, ArrowLeft } from "lucide-react"
+import { Search, ArrowLeft, QrCode, X, Loader } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import QrScanner from "qr-scanner"
 
 export default function SearchPage() {
   const router = useRouter()
@@ -14,18 +15,67 @@ export default function SearchPage() {
   const [searchType, setSearchType] = useState<"code" | "name">("code")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [showQRScanner, setShowQRScanner] = useState(false)
+  const [isScannerReady, setIsScannerReady] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const qrScannerRef = useRef<QrScanner | null>(null)
 
-  const handleSearch = async (e: React.FormEvent) => {
+  useEffect(() => {
+    if (showQRScanner && videoRef.current) {
+      const qrScanner = new QrScanner(
+        videoRef.current,
+        (result) => {
+          if (result?.data) {
+            const scannedCode = result.data.toString().trim()
+            setSearchQuery(scannedCode)
+            setSearchType("code")
+            setShowQRScanner(false)
+            handleSearch({ preventDefault: () => {} } as React.FormEvent, scannedCode)
+          }
+        },
+        {
+          onDecodeError: () => {},
+          preferredCamera: "environment",
+          maxScansPerSecond: 5,
+          highlightScanRegion: true,
+          highlightCodeOutline: true,
+        }
+      )
+
+      qrScannerRef.current = qrScanner
+
+      qrScanner
+        .start()
+        .then(() => {
+          setIsScannerReady(true)
+          setError("")
+        })
+        .catch((err) => {
+          console.error("Camera error:", err)
+          setError("Unable to access camera. Please ensure you have granted camera permissions.")
+          setShowQRScanner(false)
+        })
+
+      return () => {
+        qrScanner.destroy()
+        qrScannerRef.current = null
+      }
+    }
+  }, [showQRScanner])
+
+  const handleSearch = async (e: React.FormEvent, codeToSearch?: string) => {
     e.preventDefault()
     setError("")
     setIsLoading(true)
 
+    const query = codeToSearch || searchQuery
+
     try {
-      const query = searchType === "code" 
-        ? `code=${encodeURIComponent(searchQuery.toUpperCase())}` 
-        : `name=${encodeURIComponent(searchQuery)}`
+      const endpoint = searchType === "code" 
+        ? `code=${encodeURIComponent(query.toUpperCase())}` 
+        : `name=${encodeURIComponent(query)}`
       
-      const res = await fetch(`/api/students/search?${query}`)
+      const res = await fetch(`/api/students/search?${endpoint}`)
       
       if (!res.ok) {
         setError("Account holder not found")
@@ -40,8 +90,8 @@ export default function SearchPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          code: searchType === "code" ? searchQuery.toUpperCase() : undefined,
-          name: searchType === "name" ? searchQuery : undefined,
+          code: searchType === "code" ? query.toUpperCase() : undefined,
+          name: searchType === "name" ? query : undefined,
           type: "user"
         })
       })
@@ -113,19 +163,30 @@ export default function SearchPage() {
             </button>
           </div>
 
-          {/* Search Input */}
-          <div className="relative">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]">
-              <Search className="w-5 h-5" />
+          {/* Search Input with QR Scanner Button */}
+          <div className="relative flex gap-2">
+            <div className="relative flex-1">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]">
+                <Search className="w-5 h-5" />
+              </div>
+              <Input
+                type="text"
+                placeholder={searchType === "code" ? "e.g., MR-5774" : "Enter full name"}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                required
+                className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#4a6670]/30 focus:border-[#4a6670]"
+              />
             </div>
-            <Input
-              type="text"
-              placeholder={searchType === "code" ? "e.g., MR-5774" : "Enter full name"}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              required
-              className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#4a6670]/30 focus:border-[#4a6670]"
-            />
+            <button
+              type="button"
+              onClick={() => setShowQRScanner(true)}
+              disabled={isLoading}
+              className="h-14 px-4 bg-[#4a6670] hover:bg-[#3d565e] text-white rounded-xl transition-colors flex items-center justify-center disabled:opacity-50"
+              title="Scan QR Code"
+            >
+              <QrCode className="w-5 h-5" />
+            </button>
           </div>
 
           {error && (
@@ -137,9 +198,16 @@ export default function SearchPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full h-14 bg-[#4a6670] hover:bg-[#3d565e] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 disabled:opacity-70 mt-6"
+            className="w-full h-14 bg-[#4a6670] hover:bg-[#3d565e] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 disabled:opacity-70 mt-6 flex items-center justify-center gap-2"
           >
-            {isLoading ? "Searching..." : "Search"}
+            {isLoading ? (
+              <>
+                <Loader className="w-4 h-4 animate-spin" />
+                Searching...
+              </>
+            ) : (
+              "Search"
+            )}
           </button>
         </form>
 
@@ -153,6 +221,67 @@ export default function SearchPage() {
           </Link>
         </div>
       </div>
+
+      {/* QR Scanner Modal */}
+      {showQRScanner && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-3xl w-full max-w-md mx-4 shadow-2xl overflow-hidden">
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#f0f0f0]">
+              <h3 className="text-xl font-bold text-[#171532]">Scan QR Code</h3>
+              <button
+                onClick={() => setShowQRScanner(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-[#f5f5f5] text-[#747384] hover:bg-[#e5e5e5] transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Scanner */}
+            <div className="relative bg-black p-6">
+              <div className="relative w-full bg-black rounded-2xl overflow-hidden">
+                <video
+                  ref={videoRef}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    aspectRatio: "1 / 1",
+                    objectFit: "cover",
+                  }}
+                  className="rounded-2xl"
+                />
+                {!isScannerReady && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-2xl">
+                    <div className="text-center">
+                      <Loader className="w-8 h-8 animate-spin text-white mx-auto mb-2" />
+                      <p className="text-white text-sm">Initializing camera...</p>
+                    </div>
+                  </div>
+                )}
+                {/* QR Frame Overlay */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-64 h-64 border-4 border-[#4a6670] rounded-3xl shadow-[inset_0_0_20px_rgba(74,102,112,0.3)]" />
+                </div>
+              </div>
+
+              {/* Instructions */}
+              <div className="text-center mt-4 text-white">
+                <p className="text-sm">Position the QR code inside the frame</p>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-4 border-t border-[#f0f0f0]">
+              <button
+                onClick={() => setShowQRScanner(false)}
+                className="w-full py-3 bg-[#f0f0f0] hover:bg-[#e5e5e5] text-[#171532] font-semibold rounded-xl transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
