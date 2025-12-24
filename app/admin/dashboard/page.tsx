@@ -102,74 +102,92 @@ export default function AdminDashboard() {
       return
     }
     
-    const amount = parseFloat(transactionAmount)
-    const updatedStudents = [...students]
-    const student = updatedStudents[selectedStudentIndex]
-    
-    student.balance += amount
-    student.transactions.push({
-      type: 'deposit',
-      amount: amount,
-      date: new Date(transactionDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-      reason: transactionReason || undefined
-    })
-    
-    // Limit transactions to prevent excessive data
-    if (student.transactions.length > 100) {
-      student.transactions = student.transactions.slice(-100)
-    }
-    
-    setStudents(updatedStudents)
-    calculateTotals(updatedStudents)
-    
-    // Update in database
-    const res = await fetch(`/api/students/${student._id}`, {
-      method: 'PATCH',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(student)
-    })
-    
-    if (!res.ok) {
-      setNotification({ type: 'error', message: 'Failed to save transaction' })
-      setTimeout(() => setNotification(null), 3000)
-      return
-    }
-    
-    // Save to deposits collection
-    await fetch('/api/transactions/deposits', {
-      method: 'POST',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        studentId: student._id,
-        studentName: student.name,
-        studentCode: student.code,
+    try {
+      const amount = parseFloat(transactionAmount)
+      const updatedStudents = [...students]
+      const student = updatedStudents[selectedStudentIndex]
+      
+      if (!student._id) {
+        setNotification({ type: 'error', message: 'Student ID not found' })
+        setTimeout(() => setNotification(null), 3000)
+        return
+      }
+      
+      student.balance += amount
+      student.transactions.push({
+        type: 'deposit',
         amount: amount,
-        date: transactionDate,
+        date: new Date(transactionDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
         reason: transactionReason || undefined
       })
-    }).catch(err => console.error('Deposit record error:', err))
-    
-    // Broadcast real-time update to student
-    await fetch('/api/pusher/broadcast', {
-      method: 'POST',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: 'balance-update',
-        studentId: student._id,
-        update: {
-          balance: student.balance,
-          amount: amount
-        }
+      
+      // Limit transactions to prevent excessive data
+      if (student.transactions.length > 100) {
+        student.transactions = student.transactions.slice(-100)
+      }
+      
+      setStudents(updatedStudents)
+      calculateTotals(updatedStudents)
+      
+      // Update in database
+      const res = await fetch(`/api/students/${student._id}`, {
+        method: 'PATCH',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(student)
       })
-    }).catch(err => console.error('Broadcast error:', err))
-    
-    setShowDepositModal(false)
-    setTransactionAmount("")
-    setTransactionDate(new Date().toISOString().split('T')[0])
-    setTransactionReason("")
-    setSelectedStudentIndex(null)
-    setNotification({ type: 'success', message: `Deposit of ₹${amount.toFixed(2)} successful!` })
-    setTimeout(() => setNotification(null), 3000)
+      
+      if (!res.ok) {
+        throw new Error('Failed to save transaction')
+      }
+      
+      // Save to deposits collection
+      try {
+        await fetch('/api/transactions/deposits', {
+          method: 'POST',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            studentId: student._id,
+            studentName: student.name,
+            studentCode: student.code,
+            amount: amount,
+            date: transactionDate,
+            reason: transactionReason || undefined
+          })
+        })
+      } catch (err) {
+        console.error('Deposit record error:', err)
+      }
+      
+      // Broadcast real-time update to student
+      try {
+        await fetch('/api/pusher/broadcast', {
+          method: 'POST',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: 'balance-update',
+            studentId: student._id,
+            update: {
+              balance: student.balance,
+              amount: amount
+            }
+          })
+        })
+      } catch (err) {
+        console.error('Broadcast error:', err)
+      }
+      
+      setShowDepositModal(false)
+      setTransactionAmount("")
+      setTransactionDate(new Date().toISOString().split('T')[0])
+      setTransactionReason("")
+      setSelectedStudentIndex(null)
+      setNotification({ type: 'success', message: `Deposit of ₹${amount.toFixed(2)} successful!` })
+      setTimeout(() => setNotification(null), 3000)
+    } catch (error) {
+      setNotification({ type: 'error', message: 'Failed to process deposit' })
+      setTimeout(() => setNotification(null), 3000)
+      console.error('Deposit error:', error)
+    }
   }
 
   const handleWithdraw = async () => {
@@ -185,80 +203,98 @@ export default function AdminDashboard() {
       return
     }
     
-    const amount = parseFloat(transactionAmount)
-    const updatedStudents = [...students]
-    const student = updatedStudents[selectedStudentIndex]
-    
-    if (student.balance < amount) {
-      setNotification({ type: 'error', message: `Insufficient balance. Available: ₹${student.balance.toFixed(2)}` })
-      setTimeout(() => setNotification(null), 3000)
-      return
-    }
-    
-    student.balance -= amount
-    student.transactions.push({
-      type: 'withdraw',
-      amount: amount,
-      date: new Date(transactionDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-      reason: transactionReason || undefined
-    })
-    
-    // Limit transactions to prevent excessive data
-    if (student.transactions.length > 100) {
-      student.transactions = student.transactions.slice(-100)
-    }
-    
-    setStudents(updatedStudents)
-    calculateTotals(updatedStudents)
-    
-    // Update in database
-    const res = await fetch(`/api/students/${student._id}`, {
-      method: 'PATCH',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(student)
-    })
-    
-    if (!res.ok) {
-      setNotification({ type: 'error', message: 'Failed to save transaction' })
-      setTimeout(() => setNotification(null), 3000)
-      return
-    }
-    
-    // Save to withdrawals collection
-    await fetch('/api/transactions/withdrawals', {
-      method: 'POST',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        studentId: student._id,
-        studentName: student.name,
-        studentCode: student.code,
+    try {
+      const amount = parseFloat(transactionAmount)
+      const updatedStudents = [...students]
+      const student = updatedStudents[selectedStudentIndex]
+      
+      if (!student._id) {
+        setNotification({ type: 'error', message: 'Student ID not found' })
+        setTimeout(() => setNotification(null), 3000)
+        return
+      }
+      
+      if (student.balance < amount) {
+        setNotification({ type: 'error', message: `Insufficient balance. Available: ₹${student.balance.toFixed(2)}` })
+        setTimeout(() => setNotification(null), 3000)
+        return
+      }
+      
+      student.balance -= amount
+      student.transactions.push({
+        type: 'withdraw',
         amount: amount,
-        date: transactionDate,
+        date: new Date(transactionDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
         reason: transactionReason || undefined
       })
-    }).catch(err => console.error('Withdrawal record error:', err))
-    
-    // Broadcast real-time update to student
-    await fetch('/api/pusher/broadcast', {
-      method: 'POST',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: 'balance-update',
-        studentId: student._id,
-        update: {
-          balance: student.balance,
-          amount: amount
-        }
+      
+      // Limit transactions to prevent excessive data
+      if (student.transactions.length > 100) {
+        student.transactions = student.transactions.slice(-100)
+      }
+      
+      setStudents(updatedStudents)
+      calculateTotals(updatedStudents)
+      
+      // Update in database
+      const res = await fetch(`/api/students/${student._id}`, {
+        method: 'PATCH',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(student)
       })
-    }).catch(err => console.error('Broadcast error:', err))
-    
-    setShowWithdrawModal(false)
-    setTransactionAmount("")
-    setTransactionDate(new Date().toISOString().split('T')[0])
-    setTransactionReason("")
-    setSelectedStudentIndex(null)
-    setNotification({ type: 'success', message: `Withdrawal of ₹${amount.toFixed(2)} successful!` })
-    setTimeout(() => setNotification(null), 3000)
+      
+      if (!res.ok) {
+        throw new Error('Failed to save transaction')
+      }
+      
+      // Save to withdrawals collection
+      try {
+        await fetch('/api/transactions/withdrawals', {
+          method: 'POST',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            studentId: student._id,
+            studentName: student.name,
+            studentCode: student.code,
+            amount: amount,
+            date: transactionDate,
+            reason: transactionReason || undefined
+          })
+        })
+      } catch (err) {
+        console.error('Withdrawal record error:', err)
+      }
+      
+      // Broadcast real-time update to student
+      try {
+        await fetch('/api/pusher/broadcast', {
+          method: 'POST',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: 'balance-update',
+            studentId: student._id,
+            update: {
+              balance: student.balance,
+              amount: amount
+            }
+          })
+        })
+      } catch (err) {
+        console.error('Broadcast error:', err)
+      }
+      
+      setShowWithdrawModal(false)
+      setTransactionAmount("")
+      setTransactionDate(new Date().toISOString().split('T')[0])
+      setTransactionReason("")
+      setSelectedStudentIndex(null)
+      setNotification({ type: 'success', message: `Withdrawal of ₹${amount.toFixed(2)} successful!` })
+      setTimeout(() => setNotification(null), 3000)
+    } catch (error) {
+      setNotification({ type: 'error', message: 'Failed to process withdrawal' })
+      setTimeout(() => setNotification(null), 3000)
+      console.error('Withdrawal error:', error)
+    }
   }
 
   const filterTransactionsByDate = (student: Student, start: Date, end: Date) => {
@@ -1059,7 +1095,8 @@ export default function AdminDashboard() {
       })
 
       if (!res.ok) {
-        throw new Error("Failed to create account")
+        const error = await res.json()
+        throw new Error(error.error || "Failed to create account")
       }
 
       const createdStudent = await res.json()
@@ -1069,12 +1106,18 @@ export default function AdminDashboard() {
       setTimeout(() => setNotification(null), 5000)
       
       // Refresh students list
-      const studentsRes = await fetch("/api/students")
-      const updatedList = await studentsRes.json()
-      setStudents(updatedList)
-      calculateTotals(updatedList)
+      try {
+        const studentsRes = await fetch("/api/students")
+        if (studentsRes.ok) {
+          const updatedList = await studentsRes.json()
+          setStudents(updatedList)
+          calculateTotals(updatedList)
+        }
+      } catch (err) {
+        console.error('Failed to refresh students list:', err)
+      }
     } catch (error) {
-      setNotification({ type: 'error', message: 'Failed to create account' })
+      setNotification({ type: 'error', message: `Failed to create account: ${error instanceof Error ? error.message : 'Unknown error'}` })
       setTimeout(() => setNotification(null), 3000)
     }
   }
@@ -2115,9 +2158,14 @@ export default function AdminDashboard() {
                         Cancel
                       </button>
                       <button
-                        onClick={() => {
-                          fetch('/api/auth/logout', { method: 'POST' })
-                          router.push("/login")
+                        onClick={async () => {
+                          try {
+                            await fetch('/api/auth/logout', { method: 'POST' })
+                          } catch (error) {
+                            console.error('Logout error:', error)
+                          } finally {
+                            router.push("/login")
+                          }
                         }}
                         className="flex-1 py-3 rounded-xl font-semibold text-white bg-red-600 hover:bg-red-700 transition-colors"
                       >
