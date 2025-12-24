@@ -737,10 +737,6 @@
     display: inline-flex;
   }
 
-  .table {
-    display: table;
-  }
-
   .aspect-square {
     aspect-ratio: 1;
   }
@@ -866,6 +862,10 @@
 
   .max-h-\[85vh\] {
     max-height: 85vh;
+  }
+
+  .max-h-\[90vh\] {
+    max-height: 90vh;
   }
 
   .min-h-screen {

@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import Image from "next/image"
 
 interface AddStudentDialogProps {
   open: boolean
@@ -20,22 +21,81 @@ export function AddStudentDialog({ open, onOpenChange, onAddStudent }: AddStuden
     email: "",
     studentId: "",
     balance: "0",
+    profileImage: "",
   })
+  const [uploading, setUploading] = useState(false)
+  const [preview, setPreview] = useState<string>("")
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Show preview
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setPreview(reader.result as string)
+    }
+    reader.readAsDataURL(file)
+
+    // Upload to Cloudinary
+    setUploading(true)
+    try {
+      const formDataToSend = new FormData()
+      formDataToSend.append("file", file)
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formDataToSend,
+      })
+
+      const data = await response.json()
+      if (data.secure_url) {
+        setFormData({ ...formData, profileImage: data.secure_url })
+      }
+    } catch (error) {
+      console.error("Upload failed:", error)
+    } finally {
+      setUploading(false)
+    }
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     onAddStudent(formData)
-    setFormData({ name: "", email: "", studentId: "", balance: "0" })
+    setFormData({ name: "", email: "", studentId: "", balance: "0", profileImage: "" })
+    setPreview("")
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add New Student</DialogTitle>
           <DialogDescription>Create a new student bank account</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="profile">Profile Image</Label>
+            {preview && (
+              <div className="mb-2 relative w-24 h-24">
+                <Image
+                  src={preview}
+                  alt="Preview"
+                  fill
+                  className="object-cover rounded-lg"
+                />
+              </div>
+            )}
+            <Input
+              id="profile"
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              disabled={uploading}
+              className="cursor-pointer"
+            />
+            {uploading && <p className="text-sm text-gray-500">Uploading...</p>}
+          </div>
           <div className="space-y-2">
             <Label htmlFor="name">Full Name</Label>
             <Input
@@ -83,7 +143,7 @@ export function AddStudentDialog({ open, onOpenChange, onAddStudent }: AddStuden
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="flex-1">
               Cancel
             </Button>
-            <Button type="submit" className="flex-1">
+            <Button type="submit" className="flex-1" disabled={uploading}>
               Add Student
             </Button>
           </div>
