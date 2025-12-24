@@ -2264,10 +2264,6 @@
     color: var(--color-yellow-600);
   }
 
-  .capitalize {
-    text-transform: capitalize;
-  }
-
   .underline {
     text-decoration-line: underline;
   }
