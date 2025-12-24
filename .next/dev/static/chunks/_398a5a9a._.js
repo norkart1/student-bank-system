@@ -454,27 +454,63 @@ function ReportsPage() {
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$xlsx$2f$xlsx$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["writeFile"](wb, `transaction-ledger-${searchType}.xlsx`);
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "min-h-screen bg-gray-50 p-6",
+        className: "min-h-screen bg-gray-100 p-6",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "max-w-6xl mx-auto",
+            className: "max-w-4xl mx-auto",
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "mb-8",
                     children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                            className: "text-3xl font-bold text-gray-900 mb-2",
-                            children: "Reports"
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: ()=>window.history.back(),
+                            className: "w-12 h-12 bg-slate-600 hover:bg-slate-700 text-white rounded-full flex items-center justify-center mb-6 transition",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                className: "w-6 h-6",
+                                fill: "none",
+                                stroke: "currentColor",
+                                viewBox: "0 0 24 24",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                    strokeLinecap: "round",
+                                    strokeLinejoin: "round",
+                                    strokeWidth: 2,
+                                    d: "M15 19l-7-7 7-7"
+                                }, void 0, false, {
+                                    fileName: "[project]/app/admin/reports/page.tsx",
+                                    lineNumber: 234,
+                                    columnNumber: 15
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/app/admin/reports/page.tsx",
+                                lineNumber: 233,
+                                columnNumber: 13
+                            }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/admin/reports/page.tsx",
                             lineNumber: 232,
                             columnNumber: 11
                         }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-gray-600",
-                            children: "Search and view transaction ledgers"
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                            className: "text-4xl font-bold text-gray-900 mb-2",
+                            children: "Find Your"
                         }, void 0, false, {
                             fileName: "[project]/app/admin/reports/page.tsx",
-                            lineNumber: 233,
+                            lineNumber: 237,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                            className: "text-4xl font-bold text-gray-900 mb-4",
+                            children: "Report"
+                        }, void 0, false, {
+                            fileName: "[project]/app/admin/reports/page.tsx",
+                            lineNumber: 238,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                            className: "text-gray-600 text-base",
+                            children: "Search by student, date, month, or year"
+                        }, void 0, false, {
+                            fileName: "[project]/app/admin/reports/page.tsx",
+                            lineNumber: 239,
                             columnNumber: 11
                         }, this)
                     ]
@@ -484,102 +520,145 @@ function ReportsPage() {
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
-                    className: "p-6 mb-8 bg-white shadow",
+                    className: "p-8 mb-8 bg-white shadow-lg rounded-3xl",
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "space-y-6",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                        className: "block text-sm font-semibold text-gray-700 mb-3",
-                                        children: "Search By"
-                                    }, void 0, false, {
-                                        fileName: "[project]/app/admin/reports/page.tsx",
-                                        lineNumber: 241,
-                                        columnNumber: 15
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "grid grid-cols-2 md:grid-cols-4 gap-3",
-                                        children: [
-                                            {
-                                                value: 'student',
-                                                label: 'Student'
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "grid grid-cols-2 gap-3 mb-6",
+                                    children: [
+                                        {
+                                            value: 'student',
+                                            label: 'By Student'
+                                        },
+                                        {
+                                            value: 'date',
+                                            label: 'By Date'
+                                        },
+                                        {
+                                            value: 'month',
+                                            label: 'By Month'
+                                        },
+                                        {
+                                            value: 'year',
+                                            label: 'By Year'
+                                        }
+                                    ].map((option)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            onClick: ()=>{
+                                                setSearchType(option.value);
+                                                setShowResults(false);
+                                                setFilteredTransactions([]);
                                             },
-                                            {
-                                                value: 'date',
-                                                label: 'Date Range'
-                                            },
-                                            {
-                                                value: 'month',
-                                                label: 'Month'
-                                            },
-                                            {
-                                                value: 'year',
-                                                label: 'Year'
-                                            }
-                                        ].map((option)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                onClick: ()=>{
-                                                    setSearchType(option.value);
-                                                    setShowResults(false);
-                                                    setFilteredTransactions([]);
-                                                },
-                                                className: `px-4 py-3 rounded-lg font-medium transition ${searchType === option.value ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`,
-                                                children: option.label
-                                            }, option.value, false, {
-                                                fileName: "[project]/app/admin/reports/page.tsx",
-                                                lineNumber: 249,
-                                                columnNumber: 19
-                                            }, this))
-                                    }, void 0, false, {
-                                        fileName: "[project]/app/admin/reports/page.tsx",
-                                        lineNumber: 242,
-                                        columnNumber: 15
-                                    }, this)
-                                ]
-                            }, void 0, true, {
+                                            className: `px-4 py-3 rounded-xl font-medium transition ${searchType === option.value ? 'bg-slate-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`,
+                                            children: option.label
+                                        }, option.value, false, {
+                                            fileName: "[project]/app/admin/reports/page.tsx",
+                                            lineNumber: 254,
+                                            columnNumber: 19
+                                        }, this))
+                                }, void 0, false, {
+                                    fileName: "[project]/app/admin/reports/page.tsx",
+                                    lineNumber: 247,
+                                    columnNumber: 15
+                                }, this)
+                            }, void 0, false, {
                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                lineNumber: 240,
+                                lineNumber: 246,
                                 columnNumber: 13
                             }, this),
                             searchType === 'student' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "relative",
                                 children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                        className: "block text-sm font-semibold text-gray-700 mb-3",
-                                        children: "Search Student"
-                                    }, void 0, false, {
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex gap-3",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex-1 relative",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                        type: "text",
+                                                        placeholder: "e.g., MR-5774",
+                                                        value: studentSearch,
+                                                        onChange: (e)=>setStudentSearch(e.target.value),
+                                                        onFocus: ()=>setShowStudentDropdown(true),
+                                                        className: "w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-slate-600 bg-gray-50"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/admin/reports/page.tsx",
+                                                        lineNumber: 278,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                        className: "absolute left-4 top-3.5 w-5 h-5 text-gray-400",
+                                                        fill: "none",
+                                                        stroke: "currentColor",
+                                                        viewBox: "0 0 24 24",
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                            strokeLinecap: "round",
+                                                            strokeLinejoin: "round",
+                                                            strokeWidth: 2,
+                                                            d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/app/admin/reports/page.tsx",
+                                                            lineNumber: 287,
+                                                            columnNumber: 23
+                                                        }, this)
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/admin/reports/page.tsx",
+                                                        lineNumber: 286,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/admin/reports/page.tsx",
+                                                lineNumber: 277,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                className: "w-12 h-12 bg-slate-600 hover:bg-slate-700 text-white rounded-2xl flex items-center justify-center transition",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                    className: "w-5 h-5",
+                                                    fill: "currentColor",
+                                                    viewBox: "0 0 20 20",
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                        d: "M8 4a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.5-.5H8zm0-1h7a1.5 1.5 0 0 1 1.5 1.5v7A1.5 1.5 0 0 1 15 13H8a1.5 1.5 0 0 1-1.5-1.5v-7A1.5 1.5 0 0 1 8 3z"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/admin/reports/page.tsx",
+                                                        lineNumber: 292,
+                                                        columnNumber: 23
+                                                    }, this)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/admin/reports/page.tsx",
+                                                    lineNumber: 291,
+                                                    columnNumber: 21
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/admin/reports/page.tsx",
+                                                lineNumber: 290,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                        lineNumber: 271,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                        type: "text",
-                                        placeholder: "Enter student name, code, or ID...",
-                                        value: studentSearch,
-                                        onChange: (e)=>setStudentSearch(e.target.value),
-                                        onFocus: ()=>setShowStudentDropdown(true),
-                                        className: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                                    }, void 0, false, {
-                                        fileName: "[project]/app/admin/reports/page.tsx",
-                                        lineNumber: 272,
+                                        lineNumber: 276,
                                         columnNumber: 17
                                     }, this),
                                     showStudentDropdown && filteredStudents.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "absolute top-full left-0 right-0 bg-white border-2 border-gray-300 rounded-lg mt-1 max-h-48 overflow-y-auto z-10",
+                                        className: "absolute top-full left-0 right-0 bg-white border-2 border-gray-300 rounded-2xl mt-2 max-h-48 overflow-y-auto z-10 shadow-lg",
                                         children: filteredStudents.map((student)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                 onClick: ()=>{
                                                     setSelectedStudent(student);
                                                     setStudentSearch(student.name);
                                                     setShowStudentDropdown(false);
                                                 },
-                                                className: "w-full text-left px-4 py-3 hover:bg-blue-50 border-b border-gray-200 last:border-b-0",
+                                                className: "w-full text-left px-4 py-3 hover:bg-slate-50 border-b border-gray-200 last:border-b-0",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         className: "font-semibold text-gray-900",
                                                         children: student.name
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                                        lineNumber: 292,
+                                                        lineNumber: 308,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -587,24 +666,24 @@ function ReportsPage() {
                                                         children: student.code
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                                        lineNumber: 293,
+                                                        lineNumber: 309,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, student._id, true, {
                                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                                lineNumber: 283,
+                                                lineNumber: 299,
                                                 columnNumber: 23
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                        lineNumber: 281,
+                                        lineNumber: 297,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                lineNumber: 270,
+                                lineNumber: 275,
                                 columnNumber: 15
                             }, this),
                             searchType === 'date' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -617,23 +696,23 @@ function ReportsPage() {
                                                 children: "Start Date"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                                lineNumber: 305,
+                                                lineNumber: 321,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                                 type: "date",
                                                 value: startDate,
                                                 onChange: (e)=>setStartDate(e.target.value),
-                                                className: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                                                className: "w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-slate-600 bg-gray-50"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                                lineNumber: 306,
+                                                lineNumber: 322,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                        lineNumber: 304,
+                                        lineNumber: 320,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -643,29 +722,29 @@ function ReportsPage() {
                                                 children: "End Date"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                                lineNumber: 314,
+                                                lineNumber: 330,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                                 type: "date",
                                                 value: endDate,
                                                 onChange: (e)=>setEndDate(e.target.value),
-                                                className: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                                                className: "w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-slate-600 bg-gray-50"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                                lineNumber: 315,
+                                                lineNumber: 331,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                        lineNumber: 313,
+                                        lineNumber: 329,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                lineNumber: 303,
+                                lineNumber: 319,
                                 columnNumber: 15
                             }, this),
                             searchType === 'month' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -675,23 +754,23 @@ function ReportsPage() {
                                         children: "Select Month"
                                     }, void 0, false, {
                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                        lineNumber: 328,
+                                        lineNumber: 344,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                         type: "month",
                                         value: selectedMonth,
                                         onChange: (e)=>setSelectedMonth(e.target.value),
-                                        className: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                                        className: "w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-slate-600 bg-gray-50"
                                     }, void 0, false, {
                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                        lineNumber: 329,
+                                        lineNumber: 345,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                lineNumber: 327,
+                                lineNumber: 343,
                                 columnNumber: 15
                             }, this),
                             searchType === 'year' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -701,13 +780,13 @@ function ReportsPage() {
                                         children: "Select Year"
                                     }, void 0, false, {
                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                        lineNumber: 341,
+                                        lineNumber: 357,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
                                         value: selectedYear,
                                         onChange: (e)=>setSelectedYear(e.target.value),
-                                        className: "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500",
+                                        className: "w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-slate-600 bg-gray-50",
                                         children: [
                                             2023,
                                             2024,
@@ -718,52 +797,52 @@ function ReportsPage() {
                                                 children: year
                                             }, year, false, {
                                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                                lineNumber: 348,
+                                                lineNumber: 364,
                                                 columnNumber: 21
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                        lineNumber: 342,
+                                        lineNumber: 358,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                lineNumber: 340,
+                                lineNumber: 356,
                                 columnNumber: 15
                             }, this),
                             (searchType === 'student' && selectedStudent || searchType === 'date' && startDate && endDate || searchType === 'month' && selectedMonth || searchType === 'year') && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 onClick: filterTransactions,
-                                className: "w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition",
-                                children: "Search Report"
+                                className: "w-full px-6 py-3 bg-slate-600 hover:bg-slate-700 text-white font-semibold rounded-2xl transition",
+                                children: "Search"
                             }, void 0, false, {
                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                lineNumber: 363,
+                                lineNumber: 379,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/admin/reports/page.tsx",
-                        lineNumber: 238,
+                        lineNumber: 244,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/admin/reports/page.tsx",
-                    lineNumber: 237,
+                    lineNumber: 243,
                     columnNumber: 9
                 }, this),
                 showResults && filteredTransactions.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "space-y-6",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
-                            className: "p-4 bg-white shadow",
+                            className: "p-4 bg-white shadow-lg rounded-3xl",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                                     className: "text-xl font-bold text-gray-900 mb-4",
                                     children: "Transaction Ledger"
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/reports/page.tsx",
-                                    lineNumber: 378,
+                                    lineNumber: 394,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -780,7 +859,7 @@ function ReportsPage() {
                                                             children: "S.No"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/reports/page.tsx",
-                                                            lineNumber: 383,
+                                                            lineNumber: 399,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -788,7 +867,7 @@ function ReportsPage() {
                                                             children: "Date"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/reports/page.tsx",
-                                                            lineNumber: 384,
+                                                            lineNumber: 400,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -796,7 +875,7 @@ function ReportsPage() {
                                                             children: "Deposit"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/reports/page.tsx",
-                                                            lineNumber: 385,
+                                                            lineNumber: 401,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -804,7 +883,7 @@ function ReportsPage() {
                                                             children: "Withdraw"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/reports/page.tsx",
-                                                            lineNumber: 386,
+                                                            lineNumber: 402,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -812,18 +891,18 @@ function ReportsPage() {
                                                             children: "Balance"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/reports/page.tsx",
-                                                            lineNumber: 387,
+                                                            lineNumber: 403,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/reports/page.tsx",
-                                                    lineNumber: 382,
+                                                    lineNumber: 398,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                                lineNumber: 381,
+                                                lineNumber: 397,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -835,7 +914,7 @@ function ReportsPage() {
                                                                 children: index + 1
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                                                lineNumber: 393,
+                                                                lineNumber: 409,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -843,7 +922,7 @@ function ReportsPage() {
                                                                 children: transaction.date || 'N/A'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                                                lineNumber: 394,
+                                                                lineNumber: 410,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -857,7 +936,7 @@ function ReportsPage() {
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                                                        lineNumber: 397,
+                                                                        lineNumber: 413,
                                                                         columnNumber: 29
                                                                     }, this),
                                                                     transaction.type !== 'deposit' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -865,13 +944,13 @@ function ReportsPage() {
                                                                         children: "–"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                                                        lineNumber: 399,
+                                                                        lineNumber: 415,
                                                                         columnNumber: 62
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                                                lineNumber: 395,
+                                                                lineNumber: 411,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -885,7 +964,7 @@ function ReportsPage() {
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                                                        lineNumber: 403,
+                                                                        lineNumber: 419,
                                                                         columnNumber: 29
                                                                     }, this),
                                                                     transaction.type !== 'withdraw' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -893,13 +972,13 @@ function ReportsPage() {
                                                                         children: "–"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                                                        lineNumber: 405,
+                                                                        lineNumber: 421,
                                                                         columnNumber: 63
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                                                lineNumber: 401,
+                                                                lineNumber: 417,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -910,46 +989,46 @@ function ReportsPage() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                                                lineNumber: 407,
+                                                                lineNumber: 423,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, index, true, {
                                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                                        lineNumber: 392,
+                                                        lineNumber: 408,
                                                         columnNumber: 23
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/app/admin/reports/page.tsx",
-                                                lineNumber: 390,
+                                                lineNumber: 406,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                        lineNumber: 380,
+                                        lineNumber: 396,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/reports/page.tsx",
-                                    lineNumber: 379,
+                                    lineNumber: 395,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/admin/reports/page.tsx",
-                            lineNumber: 377,
+                            lineNumber: 393,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
-                            className: "p-6 bg-white shadow",
+                            className: "p-6 bg-white shadow-lg rounded-3xl",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                                     className: "text-lg font-bold text-gray-900 mb-4",
                                     children: "Download Report"
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/reports/page.tsx",
-                                    lineNumber: 419,
+                                    lineNumber: 435,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -957,7 +1036,7 @@ function ReportsPage() {
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                                             onClick: exportPDF,
-                                            className: "h-12 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2",
+                                            className: "h-12 bg-slate-600 hover:bg-slate-700 text-white font-semibold rounded-2xl flex items-center justify-center gap-2",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
                                                     className: "w-5 h-5",
@@ -971,24 +1050,24 @@ function ReportsPage() {
                                                         d: "M12 19l9 2-9-18-9 18 9-2zm0 0v-8m0 0l-4 4m4-4l4 4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                                        lineNumber: 426,
+                                                        lineNumber: 442,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/reports/page.tsx",
-                                                    lineNumber: 425,
+                                                    lineNumber: 441,
                                                     columnNumber: 19
                                                 }, this),
                                                 "Download PDF"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/admin/reports/page.tsx",
-                                            lineNumber: 421,
+                                            lineNumber: 437,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                                             onClick: exportExcel,
-                                            className: "h-12 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2",
+                                            className: "h-12 bg-slate-600 hover:bg-slate-700 text-white font-semibold rounded-2xl flex items-center justify-center gap-2",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
                                                     className: "w-5 h-5",
@@ -1002,52 +1081,52 @@ function ReportsPage() {
                                                         d: "M12 19l9 2-9-18-9 18 9-2zm0 0v-8m0 0l-4 4m4-4l4 4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/admin/reports/page.tsx",
-                                                        lineNumber: 435,
+                                                        lineNumber: 451,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/reports/page.tsx",
-                                                    lineNumber: 434,
+                                                    lineNumber: 450,
                                                     columnNumber: 19
                                                 }, this),
                                                 "Download Excel"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/admin/reports/page.tsx",
-                                            lineNumber: 430,
+                                            lineNumber: 446,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/admin/reports/page.tsx",
-                                    lineNumber: 420,
+                                    lineNumber: 436,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/admin/reports/page.tsx",
-                            lineNumber: 418,
+                            lineNumber: 434,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/admin/reports/page.tsx",
-                    lineNumber: 375,
+                    lineNumber: 391,
                     columnNumber: 11
                 }, this),
                 showResults && filteredTransactions.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
-                    className: "p-12 bg-white shadow text-center",
+                    className: "p-12 bg-white shadow-lg rounded-3xl text-center",
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         className: "text-gray-600 text-lg",
                         children: "No transactions found for the selected criteria."
                     }, void 0, false, {
                         fileName: "[project]/app/admin/reports/page.tsx",
-                        lineNumber: 446,
+                        lineNumber: 462,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/admin/reports/page.tsx",
-                    lineNumber: 445,
+                    lineNumber: 461,
                     columnNumber: 11
                 }, this)
             ]

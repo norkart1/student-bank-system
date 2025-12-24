@@ -225,26 +225,31 @@ export default function ReportsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="max-w-4xl mx-auto">
+        {/* Back Button & Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Reports</h1>
-          <p className="text-gray-600">Search and view transaction ledgers</p>
+          <button onClick={() => window.history.back()} className="w-12 h-12 bg-slate-600 hover:bg-slate-700 text-white rounded-full flex items-center justify-center mb-6 transition">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Find Your</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Report</h1>
+          <p className="text-gray-600 text-base">Search by student, date, month, or year</p>
         </div>
 
         {/* Search Card */}
-        <Card className="p-6 mb-8 bg-white shadow">
+        <Card className="p-8 mb-8 bg-white shadow-lg rounded-3xl">
           <div className="space-y-6">
             {/* Search Type Selection */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-3">Search By</label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 gap-3 mb-6">
                 {[
-                  { value: 'student', label: 'Student' },
-                  { value: 'date', label: 'Date Range' },
-                  { value: 'month', label: 'Month' },
-                  { value: 'year', label: 'Year' },
+                  { value: 'student', label: 'By Student' },
+                  { value: 'date', label: 'By Date' },
+                  { value: 'month', label: 'By Month' },
+                  { value: 'year', label: 'By Year' },
                 ].map((option) => (
                   <button
                     key={option.value}
@@ -253,9 +258,9 @@ export default function ReportsPage() {
                       setShowResults(false);
                       setFilteredTransactions([]);
                     }}
-                    className={`px-4 py-3 rounded-lg font-medium transition ${
+                    className={`px-4 py-3 rounded-xl font-medium transition ${
                       searchType === option.value
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-slate-600 text-white'
                         : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                     }`}
                   >
@@ -268,17 +273,28 @@ export default function ReportsPage() {
             {/* Student Search */}
             {searchType === 'student' && (
               <div className="relative">
-                <label className="block text-sm font-semibold text-gray-700 mb-3">Search Student</label>
-                <input
-                  type="text"
-                  placeholder="Enter student name, code, or ID..."
-                  value={studentSearch}
-                  onChange={(e) => setStudentSearch(e.target.value)}
-                  onFocus={() => setShowStudentDropdown(true)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                />
+                <div className="flex gap-3">
+                  <div className="flex-1 relative">
+                    <input
+                      type="text"
+                      placeholder="e.g., MR-5774"
+                      value={studentSearch}
+                      onChange={(e) => setStudentSearch(e.target.value)}
+                      onFocus={() => setShowStudentDropdown(true)}
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-slate-600 bg-gray-50"
+                    />
+                    <svg className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+                  <button className="w-12 h-12 bg-slate-600 hover:bg-slate-700 text-white rounded-2xl flex items-center justify-center transition">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M8 4a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.5-.5H8zm0-1h7a1.5 1.5 0 0 1 1.5 1.5v7A1.5 1.5 0 0 1 15 13H8a1.5 1.5 0 0 1-1.5-1.5v-7A1.5 1.5 0 0 1 8 3z" />
+                    </svg>
+                  </button>
+                </div>
                 {showStudentDropdown && filteredStudents.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 bg-white border-2 border-gray-300 rounded-lg mt-1 max-h-48 overflow-y-auto z-10">
+                  <div className="absolute top-full left-0 right-0 bg-white border-2 border-gray-300 rounded-2xl mt-2 max-h-48 overflow-y-auto z-10 shadow-lg">
                     {filteredStudents.map((student) => (
                       <button
                         key={student._id}
@@ -287,7 +303,7 @@ export default function ReportsPage() {
                           setStudentSearch(student.name);
                           setShowStudentDropdown(false);
                         }}
-                        className="w-full text-left px-4 py-3 hover:bg-blue-50 border-b border-gray-200 last:border-b-0"
+                        className="w-full text-left px-4 py-3 hover:bg-slate-50 border-b border-gray-200 last:border-b-0"
                       >
                         <div className="font-semibold text-gray-900">{student.name}</div>
                         <div className="text-sm text-gray-600">{student.code}</div>
@@ -307,7 +323,7 @@ export default function ReportsPage() {
                     type="date"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-slate-600 bg-gray-50"
                   />
                 </div>
                 <div>
@@ -316,7 +332,7 @@ export default function ReportsPage() {
                     type="date"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-slate-600 bg-gray-50"
                   />
                 </div>
               </div>
@@ -330,7 +346,7 @@ export default function ReportsPage() {
                   type="month"
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-slate-600 bg-gray-50"
                 />
               </div>
             )}
@@ -342,7 +358,7 @@ export default function ReportsPage() {
                 <select
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-slate-600 bg-gray-50"
                 >
                   {[2023, 2024, 2025, 2026].map((year) => (
                     <option key={year} value={year.toString()}>
@@ -362,9 +378,9 @@ export default function ReportsPage() {
             ) && (
               <button
                 onClick={filterTransactions}
-                className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition"
+                className="w-full px-6 py-3 bg-slate-600 hover:bg-slate-700 text-white font-semibold rounded-2xl transition"
               >
-                Search Report
+                Search
               </button>
             )}
           </div>
@@ -374,7 +390,7 @@ export default function ReportsPage() {
         {showResults && filteredTransactions.length > 0 && (
           <div className="space-y-6">
             {/* Transaction Ledger */}
-            <Card className="p-4 bg-white shadow">
+            <Card className="p-4 bg-white shadow-lg rounded-3xl">
               <h2 className="text-xl font-bold text-gray-900 mb-4">Transaction Ledger</h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -415,12 +431,12 @@ export default function ReportsPage() {
             </Card>
 
             {/* Download Buttons */}
-            <Card className="p-6 bg-white shadow">
+            <Card className="p-6 bg-white shadow-lg rounded-3xl">
               <h3 className="text-lg font-bold text-gray-900 mb-4">Download Report</h3>
               <div className="grid grid-cols-2 gap-4">
                 <Button
                   onClick={exportPDF}
-                  className="h-12 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2"
+                  className="h-12 bg-slate-600 hover:bg-slate-700 text-white font-semibold rounded-2xl flex items-center justify-center gap-2"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8m0 0l-4 4m4-4l4 4" />
@@ -429,7 +445,7 @@ export default function ReportsPage() {
                 </Button>
                 <Button
                   onClick={exportExcel}
-                  className="h-12 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2"
+                  className="h-12 bg-slate-600 hover:bg-slate-700 text-white font-semibold rounded-2xl flex items-center justify-center gap-2"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8m0 0l-4 4m4-4l4 4" />
@@ -442,7 +458,7 @@ export default function ReportsPage() {
         )}
 
         {showResults && filteredTransactions.length === 0 && (
-          <Card className="p-12 bg-white shadow text-center">
+          <Card className="p-12 bg-white shadow-lg rounded-3xl text-center">
             <p className="text-gray-600 text-lg">No transactions found for the selected criteria.</p>
           </Card>
         )}

@@ -107,7 +107,6 @@
     --color-blue-200: #bedbff;
     --color-blue-500: #3080ff;
     --color-blue-600: #155dfc;
-    --color-blue-700: #1447e6;
     --color-blue-900: #1c398e;
     --color-purple-100: #f3e8ff;
     --color-purple-200: #e9d5ff;
@@ -115,6 +114,7 @@
     --color-purple-400: #c07eff;
     --color-purple-500: #ac4bff;
     --color-pink-100: #fce7f3;
+    --color-slate-50: #f8fafc;
     --color-slate-500: #62748e;
     --color-slate-600: #45556c;
     --color-slate-700: #314158;
@@ -137,7 +137,7 @@
     --container-md: 28rem;
     --container-lg: 32rem;
     --container-xl: 36rem;
-    --container-6xl: 72rem;
+    --container-4xl: 56rem;
     --text-xs: .75rem;
     --text-xs--line-height: calc(1 / .75);
     --text-sm: .875rem;
@@ -207,7 +207,6 @@
       --color-blue-200: lab(86.15% -4.04379 -21.0797);
       --color-blue-500: lab(54.1736% 13.3369 -74.6839);
       --color-blue-600: lab(44.0605% 29.0279 -86.0352);
-      --color-blue-700: lab(36.9089% 35.0961 -85.6872);
       --color-blue-900: lab(26.1542% 15.7545 -51.5504);
       --color-purple-100: lab(93.3333% 6.97437 -9.83434);
       --color-purple-200: lab(87.8405% 13.4282 -18.7159);
@@ -215,6 +214,7 @@
       --color-purple-400: lab(63.6946% 47.6127 -59.2066);
       --color-purple-500: lab(52.0183% 66.11 -78.2316);
       --color-pink-100: lab(93.5864% 9.01193 -3.15079);
+      --color-slate-50: lab(98.1434% -.369519 -1.05966);
       --color-slate-500: lab(48.0876% -2.03595 -16.5814);
       --color-slate-600: lab(35.5623% -1.74978 -15.4316);
       --color-slate-700: lab(26.9569% -1.47016 -15.6993);
@@ -540,6 +540,10 @@
 
   .top-1\/2 {
     top: 50%;
+  }
+
+  .top-3\.5 {
+    top: calc(var(--spacing) * 3.5);
   }
 
   .top-4 {
@@ -973,8 +977,8 @@
     width: 100%;
   }
 
-  .max-w-6xl {
-    max-width: var(--container-6xl);
+  .max-w-4xl {
+    max-width: var(--container-4xl);
   }
 
   .max-w-\[320px\] {
@@ -1508,10 +1512,6 @@
     background-color: var(--color-blue-500);
   }
 
-  .bg-blue-600 {
-    background-color: var(--color-blue-600);
-  }
-
   .bg-card {
     background-color: var(--card);
   }
@@ -1522,6 +1522,10 @@
 
   .bg-gray-50 {
     background-color: var(--color-gray-50);
+  }
+
+  .bg-gray-100 {
+    background-color: var(--color-gray-100);
   }
 
   .bg-gray-200 {
@@ -1598,6 +1602,10 @@
 
   .bg-secondary {
     background-color: var(--secondary);
+  }
+
+  .bg-slate-600 {
+    background-color: var(--color-slate-600);
   }
 
   .bg-transparent {
@@ -1965,6 +1973,11 @@
     line-height: var(--tw-leading, var(--text-3xl--line-height));
   }
 
+  .text-4xl {
+    font-size: var(--text-4xl);
+    line-height: var(--tw-leading, var(--text-4xl--line-height));
+  }
+
   .text-base {
     font-size: var(--text-base);
     line-height: var(--tw-leading, var(--text-base--line-height));
@@ -2216,11 +2229,6 @@
 
   .opacity-70 {
     opacity: .7;
-  }
-
-  .shadow {
-    --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, #0000001a), 0 1px 2px -1px var(--tw-shadow-color, #0000001a);
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
   .shadow-2xl {
@@ -2519,20 +2527,8 @@
   }
 
   @media (hover: hover) {
-    .hover\:bg-blue-50:hover {
-      background-color: var(--color-blue-50);
-    }
-  }
-
-  @media (hover: hover) {
     .hover\:bg-blue-200:hover {
       background-color: var(--color-blue-200);
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-blue-700:hover {
-      background-color: var(--color-blue-700);
     }
   }
 
@@ -2621,6 +2617,18 @@
   }
 
   @media (hover: hover) {
+    .hover\:bg-slate-50:hover {
+      background-color: var(--color-slate-50);
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:bg-slate-700:hover {
+      background-color: var(--color-slate-700);
+    }
+  }
+
+  @media (hover: hover) {
     .hover\:bg-white\/20:hover {
       background-color: #fff3;
     }
@@ -2698,12 +2706,12 @@
     border-color: #4a6670;
   }
 
-  .focus\:border-blue-500:focus {
-    border-color: var(--color-blue-500);
-  }
-
   .focus\:border-purple-400:focus {
     border-color: var(--color-purple-400);
+  }
+
+  .focus\:border-slate-600:focus {
+    border-color: var(--color-slate-600);
   }
 
   .focus\:bg-accent:focus {
@@ -3019,12 +3027,6 @@
   @media (min-width: 48rem) {
     .md\:w-1\/2 {
       width: 50%;
-    }
-  }
-
-  @media (min-width: 48rem) {
-    .md\:grid-cols-4 {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 
