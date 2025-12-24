@@ -205,19 +205,21 @@ function UserDashboard() {
             loadUserData();
         }
     }["UserDashboard.useEffect"], []);
-    // Refresh data every 2 seconds to get real-time balance updates
+    // Refresh data every 5 seconds (slower polling to prevent lag)
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "UserDashboard.useEffect": ()=>{
             const interval = setInterval({
                 "UserDashboard.useEffect.interval": ()=>{
                     loadUserData();
                 }
-            }["UserDashboard.useEffect.interval"], 2000);
+            }["UserDashboard.useEffect.interval"], 5000);
             return ({
                 "UserDashboard.useEffect": ()=>clearInterval(interval)
             })["UserDashboard.useEffect"];
         }
-    }["UserDashboard.useEffect"], []);
+    }["UserDashboard.useEffect"], [
+        isLoading
+    ]);
     // Use Pusher for real-time updates
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$hooks$2f$usePusher$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePusherUpdates"])(userData?.id, {
         "UserDashboard.usePusherUpdates": (data)=>{
