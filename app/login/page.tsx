@@ -35,13 +35,23 @@ export default function SearchPage() {
 
       const student = await res.json()
       
-      localStorage.setItem("isUserAuthenticated", "true")
-      localStorage.setItem("userRole", "user")
-      localStorage.setItem("studentId", student._id)
-      localStorage.setItem("studentName", student.name)
-      localStorage.setItem("studentCode", student.code)
+      // Create session via MongoDB instead of localStorage
+      const sessionRes = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code: searchType === "code" ? searchQuery.toUpperCase() : undefined,
+          name: searchType === "name" ? searchQuery : undefined,
+          type: "user"
+        })
+      })
       
-      router.push("/user/dashboard")
+      if (sessionRes.ok) {
+        router.push("/user/dashboard")
+      } else {
+        setError("Failed to create session")
+        setIsLoading(false)
+      }
     } catch (err) {
       setError("Search error. Please try again.")
       setIsLoading(false)

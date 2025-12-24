@@ -966,16 +966,22 @@ export default function AdminDashboard() {
   }
 
   useEffect(() => {
-    const auth = localStorage.getItem("isAdminAuthenticated")
-    const role = localStorage.getItem("userRole")
-    
-    if (auth !== "true" || role !== "admin") {
-      router.push("/login")
-      return
+    // Verify admin session from MongoDB
+    const verifySession = async () => {
+      try {
+        const res = await fetch('/api/auth/verify')
+        if (!res.ok || (await res.json()).userType !== 'admin') {
+          router.push("/login")
+          return
+        }
+        setIsAuthenticated(true)
+        setIsAuthLoading(false)
+      } catch (error) {
+        router.push("/login")
+      }
     }
     
-    setIsAuthenticated(true)
-    setIsAuthLoading(false)
+    verifySession()
     
     // Fetch students from MongoDB API
     const fetchStudents = async () => {
@@ -2110,8 +2116,7 @@ export default function AdminDashboard() {
                       </button>
                       <button
                         onClick={() => {
-                          localStorage.removeItem("isAdminAuthenticated")
-                          localStorage.removeItem("userRole")
+                          fetch('/api/auth/logout', { method: 'POST' })
                           router.push("/login")
                         }}
                         className="flex-1 py-3 rounded-xl font-semibold text-white bg-red-600 hover:bg-red-700 transition-colors"

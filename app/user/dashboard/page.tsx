@@ -19,13 +19,15 @@ export default function UserDashboard() {
 
   const loadUserData = async () => {
     try {
-      const auth = localStorage.getItem("isUserAuthenticated")
-      const studentId = localStorage.getItem("studentId")
-      
-      if (auth !== "true" || !studentId) {
+      // Verify session from MongoDB
+      const verifyRes = await fetch('/api/auth/verify')
+      if (!verifyRes.ok) {
         router.push("/login")
         return
       }
+      
+      const session = await verifyRes.json()
+      const studentId = session.userData.id
 
       const res = await fetch(`/api/students/${studentId}`, {
         method: 'GET',
@@ -79,9 +81,7 @@ export default function UserDashboard() {
   })
 
   const handleLogout = () => {
-    localStorage.removeItem("isUserAuthenticated")
-    localStorage.removeItem("userRole")
-    localStorage.removeItem("studentId")
+    fetch('/api/auth/logout', { method: 'POST' })
     router.push("/login")
   }
 

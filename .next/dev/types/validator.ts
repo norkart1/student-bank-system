@@ -119,6 +119,42 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../app/api/auth/admin-login/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/auth/admin-login">> = Specific
+  const handler = {} as typeof import("../../../app/api/auth/admin-login/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/auth/login/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/auth/login">> = Specific
+  const handler = {} as typeof import("../../../app/api/auth/login/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/auth/logout/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/auth/logout">> = Specific
+  const handler = {} as typeof import("../../../app/api/auth/logout/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/auth/verify/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/auth/verify">> = Specific
+  const handler = {} as typeof import("../../../app/api/auth/verify/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../app/api/gemini/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/gemini">> = Specific

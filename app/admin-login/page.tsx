@@ -29,11 +29,7 @@ export default function AdminLoginPage() {
       })
 
       if (res.ok) {
-        const adminData = await res.json()
-        localStorage.setItem("isAdminAuthenticated", "true")
-        localStorage.setItem("userRole", "admin")
-        localStorage.setItem("adminId", adminData.admin.id)
-        localStorage.setItem("adminName", adminData.admin.name)
+        // Session created via MongoDB - cookie is set automatically
         router.push("/admin/dashboard")
         return
       }
