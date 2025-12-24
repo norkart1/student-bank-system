@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import jsPDF from 'jspdf';
 import * as XLSX from 'xlsx';
 import { Card } from '@/components/ui/card';
+import { Search } from 'lucide-react';
 
 interface Transaction {
   type: 'deposit' | 'withdraw';
@@ -24,43 +25,22 @@ interface Student {
 
 export default function ReportsPage() {
   const [students, setStudents] = useState<Student[]>([]);
-  const [filteredStudents, setFilteredStudents] = useState<Student[]>([]);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchStudents();
   }, []);
 
-  useEffect(() => {
-    if (searchQuery.trim() === '') {
-      setFilteredStudents(students);
-    } else {
-      const query = searchQuery.toLowerCase();
-      setFilteredStudents(
-        students.filter(
-          (student) =>
-            student.name.toLowerCase().includes(query) ||
-            student.code.toLowerCase().includes(query)
-        )
-      );
-    }
-  }, [searchQuery, students]);
-
   const fetchStudents = async () => {
     try {
       setLoading(true);
       const response = await fetch('/api/students');
       const data = await response.json();
-      console.log('Fetched students:', data);
-      const studentList = Array.isArray(data) ? data : [];
-      setStudents(studentList);
-      setFilteredStudents(studentList);
+      setStudents(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Failed to fetch students:', error);
       setStudents([]);
-      setFilteredStudents([]);
     } finally {
       setLoading(false);
     }
@@ -176,155 +156,167 @@ export default function ReportsPage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-8">Student Reports</h1>
-
-          {/* Report Type Section */}
-          <div className="mb-8">
-            <label className="block text-lg font-semibold text-gray-700 mb-3">Report Type</label>
-            <Select defaultValue="individual">
-              <SelectTrigger className="w-full h-12 border-2 border-gray-200">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="individual">Individual Student</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Search Section */}
-          <div className="mb-8">
-            <label className="block text-lg font-semibold text-gray-700 mb-3">Search Student</label>
-            <div className="flex gap-3">
-              <input
-                type="text"
-                placeholder="Search by name or student code..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 h-12 px-4 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
-              />
-              <Button
-                onClick={() => setSearchQuery('')}
-                className="h-12 px-6 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg"
-              >
-                Clear
-              </Button>
-            </div>
-            {searchQuery && (
-              <p className="mt-2 text-sm text-gray-600">
-                Found {filteredStudents.length} student{filteredStudents.length !== 1 ? 's' : ''}
-              </p>
-            )}
-          </div>
-
-          {/* Select Student Section */}
-          <div className="mb-8">
-            <label className="block text-lg font-semibold text-gray-700 mb-3">Select Student</label>
-            <Select
-              value={selectedStudent?._id || ''}
-              onValueChange={(id: string) => {
-                const student = filteredStudents.find((s) => s._id === id);
-                setSelectedStudent(student || null);
-              }}
-            >
-              <SelectTrigger className="w-full h-12 border-2 border-gray-200">
-                <SelectValue placeholder="Choose a student" />
-              </SelectTrigger>
-              <SelectContent>
-                {filteredStudents.map((student) => (
-                  <SelectItem key={student._id} value={student._id}>
-                    {student.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {filteredStudents.length === 0 && students.length > 0 && (
-              <p className="mt-2 text-sm text-red-500">No students match your search criteria.</p>
-            )}
-          </div>
-
-          {/* Export Buttons */}
-          <div className="flex gap-4 mb-8">
-            <Button
-              onClick={exportPDF}
-              disabled={!selectedStudent}
-              className="flex-1 h-12 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg flex items-center justify-center gap-2"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8m0 0l-4 4m4-4l4 4" />
-              </svg>
-              PDF
-            </Button>
-            <Button
-              onClick={exportExcel}
-              disabled={!selectedStudent}
-              className="flex-1 h-12 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg flex items-center justify-center gap-2"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8m0 0l-4 4m4-4l4 4" />
-              </svg>
-              Excel
-            </Button>
-          </div>
-
-          {/* Transaction Ledger */}
-          {selectedStudent && (
-            <>
-              {selectedStudent.transactions && selectedStudent.transactions.length > 0 ? (
-                <Card className="p-6">
-                  <h2 className="text-xl font-bold text-gray-800 mb-4">Transaction Ledger</h2>
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="bg-slate-700 text-white">
-                          <th className="px-4 py-3 text-left">S.No</th>
-                          <th className="px-4 py-3 text-left">Date</th>
-                          <th className="px-4 py-3 text-right">Deposit</th>
-                          <th className="px-4 py-3 text-right">Withdraw</th>
-                          <th className="px-4 py-3 text-right">Balance</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {selectedStudent.transactions.map((transaction, index) => (
-                          <tr key={index} className="border-b hover:bg-gray-50">
-                            <td className="px-4 py-3">{index + 1}</td>
-                            <td className="px-4 py-3">{transaction.date || 'N/A'}</td>
-                            <td className="px-4 py-3 text-right">
-                              {transaction.type === 'deposit' && (
-                                <span className="text-green-600 font-semibold">₹{transaction.amount.toFixed(2)}</span>
-                              )}
-                              {transaction.type !== 'deposit' && <span className="text-gray-400">–</span>}
-                            </td>
-                            <td className="px-4 py-3 text-right">
-                              {transaction.type === 'withdraw' && (
-                                <span className="text-red-600 font-semibold">₹{transaction.amount.toFixed(2)}</span>
-                              )}
-                              {transaction.type !== 'withdraw' && <span className="text-gray-400">–</span>}
-                            </td>
-                            <td className="px-4 py-3 text-right font-semibold">
-                              ₹{calculateBalance(selectedStudent.transactions, index).toFixed(2)}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                  <div className="mt-4 text-right">
-                    <p className="text-lg font-semibold text-gray-800">
-                      Current Balance: <span className="text-blue-600">₹{selectedStudent.balance.toFixed(2)}</span>
-                    </p>
-                  </div>
-                </Card>
-              ) : (
-                <div className="text-center py-8 bg-gray-50 rounded-lg">
-                  <p className="text-gray-600">No transactions found for this student.</p>
-                </div>
-              )}
-            </>
-          )}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="mb-12">
+          <h1 className="text-4xl font-bold text-white mb-2">Student Reports</h1>
+          <p className="text-slate-300">Search and download transaction reports</p>
         </div>
+
+        {/* Search Card */}
+        <Card className="bg-slate-800 border-slate-700 p-8 mb-8">
+          <div className="space-y-6">
+            {/* Report Type */}
+            <div>
+              <label className="block text-lg font-semibold text-slate-100 mb-3">Report Type</label>
+              <Select defaultValue="individual">
+                <SelectTrigger className="w-full h-12 border-slate-600 bg-slate-700 text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="individual">Individual Student</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Search and Select Student */}
+            <div>
+              <label className="block text-lg font-semibold text-slate-100 mb-3">Search Student</label>
+              <Select
+                value={selectedStudent?._id || ''}
+                onValueChange={(id: string) => {
+                  const student = students.find((s) => s._id === id);
+                  setSelectedStudent(student || null);
+                }}
+              >
+                <SelectTrigger className="w-full h-12 border-slate-600 bg-slate-700 text-white">
+                  <SelectValue placeholder="Search and select a student..." />
+                </SelectTrigger>
+                <SelectContent className="bg-slate-700 border-slate-600">
+                  {students.map((student) => (
+                    <SelectItem key={student._id} value={student._id} className="text-white hover:bg-slate-600">
+                      {student.name} ({student.code})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {students.length === 0 && (
+                <p className="mt-2 text-sm text-slate-400">No students available.</p>
+              )}
+            </div>
+
+            {/* Search Button */}
+            {selectedStudent && (
+              <Button
+                onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}
+                className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2"
+              >
+                <Search className="w-5 h-5" />
+                View Report
+              </Button>
+            )}
+          </div>
+        </Card>
+
+        {/* Results Section */}
+        {selectedStudent && (
+          <div className="space-y-8">
+            {/* Student Info */}
+            <Card className="bg-slate-800 border-slate-700 p-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <p className="text-slate-400 text-sm">Student Name</p>
+                  <p className="text-white text-lg font-semibold">{selectedStudent.name}</p>
+                </div>
+                <div>
+                  <p className="text-slate-400 text-sm">Student Code</p>
+                  <p className="text-white text-lg font-semibold">{selectedStudent.code}</p>
+                </div>
+                <div>
+                  <p className="text-slate-400 text-sm">Total Transactions</p>
+                  <p className="text-white text-lg font-semibold">{selectedStudent.transactions.length}</p>
+                </div>
+                <div>
+                  <p className="text-slate-400 text-sm">Current Balance</p>
+                  <p className="text-blue-400 text-lg font-semibold">₹{selectedStudent.balance.toFixed(2)}</p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Transaction Ledger */}
+            {selectedStudent.transactions && selectedStudent.transactions.length > 0 ? (
+              <Card className="bg-slate-800 border-slate-700 p-6">
+                <h2 className="text-2xl font-bold text-white mb-6">Transaction Ledger</h2>
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="bg-slate-700 border-b border-slate-600">
+                        <th className="px-4 py-4 text-left text-slate-200 font-semibold">S.No</th>
+                        <th className="px-4 py-4 text-left text-slate-200 font-semibold">Date</th>
+                        <th className="px-4 py-4 text-right text-slate-200 font-semibold">Deposit</th>
+                        <th className="px-4 py-4 text-right text-slate-200 font-semibold">Withdraw</th>
+                        <th className="px-4 py-4 text-right text-slate-200 font-semibold">Balance</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selectedStudent.transactions.map((transaction, index) => (
+                        <tr key={index} className="border-b border-slate-700 hover:bg-slate-700/50 transition">
+                          <td className="px-4 py-4 text-slate-300">{index + 1}</td>
+                          <td className="px-4 py-4 text-slate-300">{transaction.date || 'N/A'}</td>
+                          <td className="px-4 py-4 text-right">
+                            {transaction.type === 'deposit' && (
+                              <span className="text-green-400 font-semibold">₹{transaction.amount.toFixed(2)}</span>
+                            )}
+                            {transaction.type !== 'deposit' && <span className="text-slate-500">–</span>}
+                          </td>
+                          <td className="px-4 py-4 text-right">
+                            {transaction.type === 'withdraw' && (
+                              <span className="text-red-400 font-semibold">₹{transaction.amount.toFixed(2)}</span>
+                            )}
+                            {transaction.type !== 'withdraw' && <span className="text-slate-500">–</span>}
+                          </td>
+                          <td className="px-4 py-4 text-right text-slate-200 font-semibold">
+                            ₹{calculateBalance(selectedStudent.transactions, index).toFixed(2)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </Card>
+            ) : (
+              <Card className="bg-slate-800 border-slate-700 p-8 text-center">
+                <p className="text-slate-300 text-lg">No transactions found for this student.</p>
+              </Card>
+            )}
+
+            {/* Download Buttons */}
+            <Card className="bg-slate-800 border-slate-700 p-6">
+              <h3 className="text-xl font-bold text-white mb-4">Download Report</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <Button
+                  onClick={exportPDF}
+                  className="h-14 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2 transition"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8m0 0l-4 4m4-4l4 4" />
+                  </svg>
+                  Download PDF
+                </Button>
+                <Button
+                  onClick={exportExcel}
+                  className="h-14 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2 transition"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8m0 0l-4 4m4-4l4 4" />
+                  </svg>
+                  Download Excel
+                </Button>
+              </div>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );
