@@ -11,9 +11,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Username and password required' }, { status: 400 });
     }
 
-    const admin = await Admin.findOne({ username, password });
+    const admin = await Admin.findOne({ username });
 
     if (!admin) {
+      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+    }
+
+    // Use the comparePassword method to check hashed password
+    const isPasswordValid = await admin.comparePassword(password);
+
+    if (!isPasswordValid) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
