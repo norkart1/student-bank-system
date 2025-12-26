@@ -13,6 +13,91 @@ interface ExcelTransaction {
   amount: number
 }
 
+// Helper function to parse dates from various formats
+function parseDate(dateStr: any): string | null {
+  if (!dateStr) return null
+
+  // If it's a number (Excel serial date)
+  if (typeof dateStr === "number") {
+    const excelDate = new Date((dateStr - 25569) * 86400 * 1000)
+    return excelDate.toLocaleDateString("en-GB").split("/").reverse().join("-") // YYYY-MM-DD format
+  }
+
+  // If it's a string, try to parse it
+  const str = String(dateStr).trim()
+
+  // Try DD/MM/YYYY format
+  const ddmmyyyyMatch = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+  if (ddmmyyyyMatch) {
+    const [, day, month, year] = ddmmyyyyMatch
+    const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+    if (!isNaN(date.getTime())) {
+      return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`
+    }
+  }
+
+  // Try YYYY-MM-DD format
+  const yyyymmddMatch = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/)
+  if (yyyymmddMatch) {
+    const [, year, month, day] = yyyymmddMatch
+    const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+    if (!isNaN(date.getTime())) {
+      return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`
+    }
+  }
+
+  // Try MM/DD/YYYY format
+  const mmddyyyyMatch = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+  if (mmddyyyyMatch) {
+    const [, month, day, year] = mmddyyyyMatch
+    const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+    if (!isNaN(date.getTime())) {
+      return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`
+    }
+  }
+
+  // Try parsing as ISO date
+  const isoDate = new Date(str)
+  if (!isNaN(isoDate.getTime())) {
+    return isoDate.toLocaleDateString("en-GB").split("/").reverse().join("-").replace(/-/g, "/").split("/").reverse().join("/")
+  }
+
+  return null
+}
+
+// Function to parse CSV
+function parseCSV(text: string): any[] {
+  const lines = text.trim().split("\n")
+  if (lines.length === 0) return []
+
+  // Parse header
+  const headers = lines[0].split(",").map((h) => h.trim())
+  const data: any[] = []
+
+  // Find column indices
+  const studentCodeIdx = headers.findIndex((h) =>
+    h.toLowerCase().includes("code") || h.toLowerCase().includes("student")
+  )
+  const dateIdx = headers.findIndex((h) => h.toLowerCase().includes("date"))
+  const typeIdx = headers.findIndex((h) => h.toLowerCase().includes("type"))
+  const amountIdx = headers.findIndex((h) => h.toLowerCase().includes("amount"))
+
+  // Parse rows
+  for (let i = 1; i < lines.length; i++) {
+    const values = lines[i].split(",").map((v) => v.trim())
+    if (values.length > Math.max(studentCodeIdx, dateIdx, typeIdx, amountIdx)) {
+      data.push({
+        studentCode: values[studentCodeIdx] || "",
+        date: values[dateIdx] || "",
+        type: (values[typeIdx] || "").toLowerCase(),
+        amount: parseFloat(values[amountIdx]) || 0,
+      })
+    }
+  }
+
+  return data
+}
+
 export default function UploadTransactions() {
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -29,27 +114,40 @@ export default function UploadTransactions() {
 
     reader.onload = (e) => {
       try {
-        const data = e.target?.result as ArrayBuffer
-        const workbook = XLSX.read(data, { type: "array" })
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]]
-        const jsonData = XLSX.utils.sheet_to_json(worksheet)
+        let jsonData: any[] = []
+
+        if (file.name.endsWith(".csv")) {
+          // Parse CSV
+          const text = e.target?.result as string
+          jsonData = parseCSV(text)
+        } else {
+          // Parse Excel
+          const data = e.target?.result as ArrayBuffer
+          const workbook = XLSX.read(data, { type: "array" })
+          const worksheet = workbook.Sheets[workbook.SheetNames[0]]
+          jsonData = XLSX.utils.sheet_to_json(worksheet)
+        }
 
         // Validate and transform data
         const transactions: ExcelTransaction[] = jsonData
-          .map((row: any) => ({
-            studentCode: String(row["Student Code"] || row["Code"] || "").trim(),
-            date: String(row["Date"] || "").trim(),
-            type: String(row["Type"] || "").toLowerCase().trim() as "deposit" | "withdrawal",
-            amount: parseFloat(row["Amount"] || 0),
-          }))
+          .map((row: any) => {
+            const parsedDate = parseDate(row["Date"] || row["date"] || "")
+            return {
+              studentCode: String(
+                row["Student Code"] || row["Code"] || row["StudentCode"] || row["studentCode"] || ""
+              ).trim(),
+              date: parsedDate || "",
+              type: String(row["Type"] || row["type"] || "").toLowerCase().trim() as "deposit" | "withdrawal",
+              amount: parseFloat(row["Amount"] || row["amount"] || 0),
+            }
+          })
           .filter((t) => {
             // Validate each transaction
             if (!t.studentCode) {
-              toast.warning("Row skipped: Missing student code")
               return false
             }
             if (!t.date) {
-              toast.warning(`Row skipped (${t.studentCode}): Missing date`)
+              toast.warning(`Row skipped (${t.studentCode}): Invalid or missing date`)
               return false
             }
             if (!["deposit", "withdrawal"].includes(t.type)) {
@@ -76,13 +174,17 @@ export default function UploadTransactions() {
         toast.success(`✓ Loaded ${transactions.length} transactions`)
       } catch (error) {
         console.error("Error reading file:", error)
-        toast.error("Failed to read Excel file")
+        toast.error("Failed to read file")
         setFileName("")
         setPreviewData([])
       }
     }
 
-    reader.readAsArrayBuffer(file)
+    if (file.name.endsWith(".csv")) {
+      reader.readAsText(file)
+    } else {
+      reader.readAsArrayBuffer(file)
+    }
   }
 
   const handleUpload = async () => {
@@ -141,16 +243,16 @@ export default function UploadTransactions() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Upload Section */}
           <div className="lg:col-span-2 bg-white rounded-2xl shadow-lg p-6">
-            <h2 className="text-xl font-semibold text-[#171532] mb-4">Import Excel File</h2>
+            <h2 className="text-xl font-semibold text-[#171532] mb-4">Import Excel or CSV File</h2>
 
             <div
               className="border-2 border-dashed border-[#d1d5db] rounded-xl p-8 text-center cursor-pointer hover:border-[#4a6670] hover:bg-[#f8f9fa] transition-all"
               onClick={() => fileInputRef.current?.click()}
             >
               <Upload className="w-12 h-12 text-[#747384] mx-auto mb-3" />
-              <p className="text-[#171532] font-semibold mb-2">Click to select Excel file</p>
+              <p className="text-[#171532] font-semibold mb-2">Click to select file</p>
               <p className="text-sm text-[#747384]">
-                Supports .xlsx, .xls files with columns: Student Code, Date, Type, Amount
+                Supports .xlsx, .xls, .csv files with columns: Student Code, Date, Type, Amount
               </p>
               {fileName && (
                 <p className="text-sm text-green-600 mt-3 font-medium">
@@ -160,17 +262,17 @@ export default function UploadTransactions() {
               <input
                 ref={fileInputRef}
                 type="file"
-                accept=".xlsx,.xls"
+                accept=".xlsx,.xls,.csv"
                 onChange={handleFileSelect}
                 className="hidden"
               />
             </div>
 
             <div className="mt-6 p-4 bg-[#f0f4ff] rounded-lg border border-[#d1d5db]">
-              <h3 className="text-sm font-semibold text-[#171532] mb-2">Excel File Format:</h3>
+              <h3 className="text-sm font-semibold text-[#171532] mb-2">File Format:</h3>
               <ul className="text-sm text-[#747384] space-y-1">
                 <li>• <strong>Student Code:</strong> Student's unique code (required)</li>
-                <li>• <strong>Date:</strong> Transaction date in dd/MM/yyyy format (required)</li>
+                <li>• <strong>Date:</strong> Transaction date (formats: dd/MM/yyyy, MM/DD/YYYY, or YYYY-MM-DD) - (required)</li>
                 <li>• <strong>Type:</strong> Either "deposit" or "withdrawal" (required)</li>
                 <li>• <strong>Amount:</strong> Transaction amount as number (required)</li>
               </ul>
@@ -184,21 +286,21 @@ export default function UploadTransactions() {
                   download
                   className="text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium"
                 >
-                  📄 Sample - Mixed Deposits & Withdrawals
+                  📄 Sample - Mixed Deposits & Withdrawals (Excel)
                 </a>
                 <a
                   href="/samples/sample_deposits.xlsx"
                   download
                   className="text-sm text-green-600 hover:text-green-700 hover:underline font-medium"
                 >
-                  📄 Sample - Deposits Only
+                  📄 Sample - Deposits Only (Excel)
                 </a>
                 <a
                   href="/samples/sample_withdrawals.xlsx"
                   download
                   className="text-sm text-red-600 hover:text-red-700 hover:underline font-medium"
                 >
-                  📄 Sample - Withdrawals Only
+                  📄 Sample - Withdrawals Only (Excel)
                 </a>
               </div>
             </div>
@@ -259,7 +361,7 @@ export default function UploadTransactions() {
               <div className="text-center py-8">
                 <p className="text-[#747384]">No transactions loaded</p>
                 <p className="text-xs text-[#747384] mt-2">
-                  Select an Excel file to see a preview
+                  Select a file to see a preview
                 </p>
               </div>
             )}
