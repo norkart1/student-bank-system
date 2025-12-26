@@ -54,6 +54,7 @@ const viewport = {
     colorScheme: 'light dark'
 };
 const metadata = {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://jdsa-students-bank.vercel.app'),
     title: 'JDSA Students Bank - Educational Banking System',
     description: 'Banking Made Simple for Students. A comprehensive, secure banking system designed specifically for educational institutions. Manage student accounts, deposits, withdrawals, and transactions with ease.',
     keywords: [
@@ -142,7 +143,7 @@ function RootLayout({ children }) {
                         charSet: "utf-8"
                     }, void 0, false, {
                         fileName: "[project]/app/layout.tsx",
-                        lineNumber: 97,
+                        lineNumber: 98,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("meta", {
@@ -150,7 +151,7 @@ function RootLayout({ children }) {
                         content: "telephone=no"
                     }, void 0, false, {
                         fileName: "[project]/app/layout.tsx",
-                        lineNumber: 98,
+                        lineNumber: 99,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("meta", {
@@ -158,7 +159,7 @@ function RootLayout({ children }) {
                         content: "yes"
                     }, void 0, false, {
                         fileName: "[project]/app/layout.tsx",
-                        lineNumber: 99,
+                        lineNumber: 100,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("meta", {
@@ -166,7 +167,7 @@ function RootLayout({ children }) {
                         content: "black-translucent"
                     }, void 0, false, {
                         fileName: "[project]/app/layout.tsx",
-                        lineNumber: 100,
+                        lineNumber: 101,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("meta", {
@@ -174,7 +175,7 @@ function RootLayout({ children }) {
                         content: "JDSA Bank"
                     }, void 0, false, {
                         fileName: "[project]/app/layout.tsx",
-                        lineNumber: 101,
+                        lineNumber: 102,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("link", {
@@ -182,13 +183,13 @@ function RootLayout({ children }) {
                         href: "/manifest.json"
                     }, void 0, false, {
                         fileName: "[project]/app/layout.tsx",
-                        lineNumber: 102,
+                        lineNumber: 103,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/layout.tsx",
-                lineNumber: 96,
+                lineNumber: 97,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("body", {
@@ -201,24 +202,24 @@ function RootLayout({ children }) {
                         children,
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$vercel$2f$analytics$2f$dist$2f$next$2f$index$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Analytics"], {}, void 0, false, {
                             fileName: "[project]/app/layout.tsx",
-                            lineNumber: 107,
+                            lineNumber: 108,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/layout.tsx",
-                    lineNumber: 105,
+                    lineNumber: 106,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/layout.tsx",
-                lineNumber: 104,
+                lineNumber: 105,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/layout.tsx",
-        lineNumber: 95,
+        lineNumber: 96,
         columnNumber: 5
     }, this);
 }

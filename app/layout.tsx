@@ -18,6 +18,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://jdsa-students-bank.vercel.app'),
   title: 'JDSA Students Bank - Educational Banking System',
   description: 'Banking Made Simple for Students. A comprehensive, secure banking system designed specifically for educational institutions. Manage student accounts, deposits, withdrawals, and transactions with ease.',
   keywords: ['student banking', 'educational banking', 'account management', 'student accounts', 'banking system'],

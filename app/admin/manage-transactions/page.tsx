@@ -4,6 +4,9 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, Edit2, Save, X, Trash2, Loader } from "lucide-react"
 import { toast } from "sonner"
+import { DatePickerPopover } from "@/app/components/DatePickerPopover"
+import { ConfirmDialog } from "@/app/components/ConfirmDialog"
+import { useDebounce } from "@/app/hooks/useDebounce"
 
 interface Student {
   _id: string
@@ -26,7 +29,13 @@ export default function ManageTransactions() {
   const [editValues, setEditValues] = useState<any>({})
   const [searchQuery, setSearchQuery] = useState("")
   const [isSaving, setIsSaving] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
+  const [deleteConfirm, setDeleteConfirm] = useState<{ open: boolean; index: number | null }>({
+    open: false,
+    index: null,
+  })
+
+  // Debounce search query for better performance
+  const debouncedSearch = useDebounce(searchQuery, 200)
 
   useEffect(() => {
     loadStudents()
@@ -103,16 +112,14 @@ export default function ManageTransactions() {
     }
   }
 
-  const handleDeleteTransaction = async (index: number) => {
-    if (!selectedStudent) return
-    if (!confirm("Are you sure you want to delete this transaction?")) return
+  const handleDeleteConfirm = async () => {
+    if (!selectedStudent || deleteConfirm.index === null) return
 
-    setIsDeleting(true)
     try {
       const response = await fetch(`/api/students/${selectedStudent._id}/transaction/delete`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ index })
+        body: JSON.stringify({ index: deleteConfirm.index })
       })
 
       if (response.ok) {
@@ -120,6 +127,7 @@ export default function ManageTransactions() {
         setSelectedStudent(data.student)
         toast.success("✓ Transaction deleted successfully")
         await loadStudents()
+        setDeleteConfirm({ open: false, index: null })
       } else {
         const error = await response.json()
         toast.error(error.error || "Failed to delete transaction")
@@ -127,14 +135,12 @@ export default function ManageTransactions() {
     } catch (error) {
       console.error("Error deleting transaction:", error)
       toast.error("Error deleting transaction")
-    } finally {
-      setIsDeleting(false)
     }
   }
 
   const filteredStudents = students.filter(s =>
-    s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    s.code.toLowerCase().includes(searchQuery.toLowerCase())
+    s.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+    s.code.toLowerCase().includes(debouncedSearch.toLowerCase())
   )
 
   if (isLoading) {
@@ -221,16 +227,14 @@ export default function ManageTransactions() {
                           <div className="space-y-3">
                             <div>
                               <label className="block text-sm font-medium text-[#171532] mb-1">
-                                Date (dd/MM/yyyy)
+                                Date
                               </label>
-                              <input
-                                type="text"
-                                placeholder="dd/MM/yyyy"
+                              <DatePickerPopover
                                 value={editValues.date}
-                                onChange={(e) =>
-                                  setEditValues({ ...editValues, date: e.target.value })
+                                onChange={(date) =>
+                                  setEditValues({ ...editValues, date })
                                 }
-                                className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:border-[#4a6670]"
+                                placeholder="Select date"
                               />
                             </div>
 
@@ -304,23 +308,21 @@ export default function ManageTransactions() {
                               </p>
                               <button
                                 onClick={() => handleEditTransaction(idx, transaction)}
-                                disabled={isDeleting || isSaving}
+                                disabled={deleteConfirm.open || isSaving}
                                 className="p-2 hover:bg-blue-100 disabled:opacity-50 text-blue-600 rounded-lg transition-colors"
                                 title="Edit transaction"
                               >
                                 <Edit2 className="w-5 h-5" />
                               </button>
                               <button
-                                onClick={() => handleDeleteTransaction(idx)}
-                                disabled={isDeleting || isSaving}
+                                onClick={() =>
+                                  setDeleteConfirm({ open: true, index: idx })
+                                }
+                                disabled={deleteConfirm.open || isSaving}
                                 className="p-2 hover:bg-red-100 disabled:opacity-50 text-red-600 rounded-lg transition-colors"
                                 title="Delete transaction"
                               >
-                                {isDeleting ? (
-                                  <Loader className="w-5 h-5 animate-spin" />
-                                ) : (
-                                  <Trash2 className="w-5 h-5" />
-                                )}
+                                <Trash2 className="w-5 h-5" />
                               </button>
                             </div>
                           </div>
@@ -342,6 +344,17 @@ export default function ManageTransactions() {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Dialog */}
+      <ConfirmDialog
+        open={deleteConfirm.open}
+        title="Delete Transaction"
+        description="Are you sure you want to delete this transaction? This action cannot be undone."
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteConfirm({ open: false, index: null })}
+        isLoading={false}
+        isDangerous={true}
+      />
     </div>
   )
 }
