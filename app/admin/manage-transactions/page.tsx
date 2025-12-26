@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Edit2, Save, X, Trash2 } from "lucide-react"
+import { ArrowLeft, Edit2, Save, X, Trash2, Loader } from "lucide-react"
 import { toast } from "sonner"
 
 interface Student {
@@ -25,6 +25,8 @@ export default function ManageTransactions() {
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
   const [editValues, setEditValues] = useState<any>({})
   const [searchQuery, setSearchQuery] = useState("")
+  const [isSaving, setIsSaving] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     loadStudents()
@@ -44,6 +46,7 @@ export default function ManageTransactions() {
         }
       }
     } catch (error) {
+      console.error("Failed to load students:", error)
       toast.error("Failed to load students")
     } finally {
       setIsLoading(false)
@@ -63,11 +66,12 @@ export default function ManageTransactions() {
       return
     }
 
-    if (isNaN(parseFloat(editValues.amount))) {
+    if (isNaN(parseFloat(editValues.amount)) || parseFloat(editValues.amount) <= 0) {
       toast.error("Please enter a valid amount")
       return
     }
 
+    setIsSaving(true)
     try {
       const response = await fetch(`/api/students/${selectedStudent._id}/transaction/update`, {
         method: 'PUT',
@@ -84,15 +88,18 @@ export default function ManageTransactions() {
         const data = await response.json()
         setSelectedStudent(data.student)
         setEditingIndex(null)
-        toast.success("Transaction updated successfully")
-        loadStudents()
+        setEditValues({})
+        toast.success("✓ Transaction updated successfully")
+        await loadStudents()
       } else {
         const error = await response.json()
         toast.error(error.error || "Failed to update transaction")
       }
     } catch (error) {
-      console.error(error)
+      console.error("Error updating transaction:", error)
       toast.error("Error updating transaction")
+    } finally {
+      setIsSaving(false)
     }
   }
 
@@ -100,6 +107,7 @@ export default function ManageTransactions() {
     if (!selectedStudent) return
     if (!confirm("Are you sure you want to delete this transaction?")) return
 
+    setIsDeleting(true)
     try {
       const response = await fetch(`/api/students/${selectedStudent._id}/transaction/delete`, {
         method: 'DELETE',
@@ -110,15 +118,17 @@ export default function ManageTransactions() {
       if (response.ok) {
         const data = await response.json()
         setSelectedStudent(data.student)
-        toast.success("Transaction deleted successfully")
-        loadStudents()
+        toast.success("✓ Transaction deleted successfully")
+        await loadStudents()
       } else {
         const error = await response.json()
         toast.error(error.error || "Failed to delete transaction")
       }
     } catch (error) {
-      console.error(error)
+      console.error("Error deleting transaction:", error)
       toast.error("Error deleting transaction")
+    } finally {
+      setIsDeleting(false)
     }
   }
 
@@ -170,21 +180,25 @@ export default function ManageTransactions() {
             />
 
             <div className="space-y-2 max-h-96 overflow-y-auto">
-              {filteredStudents.map((student) => (
-                <button
-                  key={student._id}
-                  onClick={() => setSelectedStudent(student)}
-                  className={`w-full p-3 rounded-lg text-left transition-colors ${
-                    selectedStudent?._id === student._id
-                      ? "bg-[#4a6670] text-white"
-                      : "bg-[#f8f9fa] hover:bg-[#e8eef5] text-[#171532]"
-                  }`}
-                >
-                  <p className="font-semibold">{student.name}</p>
-                  <p className="text-sm text-[#747384]">{student.code}</p>
-                  <p className="text-xs mt-1">Balance: ₹{student.balance?.toFixed(2)}</p>
-                </button>
-              ))}
+              {filteredStudents.length > 0 ? (
+                filteredStudents.map((student) => (
+                  <button
+                    key={student._id}
+                    onClick={() => setSelectedStudent(student)}
+                    className={`w-full p-3 rounded-lg text-left transition-colors ${
+                      selectedStudent?._id === student._id
+                        ? "bg-[#4a6670] text-white"
+                        : "bg-[#f8f9fa] hover:bg-[#e8eef5] text-[#171532]"
+                    }`}
+                  >
+                    <p className="font-semibold">{student.name}</p>
+                    <p className="text-sm text-[#747384]">{student.code}</p>
+                    <p className="text-xs mt-1">Balance: ₹{student.balance?.toFixed(2)}</p>
+                  </button>
+                ))
+              ) : (
+                <p className="text-center text-[#747384] py-4">No students found</p>
+              )}
             </div>
           </div>
 
@@ -227,6 +241,7 @@ export default function ManageTransactions() {
                               <input
                                 type="number"
                                 step="0.01"
+                                min="0"
                                 value={editValues.amount}
                                 onChange={(e) =>
                                   setEditValues({ ...editValues, amount: e.target.value })
@@ -247,14 +262,28 @@ export default function ManageTransactions() {
                             <div className="flex gap-2 pt-2">
                               <button
                                 onClick={() => handleSaveTransaction(idx)}
-                                className="flex-1 flex items-center justify-center gap-2 bg-[#4a6670] hover:bg-[#3d565e] text-white px-3 py-2 rounded-lg font-semibold transition-colors"
+                                disabled={isSaving}
+                                className="flex-1 flex items-center justify-center gap-2 bg-[#4a6670] hover:bg-[#3d565e] disabled:opacity-50 disabled:cursor-not-allowed text-white px-3 py-2 rounded-lg font-semibold transition-colors"
                               >
-                                <Save className="w-4 h-4" />
-                                Save
+                                {isSaving ? (
+                                  <>
+                                    <Loader className="w-4 h-4 animate-spin" />
+                                    Saving...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Save className="w-4 h-4" />
+                                    Save
+                                  </>
+                                )}
                               </button>
                               <button
-                                onClick={() => setEditingIndex(null)}
-                                className="flex-1 flex items-center justify-center gap-2 bg-[#e5e7eb] hover:bg-[#d1d5db] text-[#171532] px-3 py-2 rounded-lg font-semibold transition-colors"
+                                onClick={() => {
+                                  setEditingIndex(null)
+                                  setEditValues({})
+                                }}
+                                disabled={isSaving}
+                                className="flex-1 flex items-center justify-center gap-2 bg-[#e5e7eb] hover:bg-[#d1d5db] disabled:opacity-50 text-[#171532] px-3 py-2 rounded-lg font-semibold transition-colors"
                               >
                                 <X className="w-4 h-4" />
                                 Cancel
@@ -275,17 +304,23 @@ export default function ManageTransactions() {
                               </p>
                               <button
                                 onClick={() => handleEditTransaction(idx, transaction)}
-                                className="p-2 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors"
+                                disabled={isDeleting || isSaving}
+                                className="p-2 hover:bg-blue-100 disabled:opacity-50 text-blue-600 rounded-lg transition-colors"
                                 title="Edit transaction"
                               >
                                 <Edit2 className="w-5 h-5" />
                               </button>
                               <button
                                 onClick={() => handleDeleteTransaction(idx)}
-                                className="p-2 hover:bg-red-100 text-red-600 rounded-lg transition-colors"
+                                disabled={isDeleting || isSaving}
+                                className="p-2 hover:bg-red-100 disabled:opacity-50 text-red-600 rounded-lg transition-colors"
                                 title="Delete transaction"
                               >
-                                <Trash2 className="w-5 h-5" />
+                                {isDeleting ? (
+                                  <Loader className="w-5 h-5 animate-spin" />
+                                ) : (
+                                  <Trash2 className="w-5 h-5" />
+                                )}
                               </button>
                             </div>
                           </div>

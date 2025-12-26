@@ -5,6 +5,7 @@ import { NextResponse } from "next/server"
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     await connectDB()
+
     const { id } = await params
     const body = await req.json()
     const { index, date, type, amount } = body
@@ -25,12 +26,14 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 
     student.transactions[index] = { date, type, amount }
     student.balance += difference
+    
+    student.markModified('transactions')
 
     await student.save()
 
     return NextResponse.json({ success: true, student })
   } catch (error) {
     console.error("Error updating transaction:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    return NextResponse.json({ error: "Internal server error", details: String(error) }, { status: 500 })
   }
 }
