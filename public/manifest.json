@@ -1,0 +1,68 @@
+{
+  "name": "JDSA Students Bank",
+  "short_name": "JDSA Bank",
+  "description": "Banking Made Simple for Students - A comprehensive banking system for educational institutions",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#4a6670",
+  "categories": ["business", "finance"],
+  "screenshots": [
+    {
+      "src": "/placeholder-logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/icon-light-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Login",
+      "short_name": "Login",
+      "description": "Login to your JDSA Students Bank account",
+      "url": "/login",
+      "icons": [
+        {
+          "src": "/icon-light-32x32.png",
+          "sizes": "32x32",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Admin Dashboard",
+      "short_name": "Admin",
+      "description": "Access the admin dashboard",
+      "url": "/admin-login",
+      "icons": [
+        {
+          "src": "/icon-light-32x32.png",
+          "sizes": "32x32",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}

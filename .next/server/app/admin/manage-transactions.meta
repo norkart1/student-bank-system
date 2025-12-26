@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/admin/layout,_N_T_/admin/manage-transactions/layout,_N_T_/admin/manage-transactions/page,_N_T_/admin/manage-transactions"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/admin/manage-transactions/__PAGE__",
+    "/admin/manage-transactions",
+    "/admin",
+    "/_index",
+    "/_head"
+  ]
+}

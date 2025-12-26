@@ -1,0 +1,257 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/api/students/[id]",
+      "regex": "^/api/students/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/students/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/students/[id]/transaction/add",
+      "regex": "^/api/students/([^/]+?)/transaction/add(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/students/(?<nxtPid>[^/]+?)/transaction/add(?:/)?$"
+    },
+    {
+      "page": "/api/students/[id]/transaction/delete",
+      "regex": "^/api/students/([^/]+?)/transaction/delete(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/students/(?<nxtPid>[^/]+?)/transaction/delete(?:/)?$"
+    },
+    {
+      "page": "/api/students/[id]/transaction/update",
+      "regex": "^/api/students/([^/]+?)/transaction/update(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/students/(?<nxtPid>[^/]+?)/transaction/update(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/admin/dashboard",
+      "regex": "^/admin/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/dashboard(?:/)?$"
+    },
+    {
+      "page": "/admin/manage-transactions",
+      "regex": "^/admin/manage\\-transactions(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/manage\\-transactions(?:/)?$"
+    },
+    {
+      "page": "/admin/reports",
+      "regex": "^/admin/reports(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/reports(?:/)?$"
+    },
+    {
+      "page": "/admin-login",
+      "regex": "^/admin\\-login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin\\-login(?:/)?$"
+    },
+    {
+      "page": "/admin-setup",
+      "regex": "^/admin\\-setup(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin\\-setup(?:/)?$"
+    },
+    {
+      "page": "/api/admin/check-status",
+      "regex": "^/api/admin/check\\-status(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/check\\-status(?:/)?$"
+    },
+    {
+      "page": "/api/admin/init",
+      "regex": "^/api/admin/init(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/init(?:/)?$"
+    },
+    {
+      "page": "/api/admin/init-from-env",
+      "regex": "^/api/admin/init\\-from\\-env(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/init\\-from\\-env(?:/)?$"
+    },
+    {
+      "page": "/api/admin/login",
+      "regex": "^/api/admin/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/login(?:/)?$"
+    },
+    {
+      "page": "/api/admin/test-login",
+      "regex": "^/api/admin/test\\-login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/test\\-login(?:/)?$"
+    },
+    {
+      "page": "/api/auth/login",
+      "regex": "^/api/auth/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/auth/login(?:/)?$"
+    },
+    {
+      "page": "/api/auth/logout",
+      "regex": "^/api/auth/logout(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/auth/logout(?:/)?$"
+    },
+    {
+      "page": "/api/auth/verify",
+      "regex": "^/api/auth/verify(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/auth/verify(?:/)?$"
+    },
+    {
+      "page": "/api/gemini",
+      "regex": "^/api/gemini(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/gemini(?:/)?$"
+    },
+    {
+      "page": "/api/pusher/auth",
+      "regex": "^/api/pusher/auth(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/pusher/auth(?:/)?$"
+    },
+    {
+      "page": "/api/pusher/broadcast",
+      "regex": "^/api/pusher/broadcast(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/pusher/broadcast(?:/)?$"
+    },
+    {
+      "page": "/api/students",
+      "regex": "^/api/students(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/students(?:/)?$"
+    },
+    {
+      "page": "/api/students/search",
+      "regex": "^/api/students/search(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/students/search(?:/)?$"
+    },
+    {
+      "page": "/api/students/transaction",
+      "regex": "^/api/students/transaction(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/students/transaction(?:/)?$"
+    },
+    {
+      "page": "/api/system/status",
+      "regex": "^/api/system/status(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/system/status(?:/)?$"
+    },
+    {
+      "page": "/api/transactions/deposits",
+      "regex": "^/api/transactions/deposits(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/transactions/deposits(?:/)?$"
+    },
+    {
+      "page": "/api/transactions/init",
+      "regex": "^/api/transactions/init(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/transactions/init(?:/)?$"
+    },
+    {
+      "page": "/api/transactions/withdrawals",
+      "regex": "^/api/transactions/withdrawals(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/transactions/withdrawals(?:/)?$"
+    },
+    {
+      "page": "/api/upload",
+      "regex": "^/api/upload(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/upload(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    },
+    {
+      "page": "/register",
+      "regex": "^/register(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/register(?:/)?$"
+    },
+    {
+      "page": "/user/dashboard",
+      "regex": "^/user/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/user/dashboard(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}
