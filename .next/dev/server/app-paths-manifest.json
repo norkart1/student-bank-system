@@ -3,6 +3,8 @@
   "/admin/dashboard/page": "app/admin/dashboard/page.js",
   "/admin/manage-transactions/page": "app/admin/manage-transactions/page.js",
   "/api/auth/login/route": "app/api/auth/login/route.js",
+  "/api/auth/verify/route": "app/api/auth/verify/route.js",
+  "/api/students/[id]/route": "app/api/students/[id]/route.js",
   "/api/students/[id]/transaction/delete/route": "app/api/students/[id]/transaction/delete/route.js",
   "/api/students/[id]/transaction/update/route": "app/api/students/[id]/transaction/update/route.js",
   "/api/students/route": "app/api/students/route.js",
