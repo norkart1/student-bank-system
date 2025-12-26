@@ -48,6 +48,10 @@ export default function AdminDashboard() {
   const [viewingIndex, setViewingIndex] = useState<number | null>(null)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deletingIndex, setDeletingIndex] = useState<number | null>(null)
+  const [editingTransaction, setEditingTransaction] = useState<{ studentIndex: number, transactionIndex: number } | null>(null)
+  const [editTxAmount, setEditTxAmount] = useState("")
+  const [editTxDate, setEditTxDate] = useState("")
+  const [editTxReason, setEditTxReason] = useState("")
   const [newStudent, setNewStudent] = useState({
     name: "",
     mobile: "",
@@ -1376,6 +1380,44 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
+              <div className="pt-4 border-t border-[#f0f0f0]">
+                <h4 className="text-sm font-bold text-[#171532] mb-3">Transaction History</h4>
+                <div className="space-y-2 max-h-64 overflow-y-auto pr-2">
+                  {student.transactions && student.transactions.length > 0 ? (
+                    [...student.transactions].reverse().map((tx, idx) => (
+                      <div key={idx} className="flex items-center justify-between p-3 bg-[#f8f9fa] rounded-xl group border border-transparent hover:border-[#e5e7eb] transition-all">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className={`w-2 h-2 rounded-full ${tx.type === 'deposit' ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                            <p className="text-sm font-bold text-[#171532]">
+                              {tx.type === 'deposit' ? '+' : '-'}₹{tx.amount.toFixed(2)}
+                            </p>
+                          </div>
+                          <p className="text-[10px] text-[#747384] truncate">
+                            {tx.date} {tx.reason ? `• ${tx.reason}` : ''}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => {
+                            const actualIdx = student.transactions.length - 1 - idx;
+                            setEditingTransaction({ studentIndex: viewingIndex, transactionIndex: actualIdx });
+                            setEditTxAmount(tx.amount.toString());
+                            setEditTxDate(new Date(tx.date).toISOString().split('T')[0]);
+                            setEditTxReason(tx.reason || "");
+                          }}
+                          className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+                          title="Edit Transaction"
+                        >
+                          <Edit className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-center py-4 text-[#747384] text-xs">No transactions yet</p>
+                  )}
+                </div>
+              </div>
+
               <div className="flex gap-3 pt-6 border-t border-[#e5e7eb]">
                 <button
                   onClick={() => {
@@ -1385,7 +1427,7 @@ export default function AdminDashboard() {
                   className="flex-1 flex items-center justify-center gap-2 bg-blue-100 text-blue-600 py-3 rounded-xl font-semibold hover:bg-blue-200 transition-colors"
                 >
                   <Edit className="w-4 h-4" />
-                  Edit
+                  Edit Account
                 </button>
                 <button
                   onClick={() => {
@@ -1403,6 +1445,137 @@ export default function AdminDashboard() {
         </div>
       </div>
     )
+  }
+
+  const renderEditTransactionModal = () => {
+    if (!editingTransaction) return null;
+    const student = students[editingTransaction.studentIndex];
+    const tx = student.transactions[editingTransaction.transactionIndex];
+
+    const handleUpdateTransaction = async () => {
+      try {
+        const amount = parseFloat(editTxAmount);
+        if (isNaN(amount) || amount <= 0) {
+          setNotification({ type: 'error', message: 'Please enter a valid amount' });
+          setTimeout(() => setNotification(null), 3000);
+          return;
+        }
+
+        const updatedStudents = [...students];
+        const targetStudent = updatedStudents[editingTransaction.studentIndex];
+        const targetTx = targetStudent.transactions[editingTransaction.transactionIndex];
+
+        // Update transaction
+        targetTx.amount = amount;
+        targetTx.date = new Date(editTxDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        targetTx.reason = editTxReason || undefined;
+
+        // Recalculate balance
+        let newBalance = 0;
+        targetStudent.transactions.forEach(t => {
+          if (t.type === 'deposit') newBalance += t.amount;
+          else newBalance -= t.amount;
+        });
+        targetStudent.balance = newBalance;
+
+        // Update in database
+        const res = await fetch(`/api/students/${targetStudent._id}`, {
+          method: 'PATCH',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(targetStudent)
+        });
+
+        if (!res.ok) throw new Error('Failed to update');
+
+        setStudents(updatedStudents);
+        calculateTotals(updatedStudents);
+        setEditingTransaction(null);
+        setNotification({ type: 'success', message: 'Transaction updated successfully' });
+        setTimeout(() => setNotification(null), 3000);
+
+        // Broadcast update
+        fetch('/api/pusher/broadcast', {
+          method: 'POST',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: 'balance-update',
+            studentId: targetStudent._id,
+            update: { balance: targetStudent.balance }
+          })
+        }).catch(console.error);
+
+      } catch (err) {
+        setNotification({ type: 'error', message: 'Failed to update transaction' });
+        setTimeout(() => setNotification(null), 3000);
+      }
+    };
+
+    return (
+      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[60]">
+        <div className="bg-white rounded-2xl w-full max-w-sm mx-4 shadow-2xl p-6 space-y-4 animate-in scale-in duration-200">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-bold text-[#171532]">Edit Transaction</h3>
+            <button onClick={() => setEditingTransaction(null)} className="p-2 hover:bg-[#f0f0f0] rounded-full">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="space-y-3">
+            <div>
+              <label className="block text-xs font-semibold text-[#747384] mb-1">Type</label>
+              <div className={`text-sm font-bold ${tx.type === 'deposit' ? 'text-green-600' : 'text-red-600'} capitalize`}>
+                {tx.type}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-[#747384] mb-1">Amount (₹)</label>
+              <input
+                type="number"
+                value={editTxAmount}
+                onChange={(e) => setEditTxAmount(e.target.value)}
+                className="w-full px-4 py-2 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-[#747384] mb-1">Date</label>
+              <input
+                type="date"
+                value={editTxDate}
+                onChange={(e) => setEditTxDate(e.target.value)}
+                className="w-full px-4 py-2 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-[#747384] mb-1">Reason</label>
+              <input
+                type="text"
+                value={editTxReason}
+                onChange={(e) => setEditTxReason(e.target.value)}
+                className="w-full px-4 py-2 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670]"
+              />
+            </div>
+          </div>
+
+          <div className="flex gap-2 pt-2">
+            <button
+              onClick={() => setEditingTransaction(null)}
+              className="flex-1 py-2.5 bg-gray-100 text-gray-700 rounded-xl font-bold text-sm"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleUpdateTransaction}
+              className="flex-1 py-2.5 bg-[#4a6670] text-white rounded-xl font-bold text-sm"
+            >
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const renderAITab = () => {
@@ -1614,6 +1787,7 @@ export default function AdminDashboard() {
       )}
 
       {viewingIndex !== null && renderAccountDetailView()}
+      {editingTransaction !== null && renderEditTransactionModal()}
       {showDeleteConfirm && renderDeleteConfirmModal()}
 
       {(showCreateForm || showEditForm) && (
