@@ -333,14 +333,18 @@ export default function UserDashboard() {
                           <td className="border border-[#e5e7eb] px-2 py-2 text-[#747384]">{transaction.date || '-'}</td>
                           <td className="border border-[#e5e7eb] px-2 py-2 text-right">
                             {transaction.type === 'deposit' ? (
-                              <span className="text-[#10B981] font-semibold">₹{transaction.amount?.toFixed(2)}</span>
+                              <span className="inline-flex items-center gap-1 bg-green-50 px-2 py-1 rounded font-semibold text-green-700">
+                                <span>↓</span>₹{transaction.amount?.toFixed(2)}
+                              </span>
                             ) : (
                               <span className="text-[#747384]">-</span>
                             )}
                           </td>
                           <td className="border border-[#e5e7eb] px-2 py-2 text-right">
                             {transaction.type === 'withdraw' ? (
-                              <span className="text-[#EF4444] font-semibold">₹{transaction.amount?.toFixed(2)}</span>
+                              <span className="inline-flex items-center gap-1 bg-red-50 px-2 py-1 rounded font-semibold text-red-700">
+                                <span>↑</span>₹{transaction.amount?.toFixed(2)}
+                              </span>
                             ) : (
                               <span className="text-[#747384]">-</span>
                             )}

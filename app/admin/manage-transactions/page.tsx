@@ -299,9 +299,17 @@ export default function ManageTransactions() {
                           <div className="flex items-center justify-between gap-4">
                             <div className="flex-1">
                               <p className="font-semibold text-[#171532]">{transaction.date}</p>
-                              <p className="text-sm text-[#747384] capitalize">
-                                {transaction.type}
-                              </p>
+                              <div className="mt-1 inline-flex">
+                                {transaction.type === 'deposit' ? (
+                                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-green-100 text-green-700">
+                                    ↓ Deposit
+                                  </span>
+                                ) : (
+                                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-red-100 text-red-700">
+                                    ↑ Withdraw
+                                  </span>
+                                )}
+                              </div>
                             </div>
                             <div className="flex items-center gap-3">
                               <p className="font-bold text-lg text-[#171532] min-w-[100px] text-right">
