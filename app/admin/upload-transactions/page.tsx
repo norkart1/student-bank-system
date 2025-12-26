@@ -176,6 +176,33 @@ export default function UploadTransactions() {
               </ul>
             </div>
 
+            <div className="mt-6">
+              <h3 className="text-sm font-semibold text-[#171532] mb-3">Download Sample Files:</h3>
+              <div className="grid grid-cols-1 gap-2">
+                <a
+                  href="/samples/sample_mixed_transactions.xlsx"
+                  download
+                  className="text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium"
+                >
+                  📄 Sample - Mixed Deposits & Withdrawals
+                </a>
+                <a
+                  href="/samples/sample_deposits.xlsx"
+                  download
+                  className="text-sm text-green-600 hover:text-green-700 hover:underline font-medium"
+                >
+                  📄 Sample - Deposits Only
+                </a>
+                <a
+                  href="/samples/sample_withdrawals.xlsx"
+                  download
+                  className="text-sm text-red-600 hover:text-red-700 hover:underline font-medium"
+                >
+                  📄 Sample - Withdrawals Only
+                </a>
+              </div>
+            </div>
+
             {previewData.length > 0 && (
               <div className="mt-6">
                 <button
