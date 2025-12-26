@@ -38,6 +38,10 @@ export default function ManageTransactions() {
       if (response.ok) {
         const data = await response.json()
         setStudents(data)
+        if (selectedStudent) {
+          const updated = data.find((s: Student) => s._id === selectedStudent._id)
+          if (updated) setSelectedStudent(updated)
+        }
       }
     } catch (error) {
       toast.error("Failed to load students")
@@ -81,8 +85,10 @@ export default function ManageTransactions() {
         setSelectedStudent(data.student)
         setEditingIndex(null)
         toast.success("Transaction updated successfully")
+        loadStudents()
       } else {
-        toast.error("Failed to update transaction")
+        const error = await response.json()
+        toast.error(error.error || "Failed to update transaction")
       }
     } catch (error) {
       console.error(error)
@@ -105,8 +111,10 @@ export default function ManageTransactions() {
         const data = await response.json()
         setSelectedStudent(data.student)
         toast.success("Transaction deleted successfully")
+        loadStudents()
       } else {
-        toast.error("Failed to delete transaction")
+        const error = await response.json()
+        toast.error(error.error || "Failed to delete transaction")
       }
     } catch (error) {
       console.error(error)
@@ -203,6 +211,7 @@ export default function ManageTransactions() {
                               </label>
                               <input
                                 type="text"
+                                placeholder="dd/MM/yyyy"
                                 value={editValues.date}
                                 onChange={(e) =>
                                   setEditValues({ ...editValues, date: e.target.value })
@@ -217,6 +226,7 @@ export default function ManageTransactions() {
                               </label>
                               <input
                                 type="number"
+                                step="0.01"
                                 value={editValues.amount}
                                 onChange={(e) =>
                                   setEditValues({ ...editValues, amount: e.target.value })

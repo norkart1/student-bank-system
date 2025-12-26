@@ -2,14 +2,14 @@ import { connectDB } from "@/lib/mongodb"
 import { Student } from "@/lib/models/Student"
 import { NextResponse } from "next/server"
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     await connectDB()
-
+    const { id } = await params
     const body = await req.json()
     const { index } = body
 
-    const student = await Student.findById(params.id)
+    const student = await Student.findById(id)
     if (!student) {
       return NextResponse.json({ error: "Student not found" }, { status: 404 })
     }

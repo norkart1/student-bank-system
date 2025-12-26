@@ -2,10 +2,10 @@ import { connectDB } from "@/lib/mongodb"
 import { Student } from "@/lib/models/Student"
 import { NextResponse } from "next/server"
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     await connectDB()
-
+    const { id } = await params
     const body = await req.json()
     const { date, type, amount } = body
 
@@ -13,7 +13,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
-    const student = await Student.findById(params.id)
+    const student = await Student.findById(id)
     if (!student) {
       return NextResponse.json({ error: "Student not found" }, { status: 404 })
     }
