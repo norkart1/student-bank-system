@@ -141,9 +141,10 @@ function UploadTransactions() {
                     }
                     if (![
                         "deposit",
-                        "withdrawal"
+                        "withdrawal",
+                        "withdraw"
                     ].includes(t.type)) {
-                        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].warning(`Row skipped (${t.studentCode}): Invalid type (must be 'deposit' or 'withdrawal')`);
+                        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].warning(`Row skipped (${t.studentCode}): Invalid type (must be 'deposit', 'withdrawal', or 'withdraw')`);
                         return false;
                     }
                     if (isNaN(t.amount) || t.amount <= 0) {
@@ -371,7 +372,7 @@ function UploadTransactions() {
                                                             lineNumber: 276,
                                                             columnNumber: 23
                                                         }, this),
-                                                        ' Either "deposit" or "withdrawal" (required)'
+                                                        ' Either "deposit", "withdrawal", or "withdraw" (required)'
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
