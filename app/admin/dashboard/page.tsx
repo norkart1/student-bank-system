@@ -82,6 +82,7 @@ export default function AdminDashboard() {
   const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7))
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString())
   const [selectedPersonalStudent, setSelectedPersonalStudent] = useState<number | null>(null)
+  const [studentSearchQuery, setStudentSearchQuery] = useState("")
   const [depositAllStudents, setDepositAllStudents] = useState(false)
   const [withdrawAllStudents, setWithdrawAllStudents] = useState(false)
 
@@ -1739,7 +1740,13 @@ export default function AdminDashboard() {
     )
   }
 
-  const renderAccountsTab = () => (
+  const renderAccountsTab = () => {
+    const filteredStudents = students.filter(s => 
+      s.name.toLowerCase().includes(studentSearchQuery.toLowerCase()) || 
+      s.code?.toLowerCase().includes(studentSearchQuery.toLowerCase())
+    );
+
+    return (
     <>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -1757,11 +1764,22 @@ export default function AdminDashboard() {
         </button>
       </div>
 
-      {students.length === 0 ? (
+      <div className="relative mb-4">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#747384]" />
+        <input
+          type="text"
+          placeholder="Search students by name or code..."
+          value={studentSearchQuery}
+          onChange={(e) => setStudentSearchQuery(e.target.value)}
+          className="w-full pl-10 pr-4 py-3 bg-white border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#4a6670]/10 transition-all"
+        />
+      </div>
+
+      {filteredStudents.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12 text-center">
           <Users className="w-14 h-14 text-[#e5e7eb] mb-3" />
-          <p className="text-[#747384] font-medium text-sm mb-1">No accounts yet</p>
-          <p className="text-xs text-[#a0a0a0]">Create your first account</p>
+          <p className="text-[#747384] font-medium text-sm mb-1">No accounts found</p>
+          <p className="text-xs text-[#a0a0a0]">Try a different search term</p>
         </div>
       ) : (
         <div className="mb-6 overflow-x-auto">
@@ -1774,21 +1792,23 @@ export default function AdminDashboard() {
 
             {/* Table Body */}
             <div className="divide-y divide-[#e5e7eb]">
-              {students.map((student, index) => (
+              {filteredStudents.map((student, index) => {
+                const originalIndex = students.findIndex(s => s._id === student._id);
+                return (
                 <div 
-                  key={index} 
-                  onClick={() => setViewingIndex(index)}
+                  key={student._id || index} 
+                  onClick={() => setViewingIndex(originalIndex)}
                   className="grid grid-cols-12 gap-3 p-4 hover:bg-[#f8f9fa] cursor-pointer transition-colors"
                 >
                   <div className="col-span-8 flex items-center gap-2">
-                    <div className={`w-8 h-8 rounded-full ${avatarColors[index % avatarColors.length]} flex items-center justify-center text-xs font-bold text-[#4a6670] flex-shrink-0`}>
+                    <div className={`w-8 h-8 rounded-full ${avatarColors[originalIndex % avatarColors.length]} flex items-center justify-center text-xs font-bold text-[#4a6670] flex-shrink-0`}>
                       {student.name.charAt(0)}
                     </div>
                     <span className="text-sm font-semibold text-[#171532] truncate">{student.name}</span>
                   </div>
                   <div className="col-span-4 text-sm font-bold text-[#10B981]">₹{student.balance.toFixed(2)}</div>
                 </div>
-              ))}
+              )})}
             </div>
           </div>
         </div>
