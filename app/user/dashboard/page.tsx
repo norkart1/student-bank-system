@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { Wallet, User, ArrowUpRight, ArrowDownRight, History, QrCode, Download, Printer, Zap, Calendar, Edit2 } from "lucide-react"
+import { Wallet, User, ArrowUpRight, ArrowDownRight, History, QrCode, Download, Printer, Zap } from "lucide-react"
 import { useTheme } from "next-themes"
 import { QRCodeSVG } from "qrcode.react"
 import jsPDF from "jspdf"
@@ -262,24 +261,8 @@ export default function UserDashboard() {
             </div>
           </div>
 
-          {/* Quick Actions */}
-          <div className="mt-6 grid grid-cols-2 gap-3">
-            <Link href="/user/transactions" className="w-full">
-              <button className="w-full flex items-center justify-center gap-2 bg-[#7056B2] hover:bg-[#5a4499] text-white px-3 py-2 rounded-lg font-semibold text-sm transition-colors">
-                <Calendar className="w-4 h-4" />
-                <span>Calendar</span>
-              </button>
-            </Link>
-            <Link href="/user/transactions/edit" className="w-full">
-              <button className="w-full flex items-center justify-center gap-2 bg-[#7056B2] hover:bg-[#5a4499] text-white px-3 py-2 rounded-lg font-semibold text-sm transition-colors">
-                <Edit2 className="w-4 h-4" />
-                <span>Edit</span>
-              </button>
-            </Link>
-          </div>
-
           {/* Print and Export Buttons */}
-          <div className="mt-3 grid grid-cols-3 gap-2">
+          <div className="mt-6 grid grid-cols-3 gap-2">
             <button
               onClick={handlePrint}
               className="flex items-center justify-center gap-2 bg-[#4a6670] hover:bg-[#3d565e] text-white px-3 py-2 rounded-lg font-semibold text-xs transition-colors"

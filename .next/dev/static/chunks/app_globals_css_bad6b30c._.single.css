@@ -688,10 +688,6 @@
     margin-top: calc(var(--spacing) * 2);
   }
 
-  .mt-3 {
-    margin-top: calc(var(--spacing) * 3);
-  }
-
   .mt-4 {
     margin-top: calc(var(--spacing) * 4);
   }
@@ -913,10 +909,6 @@
 
   .max-h-\[90vh\] {
     max-height: 90vh;
-  }
-
-  .max-h-\[600px\] {
-    max-height: 600px;
   }
 
   .min-h-screen {
@@ -1456,10 +1448,6 @@
     background-color: lab(66.6921% -50.6677 17.059 / .95);
   }
 
-  .bg-\[\#7056B2\] {
-    background-color: #7056b2;
-  }
-
   .bg-\[\#EF4444\] {
     background-color: #ef4444;
   }
@@ -1484,10 +1472,6 @@
 
   .bg-\[\#e5e7eb\] {
     background-color: #e5e7eb;
-  }
-
-  .bg-\[\#e8f5e9\] {
-    background-color: #e8f5e9;
   }
 
   .bg-\[\#f0f0f0\] {
@@ -2100,10 +2084,6 @@
     white-space: nowrap;
   }
 
-  .text-\[\#2e7d32\] {
-    color: #2e7d32;
-  }
-
   .text-\[\#4a6670\] {
     color: #4a6670;
   }
@@ -2575,18 +2555,6 @@
   }
 
   @media (hover: hover) {
-    .hover\:bg-\[\#5a4499\]:hover {
-      background-color: #5a4499;
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-\[\#c8e6c9\]:hover {
-      background-color: #c8e6c9;
-    }
-  }
-
-  @media (hover: hover) {
     .hover\:bg-\[\#d1d5db\]:hover {
       background-color: #d1d5db;
     }
@@ -2601,12 +2569,6 @@
   @media (hover: hover) {
     .hover\:bg-\[\#e5e5e5\]:hover {
       background-color: #e5e5e5;
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-\[\#e8e8e8\]:hover {
-      background-color: #e8e8e8;
     }
   }
 
