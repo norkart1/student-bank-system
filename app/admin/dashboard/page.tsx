@@ -66,6 +66,7 @@ export default function AdminDashboard() {
   const [adminPassword, setAdminPassword] = useState("")
   const [adminRating, setAdminRating] = useState(0)
   const [showPasswordReset, setShowPasswordReset] = useState(false)
+  const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
@@ -2233,13 +2234,23 @@ export default function AdminDashboard() {
                   </div>
                   <div className="px-6 py-6 space-y-4">
                     <div>
+                      <label className="block text-sm font-semibold text-[#171532] mb-2">Current Password</label>
+                      <input
+                        type="password"
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                        className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532]"
+                        placeholder="Enter current password"
+                      />
+                    </div>
+                    <div>
                       <label className="block text-sm font-semibold text-[#171532] mb-2">New Password</label>
                       <input
                         type="password"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532]"
-                        placeholder="Enter new password"
+                        placeholder="Enter new password (min 6 characters)"
                       />
                     </div>
                     <div>
@@ -2253,19 +2264,44 @@ export default function AdminDashboard() {
                       />
                     </div>
                     <button
-                      onClick={() => {
-                        if (newPassword === confirmPassword && newPassword.length > 0) {
-                          alert("Password reset successfully!")
-                          setShowPasswordReset(false)
-                          setNewPassword("")
-                          setConfirmPassword("")
-                        } else {
-                          alert("Passwords do not match or are empty")
+                      onClick={async () => {
+                        if (!currentPassword) {
+                          toast.error("Current password is required")
+                          return
+                        }
+                        if (newPassword.length < 6) {
+                          toast.error("New password must be at least 6 characters")
+                          return
+                        }
+                        if (newPassword !== confirmPassword) {
+                          toast.error("Passwords do not match")
+                          return
+                        }
+                        
+                        try {
+                          const response = await fetch('/api/admin/change-password', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ currentPassword, newPassword })
+                          })
+                          
+                          if (response.ok) {
+                            toast.success("✓ Password changed successfully")
+                            setShowPasswordReset(false)
+                            setCurrentPassword("")
+                            setNewPassword("")
+                            setConfirmPassword("")
+                          } else {
+                            const error = await response.json()
+                            toast.error(error.error || "Failed to change password")
+                          }
+                        } catch (error) {
+                          toast.error("Error changing password")
                         }
                       }}
                       className="w-full bg-[#4a6670] text-white py-3 rounded-xl font-semibold hover:bg-[#3d565e] transition-colors"
                     >
-                      Reset Password
+                      Change Password
                     </button>
                   </div>
                 </div>
