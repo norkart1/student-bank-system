@@ -2291,52 +2291,50 @@ export default function AdminDashboard() {
         <div className="max-w-md mx-auto bg-gradient-to-r from-[#e8f4f8] to-[#d4eef5] rounded-2xl px-6 py-3 flex items-center justify-between shadow-lg">
           <button
             onClick={() => setActiveTab("home")}
-            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 ${
+            className={`flex items-center justify-center p-2 rounded-xl transition-all ${
               activeTab === "home"
-                ? "bg-[#c17f59] text-white shadow-md px-4"
+                ? "bg-[#c17f59] text-white shadow-md"
                 : "text-[#4a6670]"
             }`}
+            title="Home"
           >
             <Home className="w-5 h-5" />
-            <span className="text-[10px] font-medium">Home</span>
           </button>
           
           <button
             onClick={() => setActiveTab("accounts")}
-            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 ${
+            className={`flex items-center justify-center p-2 rounded-xl transition-all ${
               activeTab === "accounts"
-                ? "bg-[#c17f59] text-white shadow-md px-4"
+                ? "bg-[#c17f59] text-white shadow-md"
                 : "text-[#4a6670]"
             }`}
+            title="Accounts"
           >
             <Users className="w-5 h-5" />
-            <span className="text-[10px] font-medium">Accounts</span>
           </button>
 
           <Link href="/admin/manage-transactions">
-            <button className="flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 text-[#4a6670] hover:bg-[#f0f0f0]">
+            <button className="flex items-center justify-center p-2 rounded-xl transition-all text-[#4a6670] hover:bg-[#f0f0f0]" title="Edit Transactions">
               <Edit className="w-5 h-5" />
-              <span className="text-[10px] font-medium">Edit Txn</span>
             </button>
           </Link>
 
           <Link href="/admin/upload-transactions">
-            <button className="flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 text-[#4a6670] hover:bg-[#f0f0f0]">
+            <button className="flex items-center justify-center p-2 rounded-xl transition-all text-[#4a6670] hover:bg-[#f0f0f0]" title="Upload Transactions">
               <Upload className="w-5 h-5" />
-              <span className="text-[10px] font-medium">Upload Txn</span>
             </button>
           </Link>
 
           <button
             onClick={() => setActiveTab("profile")}
-            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 ${
+            className={`flex items-center justify-center p-2 rounded-xl transition-all ${
               activeTab === "profile"
-                ? "bg-[#c17f59] text-white shadow-md px-4"
+                ? "bg-[#c17f59] text-white shadow-md"
                 : "text-[#4a6670]"
             }`}
+            title="Admin Profile"
           >
             <Settings className="w-5 h-5" />
-            <span className="text-[10px] font-medium">Admin Profile</span>
           </button>
         </div>
       </div>
