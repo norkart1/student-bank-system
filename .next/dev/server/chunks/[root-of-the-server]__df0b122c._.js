@@ -185,6 +185,7 @@ async function DELETE(req, { params }) {
         const amount = transaction.type === 'deposit' ? transaction.amount : -transaction.amount;
         student.transactions.splice(index, 1);
         student.balance -= amount;
+        student.markModified('transactions');
         await student.save();
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: true,
@@ -193,7 +194,8 @@ async function DELETE(req, { params }) {
     } catch (error) {
         console.error("Error deleting transaction:", error);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: "Internal server error"
+            error: "Internal server error",
+            details: String(error)
         }, {
             status: 500
         });
