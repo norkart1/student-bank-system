@@ -296,21 +296,21 @@ export default function ManageTransactions() {
                             </div>
                           </div>
                         ) : (
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center justify-between gap-4">
                             <div className="flex-1">
                               <p className="font-semibold text-[#171532]">{transaction.date}</p>
                               <p className="text-sm text-[#747384] capitalize">
                                 {transaction.type}
                               </p>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-3">
                               <p className="font-bold text-lg text-[#171532] min-w-[100px] text-right">
                                 ₹{transaction.amount?.toFixed(2)}
                               </p>
                               <button
                                 onClick={() => handleEditTransaction(idx, transaction)}
                                 disabled={deleteConfirm.open || isSaving}
-                                className="p-2 hover:bg-blue-100 disabled:opacity-50 text-blue-600 rounded-lg transition-colors"
+                                className="flex items-center justify-center p-2 hover:bg-blue-100 disabled:opacity-50 text-blue-600 rounded-lg transition-colors"
                                 title="Edit transaction"
                               >
                                 <Edit2 className="w-5 h-5" />
@@ -320,7 +320,7 @@ export default function ManageTransactions() {
                                   setDeleteConfirm({ open: true, index: idx })
                                 }
                                 disabled={deleteConfirm.open || isSaving}
-                                className="p-2 hover:bg-red-100 disabled:opacity-50 text-red-600 rounded-lg transition-colors"
+                                className="flex items-center justify-center p-2 hover:bg-red-100 disabled:opacity-50 text-red-600 rounded-lg transition-colors"
                                 title="Delete transaction"
                               >
                                 <Trash2 className="w-5 h-5" />
