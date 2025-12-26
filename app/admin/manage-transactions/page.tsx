@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, Edit2, Save, X, Trash2, Loader } from "lucide-react"
 import { toast } from "sonner"
-import { DatePickerPopover } from "@/app/components/DatePickerPopover"
 import { ConfirmDialog } from "@/app/components/ConfirmDialog"
 import { useDebounce } from "@/app/hooks/useDebounce"
 
@@ -227,14 +226,16 @@ export default function ManageTransactions() {
                           <div className="space-y-3">
                             <div>
                               <label className="block text-sm font-medium text-[#171532] mb-1">
-                                Date
+                                Date (dd/MM/yyyy)
                               </label>
-                              <DatePickerPopover
+                              <input
+                                type="text"
+                                placeholder="dd/MM/yyyy"
                                 value={editValues.date}
-                                onChange={(date) =>
-                                  setEditValues({ ...editValues, date })
+                                onChange={(e) =>
+                                  setEditValues({ ...editValues, date: e.target.value })
                                 }
-                                placeholder="Select date"
+                                className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:border-[#4a6670]"
                               />
                             </div>
 
