@@ -1,6 +1,6 @@
 Student Code,Date,Type,Amount
 STU001,01/12/2024,deposit,5000
-STU002,02/12/2024,withdrawal,2000
+STU002,02/12/2024,withdraw,2000
 STU003,03/12/2024,deposit,7500
-STU001,04/12/2024,withdrawal,1000
+STU001,04/12/2024,withdraw,1000
 STU004,05/12/2024,deposit,3000
