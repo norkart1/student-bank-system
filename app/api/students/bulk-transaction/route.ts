@@ -5,7 +5,7 @@ import { NextResponse } from "next/server"
 interface BulkTransaction {
   studentCode: string
   date: string
-  type: "deposit" | "withdrawal"
+  type: "deposit" | "withdrawal" | "withdraw"
   amount: number
 }
 
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
           continue
         }
 
-        if (!["deposit", "withdrawal"].includes(transaction.type)) {
+        if (!["deposit", "withdrawal", "withdraw"].includes(transaction.type)) {
           failureCount++
           errors.push(`Invalid type for ${transaction.studentCode}: ${transaction.type}`)
           continue
@@ -57,15 +57,18 @@ export async function POST(req: Request) {
           continue
         }
 
+        // Normalize type: convert "withdrawal" to "withdraw"
+        const normalizedType = transaction.type === "withdrawal" ? "withdraw" : transaction.type
+
         // Add transaction
         student.transactions.push({
           date: transaction.date,
-          type: transaction.type,
+          type: normalizedType,
           amount: transaction.amount,
         })
 
         // Update balance
-        const balanceChange = transaction.type === "deposit" ? transaction.amount : -transaction.amount
+        const balanceChange = normalizedType === "deposit" ? transaction.amount : -transaction.amount
         student.balance += balanceChange
 
         student.markModified("transactions")
