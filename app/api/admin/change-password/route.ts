@@ -1,7 +1,6 @@
 import { connectDB } from '@/lib/mongodb';
 import { Admin } from '@/lib/models/Admin';
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import { Session } from '@/lib/models/Session';
 
 export async function POST(req: NextRequest) {
@@ -9,8 +8,7 @@ export async function POST(req: NextRequest) {
     await connectDB();
     
     // Get session from cookies
-    const cookieStore = await cookies();
-    const token = cookieStore.get('auth_token')?.value;
+    const token = req.cookies.get('auth_token')?.value;
     
     if (!token) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
