@@ -9,7 +9,7 @@ import * as XLSX from "xlsx"
 interface ExcelTransaction {
   studentCode: string
   date: string
-  type: "deposit" | "withdrawal"
+  type: "deposit" | "withdrawal" | "withdraw"
   amount: number
 }
 
@@ -137,7 +137,7 @@ export default function UploadTransactions() {
                 row["Student Code"] || row["Code"] || row["StudentCode"] || row["studentCode"] || ""
               ).trim(),
               date: parsedDate || "",
-              type: String(row["Type"] || row["type"] || "").toLowerCase().trim() as "deposit" | "withdrawal",
+              type: String(row["Type"] || row["type"] || "").toLowerCase().trim() as "deposit" | "withdrawal" | "withdraw",
               amount: parseFloat(row["Amount"] || row["amount"] || 0),
             }
           })
@@ -150,9 +150,9 @@ export default function UploadTransactions() {
               toast.warning(`Row skipped (${t.studentCode}): Invalid or missing date`)
               return false
             }
-            if (!["deposit", "withdrawal"].includes(t.type)) {
+            if (!["deposit", "withdrawal", "withdraw"].includes(t.type)) {
               toast.warning(
-                `Row skipped (${t.studentCode}): Invalid type (must be 'deposit' or 'withdrawal')`
+                `Row skipped (${t.studentCode}): Invalid type (must be 'deposit', 'withdrawal', or 'withdraw')`
               )
               return false
             }
@@ -273,7 +273,7 @@ export default function UploadTransactions() {
               <ul className="text-sm text-[#747384] space-y-1">
                 <li>• <strong>Student Code:</strong> Student's unique code (required)</li>
                 <li>• <strong>Date:</strong> Transaction date (formats: dd/MM/yyyy, MM/DD/YYYY, or YYYY-MM-DD) - (required)</li>
-                <li>• <strong>Type:</strong> Either "deposit" or "withdrawal" (required)</li>
+                <li>• <strong>Type:</strong> Either "deposit", "withdrawal", or "withdraw" (required)</li>
                 <li>• <strong>Amount:</strong> Transaction amount as number (required)</li>
               </ul>
             </div>
