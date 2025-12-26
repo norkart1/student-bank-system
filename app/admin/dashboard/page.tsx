@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Activity, Moon, Sun, Download, Calendar, AlertCircle, Zap } from "lucide-react"
+import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Activity, Moon, Sun, Download, Calendar, AlertCircle, Zap, Search } from "lucide-react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 import { useTheme } from "next-themes"
 import jsPDF from "jspdf"
@@ -18,8 +18,10 @@ interface Transaction {
 }
 
 interface Student {
+  _id?: string
   id?: string
   name: string
+  code?: string
   mobile?: string
   email?: string
   username?: string
@@ -67,6 +69,15 @@ export default function AdminDashboard() {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
   const [systemStatus, setSystemStatus] = useState<any>(null)
+  const [mongoHealth, setMongoHealth] = useState(0)
+  const [cpuHealth, setCpuHealth] = useState(0)
+  const setRealTimeStatus = (status: any) => {
+    setSystemStatus(status);
+    if (typeof status === 'object' && status !== null) {
+      if (status.cpu?.percentage !== undefined) setCpuHealth(100 - status.cpu.percentage);
+      if (status.mongodb?.percentage !== undefined) setMongoHealth(100 - status.mongodb.percentage);
+    }
+  }
   const [showDepositModal, setShowDepositModal] = useState(false)
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
   const [transactionAmount, setTransactionAmount] = useState("")
@@ -83,6 +94,9 @@ export default function AdminDashboard() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString())
   const [selectedPersonalStudent, setSelectedPersonalStudent] = useState<number | null>(null)
   const [studentSearchQuery, setStudentSearchQuery] = useState("")
+  const [aiInput, setAiInput] = useState("")
+  const [aiMessages, setAiMessages] = useState<any[]>([])
+  const [aiLoading, setAiLoading] = useState(false)
   const [depositAllStudents, setDepositAllStudents] = useState(false)
   const [withdrawAllStudents, setWithdrawAllStudents] = useState(false)
 
@@ -1411,7 +1425,7 @@ export default function AdminDashboard() {
                             const actualIdx = student.transactions.length - 1 - idx;
                             setEditingTransaction({ studentIndex: viewingIndex, transactionIndex: actualIdx });
                             setEditTxAmount(tx.amount.toString());
-                            setEditTxDate(new Date(tx.date).toISOString().split('T')[0]);
+                            setEditTxDate(new Date(tx.date || Date.now()).toISOString().split('T')[0]);
                             setEditTxReason(tx.reason || "");
                           }}
                           className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
@@ -1461,63 +1475,71 @@ export default function AdminDashboard() {
     const student = students[editingTransaction.studentIndex];
     const tx = student.transactions[editingTransaction.transactionIndex];
 
-    const handleUpdateTransaction = async () => {
-      try {
-        const amount = parseFloat(editTxAmount);
-        if (isNaN(amount) || amount <= 0) {
-          setNotification({ type: 'error', message: 'Please enter a valid amount' });
-          setTimeout(() => setNotification(null), 3000);
-          return;
-        }
-
-        const updatedStudents = [...students];
-        const targetStudent = updatedStudents[editingTransaction.studentIndex];
-        const targetTx = targetStudent.transactions[editingTransaction.transactionIndex];
-
-        // Update transaction
-        targetTx.amount = amount;
-        targetTx.date = new Date(editTxDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        targetTx.reason = editTxReason || undefined;
-
-        // Recalculate balance
-        let newBalance = 0;
-        targetStudent.transactions.forEach(t => {
-          if (t.type === 'deposit') newBalance += t.amount;
-          else newBalance -= t.amount;
-        });
-        targetStudent.balance = newBalance;
-
-        // Update in database
-        const res = await fetch(`/api/students/${targetStudent._id}`, {
-          method: 'PATCH',
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(targetStudent)
-        });
-
-        if (!res.ok) throw new Error('Failed to update');
-
-        setStudents(updatedStudents);
-        calculateTotals(updatedStudents);
-        setEditingTransaction(null);
-        setNotification({ type: 'success', message: 'Transaction updated successfully' });
+  const handleUpdateTransaction = async () => {
+    try {
+      const amount = parseFloat(editTxAmount);
+      if (isNaN(amount) || amount <= 0) {
+        setNotification({ type: 'error', message: 'Please enter a valid amount' });
         setTimeout(() => setNotification(null), 3000);
-
-        // Broadcast update
-        fetch('/api/pusher/broadcast', {
-          method: 'POST',
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            type: 'balance-update',
-            studentId: targetStudent._id,
-            update: { balance: targetStudent.balance }
-          })
-        }).catch(console.error);
-
-      } catch (err) {
-        setNotification({ type: 'error', message: 'Failed to update transaction' });
-        setTimeout(() => setNotification(null), 3000);
+        return;
       }
-    };
+
+      const updatedStudents = [...students];
+      const targetStudent = updatedStudents[editingTransaction.studentIndex];
+      const targetTx = targetStudent.transactions[editingTransaction.transactionIndex];
+
+      // Update transaction
+      targetTx.amount = amount;
+      targetTx.date = new Date(editTxDate || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      targetTx.reason = editTxReason || undefined;
+
+      // Recalculate balance and re-sort transactions
+      let newBalance = 0;
+      targetStudent.transactions.forEach(t => {
+        if (t.type === 'deposit') newBalance += t.amount;
+        else newBalance -= t.amount;
+      });
+      
+      // Sort transactions by date (descending)
+      targetStudent.transactions.sort((a, b) => {
+        const dateA = new Date(a.date || 0).getTime();
+        const dateB = new Date(b.date || 0).getTime();
+        return dateB - dateA;
+      });
+
+      targetStudent.balance = newBalance;
+
+      // Update in database
+      const res = await fetch(`/api/students/${targetStudent._id}`, {
+        method: 'PATCH',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(targetStudent)
+      });
+
+      if (!res.ok) throw new Error('Failed to update');
+
+      setStudents(updatedStudents);
+      calculateTotals(updatedStudents);
+      setEditingTransaction(null);
+      setNotification({ type: 'success', message: 'Transaction updated successfully' });
+      setTimeout(() => setNotification(null), 3000);
+
+      // Broadcast update
+      fetch('/api/pusher/broadcast', {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: 'balance-update',
+          studentId: targetStudent._id,
+          update: { balance: targetStudent.balance }
+        })
+      }).catch(console.error);
+
+    } catch (err) {
+      setNotification({ type: 'error', message: 'Failed to update transaction' });
+      setTimeout(() => setNotification(null), 3000);
+    }
+  };
 
     return (
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[60]">
@@ -1874,8 +1896,8 @@ export default function AdminDashboard() {
         </div>
       )}
     </>
-  )
-
+    )
+  }
 
   const renderCalendarTab = () => {
     const today = new Date()
