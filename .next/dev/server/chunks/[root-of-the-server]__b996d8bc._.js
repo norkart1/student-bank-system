@@ -147,12 +147,12 @@ const mod = __turbopack_context__.x("next/dist/server/app-render/after-task-asyn
 
 module.exports = mod;
 }),
-"[project]/app/api/students/[id]/transaction/delete/route.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
+"[project]/app/api/students/[id]/transaction/update/route.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
-    "DELETE",
-    ()=>DELETE
+    "PUT",
+    ()=>PUT
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$mongodb$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/mongodb.ts [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/models/Student.ts [app-route] (ecmascript)");
@@ -160,12 +160,12 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$serv
 ;
 ;
 ;
-async function DELETE(req, { params }) {
+async function PUT(req, { params }) {
     try {
         await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$mongodb$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["connectDB"])();
         const { id } = await params;
         const body = await req.json();
-        const { index } = body;
+        const { index, date, type, amount } = body;
         const student = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Student"].findById(id);
         if (!student) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
@@ -181,17 +181,23 @@ async function DELETE(req, { params }) {
                 status: 400
             });
         }
-        const transaction = student.transactions[index];
-        const amount = transaction.type === 'deposit' ? transaction.amount : -transaction.amount;
-        student.transactions.splice(index, 1);
-        student.balance -= amount;
+        const oldTransaction = student.transactions[index];
+        const oldAmount = oldTransaction.type === 'deposit' ? oldTransaction.amount : -oldTransaction.amount;
+        const newAmount = type === 'deposit' ? amount : -amount;
+        const difference = newAmount - oldAmount;
+        student.transactions[index] = {
+            date,
+            type,
+            amount
+        };
+        student.balance += difference;
         await student.save();
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: true,
             student
         });
     } catch (error) {
-        console.error("Error deleting transaction:", error);
+        console.error("Error updating transaction:", error);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             error: "Internal server error"
         }, {
@@ -202,4 +208,4 @@ async function DELETE(req, { params }) {
 }),
 ];
 
-//# sourceMappingURL=%5Broot-of-the-server%5D__df0b122c._.js.map
+//# sourceMappingURL=%5Broot-of-the-server%5D__b996d8bc._.js.map
