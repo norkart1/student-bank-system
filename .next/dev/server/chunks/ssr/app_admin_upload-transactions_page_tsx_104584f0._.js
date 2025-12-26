@@ -21,6 +21,77 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$xlsx$2f$xlsx
 ;
 ;
 ;
+// Helper function to parse dates from various formats
+function parseDate(dateStr) {
+    if (!dateStr) return null;
+    // If it's a number (Excel serial date)
+    if (typeof dateStr === "number") {
+        const excelDate = new Date((dateStr - 25569) * 86400 * 1000);
+        return excelDate.toLocaleDateString("en-GB").split("/").reverse().join("-") // YYYY-MM-DD format
+        ;
+    }
+    // If it's a string, try to parse it
+    const str = String(dateStr).trim();
+    // Try DD/MM/YYYY format
+    const ddmmyyyyMatch = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (ddmmyyyyMatch) {
+        const [, day, month, year] = ddmmyyyyMatch;
+        const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+        if (!isNaN(date.getTime())) {
+            return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+        }
+    }
+    // Try YYYY-MM-DD format
+    const yyyymmddMatch = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+    if (yyyymmddMatch) {
+        const [, year, month, day] = yyyymmddMatch;
+        const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+        if (!isNaN(date.getTime())) {
+            return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+        }
+    }
+    // Try MM/DD/YYYY format
+    const mmddyyyyMatch = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (mmddyyyyMatch) {
+        const [, month, day, year] = mmddyyyyMatch;
+        const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+        if (!isNaN(date.getTime())) {
+            return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+        }
+    }
+    // Try parsing as ISO date
+    const isoDate = new Date(str);
+    if (!isNaN(isoDate.getTime())) {
+        return isoDate.toLocaleDateString("en-GB").split("/").reverse().join("-").replace(/-/g, "/").split("/").reverse().join("/");
+    }
+    return null;
+}
+// Function to parse CSV
+function parseCSV(text) {
+    const lines = text.trim().split("\n");
+    if (lines.length === 0) return [];
+    // Parse header
+    const headers = lines[0].split(",").map((h)=>h.trim());
+    const data = [];
+    // Find column indices
+    const studentCodeIdx = headers.findIndex((h)=>h.toLowerCase().includes("code") || h.toLowerCase().includes("student"));
+    const dateIdx = headers.findIndex((h)=>h.toLowerCase().includes("date"));
+    const typeIdx = headers.findIndex((h)=>h.toLowerCase().includes("type"));
+    const amountIdx = headers.findIndex((h)=>h.toLowerCase().includes("amount"));
+    // Parse rows
+    for(let i = 1; i < lines.length; i++){
+        const values = lines[i].split(",").map((v)=>v.trim());
+        if (values.length > Math.max(studentCodeIdx, dateIdx, typeIdx, amountIdx)) {
+            data.push({
+                studentCode: values[studentCodeIdx] || "",
+                date: values[dateIdx] || "",
+                type: (values[typeIdx] || "").toLowerCase(),
+                amount: parseFloat(values[amountIdx]) || 0
+            });
+        }
+    }
+    return data;
+}
 function UploadTransactions() {
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRouter"])();
     const fileInputRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
@@ -34,26 +105,36 @@ function UploadTransactions() {
         const reader = new FileReader();
         reader.onload = (e)=>{
             try {
-                const data = e.target?.result;
-                const workbook = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$xlsx$2f$xlsx$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["read"](data, {
-                    type: "array"
-                });
-                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                const jsonData = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$xlsx$2f$xlsx$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["utils"].sheet_to_json(worksheet);
+                let jsonData = [];
+                if (file.name.endsWith(".csv")) {
+                    // Parse CSV
+                    const text = e.target?.result;
+                    jsonData = parseCSV(text);
+                } else {
+                    // Parse Excel
+                    const data = e.target?.result;
+                    const workbook = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$xlsx$2f$xlsx$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["read"](data, {
+                        type: "array"
+                    });
+                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                    jsonData = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$xlsx$2f$xlsx$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["utils"].sheet_to_json(worksheet);
+                }
                 // Validate and transform data
-                const transactions = jsonData.map((row)=>({
-                        studentCode: String(row["Student Code"] || row["Code"] || "").trim(),
-                        date: String(row["Date"] || "").trim(),
-                        type: String(row["Type"] || "").toLowerCase().trim(),
-                        amount: parseFloat(row["Amount"] || 0)
-                    })).filter((t)=>{
+                const transactions = jsonData.map((row)=>{
+                    const parsedDate = parseDate(row["Date"] || row["date"] || "");
+                    return {
+                        studentCode: String(row["Student Code"] || row["Code"] || row["StudentCode"] || row["studentCode"] || "").trim(),
+                        date: parsedDate || "",
+                        type: String(row["Type"] || row["type"] || "").toLowerCase().trim(),
+                        amount: parseFloat(row["Amount"] || row["amount"] || 0)
+                    };
+                }).filter((t)=>{
                     // Validate each transaction
                     if (!t.studentCode) {
-                        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].warning("Row skipped: Missing student code");
                         return false;
                     }
                     if (!t.date) {
-                        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].warning(`Row skipped (${t.studentCode}): Missing date`);
+                        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].warning(`Row skipped (${t.studentCode}): Invalid or missing date`);
                         return false;
                     }
                     if (![
@@ -79,12 +160,16 @@ function UploadTransactions() {
                 __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].success(`✓ Loaded ${transactions.length} transactions`);
             } catch (error) {
                 console.error("Error reading file:", error);
-                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error("Failed to read Excel file");
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error("Failed to read file");
                 setFileName("");
                 setPreviewData([]);
             }
         };
-        reader.readAsArrayBuffer(file);
+        if (file.name.endsWith(".csv")) {
+            reader.readAsText(file);
+        } else {
+            reader.readAsArrayBuffer(file);
+        }
     };
     const handleUpload = async ()=>{
         if (previewData.length === 0) {
@@ -135,12 +220,12 @@ function UploadTransactions() {
                                 className: "w-5 h-5 text-[#4a6670]"
                             }, void 0, false, {
                                 fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                lineNumber: 136,
+                                lineNumber: 238,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                            lineNumber: 132,
+                            lineNumber: 234,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -148,13 +233,13 @@ function UploadTransactions() {
                             children: "Upload Transactions"
                         }, void 0, false, {
                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                            lineNumber: 138,
+                            lineNumber: 240,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                    lineNumber: 131,
+                    lineNumber: 233,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -165,10 +250,10 @@ function UploadTransactions() {
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                                     className: "text-xl font-semibold text-[#171532] mb-4",
-                                    children: "Import Excel File"
+                                    children: "Import Excel or CSV File"
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                    lineNumber: 144,
+                                    lineNumber: 246,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -179,23 +264,23 @@ function UploadTransactions() {
                                             className: "w-12 h-12 text-[#747384] mx-auto mb-3"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                            lineNumber: 150,
+                                            lineNumber: 252,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             className: "text-[#171532] font-semibold mb-2",
-                                            children: "Click to select Excel file"
+                                            children: "Click to select file"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                            lineNumber: 151,
+                                            lineNumber: 253,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             className: "text-sm text-[#747384]",
-                                            children: "Supports .xlsx, .xls files with columns: Student Code, Date, Type, Amount"
+                                            children: "Supports .xlsx, .xls, .csv files with columns: Student Code, Date, Type, Amount"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                            lineNumber: 152,
+                                            lineNumber: 254,
                                             columnNumber: 15
                                         }, this),
                                         fileName && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -206,24 +291,24 @@ function UploadTransactions() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                            lineNumber: 156,
+                                            lineNumber: 258,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                             ref: fileInputRef,
                                             type: "file",
-                                            accept: ".xlsx,.xls",
+                                            accept: ".xlsx,.xls,.csv",
                                             onChange: handleFileSelect,
                                             className: "hidden"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                            lineNumber: 160,
+                                            lineNumber: 262,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                    lineNumber: 146,
+                                    lineNumber: 248,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -231,10 +316,10 @@ function UploadTransactions() {
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                                             className: "text-sm font-semibold text-[#171532] mb-2",
-                                            children: "Excel File Format:"
+                                            children: "File Format:"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                            lineNumber: 170,
+                                            lineNumber: 272,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -247,14 +332,14 @@ function UploadTransactions() {
                                                             children: "Student Code:"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                            lineNumber: 172,
+                                                            lineNumber: 274,
                                                             columnNumber: 23
                                                         }, this),
                                                         " Student's unique code (required)"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                    lineNumber: 172,
+                                                    lineNumber: 274,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -264,14 +349,14 @@ function UploadTransactions() {
                                                             children: "Date:"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                            lineNumber: 173,
+                                                            lineNumber: 275,
                                                             columnNumber: 23
                                                         }, this),
-                                                        " Transaction date in dd/MM/yyyy format (required)"
+                                                        " Transaction date (formats: dd/MM/yyyy, MM/DD/YYYY, or YYYY-MM-DD) - (required)"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                    lineNumber: 173,
+                                                    lineNumber: 275,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -281,14 +366,14 @@ function UploadTransactions() {
                                                             children: "Type:"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                            lineNumber: 174,
+                                                            lineNumber: 276,
                                                             columnNumber: 23
                                                         }, this),
                                                         ' Either "deposit" or "withdrawal" (required)'
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                    lineNumber: 174,
+                                                    lineNumber: 276,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -298,26 +383,26 @@ function UploadTransactions() {
                                                             children: "Amount:"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                            lineNumber: 175,
+                                                            lineNumber: 277,
                                                             columnNumber: 23
                                                         }, this),
                                                         " Transaction amount as number (required)"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                    lineNumber: 175,
+                                                    lineNumber: 277,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                            lineNumber: 171,
+                                            lineNumber: 273,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                    lineNumber: 169,
+                                    lineNumber: 271,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -328,52 +413,157 @@ function UploadTransactions() {
                                             children: "Download Sample Files:"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                            lineNumber: 180,
+                                            lineNumber: 282,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "grid grid-cols-1 gap-2",
                                             children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
-                                                    href: "/samples/sample_mixed_transactions.xlsx",
-                                                    download: true,
-                                                    className: "text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium",
-                                                    children: "📄 Sample - Mixed Deposits & Withdrawals"
-                                                }, void 0, false, {
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                            className: "text-xs font-medium text-[#747384] mb-2",
+                                                            children: "Mixed Deposits & Withdrawals:"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/app/admin/upload-transactions/page.tsx",
+                                                            lineNumber: 285,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "flex gap-2",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                                                    href: "/samples/sample_mixed_transactions.xlsx",
+                                                                    download: true,
+                                                                    className: "flex-1 text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium",
+                                                                    children: "📄 Excel"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/admin/upload-transactions/page.tsx",
+                                                                    lineNumber: 287,
+                                                                    columnNumber: 21
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                                                    href: "/samples/sample_mixed_transactions.csv",
+                                                                    download: true,
+                                                                    className: "flex-1 text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium",
+                                                                    children: "📄 CSV"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/admin/upload-transactions/page.tsx",
+                                                                    lineNumber: 294,
+                                                                    columnNumber: 21
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/app/admin/upload-transactions/page.tsx",
+                                                            lineNumber: 286,
+                                                            columnNumber: 19
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
                                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                    lineNumber: 182,
+                                                    lineNumber: 284,
                                                     columnNumber: 17
                                                 }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
-                                                    href: "/samples/sample_deposits.xlsx",
-                                                    download: true,
-                                                    className: "text-sm text-green-600 hover:text-green-700 hover:underline font-medium",
-                                                    children: "📄 Sample - Deposits Only"
-                                                }, void 0, false, {
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                            className: "text-xs font-medium text-[#747384] mb-2",
+                                                            children: "Deposits Only:"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/app/admin/upload-transactions/page.tsx",
+                                                            lineNumber: 304,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "flex gap-2",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                                                    href: "/samples/sample_deposits.xlsx",
+                                                                    download: true,
+                                                                    className: "flex-1 text-sm text-green-600 hover:text-green-700 hover:underline font-medium",
+                                                                    children: "📄 Excel"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/admin/upload-transactions/page.tsx",
+                                                                    lineNumber: 306,
+                                                                    columnNumber: 21
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                                                    href: "/samples/sample_deposits.csv",
+                                                                    download: true,
+                                                                    className: "flex-1 text-sm text-green-600 hover:text-green-700 hover:underline font-medium",
+                                                                    children: "📄 CSV"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/admin/upload-transactions/page.tsx",
+                                                                    lineNumber: 313,
+                                                                    columnNumber: 21
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/app/admin/upload-transactions/page.tsx",
+                                                            lineNumber: 305,
+                                                            columnNumber: 19
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
                                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                    lineNumber: 189,
+                                                    lineNumber: 303,
                                                     columnNumber: 17
                                                 }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
-                                                    href: "/samples/sample_withdrawals.xlsx",
-                                                    download: true,
-                                                    className: "text-sm text-red-600 hover:text-red-700 hover:underline font-medium",
-                                                    children: "📄 Sample - Withdrawals Only"
-                                                }, void 0, false, {
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                            className: "text-xs font-medium text-[#747384] mb-2",
+                                                            children: "Withdrawals Only:"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/app/admin/upload-transactions/page.tsx",
+                                                            lineNumber: 323,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "flex gap-2",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                                                    href: "/samples/sample_withdrawals.xlsx",
+                                                                    download: true,
+                                                                    className: "flex-1 text-sm text-red-600 hover:text-red-700 hover:underline font-medium",
+                                                                    children: "📄 Excel"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/admin/upload-transactions/page.tsx",
+                                                                    lineNumber: 325,
+                                                                    columnNumber: 21
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                                                    href: "/samples/sample_withdrawals.csv",
+                                                                    download: true,
+                                                                    className: "flex-1 text-sm text-red-600 hover:text-red-700 hover:underline font-medium",
+                                                                    children: "📄 CSV"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/admin/upload-transactions/page.tsx",
+                                                                    lineNumber: 332,
+                                                                    columnNumber: 21
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/app/admin/upload-transactions/page.tsx",
+                                                            lineNumber: 324,
+                                                            columnNumber: 19
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
                                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                    lineNumber: 196,
+                                                    lineNumber: 322,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                            lineNumber: 181,
+                                            lineNumber: 283,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                    lineNumber: 179,
+                                    lineNumber: 281,
                                     columnNumber: 13
                                 }, this),
                                 previewData.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -388,7 +578,7 @@ function UploadTransactions() {
                                                     className: "w-4 h-4 animate-spin"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                    lineNumber: 215,
+                                                    lineNumber: 353,
                                                     columnNumber: 23
                                                 }, this),
                                                 "Uploading..."
@@ -399,7 +589,7 @@ function UploadTransactions() {
                                                     className: "w-4 h-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                    lineNumber: 220,
+                                                    lineNumber: 358,
                                                     columnNumber: 23
                                                 }, this),
                                                 "Upload ",
@@ -409,18 +599,18 @@ function UploadTransactions() {
                                         }, void 0, true)
                                     }, void 0, false, {
                                         fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                        lineNumber: 208,
+                                        lineNumber: 346,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                    lineNumber: 207,
+                                    lineNumber: 345,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                            lineNumber: 143,
+                            lineNumber: 245,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -431,7 +621,7 @@ function UploadTransactions() {
                                     children: "Preview"
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                    lineNumber: 231,
+                                    lineNumber: 369,
                                     columnNumber: 13
                                 }, this),
                                 previewData.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -444,7 +634,7 @@ function UploadTransactions() {
                                                     children: transaction.studentCode
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                    lineNumber: 237,
+                                                    lineNumber: 375,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -452,7 +642,7 @@ function UploadTransactions() {
                                                     children: transaction.date
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                    lineNumber: 240,
+                                                    lineNumber: 378,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -463,7 +653,7 @@ function UploadTransactions() {
                                                             children: transaction.type
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                            lineNumber: 242,
+                                                            lineNumber: 380,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -474,24 +664,24 @@ function UploadTransactions() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                            lineNumber: 251,
+                                                            lineNumber: 389,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                                    lineNumber: 241,
+                                                    lineNumber: 379,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, idx, true, {
                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                            lineNumber: 236,
+                                            lineNumber: 374,
                                             columnNumber: 19
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                    lineNumber: 234,
+                                    lineNumber: 372,
                                     columnNumber: 15
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "text-center py-8",
@@ -501,44 +691,44 @@ function UploadTransactions() {
                                             children: "No transactions loaded"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                            lineNumber: 260,
+                                            lineNumber: 398,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             className: "text-xs text-[#747384] mt-2",
-                                            children: "Select an Excel file to see a preview"
+                                            children: "Select a file to see a preview"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                            lineNumber: 261,
+                                            lineNumber: 399,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                                    lineNumber: 259,
+                                    lineNumber: 397,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                            lineNumber: 230,
+                            lineNumber: 368,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/admin/upload-transactions/page.tsx",
-                    lineNumber: 141,
+                    lineNumber: 243,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/admin/upload-transactions/page.tsx",
-            lineNumber: 129,
+            lineNumber: 231,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/admin/upload-transactions/page.tsx",
-        lineNumber: 128,
+        lineNumber: 230,
         columnNumber: 5
     }, this);
 }

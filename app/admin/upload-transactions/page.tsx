@@ -281,27 +281,63 @@ export default function UploadTransactions() {
             <div className="mt-6">
               <h3 className="text-sm font-semibold text-[#171532] mb-3">Download Sample Files:</h3>
               <div className="grid grid-cols-1 gap-2">
-                <a
-                  href="/samples/sample_mixed_transactions.xlsx"
-                  download
-                  className="text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium"
-                >
-                  📄 Sample - Mixed Deposits & Withdrawals (Excel)
-                </a>
-                <a
-                  href="/samples/sample_deposits.xlsx"
-                  download
-                  className="text-sm text-green-600 hover:text-green-700 hover:underline font-medium"
-                >
-                  📄 Sample - Deposits Only (Excel)
-                </a>
-                <a
-                  href="/samples/sample_withdrawals.xlsx"
-                  download
-                  className="text-sm text-red-600 hover:text-red-700 hover:underline font-medium"
-                >
-                  📄 Sample - Withdrawals Only (Excel)
-                </a>
+                <div>
+                  <p className="text-xs font-medium text-[#747384] mb-2">Mixed Deposits & Withdrawals:</p>
+                  <div className="flex gap-2">
+                    <a
+                      href="/samples/sample_mixed_transactions.xlsx"
+                      download
+                      className="flex-1 text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium"
+                    >
+                      📄 Excel
+                    </a>
+                    <a
+                      href="/samples/sample_mixed_transactions.csv"
+                      download
+                      className="flex-1 text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium"
+                    >
+                      📄 CSV
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-[#747384] mb-2">Deposits Only:</p>
+                  <div className="flex gap-2">
+                    <a
+                      href="/samples/sample_deposits.xlsx"
+                      download
+                      className="flex-1 text-sm text-green-600 hover:text-green-700 hover:underline font-medium"
+                    >
+                      📄 Excel
+                    </a>
+                    <a
+                      href="/samples/sample_deposits.csv"
+                      download
+                      className="flex-1 text-sm text-green-600 hover:text-green-700 hover:underline font-medium"
+                    >
+                      📄 CSV
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-[#747384] mb-2">Withdrawals Only:</p>
+                  <div className="flex gap-2">
+                    <a
+                      href="/samples/sample_withdrawals.xlsx"
+                      download
+                      className="flex-1 text-sm text-red-600 hover:text-red-700 hover:underline font-medium"
+                    >
+                      📄 Excel
+                    </a>
+                    <a
+                      href="/samples/sample_withdrawals.csv"
+                      download
+                      className="flex-1 text-sm text-red-600 hover:text-red-700 hover:underline font-medium"
+                    >
+                      📄 CSV
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
 
