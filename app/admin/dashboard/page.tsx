@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Activity, Moon, Sun, Download, Calendar, AlertCircle, Zap, Search } from "lucide-react"
+import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Activity, Moon, Sun, Download, Calendar, AlertCircle, Zap, Search, Upload } from "lucide-react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 import { useTheme } from "next-themes"
 import jsPDF from "jspdf"
@@ -2317,6 +2317,13 @@ export default function AdminDashboard() {
             <button className="flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 text-[#4a6670] hover:bg-[#f0f0f0]">
               <Edit className="w-5 h-5" />
               <span className="text-[10px] font-medium">Edit Txn</span>
+            </button>
+          </Link>
+
+          <Link href="/admin/upload-transactions">
+            <button className="flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 text-[#4a6670] hover:bg-[#f0f0f0]">
+              <Upload className="w-5 h-5" />
+              <span className="text-[10px] font-medium">Upload Txn</span>
             </button>
           </Link>
 
