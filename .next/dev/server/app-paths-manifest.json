@@ -1,5 +1,6 @@
 {
-  "/api/auth/verify/route": "app/api/auth/verify/route.js",
-  "/page": "app/page.js",
-  "/user/dashboard/page": "app/user/dashboard/page.js"
+  "/admin/manage-transactions/page": "app/admin/manage-transactions/page.js",
+  "/api/students/[id]/transaction/delete/route": "app/api/students/[id]/transaction/delete/route.js",
+  "/api/students/route": "app/api/students/route.js",
+  "/page": "app/page.js"
 }

@@ -1,5 +1,5 @@
-import { connectDB } from "@/lib/db"
-import Student from "@/lib/models/Student"
+import { connectDB } from "@/lib/mongodb"
+import { Student } from "@/lib/models/Student"
 import { NextResponse } from "next/server"
 
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
@@ -18,16 +18,12 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       return NextResponse.json({ error: "Invalid transaction index" }, { status: 400 })
     }
 
-    // Calculate the amount difference
     const oldTransaction = student.transactions[index]
     const oldAmount = oldTransaction.type === 'deposit' ? oldTransaction.amount : -oldTransaction.amount
     const newAmount = type === 'deposit' ? amount : -amount
     const difference = newAmount - oldAmount
 
-    // Update transaction
     student.transactions[index] = { date, type, amount }
-
-    // Update balance
     student.balance += difference
 
     await student.save()

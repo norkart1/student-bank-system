@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Edit2, Save, X } from "lucide-react"
+import { ArrowLeft, Edit2, Save, X, Trash2 } from "lucide-react"
 import { toast } from "sonner"
 
 interface Student {
@@ -77,18 +77,40 @@ export default function ManageTransactions() {
       })
 
       if (response.ok) {
-        toast.success("Transaction updated successfully")
+        const data = await response.json()
+        setSelectedStudent(data.student)
         setEditingIndex(null)
-        loadStudents()
-        
-        // Re-select the student to refresh their data
-        const updated = await response.json()
-        setSelectedStudent(updated.student)
+        toast.success("Transaction updated successfully")
       } else {
         toast.error("Failed to update transaction")
       }
     } catch (error) {
+      console.error(error)
       toast.error("Error updating transaction")
+    }
+  }
+
+  const handleDeleteTransaction = async (index: number) => {
+    if (!selectedStudent) return
+    if (!confirm("Are you sure you want to delete this transaction?")) return
+
+    try {
+      const response = await fetch(`/api/students/${selectedStudent._id}/transaction/delete`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ index })
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setSelectedStudent(data.student)
+        toast.success("Transaction deleted successfully")
+      } else {
+        toast.error("Failed to delete transaction")
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error("Error deleting transaction")
     }
   }
 
@@ -175,14 +197,12 @@ export default function ManageTransactions() {
                       >
                         {editingIndex === idx ? (
                           <div className="space-y-3">
-                            {/* Date Input */}
                             <div>
                               <label className="block text-sm font-medium text-[#171532] mb-1">
-                                Date
+                                Date (dd/MM/yyyy)
                               </label>
                               <input
                                 type="text"
-                                placeholder="dd/MM/yyyy"
                                 value={editValues.date}
                                 onChange={(e) =>
                                   setEditValues({ ...editValues, date: e.target.value })
@@ -191,7 +211,6 @@ export default function ManageTransactions() {
                               />
                             </div>
 
-                            {/* Amount Input */}
                             <div>
                               <label className="block text-sm font-medium text-[#171532] mb-1">
                                 Amount
@@ -206,7 +225,6 @@ export default function ManageTransactions() {
                               />
                             </div>
 
-                            {/* Type (Read-only) */}
                             <div>
                               <label className="block text-sm font-medium text-[#171532] mb-1">
                                 Type
@@ -216,11 +234,10 @@ export default function ManageTransactions() {
                               </div>
                             </div>
 
-                            {/* Action Buttons */}
                             <div className="flex gap-2 pt-2">
                               <button
                                 onClick={() => handleSaveTransaction(idx)}
-                                className="flex-1 flex items-center justify-center gap-2 bg-[#10B981] hover:bg-[#0fa06f] text-white px-3 py-2 rounded-lg font-semibold transition-colors"
+                                className="flex-1 flex items-center justify-center gap-2 bg-[#4a6670] hover:bg-[#3d565e] text-white px-3 py-2 rounded-lg font-semibold transition-colors"
                               >
                                 <Save className="w-4 h-4" />
                                 Save
@@ -236,14 +253,14 @@ export default function ManageTransactions() {
                           </div>
                         ) : (
                           <div className="flex items-center justify-between">
-                            <div>
+                            <div className="flex-1">
                               <p className="font-semibold text-[#171532]">{transaction.date}</p>
                               <p className="text-sm text-[#747384] capitalize">
                                 {transaction.type}
                               </p>
                             </div>
-                            <div className="flex items-center gap-3">
-                              <p className="font-bold text-lg text-[#171532]">
+                            <div className="flex items-center gap-2">
+                              <p className="font-bold text-lg text-[#171532] min-w-[100px] text-right">
                                 ₹{transaction.amount?.toFixed(2)}
                               </p>
                               <button
@@ -252,6 +269,13 @@ export default function ManageTransactions() {
                                 title="Edit transaction"
                               >
                                 <Edit2 className="w-5 h-5" />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteTransaction(idx)}
+                                className="p-2 hover:bg-red-100 text-red-600 rounded-lg transition-colors"
+                                title="Delete transaction"
+                              >
+                                <Trash2 className="w-5 h-5" />
                               </button>
                             </div>
                           </div>

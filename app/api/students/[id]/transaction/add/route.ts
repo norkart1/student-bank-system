@@ -1,5 +1,5 @@
-import { connectDB } from "@/lib/db"
-import Student from "@/lib/models/Student"
+import { connectDB } from "@/lib/mongodb"
+import { Student } from "@/lib/models/Student"
 import { NextResponse } from "next/server"
 
 export async function POST(req: Request, { params }: { params: { id: string } }) {
@@ -18,10 +18,8 @@ export async function POST(req: Request, { params }: { params: { id: string } })
       return NextResponse.json({ error: "Student not found" }, { status: 404 })
     }
 
-    // Add new transaction
     student.transactions.push({ date, type, amount })
 
-    // Update balance
     const balanceChange = type === 'deposit' ? amount : -amount
     student.balance += balanceChange
 

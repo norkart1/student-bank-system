@@ -1,5 +1,5 @@
-import { connectDB } from "@/lib/db"
-import Student from "@/lib/models/Student"
+import { connectDB } from "@/lib/mongodb"
+import { Student } from "@/lib/models/Student"
 import { NextResponse } from "next/server"
 
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
@@ -18,14 +18,10 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
       return NextResponse.json({ error: "Invalid transaction index" }, { status: 400 })
     }
 
-    // Get transaction to remove
     const transaction = student.transactions[index]
     const amount = transaction.type === 'deposit' ? transaction.amount : -transaction.amount
 
-    // Remove transaction
     student.transactions.splice(index, 1)
-
-    // Update balance
     student.balance -= amount
 
     await student.save()
