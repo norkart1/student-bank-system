@@ -13,6 +13,7 @@ export interface IStudent extends Document {
   email?: string;
   mobile?: string;
   profileImage?: string;
+  academicYear: string;
   balance: number;
   transactions: Transaction[];
   createdAt: Date;
@@ -33,6 +34,7 @@ const studentSchema = new Schema<IStudent>(
     email: { type: String },
     mobile: { type: String },
     profileImage: { type: String },
+    academicYear: { type: String, required: true, default: '2024-25' },
     balance: { type: Number, default: 0 },
     transactions: [transactionSchema],
   },

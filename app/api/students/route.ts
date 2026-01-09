@@ -5,7 +5,11 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(req: any) {
   try {
     await connectDB();
-    const students = await Student.find({});
+    const { searchParams } = new URL(req.url);
+    const academicYear = searchParams.get('academicYear');
+    
+    const query = academicYear ? { academicYear } : {};
+    const students = await Student.find(query);
     const response = NextResponse.json(students);
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
     response.headers.set('Pragma', 'no-cache');
@@ -31,6 +35,7 @@ export async function POST(req: NextRequest) {
       email: data.email || '',
       mobile: data.mobile || '',
       profileImage: data.profileImage || '',
+      academicYear: data.academicYear || '2024-25',
       balance: 0,
       transactions: [],
     });

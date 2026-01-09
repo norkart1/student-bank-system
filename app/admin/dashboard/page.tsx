@@ -28,6 +28,7 @@ interface Student {
   username?: string
   password?: string
   profileImage?: string
+  academicYear?: string
   balance: number
   transactions: Transaction[]
 }
@@ -55,11 +56,13 @@ export default function AdminDashboard() {
   const [editTxAmount, setEditTxAmount] = useState("")
   const [editTxDate, setEditTxDate] = useState("")
   const [editTxReason, setEditTxReason] = useState("")
+  const [selectedAcademicYear, setSelectedAcademicYear] = useState("2024-25")
   const [newStudent, setNewStudent] = useState({
     name: "",
     mobile: "",
     email: "",
-    profileImage: ""
+    profileImage: "",
+    academicYear: "2024-25"
   })
   const [adminName, setAdminName] = useState("")
   const [adminUsername, setAdminUsername] = useState("")
@@ -463,8 +466,21 @@ export default function AdminDashboard() {
       </div>
 
       <div className="space-y-6">
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700">
-          <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-3">Report Type</label>
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700">
+              <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-3">Academic Year</label>
+              <select
+                value={selectedAcademicYear}
+                onChange={(e) => setSelectedAcademicYear(e.target.value)}
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white"
+              >
+                <option value="2023-24">2023-24</option>
+                <option value="2024-25">2024-25</option>
+                <option value="2025-26">2025-26</option>
+              </select>
+            </div>
+
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-200 dark:border-slate-700">
+              <label className="block text-sm font-semibold text-[#171532] dark:text-white mb-3">Report Type</label>
           <select
             value={reportType}
             onChange={(e) => setReportType(e.target.value as any)}
@@ -919,7 +935,10 @@ export default function AdminDashboard() {
         const res = await fetch(`/api/students/${originalStudent._id}`, {
           method: 'PATCH',
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updateData)
+          body: JSON.stringify({
+            ...newStudent,
+            academicYear: newStudent.academicYear || originalStudent.academicYear || '2024-25'
+          })
         })
         
         if (!res.ok) {
@@ -1028,7 +1047,7 @@ export default function AdminDashboard() {
     // Fetch students from MongoDB API
     const fetchStudents = async () => {
       try {
-        const res = await fetch('/api/students')
+        const res = await fetch(`/api/students?academicYear=${selectedAcademicYear}`)
         if (res.ok) {
           const studentList = await res.json()
           setStudents(studentList)
@@ -1065,7 +1084,7 @@ export default function AdminDashboard() {
       clearInterval(statusInterval)
       clearInterval(studentRefreshInterval)
     }
-  }, [])
+  }, [selectedAcademicYear])
 
   // Use Pusher for real-time admin updates
   usePusherAdminUpdates((data) => {

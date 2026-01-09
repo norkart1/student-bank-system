@@ -129,6 +129,11 @@ const studentSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mong
     profileImage: {
         type: String
     },
+    academicYear: {
+        type: String,
+        required: true,
+        default: '2024-25'
+    },
     balance: {
         type: Number,
         default: 0
@@ -165,7 +170,12 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$serv
 async function GET(req) {
     try {
         await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$mongodb$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["connectDB"])();
-        const students = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Student"].find({});
+        const { searchParams } = new URL(req.url);
+        const academicYear = searchParams.get('academicYear');
+        const query = academicYear ? {
+            academicYear
+        } : {};
+        const students = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Student"].find(query);
         const response = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(students);
         response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
         response.headers.set('Pragma', 'no-cache');
@@ -196,6 +206,7 @@ async function POST(req) {
             email: data.email || '',
             mobile: data.mobile || '',
             profileImage: data.profileImage || '',
+            academicYear: data.academicYear || '2024-25',
             balance: 0,
             transactions: []
         });
