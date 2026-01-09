@@ -88,7 +88,8 @@ export default function ManageTransactions() {
           index: index,
           date: editValues.date,
           type: editValues.type,
-          amount: parseFloat(editValues.amount)
+          amount: parseFloat(editValues.amount),
+          academicYear: editValues.academicYear
         })
       })
 
@@ -253,6 +254,23 @@ export default function ManageTransactions() {
                                 }
                                 className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:border-[#4a6670]"
                               />
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-medium text-[#171532] mb-1">
+                                Academic Year
+                              </label>
+                              <select
+                                value={editValues.academicYear || ""}
+                                onChange={(e) =>
+                                  setEditValues({ ...editValues, academicYear: e.target.value })
+                                }
+                                className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:border-[#4a6670]"
+                              >
+                                <option value="2023-24">2023-24</option>
+                                <option value="2024-25">2024-25</option>
+                                <option value="2025-26">2025-26</option>
+                              </select>
                             </div>
 
                             <div>

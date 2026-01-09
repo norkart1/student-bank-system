@@ -5,6 +5,7 @@ interface Transaction {
   amount: number;
   date?: string;
   reason?: string;
+  academicYear?: string;
 }
 
 export interface IStudent extends Document {
@@ -25,6 +26,7 @@ const transactionSchema = new Schema({
   amount: { type: Number, required: true },
   date: { type: String },
   reason: { type: String },
+  academicYear: { type: String },
 });
 
 const studentSchema = new Schema<IStudent>(

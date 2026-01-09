@@ -8,7 +8,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 
     const { id } = await params
     const body = await req.json()
-    const { index, date, type, amount } = body
+    const { index, date, type, amount, academicYear } = body
 
     const student = await Student.findById(id)
     if (!student) {
@@ -24,7 +24,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const newAmount = type === 'deposit' ? amount : -amount
     const difference = newAmount - oldAmount
 
-    student.transactions[index] = { date, type, amount }
+    student.transactions[index] = { date, type, amount, academicYear }
     student.balance += difference
     
     student.markModified('transactions')

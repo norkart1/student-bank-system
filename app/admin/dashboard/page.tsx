@@ -131,7 +131,8 @@ export default function AdminDashboard() {
           type: 'deposit',
           amount: amount,
           date: new Date(transactionDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-          reason: transactionReason || undefined
+          reason: transactionReason || undefined,
+          academicYear: selectedAcademicYear
         })
         
         if (student.transactions.length > 100) {
@@ -236,7 +237,8 @@ export default function AdminDashboard() {
           type: 'withdraw',
           amount: amount,
           date: new Date(transactionDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-          reason: transactionReason || undefined
+          reason: transactionReason || undefined,
+          academicYear: selectedAcademicYear
         })
         
         if (student.transactions.length > 100) {

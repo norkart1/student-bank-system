@@ -15,6 +15,7 @@ export default function UserDashboard() {
   const [isLoading, setIsLoading] = useState(true)
   const [userData, setUserData] = useState<any>(null)
   const [realTimeStatus, setRealTimeStatus] = useState(false)
+  const [selectedAcademicYear, setSelectedAcademicYear] = useState("2024-25")
 
   const loadUserData = async () => {
     try {
@@ -235,6 +236,18 @@ export default function UserDashboard() {
               </div>
               <p className="text-white/70 text-sm font-medium">Total Balance</p>
             </div>
+            <div className="bg-white/10 rounded-lg p-3 mb-4">
+              <label className="block text-white/70 text-xs font-medium mb-1">View Academic Year</label>
+              <select 
+                value={selectedAcademicYear}
+                onChange={(e) => setSelectedAcademicYear(e.target.value)}
+                className="w-full bg-white/20 border-none text-white text-sm rounded-md focus:ring-0 cursor-pointer"
+              >
+                <option value="2023-24" className="text-gray-900">2023-24</option>
+                <option value="2024-25" className="text-gray-900">2024-25</option>
+                <option value="2025-26" className="text-gray-900">2025-26</option>
+              </select>
+            </div>
             <p className="text-3xl font-bold text-white">₹{(userData?.balance || 0)?.toFixed(2)}</p>
           </div>
 
@@ -316,14 +329,17 @@ export default function UserDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {userData.transactions.map((transaction: any, idx: number) => {
-                      // Calculate running balance
+                    {userData.transactions
+                      .filter((t: any) => !t.academicYear || t.academicYear === selectedAcademicYear)
+                      .map((transaction: any, idx: number) => {
+                      // Calculate running balance for filtered transactions
                       let runningBalance = 0
+                      const filteredTxs = userData.transactions.filter((t: any) => !t.academicYear || t.academicYear === selectedAcademicYear)
                       for (let i = 0; i <= idx; i++) {
-                        if (userData.transactions[i].type === 'deposit') {
-                          runningBalance += userData.transactions[i].amount || 0
+                        if (filteredTxs[i].type === 'deposit') {
+                          runningBalance += filteredTxs[i].amount || 0
                         } else {
-                          runningBalance -= userData.transactions[i].amount || 0
+                          runningBalance -= filteredTxs[i].amount || 0
                         }
                       }
                       
