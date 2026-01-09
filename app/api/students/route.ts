@@ -8,7 +8,11 @@ export async function GET(req: any) {
     const { searchParams } = new URL(req.url);
     const academicYear = searchParams.get('academicYear');
     
-    const query = academicYear ? { academicYear } : {};
+    // For the default year, also include students where academicYear is not set
+    const query = academicYear === '2024-25' 
+      ? { $or: [{ academicYear: '2024-25' }, { academicYear: { $exists: false } }, { academicYear: '' }] }
+      : academicYear ? { academicYear } : {};
+      
     const students = await Student.find(query);
     const response = NextResponse.json(students);
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');

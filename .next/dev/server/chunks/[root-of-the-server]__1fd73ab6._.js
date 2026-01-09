@@ -129,6 +129,11 @@ const studentSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mong
     profileImage: {
         type: String
     },
+    academicYear: {
+        type: String,
+        required: true,
+        default: '2024-25'
+    },
     balance: {
         type: Number,
         default: 0

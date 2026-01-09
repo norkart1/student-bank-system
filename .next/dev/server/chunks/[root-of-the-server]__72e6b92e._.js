@@ -147,8 +147,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$pusher$2d$js
 ;
 ;
 const pusher = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$pusher$2f$lib$2f$pusher$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"]({
-    appId: ("TURBOPACK compile-time value", "2092245") || '',
-    key: ("TURBOPACK compile-time value", "f9d7980c56db83a0605b") || '',
+    appId: ("TURBOPACK compile-time value", "2099227") || '',
+    key: ("TURBOPACK compile-time value", "9e5acd79cf20809208d8") || '',
     secret: process.env.PUSHER_SECRET || '',
     cluster: ("TURBOPACK compile-time value", "ap2") || 'mt1',
     useTLS: true
