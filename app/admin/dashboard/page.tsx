@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Activity, Moon, Sun, Download, Calendar, AlertCircle, Zap, Search, Upload } from "lucide-react"
+import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Activity, Moon, Sun, Download, Calendar, AlertCircle, Zap, Search, Upload, CalendarRange } from "lucide-react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 import { useTheme } from "next-themes"
 import jsPDF from "jspdf"
@@ -1191,6 +1191,51 @@ export default function AdminDashboard() {
     return null
   }
 
+  const renderYearTab = () => (
+    <>
+      <div className="flex items-center gap-3 mb-6">
+        <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
+          <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+        </button>
+        <h2 className="text-lg font-bold text-[#171532]">Academic Year</h2>
+      </div>
+      
+      <div className="bg-white rounded-2xl p-6 shadow-lg border border-[#e5e7eb] space-y-6">
+        <div>
+          <label className="block text-sm font-bold text-[#171532] mb-3">Select Active Academic Year</label>
+          <div className="grid grid-cols-1 gap-3">
+            {["2023-24", "2024-25", "2025-26"].map((year) => (
+              <button
+                key={year}
+                onClick={() => {
+                  setSelectedAcademicYear(year)
+                  setActiveTab("home")
+                  toast.success(`Active year set to ${year}`)
+                }}
+                className={`w-full p-4 rounded-xl text-left font-bold transition-all border-2 ${
+                  selectedAcademicYear === year
+                    ? "bg-[#4a6670] border-[#4a6670] text-white shadow-md scale-[1.02]"
+                    : "bg-[#f8f9fa] border-[#e8e8e8] text-[#171532] hover:border-[#4a6670]/30"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span>{year} Academic Session</span>
+                  {selectedAcademicYear === year && <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+        
+        <div className="bg-amber-50 border border-amber-100 rounded-xl p-4">
+          <p className="text-xs text-amber-800 font-medium leading-relaxed">
+            Note: Changing the academic year will filter all student accounts, transactions, and reports to show data only for the selected session.
+          </p>
+        </div>
+      </div>
+    </>
+  )
+
   const renderHomeTab = () => (
     <>
       <div className="flex items-center justify-between mb-6">
@@ -1289,11 +1334,21 @@ export default function AdminDashboard() {
         <button 
           onClick={() => setActiveTab("ai")}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center transition-colors">
             <Sparkles className="w-6 h-6 text-white" />
           </div>
           <span className="text-sm font-bold text-[#171532]">AI</span>
         </button>
+
+        <button 
+          onClick={() => setActiveTab("year")}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center transition-colors">
+            <CalendarRange className="w-6 h-6 text-white" />
+          </div>
+          <span className="text-sm font-bold text-[#171532]">Session</span>
+        </button>
+
         <button 
           onClick={() => setActiveTab("accounts")}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
@@ -2129,6 +2184,7 @@ export default function AdminDashboard() {
         {activeTab === "accounts" && renderAccountsTab()}
         {activeTab === "leaderboard" && renderLeaderboardTab()}
         {activeTab === "ai" && renderAITab()}
+        {activeTab === "year" && renderYearTab()}
         {activeTab === "calendar" && renderCalendarTab()}
         {activeTab === "status" && renderStatusTab()}
         {activeTab === "profile" && (

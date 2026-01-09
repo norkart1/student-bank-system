@@ -108,6 +108,9 @@ const transactionSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$
     },
     reason: {
         type: String
+    },
+    academicYear: {
+        type: String
     }
 });
 const studentSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__["Schema"]({
@@ -128,6 +131,11 @@ const studentSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mong
     },
     profileImage: {
         type: String
+    },
+    academicYear: {
+        type: String,
+        required: true,
+        default: '2024-25'
     },
     balance: {
         type: Number,
@@ -166,6 +174,7 @@ async function GET(req) {
         const { searchParams } = new URL(req.url);
         const code = searchParams.get('code');
         const name = searchParams.get('name');
+        const academicYear = searchParams.get('academicYear');
         if (!code && !name) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 error: 'Code or name required'
@@ -173,19 +182,35 @@ async function GET(req) {
                 status: 400
             });
         }
-        let student;
+        let query = {};
         if (code) {
-            student = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Student"].findOne({
-                code: code.toUpperCase()
-            });
+            query.code = code.toUpperCase();
         } else if (name) {
-            student = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Student"].findOne({
-                name: {
-                    $regex: name,
-                    $options: 'i'
-                }
-            });
+            query.name = {
+                $regex: name,
+                $options: 'i'
+            };
         }
+        if (academicYear) {
+            if (academicYear === '2024-25') {
+                query.$or = [
+                    {
+                        academicYear: '2024-25'
+                    },
+                    {
+                        academicYear: {
+                            $exists: false
+                        }
+                    },
+                    {
+                        academicYear: ''
+                    }
+                ];
+            } else {
+                query.academicYear = academicYear;
+            }
+        }
+        const student = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Student"].findOne(query);
         if (!student) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 error: 'Student not found'
