@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
         {
           folder: 'student-profiles',
           resource_type: 'auto',
-          max_bytes: 5000000, // 5MB
+          max_bytes: 10000000, // 10MB
         },
         (error, result) => {
           if (error) reject(error);

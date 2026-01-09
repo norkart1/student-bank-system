@@ -859,16 +859,16 @@ export default function AdminDashboard() {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      // Limit image size to 500KB
-      if (file.size > 500000) {
-        alert("Image size must be less than 500KB")
+      // Limit image size to 10MB
+      if (file.size > 10000000) {
+        alert("Image size must be less than 10MB")
         return
       }
       const reader = new FileReader()
       reader.onloadend = () => {
         const result = reader.result as string
-        // Compress if image is too large as base64
-        if (result.length > 1000000) {
+        // Compress if image is too large as base64 (over 5MB)
+        if (result.length > 5000000) {
           const canvas = document.createElement('canvas')
           const img = new Image()
           img.onload = () => {
