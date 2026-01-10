@@ -9,9 +9,14 @@ export async function GET(req: any) {
     const academicYear = searchParams.get('academicYear');
     
     // For the default year, also include students where academicYear is not set
-    const query = academicYear === '2025-26' 
-      ? { $or: [{ academicYear: '2025-26' }, { academicYear: { $exists: false } }, { academicYear: '' }] }
-      : academicYear ? { academicYear } : {};
+    let query = {};
+    if (academicYear === 'all') {
+      query = {};
+    } else if (academicYear === '2025-26') {
+      query = { $or: [{ academicYear: '2025-26' }, { academicYear: { $exists: false } }, { academicYear: '' }] };
+    } else if (academicYear) {
+      query = { academicYear };
+    }
       
     const students = await Student.find(query);
     const response = NextResponse.json(students);
@@ -35,7 +40,7 @@ export async function POST(req: NextRequest) {
     
     const student = new Student({
       name: data.name,
-      code: data.code,
+      code: data.code.trim().toUpperCase(),
       email: data.email || '',
       mobile: data.mobile || '',
       profileImage: data.profileImage || '',

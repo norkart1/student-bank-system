@@ -65,6 +65,7 @@ export default function AdminDashboard() {
   const [editTxDate, setEditTxDate] = useState("")
   const [editTxReason, setEditTxReason] = useState("")
   const [selectedAcademicYear, setSelectedAcademicYear] = useState("2025-26")
+  const [showAllSessions, setShowAllSessions] = useState(false)
   const [newStudent, setNewStudent] = useState({
     name: "",
     mobile: "",
@@ -1061,7 +1062,7 @@ export default function AdminDashboard() {
     
     studentList.forEach((student) => {
       // Calculate session-specific balance for each student
-      const sessionTransactions = student.transactions?.filter(t => (t.academicYear || '2025-26') === selectedAcademicYear) || []
+      const sessionTransactions = student.transactions?.filter(t => selectedAcademicYear === 'all' || (t.academicYear || '2025-26') === selectedAcademicYear) || []
       
       let studentSessionBalance = 0
       sessionTransactions.forEach((t) => {
@@ -2041,6 +2042,10 @@ export default function AdminDashboard() {
       s.code?.toLowerCase().includes(studentSearchQuery.toLowerCase())
     );
 
+    const totalDep = filteredStudents.reduce((acc, s) => acc + (s.transactions?.filter(t => selectedAcademicYear === 'all' || (t.academicYear || '2024-25') === selectedAcademicYear).reduce((sum, t) => t.type === 'deposit' ? sum + t.amount : sum, 0) || 0), 0);
+    const totalWith = filteredStudents.reduce((acc, s) => acc + (s.transactions?.filter(t => selectedAcademicYear === 'all' || (t.academicYear || '2024-25') === selectedAcademicYear).reduce((sum, t) => t.type === 'withdraw' ? sum + t.amount : sum, 0) || 0), 0);
+    const currentBalance = totalDep - totalWith;
+
     return (
     <>
       <div className="flex items-center justify-between mb-4">
@@ -2048,7 +2053,15 @@ export default function AdminDashboard() {
           <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
             <ChevronLeft className="w-5 h-5 text-[#4a6670]" />
           </button>
-          <h2 className="text-lg font-bold text-[#171532]">All Accounts</h2>
+          <div>
+            <h2 className="text-lg font-bold text-[#171532]">All Accounts</h2>
+            <div className="flex gap-2 mt-0.5">
+              <span className="text-[10px] font-bold text-green-600">Dep: ₹{totalDep.toLocaleString()}</span>
+              <span className="text-[10px] font-bold text-red-600">With: ₹{totalWith.toLocaleString()}</span>
+              <span className="text-[10px] font-bold text-[#4a6670]">Net: ₹{currentBalance.toLocaleString()}</span>
+              <span className="text-[10px] font-bold text-purple-600 ml-2">Total Students: {filteredStudents.length}</span>
+            </div>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <select
@@ -2056,6 +2069,7 @@ export default function AdminDashboard() {
             onChange={(e) => setSelectedAcademicYear(e.target.value)}
             className="px-3 py-2 bg-white border border-[#e5e7eb] rounded-xl text-xs font-semibold text-[#4a6670] focus:outline-none focus:ring-2 focus:ring-[#4a6670]/10 transition-all"
           >
+            <option value="all">All Sessions</option>
             {academicYears.map(year => (
               <option key={year} value={year}>{year}</option>
             ))}
@@ -2100,6 +2114,7 @@ export default function AdminDashboard() {
             <div className="divide-y divide-[#e5e7eb]">
               {filteredStudents.map((student, index) => {
                 const originalIndex = students.findIndex(s => s._id === student._id);
+                const studentBalance = student.transactions?.filter(t => selectedAcademicYear === 'all' || (t.academicYear || '2024-25') === selectedAcademicYear).reduce((acc, t) => t.type === 'deposit' ? acc + t.amount : acc - t.amount, 0) || 0;
                 return (
                 <div 
                   key={student._id || index} 
@@ -2110,10 +2125,13 @@ export default function AdminDashboard() {
                     <div className={`w-8 h-8 rounded-full ${avatarColors[originalIndex % avatarColors.length]} flex items-center justify-center text-xs font-bold text-[#4a6670] flex-shrink-0`}>
                       {student.name.charAt(0)}
                     </div>
-                    <span className="text-sm font-semibold text-[#171532] truncate">{student.name}</span>
+                    <div className="flex flex-col truncate">
+                      <span className="text-sm font-semibold text-[#171532] truncate">{student.name}</span>
+                      <span className="text-[10px] text-gray-400 font-mono">{student.code} • {student.academicYear || 'No Session'}</span>
+                    </div>
                   </div>
                   <div className="col-span-4 text-sm font-bold text-[#10B981]">
-                    ₹{(student.transactions?.filter(t => (t.academicYear || '2024-25') === selectedAcademicYear).reduce((acc, t) => t.type === 'deposit' ? acc + t.amount : acc - t.amount, 0) || 0).toFixed(2)}
+                    ₹{studentBalance.toFixed(2)}
                   </div>
                 </div>
               )})}
