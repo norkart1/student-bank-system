@@ -175,7 +175,7 @@ export default function QRDownloadPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           {/* Selection Grid - Hidden on print */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 max-h-[600px] overflow-y-auto print:hidden">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 max-h-[600px] overflow-y-auto print:hidden w-full max-w-2xl mx-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {filteredStudents.map((student) => (
                 <button
@@ -201,8 +201,8 @@ export default function QRDownloadPage() {
             </div>
           </div>
 
-          {/* A4 Preview Container */}
-          <div className="bg-white shadow-xl mx-auto overflow-hidden print:shadow-none print:m-0 sticky top-8" style={{ width: '210mm', minHeight: '297mm', padding: '10mm' }}>
+          {/* A4 Preview Container - Hidden on web, visible only for PDF/Print */}
+          <div className="bg-white shadow-xl mx-auto overflow-hidden print:shadow-none print:m-0 fixed left-[-9999px] top-0" style={{ width: '210mm', minHeight: '297mm', padding: '10mm' }}>
             <div ref={printRef} className="bg-white">
               <h2 className="text-center text-xl font-bold mb-6 text-gray-800 print:block hidden">JDSA Student QR Codes</h2>
               
