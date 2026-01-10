@@ -117,34 +117,34 @@ export default function QRDownloadPage() {
     <div className="min-h-screen bg-gray-100 p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header - Hidden on print */}
-        <div className="flex flex-col gap-6 mb-8 print:hidden">
+        <div className="flex flex-col gap-6 mb-8 print:hidden max-w-2xl mx-auto">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button 
                 onClick={() => router.back()} 
-                className="p-2 hover:bg-white rounded-full transition-colors shadow-sm"
+                className="w-10 h-10 flex items-center justify-center hover:bg-white rounded-full transition-colors shadow-sm"
               >
                 <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
               </button>
-              <h1 className="text-2xl font-bold text-[#171532]">QR Codes Download</h1>
+              <h1 className="text-xl font-bold text-[#171532]">QR Download</h1>
             </div>
-            <div className="flex gap-3">
-              <button
-                onClick={handlePrint}
-                className="flex items-center gap-2 bg-[#4a6670] hover:bg-[#3d565e] text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-              >
-                <Printer className="w-5 h-5" />
-                Print
-              </button>
-              <button
-                onClick={handleDownloadPDF}
-                disabled={isDownloading}
-                className="flex items-center gap-2 bg-[#10B981] hover:bg-[#0fa06f] text-white px-4 py-2 rounded-lg font-semibold transition-colors disabled:opacity-50"
-              >
-                {isDownloading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Download className="w-5 h-5" />}
-                Download PDF
-              </button>
-            </div>
+          <div className="flex gap-2">
+            <button
+              onClick={handlePrint}
+              className="p-2.5 bg-[#4a6670] hover:bg-[#3d565e] text-white rounded-xl shadow-sm transition-all active:scale-95"
+              title="Print QR Codes"
+            >
+              <Printer className="w-5 h-5" />
+            </button>
+            <button
+              onClick={handleDownloadPDF}
+              disabled={isDownloading}
+              className="p-2.5 bg-[#10B981] hover:bg-[#0fa06f] text-white rounded-xl shadow-sm transition-all active:scale-95 disabled:opacity-50"
+              title="Download PDF"
+            >
+              {isDownloading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Download className="w-5 h-5" />}
+            </button>
+          </div>
           </div>
 
           <div className="flex flex-col md:flex-row gap-4">

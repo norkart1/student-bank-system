@@ -1,3 +1,8 @@
 {
+  "/admin-login/page": "app/admin-login/page.js",
+  "/admin/dashboard/page": "app/admin/dashboard/page.js",
+  "/admin/qr-download/page": "app/admin/qr-download/page.js",
+  "/api/admin/login/route": "app/api/admin/login/route.js",
+  "/login/page": "app/login/page.js",
   "/page": "app/page.js"
 }
