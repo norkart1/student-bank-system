@@ -120,8 +120,7 @@ const studentSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mong
     },
     code: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     email: {
         type: String
@@ -146,6 +145,12 @@ const studentSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mong
     ]
 }, {
     timestamps: true
+});
+studentSchema.index({
+    code: 1,
+    academicYear: 1
+}, {
+    unique: true
 });
 const Student = __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__["default"].models.Student || __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__["default"].model('Student', studentSchema);
 }),
@@ -176,7 +181,22 @@ async function GET(req, { params }) {
     try {
         const { id } = await params;
         await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$mongodb$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["connectDB"])();
-        const student = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Student"].findById(id);
+        const { searchParams } = new URL(req.url);
+        const academicYear = searchParams.get('academicYear');
+        let student;
+        if (academicYear) {
+            // Find the student by code and academic year if code is available
+            const currentStudent = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Student"].findById(id);
+            if (currentStudent && currentStudent.code) {
+                student = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Student"].findOne({
+                    code: currentStudent.code,
+                    academicYear: academicYear
+                });
+            }
+        }
+        if (!student) {
+            student = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Student"].findById(id);
+        }
         if (!student) return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             error: 'Not found'
         }, {

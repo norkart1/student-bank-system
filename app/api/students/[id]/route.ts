@@ -6,7 +6,25 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   try {
     const { id } = await params;
     await connectDB();
-    const student = await Student.findById(id);
+    const { searchParams } = new URL(req.url);
+    const academicYear = searchParams.get('academicYear');
+    
+    let student;
+    if (academicYear) {
+      // Find the student by code and academic year if code is available
+      const currentStudent = await Student.findById(id);
+      if (currentStudent && currentStudent.code) {
+        student = await Student.findOne({ 
+          code: currentStudent.code, 
+          academicYear: academicYear 
+        });
+      }
+    }
+    
+    if (!student) {
+      student = await Student.findById(id);
+    }
+    
     if (!student) return NextResponse.json({ error: 'Not found' }, { status: 404 });
     
     // Prevent caching to ensure fresh data

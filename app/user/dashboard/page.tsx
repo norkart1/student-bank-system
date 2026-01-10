@@ -29,7 +29,7 @@ export default function UserDashboard() {
       const session = await verifyRes.json()
       const studentId = session.userData.id
 
-      const res = await fetch(`/api/students/${studentId}`, {
+      const res = await fetch(`/api/students/${studentId}?academicYear=${selectedAcademicYear}`, {
         method: 'GET',
         cache: 'no-store',
         headers: {
@@ -65,7 +65,7 @@ export default function UserDashboard() {
 
   useEffect(() => {
     loadUserData()
-  }, [])
+  }, [selectedAcademicYear])
 
   // Auto-logout when user refreshes or navigates away
   useEffect(() => {
@@ -84,7 +84,7 @@ export default function UserDashboard() {
     }, 5000)
 
     return () => clearInterval(interval)
-  }, [isLoading])
+  }, [isLoading, selectedAcademicYear])
 
   // Use Pusher for real-time updates
   usePusherUpdates(userData?.id, (data) => {

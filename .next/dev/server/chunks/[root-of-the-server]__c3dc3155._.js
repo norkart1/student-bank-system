@@ -181,8 +181,7 @@ const studentSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mong
     },
     code: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     email: {
         type: String
@@ -207,6 +206,12 @@ const studentSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mong
     ]
 }, {
     timestamps: true
+});
+studentSchema.index({
+    code: 1,
+    academicYear: 1
+}, {
+    unique: true
 });
 const Student = __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__["default"].models.Student || __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__["default"].model('Student', studentSchema);
 }),
