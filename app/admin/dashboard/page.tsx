@@ -47,7 +47,7 @@ export default function AdminDashboard() {
   const [totalBalance, setTotalBalance] = useState(0)
   const [totalDeposited, setTotalDeposited] = useState(0)
   const [totalWithdrawn, setTotalWithdrawn] = useState(0)
-  const [academicYears, setAcademicYears] = useState(["2023-24", "2024-25", "2025-26"])
+  const [academicYears, setAcademicYears] = useState(["2023-24", "2024-25", "2025-26", "2026-27"])
   const [showAddYearForm, setShowAddYearForm] = useState(false)
   const [newYearInput, setNewYearYearInput] = useState("")
   const [students, setStudents] = useState<Student[]>([])
@@ -61,13 +61,13 @@ export default function AdminDashboard() {
   const [editTxAmount, setEditTxAmount] = useState("")
   const [editTxDate, setEditTxDate] = useState("")
   const [editTxReason, setEditTxReason] = useState("")
-  const [selectedAcademicYear, setSelectedAcademicYear] = useState("2024-25")
+  const [selectedAcademicYear, setSelectedAcademicYear] = useState("2025-26")
   const [newStudent, setNewStudent] = useState({
     name: "",
     mobile: "",
     email: "",
     profileImage: "",
-    academicYear: "2024-25"
+    academicYear: "2025-26"
   })
   const [adminName, setAdminName] = useState("")
   const [adminUsername, setAdminUsername] = useState("")
@@ -483,7 +483,8 @@ export default function AdminDashboard() {
                 <option value="2023-24">2023-24</option>
                 <option value="2024-25">2024-25</option>
                 <option value="2025-26">2025-26</option>
-                {academicYears.filter(y => !["2023-24", "2024-25", "2025-26"].includes(y)).map(year => (
+                <option value="2026-27">2026-27</option>
+                {academicYears.filter(y => !["2023-24", "2024-25", "2025-26", "2026-27"].includes(y)).map(year => (
                   <option key={year} value={year}>{year}</option>
                 ))}
               </select>
