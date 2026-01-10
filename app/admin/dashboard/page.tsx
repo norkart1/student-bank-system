@@ -935,7 +935,8 @@ export default function AdminDashboard() {
       name: student.name || '',
       mobile: student.mobile || '',
       email: student.email || '',
-      profileImage: student.profileImage || ''
+      profileImage: student.profileImage || '',
+      academicYear: student.academicYear || '2024-25'
     })
     setEditingIndex(index)
     setShowEditForm(true)
