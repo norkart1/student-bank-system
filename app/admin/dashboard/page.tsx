@@ -1036,16 +1036,20 @@ export default function AdminDashboard() {
     let withdrawn = 0
     
     studentList.forEach((student) => {
-      balance += student.balance || 0
-      if (student.transactions) {
-        student.transactions.forEach((t) => {
-          if (t.type === 'deposit') {
-            deposited += t.amount || 0
-          } else if (t.type === 'withdraw') {
-            withdrawn += t.amount || 0
-          }
-        })
-      }
+      // Calculate session-specific balance for each student
+      const sessionTransactions = student.transactions?.filter(t => (t.academicYear || '2024-25') === selectedAcademicYear) || []
+      
+      let studentSessionBalance = 0
+      sessionTransactions.forEach((t) => {
+        if (t.type === 'deposit') {
+          deposited += t.amount || 0
+          studentSessionBalance += t.amount || 0
+        } else if (t.type === 'withdraw') {
+          withdrawn += t.amount || 0
+          studentSessionBalance -= t.amount || 0
+        }
+      })
+      balance += studentSessionBalance
     })
     
     setTotalBalance(balance)
@@ -1943,7 +1947,9 @@ export default function AdminDashboard() {
                     </div>
                     <span className="text-sm font-semibold text-[#171532] truncate">{student.name}</span>
                   </div>
-                  <div className="col-span-4 text-sm font-bold text-[#10B981]">₹{student.balance.toFixed(2)}</div>
+                  <div className="col-span-4 text-sm font-bold text-[#10B981]">
+                    ₹{(student.transactions?.filter(t => (t.academicYear || '2024-25') === selectedAcademicYear).reduce((acc, t) => t.type === 'deposit' ? acc + t.amount : acc - t.amount, 0) || 0).toFixed(2)}
+                  </div>
                 </div>
               )})}
             </div>

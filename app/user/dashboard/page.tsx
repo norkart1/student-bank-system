@@ -198,11 +198,18 @@ export default function UserDashboard() {
 
   const calculateYearlyBalance = () => {
     if (!userData || !userData.transactions) return 0
-    return userData.transactions
-      .filter((t: any) => !t.academicYear || t.academicYear === selectedAcademicYear)
-      .reduce((sum: number, t: any) => {
-        return t.type === 'deposit' ? sum + (t.amount || 0) : sum - (t.amount || 0)
-      }, 0)
+    
+    // Default session if not set is 2024-25
+    const sessionToFilter = selectedAcademicYear;
+    
+    const filtered = userData.transactions.filter((t: any) => {
+      const txYear = t.academicYear || '2024-25';
+      return txYear === sessionToFilter;
+    });
+
+    return filtered.reduce((sum: number, t: any) => {
+      return t.type === 'deposit' ? sum + (t.amount || 0) : sum - (t.amount || 0)
+    }, 0)
   }
 
   if (isLoading || !userData) {
@@ -342,11 +349,11 @@ export default function UserDashboard() {
                   </thead>
                   <tbody>
                     {userData.transactions
-                      .filter((t: any) => !t.academicYear || t.academicYear === selectedAcademicYear)
+                      .filter((t: any) => (t.academicYear || '2024-25') === selectedAcademicYear)
                       .map((transaction: any, idx: number) => {
                       // Calculate running balance for filtered transactions
                       let runningBalance = 0
-                      const filteredTxs = userData.transactions.filter((t: any) => !t.academicYear || t.academicYear === selectedAcademicYear)
+                      const filteredTxs = userData.transactions.filter((t: any) => (t.academicYear || '2024-25') === selectedAcademicYear)
                       for (let i = 0; i <= idx; i++) {
                         if (filteredTxs[i].type === 'deposit') {
                           runningBalance += filteredTxs[i].amount || 0
