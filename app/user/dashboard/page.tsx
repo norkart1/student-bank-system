@@ -345,18 +345,18 @@ export default function UserDashboard() {
                 <History className="w-5 h-5 text-[#4a6670]" />
                 <h3 className="font-semibold text-[#171532]">Transaction Ledger</h3>
               </div>
-              <div className="overflow-x-auto max-h-80 overflow-y-auto">
-                <table className="w-full text-sm border-collapse">
+              <div className="overflow-x-auto rounded-xl border border-[#e5e7eb]">
+                <table className="w-full text-sm border-collapse min-w-[500px]">
                   <thead>
-                    <tr className="bg-[#4a6670] text-white sticky top-0">
-                      <th className="border border-[#3d565e] px-2 py-2 text-left font-semibold">S.No</th>
-                      <th className="border border-[#3d565e] px-2 py-2 text-left font-semibold">Date</th>
-                      <th className="border border-[#3d565e] px-2 py-2 text-right font-semibold">Deposit</th>
-                      <th className="border border-[#3d565e] px-2 py-2 text-right font-semibold">Withdraw</th>
-                      <th className="border border-[#3d565e] px-2 py-2 text-right font-semibold">Balance</th>
+                    <tr className="bg-[#4a6670] text-white">
+                      <th className="px-3 py-3 text-left font-semibold border-b border-[#3d565e]">S.No</th>
+                      <th className="px-3 py-3 text-left font-semibold border-b border-[#3d565e]">Date</th>
+                      <th className="px-3 py-3 text-right font-semibold border-b border-[#3d565e]">Deposit</th>
+                      <th className="px-3 py-3 text-right font-semibold border-b border-[#3d565e]">Withdraw</th>
+                      <th className="px-3 py-3 text-right font-semibold border-b border-[#3d565e]">Balance</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="divide-y divide-[#e5e7eb]">
                     {userData.transactions
                       .filter((t: any) => (t.academicYear || '2025-26') === selectedAcademicYear)
                       .map((transaction: any, idx: number) => {
@@ -372,35 +372,37 @@ export default function UserDashboard() {
                       }
                       
                       return (
-                        <tr key={idx} className={idx % 2 === 0 ? 'bg-[#f8f9fa]' : 'bg-white'}>
-                          <td className="border border-[#e5e7eb] px-2 py-2 font-semibold text-[#171532]">
+                        <tr key={idx} className={idx % 2 === 0 ? 'bg-[#f8f9fa]' : 'bg-white hover:bg-[#f1f5f9] transition-colors'}>
+                          <td className="px-3 py-3 font-semibold text-[#171532]">
                             <div className="flex flex-col gap-1">
                               <span>{idx + 1}</span>
-                              <span className="text-[9px] bg-[#4a6670]/10 text-[#4a6670] px-1 py-0.5 rounded font-medium w-fit">
+                              <span className="text-[9px] bg-[#4a6670]/10 text-[#4a6670] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider w-fit">
                                 {transaction.academicYear || '2025-26'}
                               </span>
                             </div>
                           </td>
-                          <td className="border border-[#e5e7eb] px-2 py-2 text-[#747384] text-xs">{transaction.date || '-'}</td>
-                          <td className="border border-[#e5e7eb] px-2 py-2 text-right">
+                          <td className="px-3 py-3 text-[#747384] text-xs leading-relaxed">
+                            {transaction.date || '-'}
+                          </td>
+                          <td className="px-3 py-3 text-right">
                             {transaction.type === 'deposit' ? (
-                              <span className="inline-flex items-center gap-1 bg-green-50 px-2 py-1 rounded font-semibold text-green-700">
-                                <span>↓</span>₹{transaction.amount?.toFixed(2)}
+                              <span className="inline-flex items-center gap-1 bg-green-50 px-2 py-1 rounded-md font-bold text-green-700 text-xs">
+                                <span className="text-[10px]">↓</span>₹{transaction.amount?.toFixed(2)}
                               </span>
                             ) : (
-                              <span className="text-[#747384]">-</span>
+                              <span className="text-[#cbd5e1]">-</span>
                             )}
                           </td>
-                          <td className="border border-[#e5e7eb] px-2 py-2 text-right">
+                          <td className="px-3 py-3 text-right">
                             {transaction.type === 'withdraw' ? (
-                              <span className="inline-flex items-center gap-1 bg-red-50 px-2 py-1 rounded font-semibold text-red-700">
-                                <span>↑</span>₹{transaction.amount?.toFixed(2)}
+                              <span className="inline-flex items-center gap-1 bg-red-50 px-2 py-1 rounded-md font-bold text-red-700 text-xs">
+                                <span className="text-[10px]">↑</span>₹{transaction.amount?.toFixed(2)}
                               </span>
                             ) : (
-                              <span className="text-[#747384]">-</span>
+                              <span className="text-[#cbd5e1]">-</span>
                             )}
                           </td>
-                          <td className="border border-[#e5e7eb] px-2 py-2 text-right font-bold text-[#4a6670]">
+                          <td className="px-3 py-3 text-right font-bold text-[#4a6670] tabular-nums">
                             ₹{runningBalance.toFixed(2)}
                           </td>
                         </tr>
