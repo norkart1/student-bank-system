@@ -1273,27 +1273,27 @@ export default function AdminDashboard() {
 
         {showAddYearForm && (
           <div className="bg-[#f8f9fa] border-2 border-dashed border-[#e8e8e8] rounded-xl p-4 space-y-3 animate-in fade-in zoom-in duration-200">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-[#4a6670]">New Academic Session</span>
-              <button onClick={() => setShowAddYearForm(false)} className="text-[#747384] hover:text-red-500">
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={newYearInput}
-                onChange={(e) => setNewYearYearInput(e.target.value)}
-                placeholder="e.g., 2026-27"
-                className="flex-1 px-3 py-2 bg-white border border-[#e8e8e8] rounded-lg text-sm focus:outline-none focus:border-[#4a6670]"
-              />
-              <button
-                onClick={handleAddAcademicYear}
-                className="bg-[#10B981] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#0fa06f]"
-              >
-                Save
-              </button>
-            </div>
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-[#4a6670]">New Academic Session</span>
+            <button onClick={() => setShowAddYearForm(false)} className="text-[#747384] hover:text-red-500">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={newYearInput}
+              onChange={(e) => setNewYearYearInput(e.target.value)}
+              placeholder="e.g., 2026-27"
+              className="flex-1 px-3 py-2 bg-white border border-[#e8e8e8] rounded-lg text-sm focus:outline-none focus:border-[#4a6670]"
+            />
+            <button
+              onClick={handleAddAcademicYear}
+              className="h-[38px] bg-[#10B981] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#0fa06f] whitespace-nowrap"
+            >
+              Save
+            </button>
+          </div>
           </div>
         )}
 
@@ -1353,8 +1353,8 @@ export default function AdminDashboard() {
           <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
             <Wallet className="w-6 h-6 text-white" />
           </div>
-          <div>
-            <p className="text-white/70 text-sm">Total Balance</p>
+          <div className="flex-1">
+            <p className="text-white/70 text-sm">Total Balance ({selectedAcademicYear})</p>
             <p className="text-2xl font-bold text-white">₹{totalBalance.toFixed(2)}</p>
           </div>
         </div>
