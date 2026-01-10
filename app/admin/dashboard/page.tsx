@@ -1381,7 +1381,7 @@ export default function AdminDashboard() {
 
       if (res.ok) {
         toast.success(`All ${type} deleted successfully`);
-        fetchData(); // Refresh data
+        window.location.reload(); // Refresh data
       } else {
         throw new Error("Deletion failed");
       }
