@@ -193,11 +193,12 @@ System Information:
 ${studentContext ? `Student Database: ${studentContext}` : ""}
 
 User Request: ${message}`;
-        const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
-            contents: fullContext
+        const model = ai.getGenerativeModel({
+            model: "gemini-1.5-flash"
         });
-        const text = response.text || "No response from AI";
+        const result = await model.generateContent(fullContext);
+        const response = await result.response;
+        const text = response.text();
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             response: text
         });
