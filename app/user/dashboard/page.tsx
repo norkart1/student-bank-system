@@ -470,21 +470,21 @@ export default function UserDashboard() {
                       else runningBalance -= filteredTxs[i].amount || 0
                     }
                     
-                    return (
-                      <tr key={idx} className="hover:bg-[#f1f5f9] transition-colors">
-                        <td className="px-2 py-3 font-bold text-[#171532]">{idx + 1}</td>
-                        <td className="px-2 py-3 text-[#747384] font-medium truncate">{transaction.date || '-'}</td>
-                        <td className="px-2 py-3 text-right text-green-600 font-bold tabular-nums">
-                          {transaction.type === 'deposit' ? `₹${transaction.amount?.toFixed(0)}` : '-'}
-                        </td>
-                        <td className="px-2 py-3 text-right text-red-600 font-bold tabular-nums">
-                          {transaction.type === 'withdraw' ? `₹${transaction.amount?.toFixed(0)}` : '-'}
-                        </td>
-                        <td className="px-2 py-3 text-right font-black text-[#4a6670] bg-gray-50/50 tabular-nums">
-                          ₹{runningBalance.toFixed(0)}
-                        </td>
-                      </tr>
-                    )
+                      return (
+                        <tr key={idx} className={idx % 2 === 0 ? 'bg-[#f8f9fa]' : 'bg-white hover:bg-[#f1f5f9] transition-colors'}>
+                          <td className="px-2 py-3 font-bold text-[#171532]">{idx + 1}</td>
+                          <td className="px-2 py-3 text-[#747384] font-medium truncate">{transaction.date || '-'}</td>
+                          <td className="px-2 py-3 text-right text-green-600 font-bold tabular-nums">
+                            {transaction.type === 'deposit' ? `₹${transaction.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-'}
+                          </td>
+                          <td className="px-2 py-3 text-right text-red-600 font-bold tabular-nums">
+                            {transaction.type === 'withdraw' ? `₹${transaction.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-'}
+                          </td>
+                          <td className="px-2 py-3 text-right font-black text-[#4a6670] bg-gray-50/50 tabular-nums">
+                            ₹{runningBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </td>
+                        </tr>
+                      )
                   })}
                 </tbody>
               </table>
