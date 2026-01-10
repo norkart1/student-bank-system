@@ -43,7 +43,8 @@ export async function POST(req: NextRequest) {
       balance: 0,
       transactions: [],
     });
-    
+
+    console.log('Saving student with year:', student.academicYear);
     await student.save();
     return NextResponse.json(student, { status: 201 });
   } catch (error) {
