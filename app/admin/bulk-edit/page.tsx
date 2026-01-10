@@ -232,51 +232,71 @@ export default function BulkEditPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {filteredRows.map((row, index) => (
-                  <tr key={row.studentId} className="hover:bg-gray-50/50 transition-colors">
-                    <td className="px-4 py-4">
-                      <p className="text-sm font-bold text-[#171532]">{row.name}</p>
-                    </td>
-                    <td className="px-4 py-4 font-mono text-xs text-gray-500">
-                      {row.code}
-                    </td>
-                    <td className="px-4 py-4 text-right">
-                      <p className="text-sm font-bold text-[#4a6670]">₹{row.currentBalance.toFixed(2)}</p>
-                    </td>
-                    <td className="px-4 py-4">
-                      <input
-                        type="number"
-                        value={row.deposit}
-                        onChange={(e) => handleInputChange(index, 'deposit', e.target.value)}
-                        className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 text-green-700 font-bold"
-                        placeholder="0.00"
-                      />
-                    </td>
-                    <td className="px-4 py-4">
-                      <input
-                        type="number"
-                        value={row.withdraw}
-                        onChange={(e) => handleInputChange(index, 'withdraw', e.target.value)}
-                        className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 text-red-700 font-bold"
-                        placeholder="0.00"
-                      />
-                    </td>
-                    <td className="px-4 py-4">
-                      <input
-                        type="text"
-                        value={row.reason}
-                        onChange={(e) => handleInputChange(index, 'reason', e.target.value)}
-                        className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4a6670]/20"
-                        placeholder="Note..."
-                      />
-                    </td>
-                    <td className="px-4 py-4 text-center">
-                      {row.status === 'saving' && <Loader2 className="w-4 h-4 animate-spin text-gray-400 mx-auto" />}
-                      {row.status === 'saved' && <CheckCircle2 className="w-4 h-4 text-green-500 mx-auto" />}
-                      {row.status === 'error' && <AlertCircle className="w-4 h-4 text-red-500 mx-auto" />}
+                {searchQuery.trim() === "" ? (
+                  <tr>
+                    <td colSpan={7} className="px-4 py-12 text-center">
+                      <div className="flex flex-col items-center gap-2 text-gray-400">
+                        <Search className="w-8 h-8 opacity-20" />
+                        <p className="text-sm font-medium">Please search for a student to begin editing</p>
+                      </div>
                     </td>
                   </tr>
-                ))}
+                ) : filteredRows.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-4 py-12 text-center text-gray-400 text-sm">
+                      No students found matching "{searchQuery}"
+                    </td>
+                  </tr>
+                ) : (
+                  filteredRows.map((row, index) => {
+                    const originalIndex = editRows.findIndex(r => r.studentId === row.studentId)
+                    return (
+                      <tr key={row.studentId} className="hover:bg-gray-50/50 transition-colors">
+                        <td className="px-4 py-4">
+                          <p className="text-sm font-bold text-[#171532]">{row.name}</p>
+                        </td>
+                        <td className="px-4 py-4 font-mono text-xs text-gray-500">
+                          {row.code}
+                        </td>
+                        <td className="px-4 py-4 text-right">
+                          <p className="text-sm font-bold text-[#4a6670]">₹{row.currentBalance.toFixed(2)}</p>
+                        </td>
+                        <td className="px-4 py-4">
+                          <input
+                            type="number"
+                            value={row.deposit}
+                            onChange={(e) => handleInputChange(originalIndex, 'deposit', e.target.value)}
+                            className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 text-green-700 font-bold"
+                            placeholder="0.00"
+                          />
+                        </td>
+                        <td className="px-4 py-4">
+                          <input
+                            type="number"
+                            value={row.withdraw}
+                            onChange={(e) => handleInputChange(originalIndex, 'withdraw', e.target.value)}
+                            className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 text-red-700 font-bold"
+                            placeholder="0.00"
+                          />
+                        </td>
+                        <td className="px-4 py-4">
+                          <input
+                            type="text"
+                            value={row.reason}
+                            onChange={(e) => handleInputChange(originalIndex, 'reason', e.target.value)}
+                            className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4a6670]/20"
+                            placeholder="Note..."
+                          />
+                        </td>
+                        <td className="px-4 py-4 text-center">
+                          {row.status === 'saving' && <Loader2 className="w-4 h-4 animate-spin text-gray-400 mx-auto" />}
+                          {row.status === 'saved' && <CheckCircle2 className="w-4 h-4 text-green-500 mx-auto" />}
+                          {row.status === 'error' && <AlertCircle className="w-4 h-4 text-red-500 mx-auto" />}
+                        </td>
+                      </tr>
+                    )
+                  })
+                )}
               </tbody>
             </table>
           </div>
