@@ -113,6 +113,10 @@ export default function AdminDashboard() {
   const [depositAllStudents, setDepositAllStudents] = useState(false)
   const [withdrawAllStudents, setWithdrawAllStudents] = useState(false)
 
+  const [showQRScanner, setShowQRScanner] = useState(false)
+  const [qrScannerStep, setQrScannerStep] = useState<'scan' | 'result'>('scan')
+  const [scannedStudent, setScannedStudent] = useState<Student | null>(null)
+
   const handleDeposit = async () => {
     if (!transactionAmount || isNaN(parseFloat(transactionAmount)) || parseFloat(transactionAmount) <= 0) {
       setNotification({ type: 'error', message: 'Please enter a valid amount' })
@@ -1448,6 +1452,15 @@ export default function AdminDashboard() {
           </div>
           <span className="text-sm font-bold text-[#171532]">Withdraw</span>
         </button>
+        <button 
+          onClick={() => setShowQRScanner(true)}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+            <QrCode className="w-6 h-6 text-white" />
+          </div>
+          <span className="text-sm font-bold text-[#171532]">QR Code</span>
+        </button>
+
         <button 
           onClick={() => setActiveTab("calendar")}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
