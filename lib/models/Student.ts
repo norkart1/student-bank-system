@@ -32,7 +32,7 @@ const transactionSchema = new Schema({
 const studentSchema = new Schema<IStudent>(
   {
     name: { type: String, required: true },
-    code: { type: String, required: true },
+    code: { type: String, required: true, unique: true },
     email: { type: String },
     mobile: { type: String },
     profileImage: { type: String },
