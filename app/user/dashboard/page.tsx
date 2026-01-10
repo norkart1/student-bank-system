@@ -196,6 +196,15 @@ export default function UserDashboard() {
     window.print()
   }
 
+  const calculateYearlyBalance = () => {
+    if (!userData || !userData.transactions) return 0
+    return userData.transactions
+      .filter((t: any) => !t.academicYear || t.academicYear === selectedAcademicYear)
+      .reduce((sum: number, t: any) => {
+        return t.type === 'deposit' ? sum + (t.amount || 0) : sum - (t.amount || 0)
+      }, 0)
+  }
+
   if (isLoading || !userData) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#f8f9fa] to-[#e8eef5] flex items-center justify-center p-4">
@@ -234,22 +243,25 @@ export default function UserDashboard() {
               <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
                 <Wallet className="w-5 h-5 text-white" />
               </div>
-              <p className="text-white/70 text-sm font-medium">Total Balance</p>
-            </div>
-            <div className="bg-white/10 rounded-lg p-3 mb-4">
-              <label className="block text-white/70 text-xs font-medium mb-1">View Academic Year</label>
+              <p className="text-white/70 text-sm font-medium">Total Balance ({selectedAcademicYear})</p>
+          </div>
+          <div className="bg-white/10 rounded-lg p-3 mb-4">
+            <label className="block text-white/70 text-xs font-medium mb-1">Academic Session</label>
+            <div className="flex items-center gap-2">
+              <History className="w-3.5 h-3.5 text-white/60" />
               <select 
                 value={selectedAcademicYear}
                 onChange={(e) => setSelectedAcademicYear(e.target.value)}
-                className="w-full bg-white/20 border-none text-white text-sm rounded-md focus:ring-0 cursor-pointer"
+                className="flex-1 bg-transparent border-none text-white text-sm rounded-md focus:ring-0 cursor-pointer p-0 font-bold"
               >
-                <option value="2023-24" className="text-gray-900">2023-24</option>
-                <option value="2024-25" className="text-gray-900">2024-25</option>
-                <option value="2025-26" className="text-gray-900">2025-26</option>
+                <option value="2023-24" className="text-gray-900">2023-24 Session</option>
+                <option value="2024-25" className="text-gray-900">2024-25 Session</option>
+                <option value="2025-26" className="text-gray-900">2025-26 Session</option>
               </select>
             </div>
-            <p className="text-3xl font-bold text-white">₹{(userData?.balance || 0)?.toFixed(2)}</p>
           </div>
+          <p className="text-3xl font-bold text-white">₹{calculateYearlyBalance().toFixed(2)}</p>
+        </div>
 
           {/* Profile Info and QR Code Section */}
           <div className="space-y-4">
