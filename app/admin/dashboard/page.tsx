@@ -2007,13 +2007,24 @@ export default function AdminDashboard() {
           </button>
           <h2 className="text-lg font-bold text-[#171532]">All Accounts</h2>
         </div>
-        <button 
-          onClick={() => setShowCreateForm(true)}
-          className="flex items-center gap-1.5 bg-gradient-to-r from-[#4a6670] to-[#3d565e] text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-md shadow-[#4a6670]/20 hover:shadow-lg transition-all active:scale-95"
-        >
-          <Plus className="w-4 h-4" />
-          Add
-        </button>
+        <div className="flex items-center gap-2">
+          <select
+            value={selectedAcademicYear}
+            onChange={(e) => setSelectedAcademicYear(e.target.value)}
+            className="px-3 py-2 bg-white border border-[#e5e7eb] rounded-xl text-xs font-semibold text-[#4a6670] focus:outline-none focus:ring-2 focus:ring-[#4a6670]/10 transition-all"
+          >
+            {academicYears.map(year => (
+              <option key={year} value={year}>{year}</option>
+            ))}
+          </select>
+          <button 
+            onClick={() => setShowCreateForm(true)}
+            className="flex items-center gap-1.5 bg-gradient-to-r from-[#4a6670] to-[#3d565e] text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-md shadow-[#4a6670]/20 hover:shadow-lg transition-all active:scale-95"
+          >
+            <Plus className="w-4 h-4" />
+            Add
+          </button>
+        </div>
       </div>
 
       <div className="relative mb-4">
