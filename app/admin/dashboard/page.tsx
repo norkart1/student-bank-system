@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Activity, Moon, Sun, Download, Calendar, AlertCircle, Zap, Search, Upload, CalendarRange } from "lucide-react"
+import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Activity, Moon, Sun, Download, Calendar, AlertCircle, Zap, Search, Upload, CalendarRange, Loader } from "lucide-react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 import { useTheme } from "next-themes"
 import jsPDF from "jspdf"
@@ -52,6 +52,9 @@ export default function AdminDashboard() {
   const [newYearInput, setNewYearYearInput] = useState("")
   const [students, setStudents] = useState<Student[]>([])
   const [showCreateForm, setShowCreateForm] = useState(false)
+  const [useOldCode, setUseOldCode] = useState(false)
+  const [oldStudentCode, setOldStudentCode] = useState("")
+  const [isSearchingOldStudent, setIsSearchingOldStudent] = useState(false)
   const [showEditForm, setShowEditForm] = useState(false)
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
   const [viewingIndex, setViewingIndex] = useState<number | null>(null)
@@ -1140,6 +1143,31 @@ export default function AdminDashboard() {
     }
   })
 
+  const handleSearchOldStudent = async () => {
+    if (!oldStudentCode) return
+    setIsSearchingOldStudent(true)
+    try {
+      const res = await fetch(`/api/students/search?code=${oldStudentCode}`)
+      if (res.ok) {
+        const student = await res.json()
+        setNewStudent({
+          ...newStudent,
+          name: student.name,
+          mobile: student.mobile || "",
+          email: student.email || "",
+          profileImage: student.profileImage || "",
+        })
+        toast.success("Student details loaded!")
+      } else {
+        toast.error("Student not found")
+      }
+    } catch (error) {
+      toast.error("Search failed")
+    } finally {
+      setIsSearchingOldStudent(false)
+    }
+  }
+
   const handleCreateAccount = async () => {
     if (!newStudent.name) {
       alert("Please fill in the full name")
@@ -1147,7 +1175,7 @@ export default function AdminDashboard() {
     }
 
     try {
-      const generatedCode = `${newStudent.name
+      const generatedCode = useOldCode && oldStudentCode ? oldStudentCode : `${newStudent.name
         .split(' ')
         .slice(0, 2)
         .map((word: string) => word.charAt(0).toUpperCase())
@@ -2049,12 +2077,47 @@ export default function AdminDashboard() {
           <div className="bg-white rounded-t-3xl sm:rounded-2xl w-full sm:max-w-md max-h-[85vh] overflow-y-auto shadow-2xl animate-in slide-in-from-bottom duration-300">
             <div className="sticky top-0 bg-white flex items-center justify-between px-6 py-5 border-b border-[#f0f0f0]">
               <h3 className="text-xl font-bold text-[#171532]">{showEditForm ? 'Edit Account' : 'Create Account'}</h3>
-              <button onClick={() => {setShowCreateForm(false); setShowEditForm(false); setEditingIndex(null); setNewStudent({ name: "", mobile: "", email: "", profileImage: "", academicYear: "2024-25" })}} className="w-8 h-8 flex items-center justify-center rounded-full bg-[#f5f5f5] text-[#747384] hover:bg-[#e5e5e5] transition-colors">
+              <button onClick={() => {setShowCreateForm(false); setShowEditForm(false); setEditingIndex(null); setUseOldCode(false); setOldStudentCode(""); setNewStudent({ name: "", mobile: "", email: "", profileImage: "", academicYear: "2025-26" })}} className="w-8 h-8 flex items-center justify-center rounded-full bg-[#f5f5f5] text-[#747384] hover:bg-[#e5e5e5] transition-colors">
                 <X className="w-4 h-4" />
               </button>
             </div>
             
             <div className="px-6 py-6 space-y-5">
+              {!showEditForm && (
+                <div className="flex items-center gap-2 mb-2 p-3 bg-blue-50 rounded-xl">
+                  <input
+                    type="checkbox"
+                    id="useOldCode"
+                    checked={useOldCode}
+                    onChange={(e) => setUseOldCode(e.target.checked)}
+                    className="w-4 h-4 text-[#4a6670]"
+                  />
+                  <label htmlFor="useOldCode" className="text-sm font-medium text-blue-800">Use existing student code</label>
+                </div>
+              )}
+
+              {useOldCode && !showEditForm && (
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-[#171532]">Old Student Code</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={oldStudentCode}
+                      onChange={(e) => setOldStudentCode(e.target.value.toUpperCase())}
+                      placeholder="e.g., JD-1234"
+                      className="flex-1 px-4 py-3 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl text-[#171532] focus:outline-none focus:border-[#4a6670]"
+                    />
+                    <button
+                      onClick={handleSearchOldStudent}
+                      disabled={isSearchingOldStudent}
+                      className="px-4 bg-[#4a6670] text-white rounded-xl hover:bg-[#3d565e] disabled:opacity-50 flex items-center justify-center"
+                    >
+                      {isSearchingOldStudent ? <Loader className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+              )}
+
               <div className="flex justify-center pb-2">
                 <div className="relative">
                   <div className="w-24 h-24 bg-gradient-to-br from-[#e8f5f2] to-[#d4eef5] rounded-full flex items-center justify-center shadow-inner overflow-hidden">
@@ -2087,6 +2150,21 @@ export default function AdminDashboard() {
                   placeholder="Enter full name"
                 />
               </div>
+
+              {!showEditForm && (
+                <div>
+                  <label className="block text-sm font-semibold text-[#171532] mb-2">Academic Session</label>
+                  <select
+                    value={newStudent.academicYear}
+                    onChange={(e) => setNewStudent({...newStudent, academicYear: e.target.value})}
+                    className="w-full px-4 py-3.5 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:bg-white focus:ring-2 focus:ring-[#4a6670]/10 transition-all text-[#171532]"
+                  >
+                    {academicYears.map(year => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
 
               <button

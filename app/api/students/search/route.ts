@@ -22,8 +22,8 @@ export async function GET(req: NextRequest) {
     }
     
     if (academicYear) {
-      if (academicYear === '2024-25') {
-        query.$or = [{ academicYear: '2024-25' }, { academicYear: { $exists: false } }, { academicYear: '' }];
+      if (academicYear === '2025-26') {
+        query.$or = [{ academicYear: '2025-26' }, { academicYear: { $exists: false } }, { academicYear: '' }];
       } else {
         query.academicYear = academicYear;
       }

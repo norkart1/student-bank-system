@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
       email: data.email || '',
       mobile: data.mobile || '',
       profileImage: data.profileImage || '',
-      academicYear: data.academicYear || '2024-25',
+      academicYear: data.academicYear || '2025-26',
       balance: 0,
       transactions: [],
     });

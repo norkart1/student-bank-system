@@ -32,7 +32,7 @@ const transactionSchema = new Schema({
 const studentSchema = new Schema<IStudent>(
   {
     name: { type: String, required: true },
-    code: { type: String, required: true, unique: true },
+    code: { type: String, required: true },
     email: { type: String },
     mobile: { type: String },
     profileImage: { type: String },
@@ -42,5 +42,7 @@ const studentSchema = new Schema<IStudent>(
   },
   { timestamps: true }
 );
+
+studentSchema.index({ code: 1, academicYear: 1 }, { unique: true });
 
 export const Student = mongoose.models.Student || mongoose.model<IStudent>('Student', studentSchema);
