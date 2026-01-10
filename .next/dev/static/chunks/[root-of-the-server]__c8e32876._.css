@@ -603,6 +603,16 @@
   }
 
   @supports (not ((-webkit-appearance: -apple-pay-button))) or (contain-intrinsic-size: 1px) {
+    ::-moz-placeholder {
+      color: currentColor;
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      ::-moz-placeholder {
+        color: color-mix(in oklab, currentcolor 50%, transparent);
+      }
+    }
+
     ::placeholder {
       color: currentColor;
     }
@@ -1499,6 +1509,7 @@
   }
 
   .gap-x-4 {
+    -moz-column-gap: calc(var(--spacing) * 4);
     column-gap: calc(var(--spacing) * 4);
   }
 
@@ -2216,6 +2227,7 @@
   }
 
   .object-cover {
+    -o-object-fit: cover;
     object-fit: cover;
   }
 
@@ -3025,11 +3037,19 @@
     opacity: .5;
   }
 
-  .selection\:bg-primary ::selection, .selection\:bg-primary::selection {
+  .selection\:bg-primary ::selection {
     background-color: var(--primary);
   }
 
-  .selection\:text-primary-foreground ::selection, .selection\:text-primary-foreground::selection {
+  .selection\:bg-primary::selection {
+    background-color: var(--primary);
+  }
+
+  .selection\:text-primary-foreground ::selection {
+    color: var(--primary-foreground);
+  }
+
+  .selection\:text-primary-foreground::selection {
     color: var(--primary-foreground);
   }
 
