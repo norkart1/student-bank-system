@@ -61,9 +61,12 @@ export default function ManageTransactions() {
     }
   }
 
-  const handleEditTransaction = (index: number, transaction: any) => {
+    const handleEditTransaction = (index: number, transaction: any) => {
     setEditingIndex(index)
-    setEditValues({ ...transaction })
+    setEditValues({ 
+      ...transaction,
+      academicYear: transaction.academicYear || "2025-26" 
+    })
   }
 
   const handleSaveTransaction = async (index: number) => {
@@ -261,7 +264,7 @@ export default function ManageTransactions() {
                                 Academic Year
                               </label>
                               <select
-                                value={editValues.academicYear || ""}
+                                value={editValues.academicYear || "2025-26"}
                                 onChange={(e) =>
                                   setEditValues({ ...editValues, academicYear: e.target.value })
                                 }
