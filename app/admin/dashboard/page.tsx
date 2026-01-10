@@ -2115,7 +2115,7 @@ export default function AdminDashboard() {
               {useOldCode && !showEditForm && (
                 <div className="space-y-2">
                   <label className="block text-sm font-semibold text-[#171532]">Old Student Code</label>
-                  <div className="flex gap-2">
+                  <div className="relative">
                     <input
                       type="text"
                       value={oldStudentCode}
@@ -2127,15 +2127,13 @@ export default function AdminDashboard() {
                         }
                       }}
                       placeholder="e.g., JD-1234"
-                      className="flex-1 px-4 py-3 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl text-[#171532] focus:outline-none focus:border-[#4a6670]"
+                      className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl text-[#171532] focus:outline-none focus:border-[#4a6670]"
                     />
-                    <button
-                      onClick={handleSearchOldStudent}
-                      disabled={isSearchingOldStudent}
-                      className="px-4 bg-[#4a6670] text-white rounded-xl hover:bg-[#3d565e] disabled:opacity-50 flex items-center justify-center"
-                    >
-                      {isSearchingOldStudent ? <Loader className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
-                    </button>
+                    {isSearchingOldStudent && (
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                        <Loader className="w-4 h-4 animate-spin text-[#4a6670]" />
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
