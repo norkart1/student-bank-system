@@ -614,8 +614,20 @@ export default function AdminDashboard() {
     return (
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
         <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md mx-4 shadow-2xl animate-in scale-in duration-200">
-          <div className="px-6 py-5 border-b border-gray-200 dark:border-slate-700">
+          <div className="px-6 py-5 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between">
             <h3 className="text-xl font-bold text-[#171532] dark:text-white">Deposit Amount</h3>
+            <div className="flex items-center gap-2 bg-[#f8f9fa] dark:bg-slate-700 px-3 py-1.5 rounded-lg border border-[#e8e8e8] dark:border-slate-600">
+              <CalendarRange className="w-3.5 h-3.5 text-[#4a6670] dark:text-slate-400" />
+              <select
+                value={selectedAcademicYear}
+                onChange={(e) => setSelectedAcademicYear(e.target.value)}
+                className="bg-transparent text-xs font-bold text-[#4a6670] dark:text-slate-200 focus:outline-none cursor-pointer"
+              >
+                <option value="2023-24">2023-24</option>
+                <option value="2024-25">2024-25</option>
+                <option value="2025-26">2025-26</option>
+              </select>
+            </div>
           </div>
           
           <div className="px-6 py-6 space-y-4">
@@ -733,8 +745,20 @@ export default function AdminDashboard() {
     return (
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
         <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md mx-4 shadow-2xl animate-in scale-in duration-200">
-          <div className="px-6 py-5 border-b border-gray-200 dark:border-slate-700">
+          <div className="px-6 py-5 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between">
             <h3 className="text-xl font-bold text-[#171532] dark:text-white">Withdraw Amount</h3>
+            <div className="flex items-center gap-2 bg-[#f8f9fa] dark:bg-slate-700 px-3 py-1.5 rounded-lg border border-[#e8e8e8] dark:border-slate-600">
+              <CalendarRange className="w-3.5 h-3.5 text-[#4a6670] dark:text-slate-400" />
+              <select
+                value={selectedAcademicYear}
+                onChange={(e) => setSelectedAcademicYear(e.target.value)}
+                className="bg-transparent text-xs font-bold text-[#4a6670] dark:text-slate-200 focus:outline-none cursor-pointer"
+              >
+                <option value="2023-24">2023-24</option>
+                <option value="2024-25">2024-25</option>
+                <option value="2025-26">2025-26</option>
+              </select>
+            </div>
           </div>
           
           <div className="px-6 py-6 space-y-4">

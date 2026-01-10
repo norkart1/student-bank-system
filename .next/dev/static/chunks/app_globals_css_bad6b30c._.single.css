@@ -132,6 +132,8 @@
     --color-purple-500: #ac4bff;
     --color-pink-100: #fce7f3;
     --color-slate-50: #f8fafc;
+    --color-slate-200: #e2e8f0;
+    --color-slate-400: #90a1b9;
     --color-slate-500: #62748e;
     --color-slate-600: #45556c;
     --color-slate-700: #314158;
@@ -237,6 +239,8 @@
       --color-purple-500: lab(52.0183% 66.11 -78.2316);
       --color-pink-100: lab(93.5864% 9.01193 -3.15079);
       --color-slate-50: lab(98.1434% -.369519 -1.05966);
+      --color-slate-200: lab(91.7353% -.998765 -4.76968);
+      --color-slate-400: lab(65.5349% -2.25151 -14.5072);
       --color-slate-500: lab(48.0876% -2.03595 -16.5814);
       --color-slate-600: lab(35.5623% -1.74978 -15.4316);
       --color-slate-700: lab(26.9569% -1.47016 -15.6993);
@@ -3364,6 +3368,14 @@
 
   .dark\:text-muted-foreground:is(.dark *) {
     color: var(--muted-foreground);
+  }
+
+  .dark\:text-slate-200:is(.dark *) {
+    color: var(--color-slate-200);
+  }
+
+  .dark\:text-slate-400:is(.dark *) {
+    color: var(--color-slate-400);
   }
 
   .dark\:text-white:is(.dark *) {
