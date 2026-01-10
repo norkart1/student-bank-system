@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
-import { ChevronLeft, Save, X, Loader2, Search, CheckCircle2, AlertCircle } from "lucide-react"
+import { ChevronLeft, Save, X, Loader2, Search, CheckCircle2, AlertCircle, Plus, Trash2 } from "lucide-react"
 import { toast } from "sonner"
 
 interface Student {
@@ -27,11 +27,12 @@ interface EditRow {
 export default function BulkEditPage() {
   const router = useRouter()
   const [students, setStudents] = useState<Student[]>([])
-  const [editRows, setEditRows] = useState<EditRow[]>([])
+  const [activeRows, setActiveRows] = useState<EditRow[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSavingAll, setIsSavingAll] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
-  const autoSaveTimerRef = useRef<{ [key: string]: NodeJS.Timeout }>({})
+  const [searchResults, setSearchResults] = useState<Student[]>([])
+  const [showSearch, setShowSearch] = useState(false)
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -40,16 +41,6 @@ export default function BulkEditPage() {
         if (res.ok) {
           const data = await res.json()
           setStudents(data)
-          setEditRows(data.map((s: Student) => ({
-            studentId: s._id,
-            name: s.name,
-            code: s.code,
-            currentBalance: s.balance,
-            deposit: "",
-            withdraw: "",
-            reason: "",
-            status: 'idle'
-          })))
         }
       } catch (error) {
         console.error("Error fetching students:", error)
@@ -61,40 +52,64 @@ export default function BulkEditPage() {
     fetchStudents()
   }, [])
 
-  const handleInputChange = (index: number, field: keyof EditRow, value: string) => {
-    const newRows = [...editRows]
-    newRows[index] = { ...newRows[index], [field]: value, status: 'idle' }
-    setEditRows(newRows)
-
-    // Auto-save logic (debounced)
-    const studentId = newRows[index].studentId
-    if (autoSaveTimerRef.current[studentId]) {
-      clearTimeout(autoSaveTimerRef.current[studentId])
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setSearchResults([])
+      return
     }
+    const filtered = students.filter(s => 
+      s.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      s.code.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    setSearchResults(filtered)
+  }, [searchQuery, students])
 
-    autoSaveTimerRef.current[studentId] = setTimeout(() => {
-      // Only auto-save if there's a valid deposit or withdraw
-      if (value && (field === 'deposit' || field === 'withdraw')) {
-        saveRow(index)
-      }
-    }, 2000)
+  const addStudentRow = (student: Student) => {
+    if (activeRows.some(r => r.studentId === student._id)) {
+      toast.error("Student already added to list")
+      return
+    }
+    const newRow: EditRow = {
+      studentId: student._id,
+      name: student.name,
+      code: student.code,
+      currentBalance: student.balance,
+      deposit: "",
+      withdraw: "",
+      reason: "",
+      status: 'idle'
+    }
+    setActiveRows([...activeRows, newRow])
+    setSearchQuery("")
+    setShowSearch(false)
+  }
+
+  const removeRow = (index: number) => {
+    const newRows = [...activeRows]
+    newRows.splice(index, 1)
+    setActiveRows(newRows)
+  }
+
+  const handleInputChange = (index: number, field: keyof EditRow, value: string) => {
+    const newRows = [...activeRows]
+    newRows[index] = { ...newRows[index], [field]: value, status: 'idle' }
+    setActiveRows(newRows)
   }
 
   const saveRow = async (index: number) => {
-    const row = editRows[index]
+    const row = activeRows[index]
     const depositAmount = parseFloat(row.deposit) || 0
     const withdrawAmount = parseFloat(row.withdraw) || 0
 
     if (depositAmount === 0 && withdrawAmount === 0) return
 
-    setEditRows(prev => {
+    setActiveRows(prev => {
       const next = [...prev]
       next[index].status = 'saving'
       return next
     })
 
     try {
-      // Process Deposit
       if (depositAmount > 0) {
         await fetch(`/api/students/${row.studentId}/transaction/add`, {
           method: 'POST',
@@ -108,7 +123,6 @@ export default function BulkEditPage() {
         })
       }
 
-      // Process Withdraw
       if (withdrawAmount > 0) {
         await fetch(`/api/students/${row.studentId}/transaction/add`, {
           method: 'POST',
@@ -122,7 +136,7 @@ export default function BulkEditPage() {
         })
       }
 
-      setEditRows(prev => {
+      setActiveRows(prev => {
         const next = [...prev]
         next[index] = {
           ...next[index],
@@ -135,7 +149,7 @@ export default function BulkEditPage() {
         return next
       })
     } catch (error) {
-      setEditRows(prev => {
+      setActiveRows(prev => {
         const next = [...prev]
         next[index].status = 'error'
         return next
@@ -146,23 +160,15 @@ export default function BulkEditPage() {
 
   const handleSaveAll = async () => {
     setIsSavingAll(true)
-    const pendingRows = editRows.filter(r => (parseFloat(r.deposit) || 0) > 0 || (parseFloat(r.withdraw) || 0) > 0)
-    
-    for (let i = 0; i < editRows.length; i++) {
-      const row = editRows[i]
+    for (let i = 0; i < activeRows.length; i++) {
+      const row = activeRows[i]
       if ((parseFloat(row.deposit) || 0) > 0 || (parseFloat(row.withdraw) || 0) > 0) {
         await saveRow(i)
       }
     }
-    
     setIsSavingAll(false)
     toast.success("All transactions processed")
   }
-
-  const filteredRows = editRows.filter(r => 
-    r.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    r.code.toLowerCase().includes(searchQuery.toLowerCase())
-  )
 
   if (isLoading) {
     return (
@@ -204,17 +210,38 @@ export default function BulkEditPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden min-h-[400px]">
           <div className="p-4 border-b border-gray-100 bg-gray-50/50">
             <div className="relative max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Filter students..."
+                placeholder="Search to add student..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value)
+                  setShowSearch(true)
+                }}
+                onFocus={() => setShowSearch(true)}
                 className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#4a6670]/20"
               />
+              {showSearch && searchResults.length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl z-50 max-h-60 overflow-y-auto">
+                  {searchResults.map(s => (
+                    <button
+                      key={s._id}
+                      onClick={() => addStudentRow(s)}
+                      className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-50 last:border-0 flex items-center justify-between group"
+                    >
+                      <div>
+                        <p className="text-sm font-bold text-[#171532]">{s.name}</p>
+                        <p className="text-xs text-gray-500 font-mono">{s.code}</p>
+                      </div>
+                      <Plus className="w-4 h-4 text-gray-300 group-hover:text-[#4a6670] transition-colors" />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
@@ -229,76 +256,86 @@ export default function BulkEditPage() {
                   <th className="px-4 py-4 border-b border-gray-100 w-32">Withdraw (₹)</th>
                   <th className="px-4 py-4 border-b border-gray-100">Reason</th>
                   <th className="px-4 py-4 border-b border-gray-100 w-20">Status</th>
+                  <th className="px-4 py-4 border-b border-gray-100 w-12"></th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {searchQuery.trim() === "" ? (
+                {activeRows.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-4 py-12 text-center">
-                      <div className="flex flex-col items-center gap-2 text-gray-400">
-                        <Search className="w-8 h-8 opacity-20" />
-                        <p className="text-sm font-medium">Please search for a student to begin editing</p>
+                    <td colSpan={8} className="px-4 py-20 text-center">
+                      <div className="flex flex-col items-center gap-3 opacity-30">
+                        <Plus className="w-12 h-12" />
+                        <p className="text-sm font-medium">Search and select students to add them here</p>
                       </div>
                     </td>
                   </tr>
-                ) : filteredRows.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="px-4 py-12 text-center text-gray-400 text-sm">
-                      No students found matching "{searchQuery}"
-                    </td>
-                  </tr>
                 ) : (
-                  filteredRows.map((row, index) => {
-                    const originalIndex = editRows.findIndex(r => r.studentId === row.studentId)
-                    return (
-                      <tr key={row.studentId} className="hover:bg-gray-50/50 transition-colors">
-                        <td className="px-4 py-4">
-                          <p className="text-sm font-bold text-[#171532]">{row.name}</p>
-                        </td>
-                        <td className="px-4 py-4 font-mono text-xs text-gray-500">
-                          {row.code}
-                        </td>
-                        <td className="px-4 py-4 text-right">
-                          <p className="text-sm font-bold text-[#4a6670]">₹{row.currentBalance.toFixed(2)}</p>
-                        </td>
-                        <td className="px-4 py-4">
-                          <input
-                            type="number"
-                            value={row.deposit}
-                            onChange={(e) => handleInputChange(originalIndex, 'deposit', e.target.value)}
-                            className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 text-green-700 font-bold"
-                            placeholder="0.00"
-                          />
-                        </td>
-                        <td className="px-4 py-4">
-                          <input
-                            type="number"
-                            value={row.withdraw}
-                            onChange={(e) => handleInputChange(originalIndex, 'withdraw', e.target.value)}
-                            className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 text-red-700 font-bold"
-                            placeholder="0.00"
-                          />
-                        </td>
-                        <td className="px-4 py-4">
-                          <input
-                            type="text"
-                            value={row.reason}
-                            onChange={(e) => handleInputChange(originalIndex, 'reason', e.target.value)}
-                            className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4a6670]/20"
-                            placeholder="Note..."
-                          />
-                        </td>
-                        <td className="px-4 py-4 text-center">
-                          {row.status === 'saving' && <Loader2 className="w-4 h-4 animate-spin text-gray-400 mx-auto" />}
-                          {row.status === 'saved' && <CheckCircle2 className="w-4 h-4 text-green-500 mx-auto" />}
-                          {row.status === 'error' && <AlertCircle className="w-4 h-4 text-red-500 mx-auto" />}
-                        </td>
-                      </tr>
-                    )
-                  })
+                  activeRows.map((row, index) => (
+                    <tr key={row.studentId} className="hover:bg-gray-50/50 transition-colors">
+                      <td className="px-4 py-4">
+                        <p className="text-sm font-bold text-[#171532]">{row.name}</p>
+                      </td>
+                      <td className="px-4 py-4 font-mono text-xs text-gray-500">
+                        {row.code}
+                      </td>
+                      <td className="px-4 py-4 text-right">
+                        <p className="text-sm font-bold text-[#4a6670]">₹{row.currentBalance.toFixed(2)}</p>
+                      </td>
+                      <td className="px-4 py-4">
+                        <input
+                          type="number"
+                          value={row.deposit}
+                          onChange={(e) => handleInputChange(index, 'deposit', e.target.value)}
+                          className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 text-green-700 font-bold"
+                          placeholder="0.00"
+                        />
+                      </td>
+                      <td className="px-4 py-4">
+                        <input
+                          type="number"
+                          value={row.withdraw}
+                          onChange={(e) => handleInputChange(index, 'withdraw', e.target.value)}
+                          className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 text-red-700 font-bold"
+                          placeholder="0.00"
+                        />
+                      </td>
+                      <td className="px-4 py-4">
+                        <input
+                          type="text"
+                          value={row.reason}
+                          onChange={(e) => handleInputChange(index, 'reason', e.target.value)}
+                          className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4a6670]/20"
+                          placeholder="Note..."
+                        />
+                      </td>
+                      <td className="px-4 py-4 text-center">
+                        {row.status === 'saving' && <Loader2 className="w-4 h-4 animate-spin text-gray-400 mx-auto" />}
+                        {row.status === 'saved' && <CheckCircle2 className="w-4 h-4 text-green-500 mx-auto" />}
+                        {row.status === 'error' && <AlertCircle className="w-4 h-4 text-red-500 mx-auto" />}
+                      </td>
+                      <td className="px-4 py-4">
+                        <button 
+                          onClick={() => removeRow(index)}
+                          className="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
                 )}
               </tbody>
             </table>
+          </div>
+          
+          <div className="p-4 border-t border-gray-100">
+            <button
+              onClick={() => setShowSearch(true)}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-[#4a6670] hover:bg-[#4a6670]/5 rounded-xl transition-all"
+            >
+              <Plus className="w-4 h-4" />
+              Add Another Student
+            </button>
           </div>
         </div>
       </div>
