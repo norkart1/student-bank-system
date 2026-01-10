@@ -1453,7 +1453,7 @@ export default function AdminDashboard() {
           <span className="text-sm font-bold text-[#171532]">Withdraw</span>
         </button>
         <button 
-          onClick={() => setShowQRScanner(true)}
+          onClick={() => router.push("/admin/qr-download")}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
             <QrCode className="w-6 h-6 text-white" />
