@@ -120,7 +120,8 @@ const studentSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mong
     },
     code: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     email: {
         type: String

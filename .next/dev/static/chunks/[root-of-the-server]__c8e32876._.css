@@ -1501,6 +1501,10 @@
     border-color: #e5e7eb;
   }
 
+  :where(.divide-gray-50 > :not(:last-child)) {
+    border-color: var(--color-gray-50);
+  }
+
   :where(.divide-gray-100 > :not(:last-child)) {
     border-color: var(--color-gray-100);
   }
@@ -2581,6 +2585,10 @@
     color: var(--color-gray-900);
   }
 
+  .text-green-500 {
+    color: var(--color-green-500);
+  }
+
   .text-green-600 {
     color: var(--color-green-600);
   }
@@ -2619,6 +2627,10 @@
 
   .text-red-400 {
     color: var(--color-red-400);
+  }
+
+  .text-red-500 {
+    color: var(--color-red-500);
   }
 
   .text-red-600 {
@@ -3109,6 +3121,18 @@
   }
 
   @media (hover: hover) {
+    .hover\:bg-gray-50\/50:hover {
+      background-color: #f9fafb80;
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:bg-gray-50\/50:hover {
+        background-color: color-mix(in oklab, var(--color-gray-50) 50%, transparent);
+      }
+    }
+  }
+
+  @media (hover: hover) {
     .hover\:bg-gray-200:hover {
       background-color: var(--color-gray-200);
     }
@@ -3344,6 +3368,16 @@
     }
   }
 
+  .focus\:ring-\[\#4a6670\]\/20:focus {
+    --tw-ring-color: #4a667033;
+  }
+
+  @supports (color: lab(0% 0 0)) {
+    .focus\:ring-\[\#4a6670\]\/20:focus {
+      --tw-ring-color: lab(41.2653% -8.66638 -9.16503 / .2);
+    }
+  }
+
   .focus\:ring-\[\#4a6670\]\/30:focus {
     --tw-ring-color: #4a66704d;
   }
@@ -3351,6 +3385,26 @@
   @supports (color: lab(0% 0 0)) {
     .focus\:ring-\[\#4a6670\]\/30:focus {
       --tw-ring-color: lab(41.2653% -8.6664 -9.16502 / .3);
+    }
+  }
+
+  .focus\:ring-green-500\/20:focus {
+    --tw-ring-color: #00c75833;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .focus\:ring-green-500\/20:focus {
+      --tw-ring-color: color-mix(in oklab, var(--color-green-500) 20%, transparent);
+    }
+  }
+
+  .focus\:ring-red-500\/20:focus {
+    --tw-ring-color: #fb2c3633;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .focus\:ring-red-500\/20:focus {
+      --tw-ring-color: color-mix(in oklab, var(--color-red-500) 20%, transparent);
     }
   }
 
