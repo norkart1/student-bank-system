@@ -1,5 +1,7 @@
 {
-  "/admin/bulk-edit/page": "app/admin/bulk-edit/page.js",
+  "/admin/dashboard/page": "app/admin/dashboard/page.js",
+  "/api/auth/verify/route": "app/api/auth/verify/route.js",
   "/api/students/route": "app/api/students/route.js",
+  "/api/system/status/route": "app/api/system/status/route.js",
   "/page": "app/page.js"
 }

@@ -23,12 +23,10 @@ ${studentContext ? `Student Database: ${studentContext}` : ""}
 
 User Request: ${message}`;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: fullContext,
-    });
-
-    const text = response.text || "No response from AI";
+    const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const result = await model.generateContent(fullContext);
+    const response = await result.response;
+    const text = response.text();
 
     return NextResponse.json({ response: text });
   } catch (error) {
