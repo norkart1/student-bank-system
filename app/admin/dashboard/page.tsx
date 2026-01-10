@@ -1365,6 +1365,31 @@ export default function AdminDashboard() {
     </>
   )
 
+  const handleBulkDelete = async (type: 'students' | 'transactions') => {
+    const confirmMsg = type === 'students' 
+      ? "Are you sure you want to delete ALL students? This cannot be undone."
+      : "Are you sure you want to delete ALL transactions? Balances will be reset to 0.";
+    
+    if (!window.confirm(confirmMsg)) return;
+
+    try {
+      const res = await fetch('/api/admin/bulk-delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type })
+      });
+
+      if (res.ok) {
+        toast.success(`All ${type} deleted successfully`);
+        fetchData(); // Refresh data
+      } else {
+        throw new Error("Deletion failed");
+      }
+    } catch (error) {
+      toast.error("Failed to perform bulk deletion");
+    }
+  };
+
   const renderHomeTab = () => (
     <>
       <div className="flex items-center justify-between mb-6">
@@ -2435,6 +2460,39 @@ export default function AdminDashboard() {
                   <p className="text-xl font-bold">{adminName}</p>
                   <p className="text-sm text-white/70">@{adminUsername}</p>
                 </div>
+              </div>
+            </div>
+
+            {/* Danger Zone */}
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-red-100 dark:border-red-900/30 shadow-sm space-y-4">
+              <div className="flex items-center gap-2 text-red-600">
+                <AlertCircle className="w-5 h-5" />
+                <h3 className="font-bold">Danger Zone</h3>
+              </div>
+              <p className="text-xs text-gray-500">Actions in this section are permanent and cannot be undone.</p>
+              
+              <div className="grid grid-cols-1 gap-3 pt-2">
+                <button
+                  onClick={() => handleBulkDelete('transactions')}
+                  className="flex items-center justify-between p-4 bg-red-50 dark:bg-red-900/10 hover:bg-red-100 dark:hover:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-900/30 transition-colors group"
+                >
+                  <div className="text-left">
+                    <p className="text-sm font-bold text-red-700 dark:text-red-400">Clear All Transactions</p>
+                    <p className="text-[10px] text-red-600/70">Resets all student balances to ₹0.00</p>
+                  </div>
+                  <Trash2 className="w-5 h-5 text-red-400 group-hover:text-red-600 transition-colors" />
+                </button>
+
+                <button
+                  onClick={() => handleBulkDelete('students')}
+                  className="flex items-center justify-between p-4 bg-red-600 hover:bg-red-700 rounded-xl border border-red-700 transition-colors group shadow-md shadow-red-200 dark:shadow-none"
+                >
+                  <div className="text-left">
+                    <p className="text-sm font-bold text-white">Delete All Students</p>
+                    <p className="text-[10px] text-white/70">Permanently wipes the entire student database</p>
+                  </div>
+                  <Trash2 className="w-5 h-5 text-white/50 group-hover:text-white transition-colors" />
+                </button>
               </div>
             </div>
 
