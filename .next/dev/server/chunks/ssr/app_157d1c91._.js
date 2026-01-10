@@ -560,6 +560,14 @@ function ManageTransactions() {
                                                                                 fileName: "[project]/app/admin/manage-transactions/page.tsx",
                                                                                 lineNumber: 272,
                                                                                 columnNumber: 33
+                                                                            }, this),
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                                value: "2026-27",
+                                                                                children: "2026-27"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/app/admin/manage-transactions/page.tsx",
+                                                                                lineNumber: 273,
+                                                                                columnNumber: 33
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
@@ -580,7 +588,7 @@ function ManageTransactions() {
                                                                         children: "Type"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                        lineNumber: 277,
+                                                                        lineNumber: 278,
                                                                         columnNumber: 31
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -588,13 +596,13 @@ function ManageTransactions() {
                                                                         children: editValues.type
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                        lineNumber: 280,
+                                                                        lineNumber: 281,
                                                                         columnNumber: 31
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                lineNumber: 276,
+                                                                lineNumber: 277,
                                                                 columnNumber: 29
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -610,7 +618,7 @@ function ManageTransactions() {
                                                                                     className: "w-4 h-4 animate-spin"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                                    lineNumber: 293,
+                                                                                    lineNumber: 294,
                                                                                     columnNumber: 37
                                                                                 }, this),
                                                                                 "Saving..."
@@ -621,7 +629,7 @@ function ManageTransactions() {
                                                                                     className: "w-4 h-4"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                                    lineNumber: 298,
+                                                                                    lineNumber: 299,
                                                                                     columnNumber: 37
                                                                                 }, this),
                                                                                 "Save"
@@ -629,7 +637,7 @@ function ManageTransactions() {
                                                                         }, void 0, true)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                        lineNumber: 286,
+                                                                        lineNumber: 287,
                                                                         columnNumber: 31
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -644,20 +652,20 @@ function ManageTransactions() {
                                                                                 className: "w-4 h-4"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                                lineNumber: 311,
+                                                                                lineNumber: 312,
                                                                                 columnNumber: 33
                                                                             }, this),
                                                                             "Cancel"
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                        lineNumber: 303,
+                                                                        lineNumber: 304,
                                                                         columnNumber: 31
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                lineNumber: 285,
+                                                                lineNumber: 286,
                                                                 columnNumber: 29
                                                             }, this)
                                                         ]
@@ -676,7 +684,7 @@ function ManageTransactions() {
                                                                         children: transaction.date
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                        lineNumber: 319,
+                                                                        lineNumber: 320,
                                                                         columnNumber: 31
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -686,25 +694,25 @@ function ManageTransactions() {
                                                                             children: "↓ Deposit"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                            lineNumber: 322,
+                                                                            lineNumber: 323,
                                                                             columnNumber: 35
                                                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             className: "text-xs font-semibold px-3 py-1 rounded-full bg-red-100 text-red-700",
                                                                             children: "↑ Withdraw"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                            lineNumber: 326,
+                                                                            lineNumber: 327,
                                                                             columnNumber: 35
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                        lineNumber: 320,
+                                                                        lineNumber: 321,
                                                                         columnNumber: 31
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                lineNumber: 318,
+                                                                lineNumber: 319,
                                                                 columnNumber: 29
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -718,7 +726,7 @@ function ManageTransactions() {
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                        lineNumber: 333,
+                                                                        lineNumber: 334,
                                                                         columnNumber: 31
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -730,12 +738,12 @@ function ManageTransactions() {
                                                                             className: "w-5 h-5"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                            lineNumber: 342,
+                                                                            lineNumber: 343,
                                                                             columnNumber: 33
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                        lineNumber: 336,
+                                                                        lineNumber: 337,
                                                                         columnNumber: 31
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -750,24 +758,24 @@ function ManageTransactions() {
                                                                             className: "w-5 h-5"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                            lineNumber: 352,
+                                                                            lineNumber: 353,
                                                                             columnNumber: 33
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                        lineNumber: 344,
+                                                                        lineNumber: 345,
                                                                         columnNumber: 31
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                                lineNumber: 332,
+                                                                lineNumber: 333,
                                                                 columnNumber: 29
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                                        lineNumber: 317,
+                                                        lineNumber: 318,
                                                         columnNumber: 27
                                                     }, this)
                                                 }, idx, false, {
@@ -784,7 +792,7 @@ function ManageTransactions() {
                                             children: "No transactions for this student"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                            lineNumber: 361,
+                                            lineNumber: 362,
                                             columnNumber: 19
                                         }, this)
                                     ]
@@ -795,12 +803,12 @@ function ManageTransactions() {
                                         children: "Select a student to view their transactions"
                                     }, void 0, false, {
                                         fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                        lineNumber: 368,
+                                        lineNumber: 369,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                                    lineNumber: 367,
+                                    lineNumber: 368,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
@@ -833,7 +841,7 @@ function ManageTransactions() {
                 isDangerous: true
             }, void 0, false, {
                 fileName: "[project]/app/admin/manage-transactions/page.tsx",
-                lineNumber: 376,
+                lineNumber: 377,
                 columnNumber: 7
             }, this)
         ]

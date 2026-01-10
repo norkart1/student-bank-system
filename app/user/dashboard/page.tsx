@@ -15,7 +15,7 @@ export default function UserDashboard() {
   const [isLoading, setIsLoading] = useState(true)
   const [userData, setUserData] = useState<any>(null)
   const [realTimeStatus, setRealTimeStatus] = useState(false)
-  const [selectedAcademicYear, setSelectedAcademicYear] = useState("2024-25")
+  const [selectedAcademicYear, setSelectedAcademicYear] = useState("2025-26")
 
   const loadUserData = async () => {
     try {
@@ -54,6 +54,7 @@ export default function UserDashboard() {
         balance: student.balance || 0,
         profileImage: student.profileImage || null,
         transactions: student.transactions || [],
+        academicYear: student.academicYear || "2025-26"
       })
     } catch (error) {
       console.error("Error loading user data:", error)
@@ -207,7 +208,7 @@ export default function UserDashboard() {
     const sessionToFilter = selectedAcademicYear;
     
     const filtered = userData.transactions.filter((t: any) => {
-      const txYear = t.academicYear || '2024-25';
+      const txYear = t.academicYear || '2025-26';
       return txYear === sessionToFilter;
     });
 
@@ -268,7 +269,8 @@ export default function UserDashboard() {
                 <option value="2023-24" className="text-gray-900">2023-24 Session</option>
                 <option value="2024-25" className="text-gray-900">2024-25 Session</option>
                 <option value="2025-26" className="text-gray-900">2025-26 Session</option>
-                {userData?.transactions?.map((t: any) => t.academicYear).filter((v: any, i: number, a: any[]) => v && a.indexOf(v) === i && !["2023-24", "2024-25", "2025-26"].includes(v)).map((year: string) => (
+                <option value="2026-27" className="text-gray-900">2026-27 Session</option>
+                {userData?.transactions?.map((t: any) => t.academicYear).filter((v: any, i: number, a: any[]) => v && a.indexOf(v) === i && !["2023-24", "2024-25", "2025-26", "2026-27"].includes(v)).map((year: string) => (
                   <option key={year} value={year} className="text-gray-900">{year} Session</option>
                 ))}
               </select>
@@ -356,11 +358,11 @@ export default function UserDashboard() {
                   </thead>
                   <tbody>
                     {userData.transactions
-                      .filter((t: any) => (t.academicYear || '2024-25') === selectedAcademicYear)
+                      .filter((t: any) => (t.academicYear || '2025-26') === selectedAcademicYear)
                       .map((transaction: any, idx: number) => {
                       // Calculate running balance for filtered transactions
                       let runningBalance = 0
-                      const filteredTxs = userData.transactions.filter((t: any) => (t.academicYear || '2024-25') === selectedAcademicYear)
+                      const filteredTxs = userData.transactions.filter((t: any) => (t.academicYear || '2025-26') === selectedAcademicYear)
                       for (let i = 0; i <= idx; i++) {
                         if (filteredTxs[i].type === 'deposit') {
                           runningBalance += filteredTxs[i].amount || 0
@@ -375,7 +377,7 @@ export default function UserDashboard() {
                             <div className="flex flex-col gap-1">
                               <span>{idx + 1}</span>
                               <span className="text-[9px] bg-[#4a6670]/10 text-[#4a6670] px-1 py-0.5 rounded font-medium w-fit">
-                                {transaction.academicYear || '2024-25'}
+                                {transaction.academicYear || '2025-26'}
                               </span>
                             </div>
                           </td>

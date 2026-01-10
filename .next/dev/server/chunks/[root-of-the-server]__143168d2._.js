@@ -176,10 +176,10 @@ async function GET(req) {
         const { searchParams } = new URL(req.url);
         const academicYear = searchParams.get('academicYear');
         // For the default year, also include students where academicYear is not set
-        const query = academicYear === '2024-25' ? {
+        const query = academicYear === '2025-26' ? {
             $or: [
                 {
-                    academicYear: '2024-25'
+                    academicYear: '2025-26'
                 },
                 {
                     academicYear: {
