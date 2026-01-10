@@ -541,10 +541,6 @@
     container: card-header / inline-size;
   }
 
-  .visible {
-    visibility: visible;
-  }
-
   .sr-only {
     clip-path: inset(50%);
     white-space: nowrap;
@@ -655,10 +651,6 @@
 
   .left-4 {
     left: calc(var(--spacing) * 4);
-  }
-
-  .left-\[-9999px\] {
-    left: -9999px;
   }
 
   .left-\[50\%\] {
@@ -3734,13 +3726,6 @@
   @media print {
     .print\:hidden {
       display: none;
-    }
-  }
-
-  @media print {
-    .print\:shadow-none {
-      --tw-shadow: 0 0 #0000;
-      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
   }
 

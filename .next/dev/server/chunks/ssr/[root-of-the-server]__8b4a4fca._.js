@@ -372,13 +372,13 @@ function QRDownloadPage() {
                                     minHeight: '297mm',
                                     padding: '10mm'
                                 },
-                                className: "jsx-9404681cff8adf26" + " " + "bg-white shadow-xl mx-auto overflow-hidden print:shadow-none print:m-0 fixed left-[-9999px] top-0",
+                                className: "jsx-9404681cff8adf26" + " " + "bg-white mx-auto print:m-0 print:block hidden",
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     ref: printRef,
                                     className: "jsx-9404681cff8adf26" + " " + "bg-white",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                            className: "jsx-9404681cff8adf26" + " " + "text-center text-xl font-bold mb-6 text-gray-800 print:block hidden",
+                                            className: "jsx-9404681cff8adf26" + " " + "text-center text-xl font-bold mb-6 text-gray-800",
                                             children: "JDSA Student QR Codes"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/qr-download/page.tsx",

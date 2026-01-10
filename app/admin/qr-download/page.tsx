@@ -201,10 +201,10 @@ export default function QRDownloadPage() {
             </div>
           </div>
 
-          {/* A4 Preview Container - Hidden on web, visible only for PDF/Print */}
-          <div className="bg-white shadow-xl mx-auto overflow-hidden print:shadow-none print:m-0 fixed left-[-9999px] top-0" style={{ width: '210mm', minHeight: '297mm', padding: '10mm' }}>
+          {/* A4 Preview Container - Visible for Print, Hidden for Web (using visibility: hidden instead of fixed position) */}
+          <div className="bg-white mx-auto print:m-0 print:block hidden" style={{ width: '210mm', minHeight: '297mm', padding: '10mm' }}>
             <div ref={printRef} className="bg-white">
-              <h2 className="text-center text-xl font-bold mb-6 text-gray-800 print:block hidden">JDSA Student QR Codes</h2>
+              <h2 className="text-center text-xl font-bold mb-6 text-gray-800">JDSA Student QR Codes</h2>
               
               <div className="grid grid-cols-7 gap-2">
                 {displayStudents.map((student) => (
