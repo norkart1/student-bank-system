@@ -448,15 +448,15 @@ export default function UserDashboard() {
           </div>
           
           <div className="flex-1 overflow-auto p-2 bg-[#f8f9fa]">
-            <div className="min-w-[600px] bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <table className="w-full text-sm border-collapse">
+            <div className="w-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <table className="w-full text-[11px] sm:text-sm border-collapse table-fixed">
                 <thead>
                   <tr className="bg-gray-100 text-[#4a6670]">
-                    <th className="px-4 py-4 text-left font-bold border-b border-gray-200">S.No</th>
-                    <th className="px-4 py-4 text-left font-bold border-b border-gray-200">Date</th>
-                    <th className="px-4 py-4 text-right font-bold border-b border-gray-200">Deposit</th>
-                    <th className="px-4 py-4 text-right font-bold border-b border-gray-200">Withdraw</th>
-                    <th className="px-4 py-4 text-right font-bold border-b border-gray-200">Balance</th>
+                    <th className="w-[10%] px-2 py-3 text-left font-bold border-b border-gray-200">#</th>
+                    <th className="w-[25%] px-2 py-3 text-left font-bold border-b border-gray-200">Date</th>
+                    <th className="w-[20%] px-2 py-3 text-right font-bold border-b border-gray-200">Dep.</th>
+                    <th className="w-[20%] px-2 py-3 text-right font-bold border-b border-gray-200">With.</th>
+                    <th className="w-[25%] px-2 py-3 text-right font-bold border-b border-gray-200">Bal.</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -472,16 +472,16 @@ export default function UserDashboard() {
                     
                     return (
                       <tr key={idx} className="hover:bg-[#f1f5f9] transition-colors">
-                        <td className="px-4 py-4 font-bold text-[#171532]">{idx + 1}</td>
-                        <td className="px-4 py-4 text-[#747384] font-medium">{transaction.date || '-'}</td>
-                        <td className="px-4 py-4 text-right text-green-600 font-bold">
-                          {transaction.type === 'deposit' ? `₹${transaction.amount?.toFixed(2)}` : '-'}
+                        <td className="px-2 py-3 font-bold text-[#171532]">{idx + 1}</td>
+                        <td className="px-2 py-3 text-[#747384] font-medium truncate">{transaction.date || '-'}</td>
+                        <td className="px-2 py-3 text-right text-green-600 font-bold tabular-nums">
+                          {transaction.type === 'deposit' ? `₹${transaction.amount?.toFixed(0)}` : '-'}
                         </td>
-                        <td className="px-4 py-4 text-right text-red-600 font-bold">
-                          {transaction.type === 'withdraw' ? `₹${transaction.amount?.toFixed(2)}` : '-'}
+                        <td className="px-2 py-3 text-right text-red-600 font-bold tabular-nums">
+                          {transaction.type === 'withdraw' ? `₹${transaction.amount?.toFixed(0)}` : '-'}
                         </td>
-                        <td className="px-4 py-4 text-right font-black text-[#4a6670] bg-gray-50/50">
-                          ₹{runningBalance.toFixed(2)}
+                        <td className="px-2 py-3 text-right font-black text-[#4a6670] bg-gray-50/50 tabular-nums">
+                          ₹{runningBalance.toFixed(0)}
                         </td>
                       </tr>
                     )

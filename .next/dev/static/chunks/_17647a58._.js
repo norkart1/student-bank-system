@@ -1199,24 +1199,24 @@ function UserDashboard() {
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex-1 overflow-auto p-2 bg-[#f8f9fa]",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "min-w-[600px] bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden",
+                            className: "w-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
-                                className: "w-full text-sm border-collapse",
+                                className: "w-full text-[11px] sm:text-sm border-collapse table-fixed",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("thead", {
                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                             className: "bg-gray-100 text-[#4a6670]",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "px-4 py-4 text-left font-bold border-b border-gray-200",
-                                                    children: "S.No"
+                                                    className: "w-[10%] px-2 py-3 text-left font-bold border-b border-gray-200",
+                                                    children: "#"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/user/dashboard/page.tsx",
                                                     lineNumber: 455,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "px-4 py-4 text-left font-bold border-b border-gray-200",
+                                                    className: "w-[25%] px-2 py-3 text-left font-bold border-b border-gray-200",
                                                     children: "Date"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/user/dashboard/page.tsx",
@@ -1224,24 +1224,24 @@ function UserDashboard() {
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "px-4 py-4 text-right font-bold border-b border-gray-200",
-                                                    children: "Deposit"
+                                                    className: "w-[20%] px-2 py-3 text-right font-bold border-b border-gray-200",
+                                                    children: "Dep."
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/user/dashboard/page.tsx",
                                                     lineNumber: 457,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "px-4 py-4 text-right font-bold border-b border-gray-200",
-                                                    children: "Withdraw"
+                                                    className: "w-[20%] px-2 py-3 text-right font-bold border-b border-gray-200",
+                                                    children: "With."
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/user/dashboard/page.tsx",
                                                     lineNumber: 458,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                    className: "px-4 py-4 text-right font-bold border-b border-gray-200",
-                                                    children: "Balance"
+                                                    className: "w-[25%] px-2 py-3 text-right font-bold border-b border-gray-200",
+                                                    children: "Bal."
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/user/dashboard/page.tsx",
                                                     lineNumber: 459,
@@ -1271,7 +1271,7 @@ function UserDashboard() {
                                                 className: "hover:bg-[#f1f5f9] transition-colors",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "px-4 py-4 font-bold text-[#171532]",
+                                                        className: "px-2 py-3 font-bold text-[#171532]",
                                                         children: idx + 1
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/user/dashboard/page.tsx",
@@ -1279,7 +1279,7 @@ function UserDashboard() {
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "px-4 py-4 text-[#747384] font-medium",
+                                                        className: "px-2 py-3 text-[#747384] font-medium truncate",
                                                         children: transaction.date || '-'
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/user/dashboard/page.tsx",
@@ -1287,26 +1287,26 @@ function UserDashboard() {
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "px-4 py-4 text-right text-green-600 font-bold",
-                                                        children: transaction.type === 'deposit' ? `₹${transaction.amount?.toFixed(2)}` : '-'
+                                                        className: "px-2 py-3 text-right text-green-600 font-bold tabular-nums",
+                                                        children: transaction.type === 'deposit' ? `₹${transaction.amount?.toFixed(0)}` : '-'
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/user/dashboard/page.tsx",
                                                         lineNumber: 477,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "px-4 py-4 text-right text-red-600 font-bold",
-                                                        children: transaction.type === 'withdraw' ? `₹${transaction.amount?.toFixed(2)}` : '-'
+                                                        className: "px-2 py-3 text-right text-red-600 font-bold tabular-nums",
+                                                        children: transaction.type === 'withdraw' ? `₹${transaction.amount?.toFixed(0)}` : '-'
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/user/dashboard/page.tsx",
                                                         lineNumber: 480,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        className: "px-4 py-4 text-right font-black text-[#4a6670] bg-gray-50/50",
+                                                        className: "px-2 py-3 text-right font-black text-[#4a6670] bg-gray-50/50 tabular-nums",
                                                         children: [
                                                             "₹",
-                                                            runningBalance.toFixed(2)
+                                                            runningBalance.toFixed(0)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/user/dashboard/page.tsx",
