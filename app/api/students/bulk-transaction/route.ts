@@ -65,6 +65,7 @@ export async function POST(req: Request) {
           date: transaction.date,
           type: normalizedType,
           amount: transaction.amount,
+          academicYear: "2025-26",
         })
 
         // Update balance

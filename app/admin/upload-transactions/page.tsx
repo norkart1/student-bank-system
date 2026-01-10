@@ -27,9 +27,25 @@ function parseDate(dateStr: any): string | null {
   const str = String(dateStr).trim()
 
   // Try DD/MM/YYYY format
-  const ddmmyyyyMatch = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+  const ddmmyyyyMatch = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/)
   if (ddmmyyyyMatch) {
-    const [, day, month, year] = ddmmyyyyMatch
+    let [, day, month, year] = ddmmyyyyMatch
+    if (year.length === 2) {
+      year = "20" + year
+    }
+    const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+    if (!isNaN(date.getTime())) {
+      return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`
+    }
+  }
+
+  // Try DD-MM-YYYY format
+  const ddmmDashMatch = str.match(/^(\d{1,2})-(\d{1,2})-(\d{2,4})$/)
+  if (ddmmDashMatch) {
+    let [, day, month, year] = ddmmDashMatch
+    if (year.length === 2) {
+      year = "20" + year
+    }
     const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
     if (!isNaN(date.getTime())) {
       return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`
@@ -84,7 +100,9 @@ function parseCSV(text: string): any[] {
 
   // Parse rows
   for (let i = 1; i < lines.length; i++) {
-    const values = lines[i].split(",").map((v) => v.trim())
+    const line = lines[i].trim()
+    if (!line) continue
+    const values = line.split(",").map((v) => v.trim())
     if (values.length > Math.max(studentCodeIdx, dateIdx, typeIdx, amountIdx)) {
       data.push({
         studentCode: values[studentCodeIdx] || "",
