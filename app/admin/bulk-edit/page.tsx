@@ -188,24 +188,24 @@ export default function BulkEditPage() {
             </button>
             <h1 className="text-xl font-bold text-[#171532]">Bulk Transaction Edit</h1>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-2">
             <button
               onClick={() => {
                 setSelectedStudent(null)
                 setTransactions([])
               }}
-              className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl font-bold text-gray-600 hover:bg-gray-50 transition-all"
+              className="p-2.5 bg-white border border-gray-200 rounded-xl shadow-sm transition-all active:scale-95"
+              title="Reset"
             >
-              <X className="w-4 h-4" />
-              Reset
+              <X className="w-5 h-5 text-gray-600" />
             </button>
             <button
               onClick={handleSaveAll}
               disabled={isSavingAll || !selectedStudent || transactions.length === 0}
-              className="flex items-center gap-2 px-6 py-2 bg-[#4a6670] text-white rounded-xl font-bold hover:bg-[#3d565e] transition-all disabled:opacity-50"
+              className="p-2.5 bg-[#4a6670] text-white rounded-xl shadow-sm transition-all active:scale-95 disabled:opacity-50"
+              title="Save All"
             >
-              {isSavingAll ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              Save All
+              {isSavingAll ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
             </button>
           </div>
         </div>
@@ -272,82 +272,82 @@ export default function BulkEditPage() {
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
                 <thead>
-                  <tr className="bg-gray-50 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    <th className="px-4 py-4 border-b border-gray-100 w-44">Date</th>
-                    <th className="px-4 py-4 border-b border-gray-100 w-32">Session</th>
-                    <th className="px-4 py-4 border-b border-gray-100 w-32">Type</th>
-                    <th className="px-4 py-4 border-b border-gray-100 w-32">Amount (₹)</th>
-                    <th className="px-4 py-4 border-b border-gray-100">Reason</th>
-                    <th className="px-4 py-4 border-b border-gray-100 w-20">Status</th>
-                    <th className="px-4 py-4 border-b border-gray-100 w-12"></th>
+                  <tr className="bg-gray-50 text-left text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                    <th className="px-2 py-4 border-b border-gray-100 w-32">Date</th>
+                    <th className="px-2 py-4 border-b border-gray-100 w-20">Session</th>
+                    <th className="px-2 py-4 border-b border-gray-100 w-20">Type</th>
+                    <th className="px-2 py-4 border-b border-gray-100 w-24">Amount</th>
+                    <th className="px-2 py-4 border-b border-gray-100">Reason</th>
+                    <th className="px-2 py-4 border-b border-gray-100 w-16 text-center">St.</th>
+                    <th className="px-2 py-4 border-b border-gray-100 w-10"></th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
                   {transactions.map((tx, index) => (
                     <tr key={tx.id} className="hover:bg-gray-50/50 transition-colors">
-                      <td className="px-4 py-4">
+                      <td className="px-2 py-4">
                         <div className="relative">
                           <Calendar className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
                           <input
                             type="date"
                             value={tx.date}
                             onChange={(e) => handleInputChange(index, 'date', e.target.value)}
-                            className="w-full pl-7 pr-2 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none"
+                            className="w-full pl-7 pr-1 py-1.5 border border-gray-200 rounded-lg text-[10px] focus:outline-none"
                           />
                         </div>
                       </td>
-                      <td className="px-4 py-4">
+                      <td className="px-2 py-4">
                         <select
                           value={tx.academicYear}
                           onChange={(e) => handleInputChange(index, 'academicYear', e.target.value)}
-                          className="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none"
+                          className="w-full px-1 py-1.5 border border-gray-200 rounded-lg text-[10px] focus:outline-none"
                         >
-                          <option value="2024-25">2024-25</option>
-                          <option value="2025-26">2025-26</option>
-                          <option value="2026-27">2026-27</option>
+                          <option value="2024-25">24-25</option>
+                          <option value="2025-26">25-26</option>
+                          <option value="2026-27">26-27</option>
                         </select>
                       </td>
-                      <td className="px-4 py-4">
+                      <td className="px-2 py-4">
                         <select
                           value={tx.type}
                           onChange={(e) => handleInputChange(index, 'type', e.target.value as any)}
-                          className={`w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs font-bold focus:outline-none ${
+                          className={`w-full px-1 py-1.5 border border-gray-200 rounded-lg text-[10px] font-bold focus:outline-none ${
                             tx.type === 'deposit' ? 'text-green-600' : 'text-red-600'
                           }`}
                         >
-                          <option value="deposit">Deposit</option>
-                          <option value="withdraw">Withdraw</option>
+                          <option value="deposit">Dep</option>
+                          <option value="withdraw">With</option>
                         </select>
                       </td>
-                      <td className="px-4 py-4">
+                      <td className="px-2 py-4">
                         <input
                           type="number"
                           value={tx.amount}
                           onChange={(e) => handleInputChange(index, 'amount', e.target.value)}
-                          className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none font-bold"
-                          placeholder="0.00"
+                          className="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-[10px] focus:outline-none font-bold"
+                          placeholder="0"
                         />
                       </td>
-                      <td className="px-4 py-4">
+                      <td className="px-2 py-4">
                         <input
                           type="text"
                           value={tx.reason}
                           onChange={(e) => handleInputChange(index, 'reason', e.target.value)}
-                          className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none"
+                          className="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-[10px] focus:outline-none"
                           placeholder="Note..."
                         />
                       </td>
-                      <td className="px-4 py-4 text-center">
-                        {tx.status === 'saving' && <Loader2 className="w-4 h-4 animate-spin text-gray-400 mx-auto" />}
-                        {tx.status === 'saved' && <CheckCircle2 className="w-4 h-4 text-green-500 mx-auto" />}
-                        {tx.status === 'error' && <AlertCircle className="w-4 h-4 text-red-500 mx-auto" />}
+                      <td className="px-2 py-4 text-center">
+                        {tx.status === 'saving' && <Loader2 className="w-3.5 h-3.5 animate-spin text-gray-400 mx-auto" />}
+                        {tx.status === 'saved' && <CheckCircle2 className="w-3.5 h-3.5 text-green-500 mx-auto" />}
+                        {tx.status === 'error' && <AlertCircle className="w-3.5 h-3.5 text-red-500 mx-auto" />}
                       </td>
-                      <td className="px-4 py-4">
+                      <td className="px-2 py-4">
                         <button 
                           onClick={() => removeRow(index)}
-                          className="p-1.5 text-gray-300 hover:text-red-500 rounded-lg transition-all"
+                          className="p-1 text-gray-300 hover:text-red-500 rounded-lg transition-all"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </td>
                     </tr>
