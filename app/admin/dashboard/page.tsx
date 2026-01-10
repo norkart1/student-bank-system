@@ -2055,12 +2055,6 @@ export default function AdminDashboard() {
           </button>
           <div>
             <h2 className="text-lg font-bold text-[#171532]">All Accounts</h2>
-            <div className="flex gap-2 mt-0.5">
-              <span className="text-[10px] font-bold text-green-600">Dep: ₹{totalDep.toLocaleString()}</span>
-              <span className="text-[10px] font-bold text-red-600">With: ₹{totalWith.toLocaleString()}</span>
-              <span className="text-[10px] font-bold text-[#4a6670]">Net: ₹{currentBalance.toLocaleString()}</span>
-              <span className="text-[10px] font-bold text-purple-600 ml-2">Total Students: {filteredStudents.length}</span>
-            </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
