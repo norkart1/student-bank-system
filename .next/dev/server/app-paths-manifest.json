@@ -1,3 +1,5 @@
 {
+  "/admin/qr-download/page": "app/admin/qr-download/page.js",
+  "/api/students/route": "app/api/students/route.js",
   "/page": "app/page.js"
 }
