@@ -17,6 +17,8 @@ export default function UserDashboard() {
   const [realTimeStatus, setRealTimeStatus] = useState(false)
   const [selectedAcademicYear, setSelectedAcademicYear] = useState("2025-26")
 
+  const [isLedgerFullscreen, setIsLedgerFullscreen] = useState(false)
+
   const loadUserData = async () => {
     try {
       // Verify session from MongoDB
@@ -341,11 +343,20 @@ export default function UserDashboard() {
           {/* Transactions Table Section */}
           {userData?.transactions && userData.transactions.length > 0 && (
             <div className="mt-6 pt-6 border-t border-[#e5e7eb]">
-              <div className="flex items-center gap-2 mb-4">
-                <History className="w-5 h-5 text-[#4a6670]" />
-                <h3 className="font-semibold text-[#171532]">Transaction Ledger</h3>
+              <div 
+                className="flex items-center justify-between mb-4 cursor-pointer hover:opacity-80 active:scale-95 transition-all"
+                onClick={() => setIsLedgerFullscreen(true)}
+              >
+                <div className="flex items-center gap-2">
+                  <History className="w-5 h-5 text-[#4a6670]" />
+                  <h3 className="font-semibold text-[#171532]">Transaction Ledger</h3>
+                </div>
+                <Zap className="w-4 h-4 text-[#4a6670] animate-pulse" />
               </div>
-              <div className="overflow-x-auto rounded-xl border border-[#e5e7eb]">
+              <div 
+                className="overflow-x-auto rounded-xl border border-[#e5e7eb] cursor-pointer"
+                onClick={() => setIsLedgerFullscreen(true)}
+              >
                 <table className="w-full text-sm border-collapse min-w-[500px]">
                   <thead>
                     <tr className="bg-[#4a6670] text-white">
@@ -416,6 +427,86 @@ export default function UserDashboard() {
         </div>
 
       </div>
+
+      {/* Fullscreen Ledger Modal */}
+      {isLedgerFullscreen && (
+        <div className="fixed inset-0 bg-white z-50 overflow-hidden flex flex-col animate-in fade-in zoom-in duration-200">
+          <div className="bg-[#4a6670] text-white p-4 flex items-center justify-between shadow-md">
+            <div className="flex items-center gap-3">
+              <History className="w-6 h-6" />
+              <div>
+                <h2 className="text-lg font-bold leading-tight">Full Ledger</h2>
+                <p className="text-xs text-white/70">{selectedAcademicYear} Session</p>
+              </div>
+            </div>
+            <button 
+              onClick={() => setIsLedgerFullscreen(false)}
+              className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 active:scale-90 transition-all"
+            >
+              <ArrowDownRight className="w-6 h-6 rotate-45" />
+            </button>
+          </div>
+          
+          <div className="flex-1 overflow-auto p-2 bg-[#f8f9fa]">
+            <div className="min-w-[600px] bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <table className="w-full text-sm border-collapse">
+                <thead>
+                  <tr className="bg-gray-100 text-[#4a6670]">
+                    <th className="px-4 py-4 text-left font-bold border-b border-gray-200">S.No</th>
+                    <th className="px-4 py-4 text-left font-bold border-b border-gray-200">Date</th>
+                    <th className="px-4 py-4 text-right font-bold border-b border-gray-200">Deposit</th>
+                    <th className="px-4 py-4 text-right font-bold border-b border-gray-200">Withdraw</th>
+                    <th className="px-4 py-4 text-right font-bold border-b border-gray-200">Balance</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {userData.transactions
+                    .filter((t: any) => (t.academicYear || '2025-26') === selectedAcademicYear)
+                    .map((transaction: any, idx: number) => {
+                    let runningBalance = 0
+                    const filteredTxs = userData.transactions.filter((t: any) => (t.academicYear || '2025-26') === selectedAcademicYear)
+                    for (let i = 0; i <= idx; i++) {
+                      if (filteredTxs[i].type === 'deposit') runningBalance += filteredTxs[i].amount || 0
+                      else runningBalance -= filteredTxs[i].amount || 0
+                    }
+                    
+                    return (
+                      <tr key={idx} className="hover:bg-[#f1f5f9] transition-colors">
+                        <td className="px-4 py-4 font-bold text-[#171532]">{idx + 1}</td>
+                        <td className="px-4 py-4 text-[#747384] font-medium">{transaction.date || '-'}</td>
+                        <td className="px-4 py-4 text-right text-green-600 font-bold">
+                          {transaction.type === 'deposit' ? `₹${transaction.amount?.toFixed(2)}` : '-'}
+                        </td>
+                        <td className="px-4 py-4 text-right text-red-600 font-bold">
+                          {transaction.type === 'withdraw' ? `₹${transaction.amount?.toFixed(2)}` : '-'}
+                        </td>
+                        <td className="px-4 py-4 text-right font-black text-[#4a6670] bg-gray-50/50">
+                          ₹{runningBalance.toFixed(2)}
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <div className="p-4 bg-white border-t border-gray-200 grid grid-cols-2 gap-3">
+            <button 
+              onClick={handlePrint}
+              className="flex items-center justify-center gap-2 bg-[#4a6670] text-white py-3 rounded-xl font-bold"
+            >
+              <Printer className="w-5 h-5" /> Print
+            </button>
+            <button 
+              onClick={() => setIsLedgerFullscreen(false)}
+              className="bg-gray-100 text-gray-700 py-3 rounded-xl font-bold"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
