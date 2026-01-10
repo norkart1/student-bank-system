@@ -637,7 +637,8 @@ export default function AdminDashboard() {
                 <option value="2023-24">2023-24</option>
                 <option value="2024-25">2024-25</option>
                 <option value="2025-26">2025-26</option>
-                {academicYears.filter(y => !["2023-24", "2024-25", "2025-26"].includes(y)).map(year => (
+                <option value="2026-27">2026-27</option>
+                {academicYears.filter(y => !["2023-24", "2024-25", "2025-26", "2026-27"].includes(y)).map(year => (
                   <option key={year} value={year}>{year}</option>
                 ))}
               </select>
@@ -771,7 +772,8 @@ export default function AdminDashboard() {
                 <option value="2023-24">2023-24</option>
                 <option value="2024-25">2024-25</option>
                 <option value="2025-26">2025-26</option>
-                {academicYears.filter(y => !["2023-24", "2024-25", "2025-26"].includes(y)).map(year => (
+                <option value="2026-27">2026-27</option>
+                {academicYears.filter(y => !["2023-24", "2024-25", "2025-26", "2026-27"].includes(y)).map(year => (
                   <option key={year} value={year}>{year}</option>
                 ))}
               </select>
@@ -1188,6 +1190,7 @@ export default function AdminDashboard() {
           name: newStudent.name,
           code: generatedCode,
           profileImage: newStudent.profileImage,
+          academicYear: newStudent.academicYear,
           balance: 0,
           transactions: [],
         }),
@@ -1206,7 +1209,7 @@ export default function AdminDashboard() {
       
       // Refresh students list
       try {
-        const studentsRes = await fetch("/api/students")
+        const studentsRes = await fetch(`/api/students?academicYear=${selectedAcademicYear}`)
         if (studentsRes.ok) {
           const updatedList = await studentsRes.json()
           setStudents(updatedList)
@@ -1813,7 +1816,8 @@ export default function AdminDashboard() {
                 <option value="2023-24">2023-24</option>
                 <option value="2024-25">2024-25</option>
                 <option value="2025-26">2025-26</option>
-                {academicYears.filter(y => !["2023-24", "2024-25", "2025-26"].includes(y)).map(year => (
+                <option value="2026-27">2026-27</option>
+                {academicYears.filter(y => !["2023-24", "2024-25", "2025-26", "2026-27"].includes(y)).map(year => (
                   <option key={year} value={year}>{year}</option>
                 ))}
               </select>
