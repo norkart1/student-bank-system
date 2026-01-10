@@ -17,6 +17,7 @@ interface Transaction {
   amount: number
   date?: string
   reason?: string
+  academicYear?: string
 }
 
 interface Student {
@@ -46,6 +47,9 @@ export default function AdminDashboard() {
   const [totalBalance, setTotalBalance] = useState(0)
   const [totalDeposited, setTotalDeposited] = useState(0)
   const [totalWithdrawn, setTotalWithdrawn] = useState(0)
+  const [academicYears, setAcademicYears] = useState(["2023-24", "2024-25", "2025-26"])
+  const [showAddYearForm, setShowAddYearForm] = useState(false)
+  const [newYearInput, setNewYearYearInput] = useState("")
   const [students, setStudents] = useState<Student[]>([])
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [showEditForm, setShowEditForm] = useState(false)
@@ -985,7 +989,7 @@ export default function AdminDashboard() {
           return
         }
         
-        setNewStudent({ name: "", mobile: "", email: "", profileImage: "" })
+        setNewStudent({ name: "", mobile: "", email: "", profileImage: "", academicYear: "2024-25" })
         setEditingIndex(null)
         setShowEditForm(false)
         setNotification({ type: 'success', message: 'Account updated successfully!' })
@@ -1165,7 +1169,7 @@ export default function AdminDashboard() {
       }
 
       const createdStudent = await res.json()
-      setNewStudent({ name: "", mobile: "", email: "", profileImage: "" })
+      setNewStudent({ name: "", mobile: "", email: "", profileImage: "", academicYear: "2024-25" })
       setShowCreateForm(false)
       setNotification({ type: 'success', message: `Account created! Code: ${generatedCode}` })
       setTimeout(() => setNotification(null), 5000)
@@ -1228,10 +1232,6 @@ export default function AdminDashboard() {
   if (!isAuthenticated || isAuthLoading) {
     return null
   }
-
-  const [academicYears, setAcademicYears] = useState(["2023-24", "2024-25", "2025-26"])
-  const [showAddYearForm, setShowAddYearForm] = useState(false)
-  const [newYearInput, setNewYearYearInput] = useState("")
 
   const handleAddAcademicYear = () => {
     if (!newYearInput || !/^\d{4}-\d{2}$/.test(newYearInput)) {
@@ -2031,7 +2031,7 @@ export default function AdminDashboard() {
           <div className="bg-white rounded-t-3xl sm:rounded-2xl w-full sm:max-w-md max-h-[85vh] overflow-y-auto shadow-2xl animate-in slide-in-from-bottom duration-300">
             <div className="sticky top-0 bg-white flex items-center justify-between px-6 py-5 border-b border-[#f0f0f0]">
               <h3 className="text-xl font-bold text-[#171532]">{showEditForm ? 'Edit Account' : 'Create Account'}</h3>
-              <button onClick={() => {setShowCreateForm(false); setShowEditForm(false); setEditingIndex(null); setNewStudent({ name: "", mobile: "", email: "", profileImage: "" })}} className="w-8 h-8 flex items-center justify-center rounded-full bg-[#f5f5f5] text-[#747384] hover:bg-[#e5e5e5] transition-colors">
+              <button onClick={() => {setShowCreateForm(false); setShowEditForm(false); setEditingIndex(null); setNewStudent({ name: "", mobile: "", email: "", profileImage: "", academicYear: "2024-25" })}} className="w-8 h-8 flex items-center justify-center rounded-full bg-[#f5f5f5] text-[#747384] hover:bg-[#e5e5e5] transition-colors">
                 <X className="w-4 h-4" />
               </button>
             </div>
