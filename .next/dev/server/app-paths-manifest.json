@@ -1,5 +1,4 @@
 {
   "/admin/bulk-edit/page": "app/admin/bulk-edit/page.js",
-  "/api/students/route": "app/api/students/route.js",
   "/page": "app/page.js"
 }

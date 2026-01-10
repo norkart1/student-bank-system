@@ -33,6 +33,7 @@ export default function BulkEditPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [searchResults, setSearchResults] = useState<Student[]>([])
   const [showSearch, setShowSearch] = useState(false)
+  const autoSaveTimerRef = useRef<{ [key: string]: NodeJS.Timeout }>({})
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -102,6 +103,27 @@ export default function BulkEditPage() {
     const newTxs = [...transactions]
     newTxs[index] = { ...newTxs[index], [field]: value, status: 'idle' }
     setTransactions(newTxs)
+
+    // Auto-save logic
+    const rowId = newTxs[index].id
+    if (autoSaveTimerRef.current[rowId]) {
+      clearTimeout(autoSaveTimerRef.current[rowId])
+    }
+
+    autoSaveTimerRef.current[rowId] = setTimeout(() => {
+      if (newTxs[index].amount && parseFloat(newTxs[index].amount) > 0) {
+        saveTransaction(index)
+      }
+    }, 1500)
+  }
+
+  const calculateTotals = () => {
+    return transactions.reduce((acc, tx) => {
+      const amt = parseFloat(tx.amount) || 0
+      if (tx.type === 'deposit') acc.deposit += amt
+      else acc.withdraw += amt
+      return acc
+    }, { deposit: 0, withdraw: 0 })
   }
 
   const saveTransaction = async (index: number) => {
@@ -258,7 +280,14 @@ export default function BulkEditPage() {
                 </div>
                 <div>
                   <h2 className="font-bold text-[#171532]">{selectedStudent.name}</h2>
-                  <p className="text-xs text-gray-500 font-mono">{selectedStudent.code} • Balance: ₹{selectedStudent.balance.toFixed(2)}</p>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
+                    <p className="text-xs text-gray-500 font-mono">{selectedStudent.code}</p>
+                    <p className="text-xs font-bold text-[#4a6670]">Balance: ₹{selectedStudent.balance.toFixed(2)}</p>
+                    <div className="flex gap-3 border-l border-gray-300 pl-4">
+                      <p className="text-[10px] font-bold text-green-600">Total Dep: ₹{calculateTotals().deposit.toFixed(2)}</p>
+                      <p className="text-[10px] font-bold text-red-600">Total With: ₹{calculateTotals().withdraw.toFixed(2)}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
               <button 
