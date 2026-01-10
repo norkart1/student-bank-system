@@ -1,5 +1,4 @@
 {
-  "/admin/dashboard/page": "app/admin/dashboard/page.js",
   "/admin/qr-download/page": "app/admin/qr-download/page.js",
   "/api/auth/verify/route": "app/api/auth/verify/route.js",
   "/api/students/route": "app/api/students/route.js",
