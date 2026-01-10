@@ -2113,7 +2113,7 @@ export default function AdminDashboard() {
               )}
 
               {useOldCode && !showEditForm && (
-                <div className="space-y-2">
+                <div className="space-y-2 mb-4">
                   <label className="block text-sm font-semibold text-[#171532]">Old Student Code</label>
                   <div className="relative">
                     <input
