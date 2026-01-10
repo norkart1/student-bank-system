@@ -342,10 +342,10 @@ export default function AdminDashboard() {
       reportData.push({
         'Student': student.name,
         'Username': student.username,
-        'Deposits': deposits.toFixed(2),
-        'Withdrawals': withdraws.toFixed(2),
-        'Net Change': (deposits - withdraws).toFixed(2),
-        'Final Balance': student.balance.toFixed(2)
+        'Deposits': deposits.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        'Withdrawals': withdraws.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        'Net Change': (deposits - withdraws).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        'Final Balance': student.balance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       })
     })
     return reportData
@@ -375,7 +375,7 @@ export default function AdminDashboard() {
     return student.transactions.map((t, idx) => ({
       'S.No': (idx + 1).toString(),
       'Type': t.type.charAt(0).toUpperCase() + t.type.slice(1),
-      'Amount': t.amount.toFixed(2),
+      'Amount': t.amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
       'Date': t.date || 'N/A'
     }))
   }

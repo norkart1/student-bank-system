@@ -116,7 +116,7 @@ export default function UserDashboard() {
     yPosition += 8
     doc.text(`Code: ${userData?.code || 'N/A'}`, margin, yPosition)
     yPosition += 8
-    doc.text(`Balance: ₹${(userData?.balance || 0).toFixed(2)}`, margin, yPosition)
+    doc.text(`Balance: ₹${(userData?.balance || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, margin, yPosition)
     yPosition += 12
 
     // Transactions Table
@@ -137,9 +137,9 @@ export default function UserDashboard() {
       rows.push([
         (idx + 1).toString(),
         t.date || '-',
-        t.type === 'deposit' ? `₹${t.amount?.toFixed(2)}` : '-',
-        t.type === 'withdraw' ? `₹${t.amount?.toFixed(2)}` : '-',
-        `₹${runningBalance.toFixed(2)}`
+        t.type === 'deposit' ? `₹${t.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-',
+        t.type === 'withdraw' ? `₹${t.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-',
+        `₹${runningBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
       ])
     })
 
@@ -170,7 +170,7 @@ export default function UserDashboard() {
       ['Account Details'],
       ['Name', userData?.name || 'N/A'],
       ['Code', userData?.code || 'N/A'],
-      ['Balance', `₹${(userData?.balance || 0).toFixed(2)}`],
+      ['Balance', `₹${(userData?.balance || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`],
       [],
       ['Transaction History'],
     ]
@@ -187,9 +187,9 @@ export default function UserDashboard() {
       data.push([
         idx + 1,
         t.date || '-',
-        t.type === 'deposit' ? `₹${t.amount?.toFixed(2)}` : '-',
-        t.type === 'withdraw' ? `₹${t.amount?.toFixed(2)}` : '-',
-        `₹${runningBalance.toFixed(2)}`
+        t.type === 'deposit' ? `₹${t.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-',
+        t.type === 'withdraw' ? `₹${t.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-',
+        `₹${runningBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
       ])
     })
 
@@ -278,7 +278,7 @@ export default function UserDashboard() {
               </select>
             </div>
           </div>
-          <p className="text-3xl font-bold text-white">₹{calculateYearlyBalance().toFixed(2)}</p>
+          <p className="text-3xl font-bold text-white">₹{calculateYearlyBalance().toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
         </div>
 
           {/* Profile Info and QR Code Section */}
@@ -398,7 +398,7 @@ export default function UserDashboard() {
                           <td className="px-3 py-3 text-right">
                             {transaction.type === 'deposit' ? (
                               <span className="inline-flex items-center gap-1 bg-green-50 px-2 py-1 rounded-md font-bold text-green-700 text-xs">
-                                <span className="text-[10px]">↓</span>₹{transaction.amount?.toFixed(2)}
+                                <span className="text-[10px]">↓</span>₹{transaction.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                               </span>
                             ) : (
                               <span className="text-[#cbd5e1]">-</span>
@@ -407,14 +407,14 @@ export default function UserDashboard() {
                           <td className="px-3 py-3 text-right">
                             {transaction.type === 'withdraw' ? (
                               <span className="inline-flex items-center gap-1 bg-red-50 px-2 py-1 rounded-md font-bold text-red-700 text-xs">
-                                <span className="text-[10px]">↑</span>₹{transaction.amount?.toFixed(2)}
+                                <span className="text-[10px]">↑</span>₹{transaction.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                               </span>
                             ) : (
                               <span className="text-[#cbd5e1]">-</span>
                             )}
                           </td>
                           <td className="px-3 py-3 text-right font-bold text-[#4a6670] tabular-nums">
-                            ₹{runningBalance.toFixed(2)}
+                            ₹{runningBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                           </td>
                         </tr>
                       )
