@@ -1353,8 +1353,24 @@ export default function AdminDashboard() {
           <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
             <Wallet className="w-6 h-6 text-white" />
           </div>
-          <div className="flex-1">
-            <p className="text-white/70 text-sm">Total Balance ({selectedAcademicYear})</p>
+          <div className="flex-1 flex flex-col">
+            <div className="flex items-center gap-2">
+              <p className="text-white/70 text-sm">Total Balance</p>
+              <select
+                value={selectedAcademicYear}
+                onChange={(e) => {
+                  setSelectedAcademicYear(e.target.value)
+                  toast.success(`Active year set to ${e.target.value}`)
+                }}
+                className="bg-white/10 hover:bg-white/20 border-none text-white text-xs font-bold py-1 px-2 rounded-lg focus:ring-0 cursor-pointer transition-colors"
+              >
+                {academicYears.map(year => (
+                  <option key={year} value={year} className="bg-[#3d565e] text-white">
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
             <p className="text-2xl font-bold text-white">₹{totalBalance.toFixed(2)}</p>
           </div>
         </div>
