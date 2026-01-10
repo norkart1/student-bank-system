@@ -479,6 +479,9 @@ export default function AdminDashboard() {
                 <option value="2023-24">2023-24</option>
                 <option value="2024-25">2024-25</option>
                 <option value="2025-26">2025-26</option>
+                {academicYears.filter(y => !["2023-24", "2024-25", "2025-26"].includes(y)).map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
               </select>
             </div>
 
@@ -626,6 +629,9 @@ export default function AdminDashboard() {
                 <option value="2023-24">2023-24</option>
                 <option value="2024-25">2024-25</option>
                 <option value="2025-26">2025-26</option>
+                {academicYears.filter(y => !["2023-24", "2024-25", "2025-26"].includes(y)).map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -757,6 +763,9 @@ export default function AdminDashboard() {
                 <option value="2023-24">2023-24</option>
                 <option value="2024-25">2024-25</option>
                 <option value="2025-26">2025-26</option>
+                {academicYears.filter(y => !["2023-24", "2024-25", "2025-26"].includes(y)).map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -1220,6 +1229,25 @@ export default function AdminDashboard() {
     return null
   }
 
+  const [academicYears, setAcademicYears] = useState(["2023-24", "2024-25", "2025-26"])
+  const [showAddYearForm, setShowAddYearForm] = useState(false)
+  const [newYearInput, setNewYearYearInput] = useState("")
+
+  const handleAddAcademicYear = () => {
+    if (!newYearInput || !/^\d{4}-\d{2}$/.test(newYearInput)) {
+      toast.error("Invalid format. Use YYYY-YY (e.g., 2026-27)")
+      return
+    }
+    if (academicYears.includes(newYearInput)) {
+      toast.error("Year already exists")
+      return
+    }
+    setAcademicYears(prev => [...prev, newYearInput].sort())
+    setNewYearYearInput("")
+    setShowAddYearForm(false)
+    toast.success(`Academic year ${newYearInput} added!`)
+  }
+
   const renderYearTab = () => (
     <>
       <div className="flex items-center gap-3 mb-6">
@@ -1230,30 +1258,64 @@ export default function AdminDashboard() {
       </div>
       
       <div className="bg-white rounded-2xl p-6 shadow-lg border border-[#e5e7eb] space-y-6">
-        <div>
-          <label className="block text-sm font-bold text-[#171532] mb-3">Select Active Academic Year</label>
-          <div className="grid grid-cols-1 gap-3">
-            {["2023-24", "2024-25", "2025-26"].map((year) => (
-              <button
-                key={year}
-                onClick={() => {
-                  setSelectedAcademicYear(year)
-                  setActiveTab("home")
-                  toast.success(`Active year set to ${year}`)
-                }}
-                className={`w-full p-4 rounded-xl text-left font-bold transition-all border-2 ${
-                  selectedAcademicYear === year
-                    ? "bg-[#4a6670] border-[#4a6670] text-white shadow-md scale-[1.02]"
-                    : "bg-[#f8f9fa] border-[#e8e8e8] text-[#171532] hover:border-[#4a6670]/30"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span>{year} Academic Session</span>
-                  {selectedAcademicYear === year && <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>}
-                </div>
+        <div className="flex items-center justify-between mb-2">
+          <label className="block text-sm font-bold text-[#171532]">Select Active Academic Year</label>
+          <button 
+            onClick={() => setShowAddYearForm(true)}
+            className="flex items-center gap-1.5 bg-[#4a6670] text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-[#3d565e] transition-all"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            Add New
+          </button>
+        </div>
+
+        {showAddYearForm && (
+          <div className="bg-[#f8f9fa] border-2 border-dashed border-[#e8e8e8] rounded-xl p-4 space-y-3 animate-in fade-in zoom-in duration-200">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-[#4a6670]">New Academic Session</span>
+              <button onClick={() => setShowAddYearForm(false)} className="text-[#747384] hover:text-red-500">
+                <X className="w-4 h-4" />
               </button>
-            ))}
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newYearInput}
+                onChange={(e) => setNewYearYearInput(e.target.value)}
+                placeholder="e.g., 2026-27"
+                className="flex-1 px-3 py-2 bg-white border border-[#e8e8e8] rounded-lg text-sm focus:outline-none focus:border-[#4a6670]"
+              />
+              <button
+                onClick={handleAddAcademicYear}
+                className="bg-[#10B981] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#0fa06f]"
+              >
+                Save
+              </button>
+            </div>
           </div>
+        )}
+
+        <div className="grid grid-cols-1 gap-3">
+          {academicYears.map((year) => (
+            <button
+              key={year}
+              onClick={() => {
+                setSelectedAcademicYear(year)
+                setActiveTab("home")
+                toast.success(`Active year set to ${year}`)
+              }}
+              className={`w-full p-4 rounded-xl text-left font-bold transition-all border-2 ${
+                selectedAcademicYear === year
+                  ? "bg-[#4a6670] border-[#4a6670] text-white shadow-md scale-[1.02]"
+                  : "bg-[#f8f9fa] border-[#e8e8e8] text-[#171532] hover:border-[#4a6670]/30"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span>{year} Academic Session</span>
+                {selectedAcademicYear === year && <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>}
+              </div>
+            </button>
+          ))}
         </div>
         
         <div className="bg-amber-50 border border-amber-100 rounded-xl p-4">
@@ -1705,6 +1767,9 @@ export default function AdminDashboard() {
                 <option value="2023-24">2023-24</option>
                 <option value="2024-25">2024-25</option>
                 <option value="2025-26">2025-26</option>
+                {academicYears.filter(y => !["2023-24", "2024-25", "2025-26"].includes(y)).map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
               </select>
             </div>
           </div>

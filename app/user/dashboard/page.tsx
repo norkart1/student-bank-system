@@ -43,6 +43,10 @@ export default function UserDashboard() {
       }
       
       const student = await res.json()
+      if (!student) {
+        console.error("Student data is null")
+        return
+      }
       setUserData({
         id: student._id,
         name: student.name || "User",
@@ -264,6 +268,9 @@ export default function UserDashboard() {
                 <option value="2023-24" className="text-gray-900">2023-24 Session</option>
                 <option value="2024-25" className="text-gray-900">2024-25 Session</option>
                 <option value="2025-26" className="text-gray-900">2025-26 Session</option>
+                {userData?.transactions?.map((t: any) => t.academicYear).filter((v: any, i: number, a: any[]) => v && a.indexOf(v) === i && !["2023-24", "2024-25", "2025-26"].includes(v)).map((year: string) => (
+                  <option key={year} value={year} className="text-gray-900">{year} Session</option>
+                ))}
               </select>
             </div>
           </div>
