@@ -1433,7 +1433,7 @@ export default function AdminDashboard() {
                 ))}
               </select>
             </div>
-            <p className="text-2xl font-bold text-white">₹{totalBalance.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-white">₹{totalBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
           </div>
         </div>
         
@@ -1445,7 +1445,7 @@ export default function AdminDashboard() {
               </div>
               <p className="text-white/70 text-xs">Deposited</p>
             </div>
-            <p className="text-lg font-bold text-white">₹{totalDeposited.toFixed(2)}</p>
+            <p className="text-lg font-bold text-white">₹{totalDeposited.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
           </div>
           
           <div className="bg-white/10 rounded-xl p-3">
@@ -1455,7 +1455,7 @@ export default function AdminDashboard() {
               </div>
               <p className="text-white/70 text-xs">Withdrawn</p>
             </div>
-            <p className="text-lg font-bold text-white">₹{totalWithdrawn.toFixed(2)}</p>
+            <p className="text-lg font-bold text-white">₹{totalWithdrawn.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
           </div>
         </div>
       </div>
@@ -1600,7 +1600,7 @@ export default function AdminDashboard() {
                       index === 2 ? 'text-orange-600 text-lg' :
                       'text-[#10B981] text-base'
                     }`}>
-                      ₹{(student.balance || 0).toFixed(2)}
+                      ₹{(student.balance || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </p>
                   </div>
                 </div>
@@ -1653,7 +1653,7 @@ export default function AdminDashboard() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-[#747384] mb-1">Balance</label>
-                  <p className="text-lg font-bold text-[#10B981]">₹{(student?.balance || 0).toFixed(2)}</p>
+                  <p className="text-lg font-bold text-[#10B981]">₹{(student?.balance || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-[#747384] mb-1">Transactions</label>
@@ -1671,7 +1671,7 @@ export default function AdminDashboard() {
                           <div className="flex items-center gap-2">
                             <span className={`w-2 h-2 rounded-full ${tx.type === 'deposit' ? 'bg-green-500' : 'bg-red-500'}`}></span>
                             <p className="text-sm font-bold text-[#171532]">
-                              {tx.type === 'deposit' ? '+' : '-'}₹{tx.amount.toFixed(2)}
+                              {tx.type === 'deposit' ? '+' : '-'}₹{tx.amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </p>
                             <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-md font-medium">
                               {tx.academicYear || '2024-25'}

@@ -111,10 +111,10 @@ export default function BulkEditPage() {
     }
 
     autoSaveTimerRef.current[rowId] = setTimeout(() => {
-      if (newTxs[index].amount && parseFloat(newTxs[index].amount) > 0) {
+      if (newTxs[index].amount && parseFloat(newTxs[index].amount) >= 1) {
         saveTransaction(index)
       }
-    }, 1500)
+    }, 3000)
   }
 
   const calculateTotals = () => {
@@ -350,11 +350,17 @@ export default function BulkEditPage() {
                       </td>
                       <td className="px-2 py-4">
                         <input
-                          type="number"
+                          type="text"
+                          inputMode="decimal"
                           value={tx.amount}
-                          onChange={(e) => handleInputChange(index, 'amount', e.target.value)}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === "" || /^\d*\.?\d*$/.test(val)) {
+                              handleInputChange(index, 'amount', val);
+                            }
+                          }}
                           className="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-[10px] focus:outline-none font-bold"
-                          placeholder="0"
+                          placeholder="0.00"
                         />
                       </td>
                       <td className="px-2 py-4">
