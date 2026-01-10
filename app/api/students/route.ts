@@ -9,8 +9,8 @@ export async function GET(req: any) {
     const academicYear = searchParams.get('academicYear');
     
     // For the default year, also include students where academicYear is not set
-    const query = academicYear === '2024-25' 
-      ? { $or: [{ academicYear: '2024-25' }, { academicYear: { $exists: false } }, { academicYear: '' }] }
+    const query = academicYear === '2025-26' 
+      ? { $or: [{ academicYear: '2025-26' }, { academicYear: { $exists: false } }, { academicYear: '' }] }
       : academicYear ? { academicYear } : {};
       
     const students = await Student.find(query);

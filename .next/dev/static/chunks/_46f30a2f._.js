@@ -1997,7 +1997,7 @@ function AdminDashboard() {
         let withdrawn = 0;
         studentList.forEach((student)=>{
             // Calculate session-specific balance for each student
-            const sessionTransactions = student.transactions?.filter((t)=>(t.academicYear || '2024-25') === selectedAcademicYear) || [];
+            const sessionTransactions = student.transactions?.filter((t)=>(t.academicYear || '2025-26') === selectedAcademicYear) || [];
             let studentSessionBalance = 0;
             sessionTransactions.forEach((t)=>{
                 if (t.type === 'deposit') {
