@@ -357,8 +357,15 @@ export default function UserDashboard() {
                       
                       return (
                         <tr key={idx} className={idx % 2 === 0 ? 'bg-[#f8f9fa]' : 'bg-white'}>
-                          <td className="border border-[#e5e7eb] px-2 py-2 font-semibold text-[#171532]">{idx + 1}</td>
-                          <td className="border border-[#e5e7eb] px-2 py-2 text-[#747384]">{transaction.date || '-'}</td>
+                          <td className="border border-[#e5e7eb] px-2 py-2 font-semibold text-[#171532]">
+                            <div className="flex flex-col gap-1">
+                              <span>{idx + 1}</span>
+                              <span className="text-[9px] bg-[#4a6670]/10 text-[#4a6670] px-1 py-0.5 rounded font-medium w-fit">
+                                {transaction.academicYear || '2024-25'}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="border border-[#e5e7eb] px-2 py-2 text-[#747384] text-xs">{transaction.date || '-'}</td>
                           <td className="border border-[#e5e7eb] px-2 py-2 text-right">
                             {transaction.type === 'deposit' ? (
                               <span className="inline-flex items-center gap-1 bg-green-50 px-2 py-1 rounded font-semibold text-green-700">

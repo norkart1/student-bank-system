@@ -108,6 +108,9 @@ const transactionSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$
     },
     reason: {
         type: String
+    },
+    academicYear: {
+        type: String
     }
 });
 const studentSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__["Schema"]({
@@ -128,6 +131,11 @@ const studentSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mong
     },
     profileImage: {
         type: String
+    },
+    academicYear: {
+        type: String,
+        required: true,
+        default: '2024-25'
     },
     balance: {
         type: Number,
@@ -165,7 +173,7 @@ async function PUT(req, { params }) {
         await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$mongodb$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["connectDB"])();
         const { id } = await params;
         const body = await req.json();
-        const { index, date, type, amount } = body;
+        const { index, date, type, amount, academicYear } = body;
         const student = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Student"].findById(id);
         if (!student) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
@@ -188,9 +196,11 @@ async function PUT(req, { params }) {
         student.transactions[index] = {
             date,
             type,
-            amount
+            amount,
+            academicYear
         };
         student.balance += difference;
+        student.markModified('transactions');
         await student.save();
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: true,
@@ -199,7 +209,8 @@ async function PUT(req, { params }) {
     } catch (error) {
         console.error("Error updating transaction:", error);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: "Internal server error"
+            error: "Internal server error",
+            details: String(error)
         }, {
             status: 500
         });

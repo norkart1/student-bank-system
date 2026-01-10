@@ -1518,6 +1518,9 @@ export default function AdminDashboard() {
                             <p className="text-sm font-bold text-[#171532]">
                               {tx.type === 'deposit' ? '+' : '-'}₹{tx.amount.toFixed(2)}
                             </p>
+                            <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-md font-medium">
+                              {tx.academicYear || '2024-25'}
+                            </span>
                           </div>
                           <p className="text-[10px] text-[#747384] truncate">
                             {tx.date} {tx.reason ? `• ${tx.reason}` : ''}
@@ -1595,6 +1598,7 @@ export default function AdminDashboard() {
       targetTx.amount = amount;
       targetTx.date = new Date(editTxDate || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
       targetTx.reason = editTxReason || undefined;
+      targetTx.academicYear = selectedAcademicYear; // Add this line to update year during edit
 
       // Recalculate balance and re-sort transactions
       let newBalance = 0;
@@ -1603,20 +1607,15 @@ export default function AdminDashboard() {
         else newBalance -= t.amount;
       });
       
-      // Sort transactions by date (descending)
-      targetStudent.transactions.sort((a, b) => {
-        const dateA = new Date(a.date || 0).getTime();
-        const dateB = new Date(b.date || 0).getTime();
-        return dateB - dateA;
-      });
-
-      targetStudent.balance = newBalance;
-
       // Update in database
       const res = await fetch(`/api/students/${targetStudent._id}`, {
         method: 'PATCH',
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(targetStudent)
+        body: JSON.stringify({
+          ...targetStudent,
+          balance: newBalance,
+          transactions: targetStudent.transactions
+        })
       });
 
       if (!res.ok) throw new Error('Failed to update');
@@ -1690,6 +1689,19 @@ export default function AdminDashboard() {
                 onChange={(e) => setEditTxReason(e.target.value)}
                 className="w-full px-4 py-2 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670]"
               />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-[#747384] mb-1">Academic Year</label>
+              <select
+                value={selectedAcademicYear}
+                onChange={(e) => setSelectedAcademicYear(e.target.value)}
+                className="w-full px-4 py-2 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670]"
+              >
+                <option value="2023-24">2023-24</option>
+                <option value="2024-25">2024-25</option>
+                <option value="2025-26">2025-26</option>
+              </select>
             </div>
           </div>
 

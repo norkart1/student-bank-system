@@ -1498,6 +1498,11 @@
     background-color: #4a6670;
   }
 
+  .bg-\[\#4a6670\]\/10 {
+    background-color: #4a66701a;
+    background-color: lab(41.2653% -8.66638 -9.16503 / .1);
+  }
+
   .bg-\[\#10B981\] {
     background-color: #10b981;
   }
@@ -1955,6 +1960,14 @@
     padding: 3px;
   }
 
+  .px-1 {
+    padding-inline: calc(var(--spacing) * 1);
+  }
+
+  .px-1\.5 {
+    padding-inline: calc(var(--spacing) * 1.5);
+  }
+
   .px-2 {
     padding-inline: calc(var(--spacing) * 2);
   }
@@ -2129,6 +2142,10 @@
   .text-xs {
     font-size: var(--text-xs);
     line-height: var(--tw-leading, var(--text-xs--line-height));
+  }
+
+  .text-\[9px\] {
+    font-size: 9px;
   }
 
   .text-\[10px\] {

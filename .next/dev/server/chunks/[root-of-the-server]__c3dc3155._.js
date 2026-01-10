@@ -169,6 +169,9 @@ const transactionSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$
     },
     reason: {
         type: String
+    },
+    academicYear: {
+        type: String
     }
 });
 const studentSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__["Schema"]({
@@ -189,6 +192,11 @@ const studentSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mong
     },
     profileImage: {
         type: String
+    },
+    academicYear: {
+        type: String,
+        required: true,
+        default: '2024-25'
     },
     balance: {
         type: Number,
