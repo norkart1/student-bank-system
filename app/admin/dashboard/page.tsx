@@ -1145,11 +1145,12 @@ export default function AdminDashboard() {
     }
   })
 
-  const handleSearchOldStudent = async () => {
-    if (!oldStudentCode) return
+  const handleSearchOldStudent = async (codeValue?: string) => {
+    const codeToSearch = codeValue || oldStudentCode
+    if (!codeToSearch) return
     setIsSearchingOldStudent(true)
     try {
-      const res = await fetch(`/api/students/search?code=${oldStudentCode}`)
+      const res = await fetch(`/api/students/search?code=${codeToSearch}`)
       if (res.ok) {
         const student = await res.json()
         setNewStudent({
@@ -1161,10 +1162,10 @@ export default function AdminDashboard() {
         })
         toast.success("Student details loaded!")
       } else {
-        toast.error("Student not found")
+        if (!codeValue) toast.error("Student not found")
       }
     } catch (error) {
-      toast.error("Search failed")
+      if (!codeValue) toast.error("Search failed")
     } finally {
       setIsSearchingOldStudent(false)
     }
@@ -2118,7 +2119,13 @@ export default function AdminDashboard() {
                     <input
                       type="text"
                       value={oldStudentCode}
-                      onChange={(e) => setOldStudentCode(e.target.value.toUpperCase())}
+                      onChange={(e) => {
+                        const val = e.target.value.toUpperCase();
+                        setOldStudentCode(val);
+                        if (val.length >= 4) {
+                          handleSearchOldStudent(val);
+                        }
+                      }}
                       placeholder="e.g., JD-1234"
                       className="flex-1 px-4 py-3 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl text-[#171532] focus:outline-none focus:border-[#4a6670]"
                     />
