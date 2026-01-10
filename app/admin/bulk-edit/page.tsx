@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { ChevronLeft, Save, X, Loader2, Search, CheckCircle2, AlertCircle, Plus, Trash2 } from "lucide-react"
+import { ChevronLeft, Save, X, Loader2, Search, CheckCircle2, AlertCircle, Plus, Trash2, Calendar } from "lucide-react"
 import { toast } from "sonner"
 
 interface Student {
@@ -13,13 +13,12 @@ interface Student {
   academicYear: string
 }
 
-interface EditRow {
-  studentId: string
-  name: string
-  code: string
-  currentBalance: number
-  deposit: string
-  withdraw: string
+interface TransactionRow {
+  id: string
+  date: string
+  academicYear: string
+  type: 'deposit' | 'withdraw'
+  amount: string
   reason: string
   status: 'idle' | 'saving' | 'saved' | 'error'
 }
@@ -27,7 +26,8 @@ interface EditRow {
 export default function BulkEditPage() {
   const router = useRouter()
   const [students, setStudents] = useState<Student[]>([])
-  const [activeRows, setActiveRows] = useState<EditRow[]>([])
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
+  const [transactions, setTransactions] = useState<TransactionRow[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSavingAll, setIsSavingAll] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
@@ -64,106 +64,103 @@ export default function BulkEditPage() {
     setSearchResults(filtered)
   }, [searchQuery, students])
 
-  const addStudentRow = (student: Student) => {
-    if (activeRows.some(r => r.studentId === student._id)) {
-      toast.error("Student already added to list")
-      return
-    }
-    const newRow: EditRow = {
-      studentId: student._id,
-      name: student.name,
-      code: student.code,
-      currentBalance: student.balance,
-      deposit: "",
-      withdraw: "",
+  const selectStudent = (student: Student) => {
+    setSelectedStudent(student)
+    setTransactions([{
+      id: Math.random().toString(36).substr(2, 9),
+      date: new Date().toISOString().split('T')[0],
+      academicYear: student.academicYear || "2025-26",
+      type: 'deposit',
+      amount: "",
       reason: "",
       status: 'idle'
-    }
-    setActiveRows([...activeRows, newRow])
+    }])
     setSearchQuery("")
     setShowSearch(false)
   }
 
+  const addTransactionRow = () => {
+    if (!selectedStudent) return
+    setTransactions([...transactions, {
+      id: Math.random().toString(36).substr(2, 9),
+      date: new Date().toISOString().split('T')[0],
+      academicYear: selectedStudent.academicYear || "2025-26",
+      type: 'deposit',
+      amount: "",
+      reason: "",
+      status: 'idle'
+    }])
+  }
+
   const removeRow = (index: number) => {
-    const newRows = [...activeRows]
-    newRows.splice(index, 1)
-    setActiveRows(newRows)
+    const newTxs = [...transactions]
+    newTxs.splice(index, 1)
+    setTransactions(newTxs)
   }
 
-  const handleInputChange = (index: number, field: keyof EditRow, value: string) => {
-    const newRows = [...activeRows]
-    newRows[index] = { ...newRows[index], [field]: value, status: 'idle' }
-    setActiveRows(newRows)
+  const handleInputChange = (index: number, field: keyof TransactionRow, value: string) => {
+    const newTxs = [...transactions]
+    newTxs[index] = { ...newTxs[index], [field]: value, status: 'idle' }
+    setTransactions(newTxs)
   }
 
-  const saveRow = async (index: number) => {
-    const row = activeRows[index]
-    const depositAmount = parseFloat(row.deposit) || 0
-    const withdrawAmount = parseFloat(row.withdraw) || 0
+  const saveTransaction = async (index: number) => {
+    if (!selectedStudent) return
+    const tx = transactions[index]
+    const amount = parseFloat(tx.amount) || 0
 
-    if (depositAmount === 0 && withdrawAmount === 0) return
+    if (amount <= 0) return
 
-    setActiveRows(prev => {
+    setTransactions(prev => {
       const next = [...prev]
       next[index].status = 'saving'
       return next
     })
 
     try {
-      if (depositAmount > 0) {
-        await fetch(`/api/students/${row.studentId}/transaction/add`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: 'deposit',
-            amount: depositAmount,
-            reason: row.reason || "Bulk Edit Deposit",
-            date: new Date().toISOString().split('T')[0]
-          })
+      const res = await fetch(`/api/students/${selectedStudent._id}/transaction/add`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: tx.type,
+          amount: amount,
+          reason: tx.reason || `Bulk Edit ${tx.type}`,
+          date: tx.date,
+          academicYear: tx.academicYear
         })
-      }
+      })
 
-      if (withdrawAmount > 0) {
-        await fetch(`/api/students/${row.studentId}/transaction/add`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: 'withdraw',
-            amount: withdrawAmount,
-            reason: row.reason || "Bulk Edit Withdrawal",
-            date: new Date().toISOString().split('T')[0]
-          })
-        })
-      }
+      if (!res.ok) throw new Error("Failed to save")
 
-      setActiveRows(prev => {
+      setTransactions(prev => {
         const next = [...prev]
-        next[index] = {
-          ...next[index],
-          status: 'saved',
-          deposit: "",
-          withdraw: "",
-          reason: "",
-          currentBalance: next[index].currentBalance + depositAmount - withdrawAmount
-        }
+        next[index].status = 'saved'
         return next
       })
+      
+      // Update selected student balance locally
+      setSelectedStudent(prev => prev ? {
+        ...prev,
+        balance: tx.type === 'deposit' ? prev.balance + amount : prev.balance - amount
+      } : null)
+
     } catch (error) {
-      setActiveRows(prev => {
+      setTransactions(prev => {
         const next = [...prev]
         next[index].status = 'error'
         return next
       })
-      toast.error(`Failed to save for ${row.name}`)
+      toast.error(`Failed to save transaction`)
     }
   }
 
   const handleSaveAll = async () => {
+    if (!selectedStudent) return
     setIsSavingAll(true)
-    for (let i = 0; i < activeRows.length; i++) {
-      const row = activeRows[i]
-      if ((parseFloat(row.deposit) || 0) > 0 || (parseFloat(row.withdraw) || 0) > 0) {
-        await saveRow(i)
+    for (let i = 0; i < transactions.length; i++) {
+      const tx = transactions[i]
+      if ((parseFloat(tx.amount) || 0) > 0 && tx.status !== 'saved') {
+        await saveTransaction(i)
       }
     }
     setIsSavingAll(false)
@@ -193,15 +190,18 @@ export default function BulkEditPage() {
           </div>
           <div className="flex gap-3">
             <button
-              onClick={() => router.back()}
+              onClick={() => {
+                setSelectedStudent(null)
+                setTransactions([])
+              }}
               className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl font-bold text-gray-600 hover:bg-gray-50 transition-all"
             >
               <X className="w-4 h-4" />
-              Cancel
+              Reset
             </button>
             <button
               onClick={handleSaveAll}
-              disabled={isSavingAll}
+              disabled={isSavingAll || !selectedStudent || transactions.length === 0}
               className="flex items-center gap-2 px-6 py-2 bg-[#4a6670] text-white rounded-xl font-bold hover:bg-[#3d565e] transition-all disabled:opacity-50"
             >
               {isSavingAll ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
@@ -210,134 +210,163 @@ export default function BulkEditPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden min-h-[400px]">
-          <div className="p-4 border-b border-gray-100 bg-gray-50/50">
-            <div className="relative max-w-md">
+        {!selectedStudent ? (
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center max-w-xl mx-auto">
+            <div className="w-16 h-16 bg-[#4a6670]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Search className="w-8 h-8 text-[#4a6670]" />
+            </div>
+            <h2 className="text-lg font-bold text-[#171532] mb-2">Find a Student</h2>
+            <p className="text-sm text-gray-500 mb-6">Search for a student to add multiple transactions at once.</p>
+            
+            <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search to add student..."
+                placeholder="Search by name or code..."
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value)
                   setShowSearch(true)
                 }}
-                onFocus={() => setShowSearch(true)}
-                className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#4a6670]/20"
+                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#4a6670]/20"
               />
               {showSearch && searchResults.length > 0 && (
                 <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl z-50 max-h-60 overflow-y-auto">
                   {searchResults.map(s => (
                     <button
                       key={s._id}
-                      onClick={() => addStudentRow(s)}
-                      className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-50 last:border-0 flex items-center justify-between group"
+                      onClick={() => selectStudent(s)}
+                      className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-50 last:border-0 flex items-center justify-between"
                     >
                       <div>
                         <p className="text-sm font-bold text-[#171532]">{s.name}</p>
                         <p className="text-xs text-gray-500 font-mono">{s.code}</p>
                       </div>
-                      <Plus className="w-4 h-4 text-gray-300 group-hover:text-[#4a6670] transition-colors" />
+                      <Plus className="w-4 h-4 text-[#4a6670]" />
                     </button>
                   ))}
                 </div>
               )}
             </div>
           </div>
+        ) : (
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="p-6 bg-[#4a6670]/5 border-b border-gray-100 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-[#4a6670] rounded-full flex items-center justify-center text-white font-bold">
+                  {selectedStudent.name.charAt(0)}
+                </div>
+                <div>
+                  <h2 className="font-bold text-[#171532]">{selectedStudent.name}</h2>
+                  <p className="text-xs text-gray-500 font-mono">{selectedStudent.code} • Balance: ₹{selectedStudent.balance.toFixed(2)}</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setSelectedStudent(null)}
+                className="text-xs font-bold text-[#4a6670] hover:underline"
+              >
+                Change Student
+              </button>
+            </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-gray-50 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                  <th className="px-4 py-4 border-b border-gray-100">Student</th>
-                  <th className="px-4 py-4 border-b border-gray-100">Code</th>
-                  <th className="px-4 py-4 border-b border-gray-100 text-right">Balance</th>
-                  <th className="px-4 py-4 border-b border-gray-100 w-32">Deposit (₹)</th>
-                  <th className="px-4 py-4 border-b border-gray-100 w-32">Withdraw (₹)</th>
-                  <th className="px-4 py-4 border-b border-gray-100">Reason</th>
-                  <th className="px-4 py-4 border-b border-gray-100 w-20">Status</th>
-                  <th className="px-4 py-4 border-b border-gray-100 w-12"></th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {activeRows.length === 0 ? (
-                  <tr>
-                    <td colSpan={8} className="px-4 py-20 text-center">
-                      <div className="flex flex-col items-center gap-3 opacity-30">
-                        <Plus className="w-12 h-12" />
-                        <p className="text-sm font-medium">Search and select students to add them here</p>
-                      </div>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="bg-gray-50 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-4 border-b border-gray-100 w-44">Date</th>
+                    <th className="px-4 py-4 border-b border-gray-100 w-32">Session</th>
+                    <th className="px-4 py-4 border-b border-gray-100 w-32">Type</th>
+                    <th className="px-4 py-4 border-b border-gray-100 w-32">Amount (₹)</th>
+                    <th className="px-4 py-4 border-b border-gray-100">Reason</th>
+                    <th className="px-4 py-4 border-b border-gray-100 w-20">Status</th>
+                    <th className="px-4 py-4 border-b border-gray-100 w-12"></th>
                   </tr>
-                ) : (
-                  activeRows.map((row, index) => (
-                    <tr key={row.studentId} className="hover:bg-gray-50/50 transition-colors">
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {transactions.map((tx, index) => (
+                    <tr key={tx.id} className="hover:bg-gray-50/50 transition-colors">
                       <td className="px-4 py-4">
-                        <p className="text-sm font-bold text-[#171532]">{row.name}</p>
+                        <div className="relative">
+                          <Calendar className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+                          <input
+                            type="date"
+                            value={tx.date}
+                            onChange={(e) => handleInputChange(index, 'date', e.target.value)}
+                            className="w-full pl-7 pr-2 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none"
+                          />
+                        </div>
                       </td>
-                      <td className="px-4 py-4 font-mono text-xs text-gray-500">
-                        {row.code}
+                      <td className="px-4 py-4">
+                        <select
+                          value={tx.academicYear}
+                          onChange={(e) => handleInputChange(index, 'academicYear', e.target.value)}
+                          className="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none"
+                        >
+                          <option value="2024-25">2024-25</option>
+                          <option value="2025-26">2025-26</option>
+                          <option value="2026-27">2026-27</option>
+                        </select>
                       </td>
-                      <td className="px-4 py-4 text-right">
-                        <p className="text-sm font-bold text-[#4a6670]">₹{row.currentBalance.toFixed(2)}</p>
+                      <td className="px-4 py-4">
+                        <select
+                          value={tx.type}
+                          onChange={(e) => handleInputChange(index, 'type', e.target.value as any)}
+                          className={`w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs font-bold focus:outline-none ${
+                            tx.type === 'deposit' ? 'text-green-600' : 'text-red-600'
+                          }`}
+                        >
+                          <option value="deposit">Deposit</option>
+                          <option value="withdraw">Withdraw</option>
+                        </select>
                       </td>
                       <td className="px-4 py-4">
                         <input
                           type="number"
-                          value={row.deposit}
-                          onChange={(e) => handleInputChange(index, 'deposit', e.target.value)}
-                          className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 text-green-700 font-bold"
-                          placeholder="0.00"
-                        />
-                      </td>
-                      <td className="px-4 py-4">
-                        <input
-                          type="number"
-                          value={row.withdraw}
-                          onChange={(e) => handleInputChange(index, 'withdraw', e.target.value)}
-                          className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 text-red-700 font-bold"
+                          value={tx.amount}
+                          onChange={(e) => handleInputChange(index, 'amount', e.target.value)}
+                          className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none font-bold"
                           placeholder="0.00"
                         />
                       </td>
                       <td className="px-4 py-4">
                         <input
                           type="text"
-                          value={row.reason}
+                          value={tx.reason}
                           onChange={(e) => handleInputChange(index, 'reason', e.target.value)}
-                          className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4a6670]/20"
+                          className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none"
                           placeholder="Note..."
                         />
                       </td>
                       <td className="px-4 py-4 text-center">
-                        {row.status === 'saving' && <Loader2 className="w-4 h-4 animate-spin text-gray-400 mx-auto" />}
-                        {row.status === 'saved' && <CheckCircle2 className="w-4 h-4 text-green-500 mx-auto" />}
-                        {row.status === 'error' && <AlertCircle className="w-4 h-4 text-red-500 mx-auto" />}
+                        {tx.status === 'saving' && <Loader2 className="w-4 h-4 animate-spin text-gray-400 mx-auto" />}
+                        {tx.status === 'saved' && <CheckCircle2 className="w-4 h-4 text-green-500 mx-auto" />}
+                        {tx.status === 'error' && <AlertCircle className="w-4 h-4 text-red-500 mx-auto" />}
                       </td>
                       <td className="px-4 py-4">
                         <button 
                           onClick={() => removeRow(index)}
-                          className="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                          className="p-1.5 text-gray-300 hover:text-red-500 rounded-lg transition-all"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            
+            <div className="p-4 border-t border-gray-100 flex justify-center">
+              <button
+                onClick={addTransactionRow}
+                className="flex items-center gap-2 px-6 py-2 bg-[#4a6670]/10 text-[#4a6670] rounded-xl font-bold text-sm hover:bg-[#4a6670]/20 transition-all"
+              >
+                <Plus className="w-4 h-4" />
+                Add Another Transaction
+              </button>
+            </div>
           </div>
-          
-          <div className="p-4 border-t border-gray-100">
-            <button
-              onClick={() => setShowSearch(true)}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-[#4a6670] hover:bg-[#4a6670]/5 rounded-xl transition-all"
-            >
-              <Plus className="w-4 h-4" />
-              Add Another Student
-            </button>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   )
