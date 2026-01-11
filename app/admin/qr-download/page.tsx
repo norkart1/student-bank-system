@@ -211,7 +211,7 @@ export default function QRDownloadPage() {
                   <div key={student._id} className="flex flex-col items-center p-2 border border-gray-100 rounded">
                     <div className="bg-white p-1">
                       <QRCodeSVG 
-                        value={`${window.location.origin}/login?code=${student.code}`} 
+                        value={`https://jdsa-students-bank.vercel.app/login?code=${student.code}`} 
                         size={80} 
                         level="M" 
                       />

@@ -2536,7 +2536,7 @@ export default function AdminDashboard() {
 
               <button
                 onClick={() => {
-                  const text = `Check out JDSA Students Bank: ${window.location.origin}`
+                  const text = "Check out JDSA Students Bank: https://jdsa-students-bank.vercel.app"
                   if (navigator.share) {
                     navigator.share({
                       title: "JDSA Students Bank",

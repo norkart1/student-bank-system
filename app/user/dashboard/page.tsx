@@ -299,7 +299,7 @@ export default function UserDashboard() {
               </div>
               <div className="bg-white p-2 rounded border border-[#e5e7eb]">
                 <QRCodeSVG 
-                  value={`${window.location.origin}/user/dashboard`} 
+                  value="https://jdsa-students-bank.vercel.app/user/dashboard" 
                   size={120} 
                   level="H" 
                   includeMargin={true} 
