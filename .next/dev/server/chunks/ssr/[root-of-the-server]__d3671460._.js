@@ -101,13 +101,12 @@ const metadata = {
     icons: {
         icon: [
             {
-                url: '/icon.svg',
-                type: 'image/svg+xml'
+                url: '/favicon.png',
+                type: 'image/png'
             },
             {
-                url: '/icon-light-32x32.png',
-                sizes: '32x32',
-                type: 'image/png'
+                url: '/favicon.ico',
+                type: 'image/x-icon'
             }
         ],
         apple: [
@@ -118,7 +117,7 @@ const metadata = {
             }
         ],
         shortcut: [
-            '/icon-light-32x32.png'
+            '/favicon.png'
         ]
     },
     // Robots and Canonical
@@ -143,7 +142,7 @@ function RootLayout({ children }) {
                         charSet: "utf-8"
                     }, void 0, false, {
                         fileName: "[project]/app/layout.tsx",
-                        lineNumber: 98,
+                        lineNumber: 97,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("meta", {
@@ -151,7 +150,7 @@ function RootLayout({ children }) {
                         content: "telephone=no"
                     }, void 0, false, {
                         fileName: "[project]/app/layout.tsx",
-                        lineNumber: 99,
+                        lineNumber: 98,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("meta", {
@@ -159,7 +158,7 @@ function RootLayout({ children }) {
                         content: "yes"
                     }, void 0, false, {
                         fileName: "[project]/app/layout.tsx",
-                        lineNumber: 100,
+                        lineNumber: 99,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("meta", {
@@ -167,7 +166,7 @@ function RootLayout({ children }) {
                         content: "black-translucent"
                     }, void 0, false, {
                         fileName: "[project]/app/layout.tsx",
-                        lineNumber: 101,
+                        lineNumber: 100,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("meta", {
@@ -175,7 +174,7 @@ function RootLayout({ children }) {
                         content: "JDSA Bank"
                     }, void 0, false, {
                         fileName: "[project]/app/layout.tsx",
-                        lineNumber: 102,
+                        lineNumber: 101,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("link", {
@@ -183,13 +182,13 @@ function RootLayout({ children }) {
                         href: "/manifest.json"
                     }, void 0, false, {
                         fileName: "[project]/app/layout.tsx",
-                        lineNumber: 103,
+                        lineNumber: 102,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/layout.tsx",
-                lineNumber: 97,
+                lineNumber: 96,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("body", {
@@ -202,24 +201,24 @@ function RootLayout({ children }) {
                         children,
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$vercel$2f$analytics$2f$dist$2f$next$2f$index$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Analytics"], {}, void 0, false, {
                             fileName: "[project]/app/layout.tsx",
-                            lineNumber: 108,
+                            lineNumber: 107,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/layout.tsx",
-                    lineNumber: 106,
+                    lineNumber: 105,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/layout.tsx",
-                lineNumber: 105,
+                lineNumber: 104,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/layout.tsx",
-        lineNumber: 96,
+        lineNumber: 95,
         columnNumber: 5
     }, this);
 }
