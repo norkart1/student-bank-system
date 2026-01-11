@@ -210,7 +210,11 @@ export default function QRDownloadPage() {
                 {displayStudents.map((student) => (
                   <div key={student._id} className="flex flex-col items-center p-2 border border-gray-100 rounded">
                     <div className="bg-white p-1">
-                      <QRCodeSVG value={student.code} size={80} level="M" />
+                      <QRCodeSVG 
+                        value={`${window.location.origin}/login?code=${student.code}`} 
+                        size={80} 
+                        level="M" 
+                      />
                     </div>
                     <p className="text-[8px] font-bold text-center mt-1 truncate w-full">{student.name}</p>
                     <p className="text-[7px] text-gray-500 text-center uppercase">{student.code}</p>

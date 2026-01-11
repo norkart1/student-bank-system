@@ -295,12 +295,17 @@ export default function UserDashboard() {
             <div className="bg-[#f8f9fa] rounded-lg p-4 flex flex-col items-center">
               <div className="flex items-center gap-2 mb-3 w-full">
                 <QrCode className="w-4 h-4 text-[#4a6670]" />
-                <p className="text-xs text-[#747384] font-medium">QR Code</p>
+                <p className="text-xs text-[#747384] font-medium">Scan to View Results</p>
               </div>
               <div className="bg-white p-2 rounded border border-[#e5e7eb]">
-                <QRCodeSVG value={userData?.code || 'NA-0000'} size={120} level="H" includeMargin={true} />
+                <QRCodeSVG 
+                  value={`${window.location.origin}/user/dashboard`} 
+                  size={120} 
+                  level="H" 
+                  includeMargin={true} 
+                />
               </div>
-              <p className="text-xs text-[#747384] mt-2 text-center">Scan to verify account</p>
+              <p className="text-xs text-[#747384] mt-2 text-center font-mono">{userData?.code}</p>
             </div>
           </div>
 
