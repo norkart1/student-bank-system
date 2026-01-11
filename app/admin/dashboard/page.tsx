@@ -1666,14 +1666,14 @@ export default function AdminDashboard() {
                 <div className="space-y-2 max-h-64 overflow-y-auto pr-2">
                   {student.transactions && student.transactions.length > 0 ? (
                     [...student.transactions].reverse().map((tx, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 bg-[#f8f9fa] rounded-xl group border border-transparent hover:border-[#e5e7eb] transition-all">
+                      <div key={idx} className="flex items-center justify-between p-3 bg-[#f8f9fa] rounded-xl group border border-transparent hover:border-[#e5e7eb] transition-all gap-3 overflow-hidden">
                         <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2">
-                            <span className={`w-2 h-2 rounded-full ${tx.type === 'deposit' ? 'bg-green-500' : 'bg-red-500'}`}></span>
-                            <p className="text-sm font-bold text-[#171532]">
+                          <div className="flex items-center gap-2 overflow-hidden">
+                            <span className={`w-2 h-2 rounded-full shrink-0 ${tx.type === 'deposit' ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                            <p className="text-sm font-bold text-[#171532] truncate">
                               {tx.type === 'deposit' ? '+' : '-'}₹{tx.amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </p>
-                            <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-md font-medium">
+                            <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-md font-medium shrink-0">
                               {tx.academicYear || '2024-25'}
                             </span>
                           </div>
@@ -1681,7 +1681,7 @@ export default function AdminDashboard() {
                             {tx.date} {tx.reason ? `• ${tx.reason}` : ''}
                           </p>
                         </div>
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1 shrink-0 bg-[#f8f9fa] pl-2">
                           <button
                             onClick={() => {
                               const actualIdx = student.transactions.length - 1 - idx;
