@@ -318,7 +318,7 @@ export default function ManageTransactions() {
                             </div>
                           </div>
                         ) : (
-                          <div className="flex items-center justify-between gap-4">
+                          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                             <div className="flex-1">
                               <p className="font-semibold text-[#171532]">{transaction.date}</p>
                               <div className="mt-1 inline-flex">
@@ -333,28 +333,30 @@ export default function ManageTransactions() {
                                 )}
                               </div>
                             </div>
-                            <div className="flex items-center gap-3">
-                              <p className="font-bold text-lg text-[#171532] min-w-[100px] text-right">
+                            <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
+                              <p className="font-bold text-lg text-[#171532] min-w-0 sm:min-w-[100px] text-left sm:text-right">
                                 ₹{transaction.amount?.toFixed(2)}
                               </p>
-                              <button
-                                onClick={() => handleEditTransaction(idx, transaction)}
-                                disabled={deleteConfirm.open || isSaving}
-                                className="flex items-center justify-center p-2 hover:bg-blue-100 disabled:opacity-50 text-blue-600 rounded-lg transition-colors"
-                                title="Edit transaction"
-                              >
-                                <Edit2 className="w-5 h-5" />
-                              </button>
-                              <button
-                                onClick={() =>
-                                  setDeleteConfirm({ open: true, index: idx })
-                                }
-                                disabled={deleteConfirm.open || isSaving}
-                                className="flex items-center justify-center p-2 hover:bg-red-100 disabled:opacity-50 text-red-600 rounded-lg transition-colors"
-                                title="Delete transaction"
-                              >
-                                <Trash2 className="w-5 h-5" />
-                              </button>
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={() => handleEditTransaction(idx, transaction)}
+                                  disabled={deleteConfirm.open || isSaving}
+                                  className="flex items-center justify-center p-2 hover:bg-blue-100 disabled:opacity-50 text-blue-600 rounded-lg transition-colors"
+                                  title="Edit transaction"
+                                >
+                                  <Edit2 className="w-5 h-5" />
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    setDeleteConfirm({ open: true, index: idx })
+                                  }
+                                  disabled={deleteConfirm.open || isSaving}
+                                  className="flex items-center justify-center p-2 hover:bg-red-100 disabled:opacity-50 text-red-600 rounded-lg transition-colors"
+                                  title="Delete transaction"
+                                >
+                                  <Trash2 className="w-5 h-5" />
+                                </button>
+                              </div>
                             </div>
                           </div>
                         )}
