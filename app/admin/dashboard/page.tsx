@@ -1681,19 +1681,56 @@ export default function AdminDashboard() {
                             {tx.date} {tx.reason ? `• ${tx.reason}` : ''}
                           </p>
                         </div>
-                        <button
-                          onClick={() => {
-                            const actualIdx = student.transactions.length - 1 - idx;
-                            setEditingTransaction({ studentIndex: viewingIndex, transactionIndex: actualIdx });
-                            setEditTxAmount(tx.amount.toString());
-                            setEditTxDate(new Date(tx.date || Date.now()).toISOString().split('T')[0]);
-                            setEditTxReason(tx.reason || "");
-                          }}
-                          className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
-                          title="Edit Transaction"
-                        >
-                          <Edit className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => {
+                              const actualIdx = student.transactions.length - 1 - idx;
+                              setEditingTransaction({ studentIndex: viewingIndex, transactionIndex: actualIdx });
+                              setEditTxAmount(tx.amount.toString());
+                              setEditTxDate(new Date(tx.date || Date.now()).toISOString().split('T')[0]);
+                              setEditTxReason(tx.reason || "");
+                            }}
+                            className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg opacity-0 group-hover:opacity-100 transition-all shrink-0"
+                            title="Edit Transaction"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={async () => {
+                              if (!confirm('Are you sure you want to delete this transaction?')) return;
+                              const actualIdx = student.transactions.length - 1 - idx;
+                              try {
+                                const updatedStudents = [...students];
+                                const targetStudent = updatedStudents[viewingIndex!];
+                                const removedTx = targetStudent.transactions.splice(actualIdx, 1)[0];
+                                
+                                // Recalculate balance
+                                let newBalance = 0;
+                                targetStudent.transactions.forEach(t => {
+                                  if (t.type === 'deposit') newBalance += t.amount;
+                                  else newBalance -= t.amount;
+                                });
+                                targetStudent.balance = newBalance;
+
+                                await fetch(`/api/students/${targetStudent._id}`, {
+                                  method: 'PATCH',
+                                  headers: { "Content-Type": "application/json" },
+                                  body: JSON.stringify(targetStudent)
+                                });
+                                
+                                setStudents(updatedStudents);
+                                calculateTotals(updatedStudents);
+                                toast.success('Transaction deleted');
+                              } catch (err) {
+                                toast.error('Failed to delete transaction');
+                              }
+                            }}
+                            className="p-2 hover:bg-red-50 text-red-600 rounded-lg opacity-0 group-hover:opacity-100 transition-all shrink-0"
+                            title="Delete Transaction"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
                     ))
                   ) : (
