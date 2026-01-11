@@ -1288,10 +1288,6 @@
     min-width: 8rem;
   }
 
-  .min-w-\[100px\] {
-    min-width: 100px;
-  }
-
   .min-w-\[500px\] {
     min-width: 500px;
   }
@@ -3747,6 +3743,12 @@
   }
 
   @media (min-width: 40rem) {
+    .sm\:w-auto {
+      width: auto;
+    }
+  }
+
+  @media (min-width: 40rem) {
     .sm\:max-w-lg {
       max-width: var(--container-lg);
     }
@@ -3755,6 +3757,12 @@
   @media (min-width: 40rem) {
     .sm\:max-w-md {
       max-width: var(--container-md);
+    }
+  }
+
+  @media (min-width: 40rem) {
+    .sm\:min-w-\[100px\] {
+      min-width: 100px;
     }
   }
 
@@ -3789,6 +3797,12 @@
   }
 
   @media (min-width: 40rem) {
+    .sm\:gap-3 {
+      gap: calc(var(--spacing) * 3);
+    }
+  }
+
+  @media (min-width: 40rem) {
     .sm\:rounded-2xl {
       border-radius: var(--radius-2xl);
     }
@@ -3797,6 +3811,12 @@
   @media (min-width: 40rem) {
     .sm\:text-left {
       text-align: left;
+    }
+  }
+
+  @media (min-width: 40rem) {
+    .sm\:text-right {
+      text-align: right;
     }
   }
 
