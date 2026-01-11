@@ -26,11 +26,31 @@ export default function SearchPage() {
         videoRef.current,
         (result) => {
           if (result?.data) {
-            const scannedCode = result.data.toString().trim()
-            setSearchQuery(scannedCode)
+            let scannedValue = result.data.toString().trim()
+            
+            // Extract code from URL if it's a link (e.g., https://.../login?code=MR-5774)
+            try {
+              if (scannedValue.includes('?code=')) {
+                const url = new URL(scannedValue)
+                scannedValue = url.searchParams.get('code') || scannedValue
+              } else if (scannedValue.startsWith('http')) {
+                // If it's a dashboard link (e.g., https://.../user/dashboard?id=...)
+                // We'll let the search handle it or extract what we can
+                const url = new URL(scannedValue)
+                const id = url.searchParams.get('id')
+                if (id) {
+                  // If we have an ID, we might need a different search approach, 
+                  // but for now let's just use the raw value if it's not a clear code
+                }
+              }
+            } catch (e) {
+              console.error("URL parsing error:", e)
+            }
+
+            setSearchQuery(scannedValue)
             setSearchType("code")
             setShowQRScanner(false)
-            handleSearch({ preventDefault: () => {} } as React.FormEvent, scannedCode)
+            handleSearch({ preventDefault: () => {} } as React.FormEvent, scannedValue)
           }
         },
         {
