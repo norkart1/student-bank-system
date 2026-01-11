@@ -56,22 +56,18 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: `/favicon.png?v=${Date.now()}`,
+        url: `/favicon.png?v=2`,
         type: 'image/png',
-      },
-      {
-        url: `/favicon.ico?v=${Date.now()}`,
-        type: 'image/x-icon',
       },
     ],
     apple: [
       {
-        url: `/apple-icon.png?v=${Date.now()}`,
+        url: `/apple-icon.png?v=2`,
         sizes: '180x180',
         type: 'image/png',
       },
     ],
-    shortcut: [`/favicon.png?v=${Date.now()}`],
+    shortcut: [`/favicon.png?v=2`],
   },
   
   // Robots and Canonical
