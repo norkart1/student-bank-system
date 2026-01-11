@@ -21,15 +21,24 @@ export default function UserDashboard() {
 
   const loadUserData = async () => {
     try {
+      // Check if we have a student ID in the URL for direct access (QR scan)
+      const urlParams = new URLSearchParams(window.location.search);
+      const directStudentId = urlParams.get('id');
+
       // Verify session from MongoDB
       const verifyRes = await fetch('/api/auth/verify')
-      if (!verifyRes.ok) {
+      
+      let studentId = null;
+      if (verifyRes.ok) {
+        const session = await verifyRes.json()
+        studentId = session.userData.id
+      } else if (directStudentId) {
+        // Allow direct view if ID is provided via QR, but we still prefer session if available
+        studentId = directStudentId;
+      } else {
         router.push("/login")
         return
       }
-      
-      const session = await verifyRes.json()
-      const studentId = session.userData.id
 
       const res = await fetch(`/api/students/${studentId}?academicYear=${selectedAcademicYear}`, {
         method: 'GET',
@@ -299,7 +308,7 @@ export default function UserDashboard() {
               </div>
               <div className="bg-white p-2 rounded border border-[#e5e7eb]">
                 <QRCodeSVG 
-                  value="https://jdsa-students-bank.vercel.app/user/dashboard" 
+                  value={`https://jdsa-students-bank.vercel.app/user/dashboard?id=${userData.id}`} 
                   size={120} 
                   level="H" 
                   includeMargin={true} 

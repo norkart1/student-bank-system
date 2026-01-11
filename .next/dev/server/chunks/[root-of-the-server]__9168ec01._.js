@@ -66,7 +66,10 @@ async function connectDB() {
     }
     if (!cached.promise) {
         const opts = {
-            bufferCommands: false
+            bufferCommands: false,
+            maxPoolSize: 10,
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 45000
         };
         cached.promise = __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__["default"].connect(MONGODB_URI, opts).then((mongoose)=>{
             return mongoose;
