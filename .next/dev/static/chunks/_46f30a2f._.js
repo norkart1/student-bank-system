@@ -530,10 +530,22 @@ function AdminDashboard() {
             reportData.push({
                 'Student': student.name,
                 'Username': student.username,
-                'Deposits': deposits.toFixed(2),
-                'Withdrawals': withdraws.toFixed(2),
-                'Net Change': (deposits - withdraws).toFixed(2),
-                'Final Balance': student.balance.toFixed(2)
+                'Deposits': deposits.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }),
+                'Withdrawals': withdraws.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }),
+                'Net Change': (deposits - withdraws).toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }),
+                'Final Balance': student.balance.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })
             });
         });
         return reportData;
@@ -559,7 +571,10 @@ function AdminDashboard() {
         return student.transactions.map((t, idx)=>({
                 'S.No': (idx + 1).toString(),
                 'Type': t.type.charAt(0).toUpperCase() + t.type.slice(1),
-                'Amount': t.amount.toFixed(2),
+                'Amount': t.amount.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }),
                 'Date': t.date || 'N/A'
             }));
     };
@@ -2701,7 +2716,10 @@ function AdminDashboard() {
                                             className: "text-2xl font-bold text-white",
                                             children: [
                                                 "₹",
-                                                totalBalance.toFixed(2)
+                                                totalBalance.toLocaleString('en-IN', {
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2
+                                                })
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/admin/dashboard/page.tsx",
@@ -2761,7 +2779,10 @@ function AdminDashboard() {
                                             className: "text-lg font-bold text-white",
                                             children: [
                                                 "₹",
-                                                totalDeposited.toFixed(2)
+                                                totalDeposited.toLocaleString('en-IN', {
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2
+                                                })
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/admin/dashboard/page.tsx",
@@ -2812,7 +2833,10 @@ function AdminDashboard() {
                                             className: "text-lg font-bold text-white",
                                             children: [
                                                 "₹",
-                                                totalWithdrawn.toFixed(2)
+                                                totalWithdrawn.toLocaleString('en-IN', {
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2
+                                                })
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/admin/dashboard/page.tsx",
@@ -3277,7 +3301,10 @@ function AdminDashboard() {
                                         className: `font-bold ${index === 0 ? 'text-yellow-600 text-lg' : index === 1 ? 'text-gray-600 text-lg' : index === 2 ? 'text-orange-600 text-lg' : 'text-[#10B981] text-base'}`,
                                         children: [
                                             "₹",
-                                            (student.balance || 0).toFixed(2)
+                                            (student.balance || 0).toLocaleString('en-IN', {
+                                                minimumFractionDigits: 2,
+                                                maximumFractionDigits: 2
+                                            })
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/admin/dashboard/page.tsx",
@@ -3441,7 +3468,10 @@ function AdminDashboard() {
                                                         className: "text-lg font-bold text-[#10B981]",
                                                         children: [
                                                             "₹",
-                                                            (student?.balance || 0).toFixed(2)
+                                                            (student?.balance || 0).toLocaleString('en-IN', {
+                                                                minimumFractionDigits: 2,
+                                                                maximumFractionDigits: 2
+                                                            })
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/admin/dashboard/page.tsx",
@@ -3520,7 +3550,10 @@ function AdminDashboard() {
                                                                                 children: [
                                                                                     tx.type === 'deposit' ? '+' : '-',
                                                                                     "₹",
-                                                                                    tx.amount.toFixed(2)
+                                                                                    tx.amount.toLocaleString('en-IN', {
+                                                                                        minimumFractionDigits: 2,
+                                                                                        maximumFractionDigits: 2
+                                                                                    })
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/app/admin/dashboard/page.tsx",

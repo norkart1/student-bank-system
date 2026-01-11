@@ -276,7 +276,10 @@ function UserDashboard() {
         yPosition += 8;
         doc.text(`Code: ${userData?.code || 'N/A'}`, margin, yPosition);
         yPosition += 8;
-        doc.text(`Balance: ₹${(userData?.balance || 0).toFixed(2)}`, margin, yPosition);
+        doc.text(`Balance: ₹${(userData?.balance || 0).toLocaleString('en-IN', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}`, margin, yPosition);
         yPosition += 12;
         // Transactions Table
         doc.setFontSize(12);
@@ -300,9 +303,18 @@ function UserDashboard() {
             rows.push([
                 (idx + 1).toString(),
                 t.date || '-',
-                t.type === 'deposit' ? `₹${t.amount?.toFixed(2)}` : '-',
-                t.type === 'withdraw' ? `₹${t.amount?.toFixed(2)}` : '-',
-                `₹${runningBalance.toFixed(2)}`
+                t.type === 'deposit' ? `₹${t.amount?.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })}` : '-',
+                t.type === 'withdraw' ? `₹${t.amount?.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })}` : '-',
+                `₹${runningBalance.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })}`
             ]);
         });
         doc.setFontSize(9);
@@ -338,7 +350,10 @@ function UserDashboard() {
             ],
             [
                 'Balance',
-                `₹${(userData?.balance || 0).toFixed(2)}`
+                `₹${(userData?.balance || 0).toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })}`
             ],
             [],
             [
@@ -362,9 +377,18 @@ function UserDashboard() {
             data.push([
                 idx + 1,
                 t.date || '-',
-                t.type === 'deposit' ? `₹${t.amount?.toFixed(2)}` : '-',
-                t.type === 'withdraw' ? `₹${t.amount?.toFixed(2)}` : '-',
-                `₹${runningBalance.toFixed(2)}`
+                t.type === 'deposit' ? `₹${t.amount?.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })}` : '-',
+                t.type === 'withdraw' ? `₹${t.amount?.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })}` : '-',
+                `₹${runningBalance.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })}`
             ]);
         });
         const ws = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$xlsx$2f$xlsx$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["utils"].aoa_to_sheet(data);
@@ -618,7 +642,10 @@ function UserDashboard() {
                                     className: "text-3xl font-bold text-white",
                                     children: [
                                         "₹",
-                                        calculateYearlyBalance().toFixed(2)
+                                        calculateYearlyBalance().toLocaleString('en-IN', {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        })
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/user/dashboard/page.tsx",
@@ -1023,7 +1050,10 @@ function UserDashboard() {
                                                                             columnNumber: 33
                                                                         }, this),
                                                                         "₹",
-                                                                        transaction.amount?.toFixed(2)
+                                                                        transaction.amount?.toLocaleString('en-IN', {
+                                                                            minimumFractionDigits: 2,
+                                                                            maximumFractionDigits: 2
+                                                                        })
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/user/dashboard/page.tsx",
@@ -1056,7 +1086,10 @@ function UserDashboard() {
                                                                             columnNumber: 33
                                                                         }, this),
                                                                         "₹",
-                                                                        transaction.amount?.toFixed(2)
+                                                                        transaction.amount?.toLocaleString('en-IN', {
+                                                                            minimumFractionDigits: 2,
+                                                                            maximumFractionDigits: 2
+                                                                        })
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/user/dashboard/page.tsx",
@@ -1079,7 +1112,10 @@ function UserDashboard() {
                                                                 className: "px-3 py-3 text-right font-bold text-[#4a6670] tabular-nums",
                                                                 children: [
                                                                     "₹",
-                                                                    runningBalance.toFixed(2)
+                                                                    runningBalance.toLocaleString('en-IN', {
+                                                                        minimumFractionDigits: 2,
+                                                                        maximumFractionDigits: 2
+                                                                    })
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/user/dashboard/page.tsx",
@@ -1268,7 +1304,7 @@ function UserDashboard() {
                                                 else runningBalance -= filteredTxs[i].amount || 0;
                                             }
                                             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
-                                                className: "hover:bg-[#f1f5f9] transition-colors",
+                                                className: idx % 2 === 0 ? 'bg-[#f8f9fa]' : 'bg-white hover:bg-[#f1f5f9] transition-colors',
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                                         className: "px-2 py-3 font-bold text-[#171532]",
@@ -1276,7 +1312,7 @@ function UserDashboard() {
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/user/dashboard/page.tsx",
                                                         lineNumber: 475,
-                                                        columnNumber: 25
+                                                        columnNumber: 27
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                                         className: "px-2 py-3 text-[#747384] font-medium truncate",
@@ -1284,40 +1320,49 @@ function UserDashboard() {
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/user/dashboard/page.tsx",
                                                         lineNumber: 476,
-                                                        columnNumber: 25
+                                                        columnNumber: 27
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                                         className: "px-2 py-3 text-right text-green-600 font-bold tabular-nums",
-                                                        children: transaction.type === 'deposit' ? `₹${transaction.amount?.toFixed(0)}` : '-'
+                                                        children: transaction.type === 'deposit' ? `₹${transaction.amount?.toLocaleString('en-IN', {
+                                                            minimumFractionDigits: 2,
+                                                            maximumFractionDigits: 2
+                                                        })}` : '-'
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/user/dashboard/page.tsx",
                                                         lineNumber: 477,
-                                                        columnNumber: 25
+                                                        columnNumber: 27
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                                         className: "px-2 py-3 text-right text-red-600 font-bold tabular-nums",
-                                                        children: transaction.type === 'withdraw' ? `₹${transaction.amount?.toFixed(0)}` : '-'
+                                                        children: transaction.type === 'withdraw' ? `₹${transaction.amount?.toLocaleString('en-IN', {
+                                                            minimumFractionDigits: 2,
+                                                            maximumFractionDigits: 2
+                                                        })}` : '-'
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/user/dashboard/page.tsx",
                                                         lineNumber: 480,
-                                                        columnNumber: 25
+                                                        columnNumber: 27
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                                         className: "px-2 py-3 text-right font-black text-[#4a6670] bg-gray-50/50 tabular-nums",
                                                         children: [
                                                             "₹",
-                                                            runningBalance.toFixed(0)
+                                                            runningBalance.toLocaleString('en-IN', {
+                                                                minimumFractionDigits: 2,
+                                                                maximumFractionDigits: 2
+                                                            })
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/user/dashboard/page.tsx",
                                                         lineNumber: 483,
-                                                        columnNumber: 25
+                                                        columnNumber: 27
                                                     }, this)
                                                 ]
                                             }, idx, true, {
                                                 fileName: "[project]/app/user/dashboard/page.tsx",
                                                 lineNumber: 474,
-                                                columnNumber: 23
+                                                columnNumber: 25
                                             }, this);
                                         })
                                     }, void 0, false, {

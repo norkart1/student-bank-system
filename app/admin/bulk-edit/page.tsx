@@ -103,18 +103,6 @@ export default function BulkEditPage() {
     const newTxs = [...transactions]
     newTxs[index] = { ...newTxs[index], [field]: value, status: 'idle' }
     setTransactions(newTxs)
-
-    // Auto-save logic
-    const rowId = newTxs[index].id
-    if (autoSaveTimerRef.current[rowId]) {
-      clearTimeout(autoSaveTimerRef.current[rowId])
-    }
-
-    autoSaveTimerRef.current[rowId] = setTimeout(() => {
-      if (newTxs[index].amount && parseFloat(newTxs[index].amount) >= 1) {
-        saveTransaction(index)
-      }
-    }, 3000)
   }
 
   const calculateTotals = () => {
@@ -373,6 +361,15 @@ export default function BulkEditPage() {
                         />
                       </td>
                       <td className="px-2 py-4 text-center">
+                        {tx.status === 'idle' && (
+                          <button
+                            onClick={() => saveTransaction(index)}
+                            className="p-1.5 bg-[#4a6670]/10 text-[#4a6670] rounded-lg hover:bg-[#4a6670]/20 transition-all"
+                            title="Save Row"
+                          >
+                            <Save className="w-3.5 h-3.5" />
+                          </button>
+                        )}
                         {tx.status === 'saving' && <Loader2 className="w-3.5 h-3.5 animate-spin text-gray-400 mx-auto" />}
                         {tx.status === 'saved' && <CheckCircle2 className="w-3.5 h-3.5 text-green-500 mx-auto" />}
                         {tx.status === 'error' && <AlertCircle className="w-3.5 h-3.5 text-red-500 mx-auto" />}
