@@ -11,6 +11,7 @@ interface Student {
   code: string
   balance: number
   academicYear: string
+  profileImage?: string
 }
 
 interface TransactionRow {
@@ -278,8 +279,16 @@ export default function BulkEditPage() {
                       className="w-full px-4 py-4 text-left hover:bg-[#4a6670]/5 rounded-xl flex items-center justify-between transition-colors group"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-[#4a6670] rounded-lg flex items-center justify-center text-white font-black text-lg">
-                          {s.name.charAt(0)}
+                        <div className="w-10 h-10 bg-[#4a6670] rounded-lg flex items-center justify-center text-white font-black text-lg overflow-hidden relative">
+                          {s.profileImage ? (
+                            <img 
+                              src={s.profileImage} 
+                              alt={s.name} 
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            s.name.charAt(0)
+                          )}
                         </div>
                         <div>
                           <p className="text-sm font-black text-[#171532] group-hover:text-[#4a6670] transition-colors">{s.name}</p>
@@ -299,8 +308,16 @@ export default function BulkEditPage() {
             <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="p-6 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-5">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#4a6670] to-[#171532] rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-[#4a6670]/20">
-                    {selectedStudent.name.charAt(0)}
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#4a6670] to-[#171532] rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-[#4a6670]/20 overflow-hidden relative">
+                    {selectedStudent.profileImage ? (
+                      <img 
+                        src={selectedStudent.profileImage} 
+                        alt={selectedStudent.name} 
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      selectedStudent.name.charAt(0)
+                    )}
                   </div>
                   <div>
                     <h2 className="text-2xl font-black text-[#171532]">{selectedStudent.name}</h2>
