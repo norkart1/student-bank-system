@@ -6,6 +6,7 @@ import { Wallet, User, ArrowUpRight, ArrowDownRight, History, QrCode, Download, 
 import { useTheme } from "next-themes"
 import { QRCodeSVG } from "qrcode.react"
 import jsPDF from "jspdf"
+import autoTable from "jspdf-autotable"
 import * as XLSX from "xlsx"
 import { usePusherUpdates } from "@/lib/hooks/usePusher"
 
@@ -109,69 +110,78 @@ export default function UserDashboard() {
 
   const downloadPDF = () => {
     const doc = new jsPDF()
-    const pageHeight = doc.internal.pageSize.getHeight()
     const pageWidth = doc.internal.pageSize.getWidth()
-    const margin = 10
-    let yPosition = 20
 
-    // Title
-    doc.setFontSize(18)
-    doc.text('Student Account Details', margin, yPosition)
-    yPosition += 12
+    // Title & Header
+    doc.setFontSize(20)
+    doc.setTextColor(74, 102, 112) // #4a6670
+    doc.text("JDSA STUDENTS BANK", pageWidth / 2, 20, { align: "center" })
 
-    // User Info
+    doc.setFontSize(14)
+    doc.setTextColor(23, 21, 50) // #171532
+    doc.text("Account Transaction History", pageWidth / 2, 30, { align: "center" })
+
+    // User Details Section
     doc.setFontSize(11)
-    doc.text(`Name: ${userData?.name || 'N/A'}`, margin, yPosition)
-    yPosition += 8
-    doc.text(`Code: ${userData?.code || 'N/A'}`, margin, yPosition)
-    yPosition += 8
-    doc.text(`Balance: ₹${(userData?.balance || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, margin, yPosition)
-    yPosition += 12
+    doc.setTextColor(23, 21, 50)
+    doc.text(`Student Name: ${userData?.name || "N/A"}`, 14, 42)
+    doc.text(`Student Code: ${userData?.code || "N/A"}`, 14, 48)
+    doc.text(`Current Balance: ₹${(userData?.balance || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 14, 54)
+    doc.text(`Academic Session: ${selectedAcademicYear}`, 14, 60)
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, pageWidth - 14, 42, { align: "right" })
 
-    // Transactions Table
-    doc.setFontSize(12)
-    doc.text('Transaction History', margin, yPosition)
-    yPosition += 8
-
-    const columns = ['S.No', 'Date', 'Deposit', 'Withdraw', 'Balance']
-    const rows: any[] = []
+    const columns = ["S.No", "Date", "Academic Year", "Type", "Amount", "Balance"]
     let runningBalance = 0
-
-    userData?.transactions?.forEach((t: any, idx: number) => {
-      if (t.type === 'deposit') {
-        runningBalance += t.amount || 0
-      } else {
-        runningBalance -= t.amount || 0
-      }
-      rows.push([
-        (idx + 1).toString(),
-        t.date || '-',
-        t.type === 'deposit' ? `₹${t.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-',
-        t.type === 'withdraw' ? `₹${t.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-',
-        `₹${runningBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-      ])
-    })
-
-    doc.setFontSize(9)
-    let colWidth = (pageWidth - 2 * margin) / columns.length
+    const filteredTxs = userData?.transactions?.filter((t: any) => (t.academicYear || "2025-26") === selectedAcademicYear) || []
     
-    columns.forEach((col, idx) => {
-      doc.text(col, margin + idx * colWidth, yPosition)
-    })
-    yPosition += 6
-
-    rows.forEach(row => {
-      if (yPosition + 6 > pageHeight - margin) {
-        doc.addPage()
-        yPosition = margin
-      }
-      row.forEach((cell: string, idx: number) => {
-        doc.text(cell.substring(0, 10), margin + idx * colWidth, yPosition)
-      })
-      yPosition += 6
+    const rows = filteredTxs.map((t: any, idx: number) => {
+      if (t.type === "deposit") runningBalance += t.amount || 0
+      else runningBalance -= t.amount || 0
+      
+      return [
+        idx + 1,
+        t.date || "-",
+        t.academicYear || "2025-26",
+        t.type.charAt(0).toUpperCase() + t.type.slice(1),
+        `₹${(t.amount || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        `₹${runningBalance.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+      ]
     })
 
-    doc.save(`${userData?.name}_account_${new Date().toISOString().split('T')[0]}.pdf`)
+    autoTable(doc, {
+      startY: 70,
+      head: [columns],
+      body: rows,
+      theme: "grid",
+      headStyles: {
+        fillColor: [74, 102, 112],
+        textColor: [255, 255, 255],
+        fontSize: 10,
+        fontStyle: "bold",
+        halign: "center",
+      },
+      bodyStyles: {
+        fontSize: 9,
+        textColor: [23, 21, 50],
+      },
+      alternateRowStyles: {
+        fillColor: [248, 249, 250],
+      },
+      margin: { top: 70 },
+      didDrawPage: (data) => {
+        const pageCount = doc.internal.pages.length - 1
+        doc.setFontSize(8)
+        doc.setTextColor(116, 115, 132)
+        doc.text(
+          `Page ${data.pageNumber} of ${pageCount}`,
+          pageWidth / 2,
+          doc.internal.pageSize.getHeight() - 10,
+          { align: "center" },
+        )
+      },
+    })
+
+    doc.save(`${userData?.name}_account_${new Date().toISOString().split("T")[0]}.pdf`)
   }
 
   const downloadExcel = () => {

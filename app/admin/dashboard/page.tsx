@@ -7,6 +7,7 @@ import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, A
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 import { useTheme } from "next-themes"
 import jsPDF from "jspdf"
+import autoTable from "jspdf-autotable"
 import * as XLSX from "xlsx"
 import { toast } from "sonner"
 import { defaultStudents } from "@/lib/students"
@@ -390,55 +391,76 @@ export default function AdminDashboard() {
   const downloadPDF = () => {
     const data = getReportData()
     if (data.length === 0) {
-      setNotification({ type: 'error', message: 'No data available for this report' })
+      setNotification({ type: "error", message: "No data available for this report" })
       setTimeout(() => setNotification(null), 3000)
       return
     }
 
     const doc = new jsPDF()
-    const pageHeight = doc.internal.pageSize.getHeight()
     const pageWidth = doc.internal.pageSize.getWidth()
-    const margin = 10
-    const lineHeight = 7
-    let yPosition = 20
 
-    doc.setFontSize(16)
-    doc.text('JDSA STUDENTS BANK Report', margin, yPosition)
-    yPosition += 10
+    // Title & Header
+    doc.setFontSize(20)
+    doc.setTextColor(74, 102, 112) // #4a6670
+    doc.text("JDSA STUDENTS BANK", pageWidth / 2, 20, { align: "center" })
 
+    doc.setFontSize(14)
+    doc.setTextColor(23, 21, 50) // #171532
+    const reportTitle =
+      reportType === "date"
+        ? `Transaction Report: ${startDate} to ${endDate}`
+        : reportType === "monthly"
+          ? `Monthly Report: ${selectedMonth}`
+          : reportType === "yearly"
+            ? `Yearly Report: ${selectedYear}`
+            : `Personal Report: ${students[selectedPersonalStudent!]?.name || "N/A"}`
+    doc.text(reportTitle, pageWidth / 2, 30, { align: "center" })
+
+    // Report Meta
     doc.setFontSize(10)
-    const reportTitle = reportType === 'date' ? `Date Range: ${startDate} to ${endDate}` :
-                       reportType === 'monthly' ? `Monthly Report: ${selectedMonth}` :
-                       reportType === 'yearly' ? `Yearly Report: ${selectedYear}` :
-                       `Personal Report: ${students[selectedPersonalStudent!]?.name || 'N/A'}`
-    doc.text(reportTitle, margin, yPosition)
-    yPosition += 8
+    doc.setTextColor(116, 115, 132) // #747384
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 40)
+    doc.text(`Academic Session: ${selectedAcademicYear}`, 14, 45)
 
     const columns = Object.keys(data[0])
-    const rows = data.map(item => Object.values(item).map(v => String(v)))
+    const rows = data.map((item) => Object.values(item)) as any[][]
 
-    doc.setFontSize(9)
-    let colWidth = (pageWidth - 2 * margin) / columns.length
-    
-    columns.forEach((col, idx) => {
-      doc.text(col, margin + idx * colWidth, yPosition)
+    autoTable(doc, {
+      startY: 55,
+      head: [columns],
+      body: rows,
+      theme: "grid",
+      headStyles: {
+        fillColor: [74, 102, 112],
+        textColor: [255, 255, 255],
+        fontSize: 10,
+        fontStyle: "bold",
+        halign: "center",
+      },
+      bodyStyles: {
+        fontSize: 9,
+        textColor: [23, 21, 50],
+      },
+      alternateRowStyles: {
+        fillColor: [248, 249, 250],
+      },
+      margin: { top: 55 },
+      didDrawPage: (data) => {
+        // Footer
+        const pageCount = doc.internal.pages.length - 1
+        doc.setFontSize(8)
+        doc.setTextColor(116, 115, 132)
+        doc.text(
+          `Page ${data.pageNumber} of ${pageCount}`,
+          pageWidth / 2,
+          doc.internal.pageSize.getHeight() - 10,
+          { align: "center" },
+        )
+      },
     })
-    yPosition += lineHeight
 
-    doc.setFontSize(8)
-    rows.forEach(row => {
-      if (yPosition + lineHeight > pageHeight - margin) {
-        doc.addPage()
-        yPosition = margin
-      }
-      row.forEach((cell, idx) => {
-        doc.text(String(cell).substring(0, 10), margin + idx * colWidth, yPosition)
-      })
-      yPosition += lineHeight
-    })
-
-    doc.save(`JDSA_Report_${reportType}_${new Date().toISOString().split('T')[0]}.pdf`)
-    setNotification({ type: 'success', message: 'PDF downloaded successfully!' })
+    doc.save(`JDSA_Report_${reportType}_${new Date().toISOString().split("T")[0]}.pdf`)
+    setNotification({ type: "success", message: "PDF downloaded successfully!" })
     setTimeout(() => setNotification(null), 3000)
   }
 
