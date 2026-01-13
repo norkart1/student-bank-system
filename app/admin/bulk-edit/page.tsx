@@ -650,12 +650,22 @@ export default function BulkEditPage() {
                                 onChange={(e) => setEditingHistoryData({ ...editingHistoryData, amount: e.target.value })}
                                 className="w-20 px-2 py-1 bg-white border border-gray-200 rounded-lg text-xs font-bold outline-none"
                               />
-                              <button onClick={() => saveHistoryEdit(h._id)} className="p-1 text-green-600 hover:bg-green-50 rounded">
-                                <Save className="w-4 h-4" />
-                              </button>
-                              <button onClick={() => setEditingHistoryId(null)} className="p-1 text-gray-400 hover:bg-gray-50 rounded">
-                                <X className="w-4 h-4" />
-                              </button>
+                              <div className="flex items-center gap-1">
+                                <button 
+                                  onClick={() => saveHistoryEdit(h._id)}
+                                  className="p-1.5 text-green-600 hover:bg-green-50 rounded-lg transition-all"
+                                  title="Save Changes"
+                                >
+                                  <Save className="w-3.5 h-3.5" />
+                                </button>
+                                <button 
+                                  onClick={() => setEditingHistoryId(null)}
+                                  className="p-1.5 text-gray-400 hover:bg-gray-50 rounded-lg transition-all"
+                                  title="Cancel"
+                                >
+                                  <X className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
                             </div>
                           ) : (
                             <>
