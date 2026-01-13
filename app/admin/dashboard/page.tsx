@@ -418,15 +418,17 @@ export default function AdminDashboard() {
 
     // Report Meta
     doc.setFontSize(10)
-    doc.setTextColor(116, 115, 132) // #747384
-    doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 40)
-    doc.text(`Academic Session: ${selectedAcademicYear}`, 14, 45)
+    doc.setTextColor(23, 21, 50) 
+    doc.text(`Student Name: ${students[selectedPersonalStudent!]?.name || "N/A"}`, 14, 45)
+    doc.text(`Student Code: ${students[selectedPersonalStudent!]?.code || "N/A"}`, 14, 51)
+    doc.text(`Academic Session: ${selectedAcademicYear}`, 14, 57)
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, pageWidth - 14, 45, { align: "right" })
 
     const columns = Object.keys(data[0])
     const rows = data.map((item) => Object.values(item)) as any[][]
 
     autoTable(doc, {
-      startY: 55,
+      startY: 70,
       head: [["Date", "Dep.", "With.", "Bal."]],
       body: data.map((item: any) => [
         item.Date || "-",

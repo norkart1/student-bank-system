@@ -368,14 +368,14 @@ function UserDashboard() {
                 t.date || "-",
                 t.academicYear || "2025-26",
                 t.type.charAt(0).toUpperCase() + t.type.slice(1),
-                `₹${(t.amount || 0).toLocaleString("en-IN", {
+                (t.amount || 0).toLocaleString("en-IN", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
-                })}`,
-                `₹${runningBalance.toLocaleString("en-IN", {
+                }),
+                runningBalance.toLocaleString("en-IN", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
-                })}`
+                })
             ];
         });
         (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$jspdf$2d$autotable$2f$dist$2f$jspdf$2e$plugin$2e$autotable$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])(doc, {

@@ -122,13 +122,13 @@ export default function UserDashboard() {
     doc.text("Account Transaction History", pageWidth / 2, 30, { align: "center" })
 
     // User Details Section
-    doc.setFontSize(11)
+    doc.setFontSize(10)
     doc.setTextColor(23, 21, 50)
-    doc.text(`Student Name: ${userData?.name || "N/A"}`, 14, 42)
-    doc.text(`Student Code: ${userData?.code || "N/A"}`, 14, 48)
-    doc.text(`Current Balance: ₹${(userData?.balance || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 14, 54)
-    doc.text(`Academic Session: ${selectedAcademicYear}`, 14, 60)
-    doc.text(`Generated on: ${new Date().toLocaleString()}`, pageWidth - 14, 42, { align: "right" })
+    doc.text(`Student Name: ${userData?.name || "N/A"}`, 14, 45)
+    doc.text(`Student Code: ${userData?.code || "N/A"}`, 14, 51)
+    doc.text(`Academic Session: ${selectedAcademicYear}`, 14, 57)
+    doc.text(`Current Balance: ₹${(userData?.balance || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 14, 63)
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, pageWidth - 14, 45, { align: "right" })
 
     const columns = ["S.No", "Date", "Academic Year", "Type", "Amount", "Balance"]
     let runningBalance = 0
@@ -143,13 +143,13 @@ export default function UserDashboard() {
         t.date || "-",
         t.academicYear || "2025-26",
         t.type.charAt(0).toUpperCase() + t.type.slice(1),
-        `₹${(t.amount || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-        `₹${runningBalance.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+        (t.amount || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        runningBalance.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       ]
-    })
+    }) as any[][]
 
     autoTable(doc, {
-      startY: 70,
+      startY: 75,
       head: [["Date", "Dep.", "With.", "Bal."]],
       body: rows.map(r => [r[1], r[3] === "Deposit" ? r[4] : "-", r[3] === "Withdraw" ? r[4] : "-", r[5]]),
       theme: "grid",
