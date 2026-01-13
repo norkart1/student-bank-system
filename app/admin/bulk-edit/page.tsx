@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
-import { ChevronLeft, Save, X, Loader2, Search, CheckCircle2, AlertCircle, Plus, Trash2, Calendar } from "lucide-react"
+import { ChevronLeft, Save, X, Loader2, Search, CheckCircle2, AlertCircle, Plus, Trash2, Calendar, Edit } from "lucide-react"
 import { toast } from "sonner"
 
 interface Student {
@@ -226,33 +226,6 @@ export default function BulkEditPage() {
     }
     setIsSavingAll(false)
     toast.success("All transactions processed")
-  }
-
-  const deleteHistoryItem = async (txId: string) => {
-    if (!selectedStudent) return
-    if (!confirm("Are you sure you want to delete this transaction?")) return
-
-    try {
-      const res = await fetch(`/api/students/${selectedStudent._id}/transaction/${txId}`, {
-        method: 'DELETE'
-      })
-      if (res.ok) {
-        toast.success("Transaction deleted")
-        fetchHistory()
-        // Update balance locally
-        const deletedTx = history.find(h => h._id === txId)
-        if (deletedTx) {
-          setSelectedStudent(prev => prev ? {
-            ...prev,
-            balance: deletedTx.type === 'deposit' ? prev.balance - deletedTx.amount : prev.balance + deletedTx.amount
-          } : null)
-        }
-      } else {
-        throw new Error("Failed to delete")
-      }
-    } catch (error) {
-      toast.error("Failed to delete transaction")
-    }
   }
 
   const deleteHistoryItem = async (txId: string) => {
