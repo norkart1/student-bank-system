@@ -427,36 +427,35 @@ export default function AdminDashboard() {
 
     autoTable(doc, {
       startY: 55,
-      head: [columns],
-      body: rows,
+      head: [["Date", "Dep.", "With.", "Bal."]],
+      body: data.map((item: any) => [
+        item.Date || "-",
+        item.Deposits !== "0.00" ? item.Deposits : "-",
+        item.Withdrawals !== "0.00" ? item.Withdrawals : "-",
+        item["Final Balance"] || "-",
+      ]),
       theme: "grid",
-      headStyles: {
-        fillColor: [74, 102, 112],
-        textColor: [255, 255, 255],
+      styles: {
         fontSize: 10,
-        fontStyle: "bold",
+        cellPadding: 3,
         halign: "center",
+        valign: "middle",
+        lineWidth: 0.1,
+        lineColor: [0, 0, 0],
       },
-      bodyStyles: {
-        fontSize: 9,
-        textColor: [23, 21, 50],
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: "bold",
+        lineWidth: 0.1,
       },
-      alternateRowStyles: {
-        fillColor: [248, 249, 250],
+      columnStyles: {
+        0: { cellWidth: 40 },
+        1: { cellWidth: 40 },
+        2: { cellWidth: 40 },
+        3: { cellWidth: 40 },
       },
-      margin: { top: 55 },
-      didDrawPage: (data) => {
-        // Footer
-        const pageCount = doc.internal.pages.length - 1
-        doc.setFontSize(8)
-        doc.setTextColor(116, 115, 132)
-        doc.text(
-          `Page ${data.pageNumber} of ${pageCount}`,
-          pageWidth / 2,
-          doc.internal.pageSize.getHeight() - 10,
-          { align: "center" },
-        )
-      },
+      margin: { left: (pageWidth - 160) / 2 },
     })
 
     doc.save(`JDSA_Report_${reportType}_${new Date().toISOString().split("T")[0]}.pdf`)
