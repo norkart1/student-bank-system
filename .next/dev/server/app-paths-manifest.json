@@ -1,4 +1,10 @@
 {
+  "/api/auth/login/route": "app/api/auth/login/route.js",
+  "/api/auth/logout/route": "app/api/auth/logout/route.js",
+  "/api/auth/verify/route": "app/api/auth/verify/route.js",
+  "/api/students/[id]/route": "app/api/students/[id]/route.js",
+  "/api/students/search/route": "app/api/students/search/route.js",
   "/login/page": "app/login/page.js",
-  "/page": "app/page.js"
+  "/page": "app/page.js",
+  "/user/dashboard/page": "app/user/dashboard/page.js"
 }
