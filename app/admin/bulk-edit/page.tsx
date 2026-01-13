@@ -39,6 +39,8 @@ export default function BulkEditPage() {
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
   const [transactions, setTransactions] = useState<TransactionRow[]>([])
   const [history, setHistory] = useState<Transaction[]>([])
+  const [editingHistoryId, setEditingHistoryId] = useState<string | null>(null)
+  const [editingHistoryData, setEditingHistoryData] = useState<{ amount: string, reason: string }>({ amount: "", reason: "" })
   const [isLoading, setIsLoading] = useState(true)
   const [isHistoryLoading, setIsHistoryLoading] = useState(false)
   const [isSavingAll, setIsSavingAll] = useState(false)
@@ -250,6 +252,74 @@ export default function BulkEditPage() {
       }
     } catch (error) {
       toast.error("Failed to delete transaction")
+    }
+  }
+
+  const deleteHistoryItem = async (txId: string) => {
+    if (!selectedStudent) return
+    if (!confirm("Are you sure you want to delete this transaction?")) return
+
+    try {
+      const res = await fetch(`/api/students/${selectedStudent._id}/transaction/${txId}`, {
+        method: 'DELETE'
+      })
+      if (res.ok) {
+        toast.success("Transaction deleted")
+        fetchHistory()
+        // Update balance locally
+        const deletedTx = history.find(h => h._id === txId)
+        if (deletedTx) {
+          setSelectedStudent(prev => prev ? {
+            ...prev,
+            balance: deletedTx.type === 'deposit' ? prev.balance - deletedTx.amount : prev.balance + deletedTx.amount
+          } : null)
+        }
+      } else {
+        throw new Error("Failed to delete")
+      }
+    } catch (error) {
+      toast.error("Failed to delete transaction")
+    }
+  }
+
+  const startEditingHistory = (tx: Transaction) => {
+    setEditingHistoryId(tx._id)
+    setEditingHistoryData({ amount: tx.amount.toString(), reason: tx.reason })
+  }
+
+  const saveHistoryEdit = async (txId: string) => {
+    if (!selectedStudent) return
+    const originalTx = history.find(h => h._id === txId)
+    if (!originalTx) return
+
+    const newAmount = parseFloat(editingHistoryData.amount)
+    if (isNaN(newAmount) || newAmount <= 0) {
+      toast.error("Invalid amount")
+      return
+    }
+
+    try {
+      const res = await fetch(`/api/students/${selectedStudent._id}/transaction/${txId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: newAmount,
+          reason: editingHistoryData.reason
+        })
+      })
+
+      if (res.ok) {
+        toast.success("Transaction updated")
+        setEditingHistoryId(null)
+        fetchHistory()
+        // Update balance locally
+        const diff = originalTx.type === 'deposit' ? newAmount - originalTx.amount : originalTx.amount - newAmount
+        setSelectedStudent(prev => prev ? { ...prev, balance: prev.balance + diff } : null)
+      } else {
+        throw new Error("Failed to update")
+      }
+    } catch (error) {
+      toast.error("Failed to update transaction")
     }
   }
 
@@ -584,11 +654,44 @@ export default function BulkEditPage() {
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
-                          <p className={`text-sm font-black ${
-                            h.type === 'deposit' ? 'text-green-600' : 'text-red-600'
-                          }`}>
-                            ₹{h.amount.toFixed(2)}
-                          </p>
+                          {editingHistoryId === h._id ? (
+                            <div className="flex items-center gap-2">
+                              <input 
+                                type="text"
+                                value={editingHistoryData.amount}
+                                onChange={(e) => setEditingHistoryData({ ...editingHistoryData, amount: e.target.value })}
+                                className="w-20 px-2 py-1 bg-white border border-gray-200 rounded-lg text-xs font-bold outline-none"
+                              />
+                              <button onClick={() => saveHistoryEdit(h._id)} className="p-1 text-green-600 hover:bg-green-50 rounded">
+                                <Save className="w-4 h-4" />
+                              </button>
+                              <button onClick={() => setEditingHistoryId(null)} className="p-1 text-gray-400 hover:bg-gray-50 rounded">
+                                <X className="w-4 h-4" />
+                              </button>
+                            </div>
+                          ) : (
+                            <>
+                              <p className={`text-sm font-black ${
+                                h.type === 'deposit' ? 'text-green-600' : 'text-red-600'
+                              }`}>
+                                ₹{h.amount.toFixed(2)}
+                              </p>
+                              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                                <button 
+                                  onClick={() => startEditingHistory(h)}
+                                  className="p-1.5 text-gray-400 hover:text-[#4a6670] hover:bg-white rounded-lg transition-all"
+                                >
+                                  <Edit className="w-3.5 h-3.5" />
+                                </button>
+                                <button 
+                                  onClick={() => deleteHistoryItem(h._id)}
+                                  className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-white rounded-lg transition-all"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            </>
+                          )}
                         </div>
                       </div>
                     ))
