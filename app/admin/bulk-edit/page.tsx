@@ -14,6 +14,15 @@ interface Student {
   profileImage?: string
 }
 
+interface Transaction {
+  _id: string
+  type: 'deposit' | 'withdraw'
+  amount: number
+  reason: string
+  date: string
+  academicYear: string
+}
+
 interface TransactionRow {
   id: string
   date: string
@@ -29,7 +38,9 @@ export default function BulkEditPage() {
   const [students, setStudents] = useState<Student[]>([])
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
   const [transactions, setTransactions] = useState<TransactionRow[]>([])
+  const [history, setHistory] = useState<Transaction[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isHistoryLoading, setIsHistoryLoading] = useState(false)
   const [isSavingAll, setIsSavingAll] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [searchResults, setSearchResults] = useState<Student[]>([])
@@ -65,6 +76,34 @@ export default function BulkEditPage() {
     )
     setSearchResults(filtered)
   }, [searchQuery, students])
+
+  useEffect(() => {
+    if (selectedStudent) {
+      fetchHistory()
+    } else {
+      setHistory([])
+    }
+  }, [selectedStudent])
+
+  const fetchHistory = async () => {
+    if (!selectedStudent) return
+    setIsHistoryLoading(true)
+    try {
+      const res = await fetch(`/api/students/${selectedStudent._id}`)
+      if (res.ok) {
+        const data = await res.json()
+        // Sort transactions by date descending
+        const sorted = (data.transactions || []).sort((a: any, b: any) => 
+          new Date(b.date).getTime() - new Date(a.date).getTime()
+        )
+        setHistory(sorted)
+      }
+    } catch (error) {
+      console.error("Error fetching history:", error)
+    } finally {
+      setIsHistoryLoading(false)
+    }
+  }
 
   const selectStudent = (student: Student) => {
     setSelectedStudent(student)
@@ -143,21 +182,24 @@ export default function BulkEditPage() {
       })
 
       if (!res.ok) throw new Error("Failed to save")
+      
+      const savedData = await res.json()
 
       setTransactions(prev => {
         const next = [...prev]
         next[index].status = 'saved'
-        // Reset status to idle after 1.5 seconds so user can edit again
         setTimeout(() => {
           setTransactions(current => {
             const updated = [...current]
             if (updated[index]) {
               updated[index].status = 'idle'
-              updated[index].amount = "" // Optional: clear amount but keep fields
+              updated[index].amount = ""
             }
             return updated
           })
-        }, 1500)
+          // Refresh history after save
+          fetchHistory()
+        }, 1000)
         return next
       })
       
@@ -188,6 +230,33 @@ export default function BulkEditPage() {
     }
     setIsSavingAll(false)
     toast.success("All transactions processed")
+  }
+
+  const deleteHistoryItem = async (txId: string) => {
+    if (!selectedStudent) return
+    if (!confirm("Are you sure you want to delete this transaction?")) return
+
+    try {
+      const res = await fetch(`/api/students/${selectedStudent._id}/transaction/${txId}`, {
+        method: 'DELETE'
+      })
+      if (res.ok) {
+        toast.success("Transaction deleted")
+        fetchHistory()
+        // Update balance locally
+        const deletedTx = history.find(h => h._id === txId)
+        if (deletedTx) {
+          setSelectedStudent(prev => prev ? {
+            ...prev,
+            balance: deletedTx.type === 'deposit' ? prev.balance - deletedTx.amount : prev.balance + deletedTx.amount
+          } : null)
+        }
+      } else {
+        throw new Error("Failed to delete")
+      }
+    } catch (error) {
+      toast.error("Failed to delete transaction")
+    }
   }
 
   if (isLoading) {
@@ -494,6 +563,49 @@ export default function BulkEditPage() {
                   <Plus className="w-5 h-5" />
                   Add New Transaction Row
                 </button>
+              </div>
+
+              {/* Transaction History Section */}
+              <div className="mt-8 border-t border-gray-100 p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-black text-[#171532] uppercase tracking-widest">Recent Transactions</h3>
+                  {isHistoryLoading && <Loader2 className="w-4 h-4 animate-spin text-[#4a6670]" />}
+                </div>
+                
+                <div className="space-y-3">
+                  {history.length === 0 ? (
+                    <p className="text-center py-8 text-xs text-gray-400 font-bold">No recent transactions</p>
+                  ) : (
+                    history.slice(0, 5).map((h) => (
+                      <div key={h._id} className="flex items-center justify-between p-4 bg-[#f8f9fa] rounded-2xl border border-gray-50 group hover:border-[#4a6670]/20 transition-all">
+                        <div className="flex items-center gap-4">
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black ${
+                            h.type === 'deposit' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
+                          }`}>
+                            {h.type === 'deposit' ? '+' : '-'}
+                          </div>
+                          <div>
+                            <p className="text-xs font-black text-[#171532]">{h.reason}</p>
+                            <p className="text-[10px] text-gray-400 font-bold">{h.date} • {h.academicYear}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <p className={`text-sm font-black ${
+                            h.type === 'deposit' ? 'text-green-600' : 'text-red-600'
+                          }`}>
+                            ₹{h.amount.toFixed(2)}
+                          </p>
+                          <button 
+                            onClick={() => deleteHistoryItem(h._id)}
+                            className="p-2 text-gray-300 hover:text-red-500 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
             </div>
           </div>

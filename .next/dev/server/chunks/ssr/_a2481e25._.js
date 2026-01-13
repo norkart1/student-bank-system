@@ -158,9 +158,18 @@ function BulkEditPage() {
                     ...prev
                 ];
                 next[index].status = 'saved';
-                // Automatically remove the row after 1.5 seconds if it was saved successfully
+                // Reset status to idle after 1.5 seconds so user can edit again
                 setTimeout(()=>{
-                    setTransactions((current)=>current.filter((_, i)=>i !== index));
+                    setTransactions((current)=>{
+                        const updated = [
+                            ...current
+                        ];
+                        if (updated[index]) {
+                            updated[index].status = 'idle';
+                            updated[index].amount = ""; // Optional: clear amount but keep fields
+                        }
+                        return updated;
+                    });
                 }, 1500);
                 return next;
             });
@@ -199,12 +208,12 @@ function BulkEditPage() {
                 className: "w-8 h-8 animate-spin text-[#4a6670]"
             }, void 0, false, {
                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                lineNumber: 189,
+                lineNumber: 196,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-            lineNumber: 188,
+            lineNumber: 195,
             columnNumber: 7
         }, this);
     }
@@ -229,12 +238,12 @@ function BulkEditPage() {
                                                 className: "w-6 h-6 text-[#4a6670]"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                lineNumber: 205,
+                                                lineNumber: 212,
                                                 columnNumber: 17
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                            lineNumber: 201,
+                                            lineNumber: 208,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -244,7 +253,7 @@ function BulkEditPage() {
                                                     children: "Manage Transactions"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                    lineNumber: 208,
+                                                    lineNumber: 215,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -252,19 +261,19 @@ function BulkEditPage() {
                                                     children: "Bulk Edit Mode"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                    lineNumber: 209,
+                                                    lineNumber: 216,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                            lineNumber: 207,
+                                            lineNumber: 214,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                    lineNumber: 200,
+                                    lineNumber: 207,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -281,14 +290,14 @@ function BulkEditPage() {
                                                     className: "w-4 h-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                    lineNumber: 220,
+                                                    lineNumber: 227,
                                                     columnNumber: 17
                                                 }, this),
                                                 "Reset"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                            lineNumber: 213,
+                                            lineNumber: 220,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -300,32 +309,32 @@ function BulkEditPage() {
                                                     className: "w-4 h-4 animate-spin"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                    lineNumber: 228,
+                                                    lineNumber: 235,
                                                     columnNumber: 32
                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$save$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Save$3e$__["Save"], {
                                                     className: "w-4 h-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                    lineNumber: 228,
+                                                    lineNumber: 235,
                                                     columnNumber: 79
                                                 }, this),
                                                 "Save All"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                            lineNumber: 223,
+                                            lineNumber: 230,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                    lineNumber: 212,
+                                    lineNumber: 219,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                            lineNumber: 199,
+                            lineNumber: 206,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -342,14 +351,14 @@ function BulkEditPage() {
                                             className: "w-4 h-4"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                            lineNumber: 243,
+                                            lineNumber: 250,
                                             columnNumber: 15
                                         }, this),
                                         "Reset"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                    lineNumber: 236,
+                                    lineNumber: 243,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -361,32 +370,32 @@ function BulkEditPage() {
                                             className: "w-4 h-4 animate-spin"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                            lineNumber: 251,
+                                            lineNumber: 258,
                                             columnNumber: 30
                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$save$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Save$3e$__["Save"], {
                                             className: "w-4 h-4"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                            lineNumber: 251,
+                                            lineNumber: 258,
                                             columnNumber: 77
                                         }, this),
                                         "Save All"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                    lineNumber: 246,
+                                    lineNumber: 253,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                            lineNumber: 235,
+                            lineNumber: 242,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                    lineNumber: 198,
+                    lineNumber: 205,
                     columnNumber: 9
                 }, this),
                 !selectedStudent ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -398,12 +407,12 @@ function BulkEditPage() {
                                 className: "w-10 h-10 text-[#4a6670]"
                             }, void 0, false, {
                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                lineNumber: 260,
+                                lineNumber: 267,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                            lineNumber: 259,
+                            lineNumber: 266,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -411,7 +420,7 @@ function BulkEditPage() {
                             children: "Select Student"
                         }, void 0, false, {
                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                            lineNumber: 262,
+                            lineNumber: 269,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -419,7 +428,7 @@ function BulkEditPage() {
                             children: "Search for a student to start adding or editing transactions."
                         }, void 0, false, {
                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                            lineNumber: 263,
+                            lineNumber: 270,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -429,7 +438,7 @@ function BulkEditPage() {
                                     className: "absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-[#4a6670] transition-colors"
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                    lineNumber: 266,
+                                    lineNumber: 273,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -443,7 +452,7 @@ function BulkEditPage() {
                                     className: "w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-transparent focus:border-[#4a6670]/20 focus:bg-white rounded-2xl text-base font-bold text-[#171532] outline-none transition-all shadow-inner"
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                    lineNumber: 267,
+                                    lineNumber: 274,
                                     columnNumber: 15
                                 }, this),
                                 showSearch && searchResults.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -463,12 +472,12 @@ function BulkEditPage() {
                                                                 className: "w-full h-full object-cover"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                lineNumber: 288,
+                                                                lineNumber: 295,
                                                                 columnNumber: 29
                                                             }, this) : s.name.charAt(0)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                            lineNumber: 286,
+                                                            lineNumber: 293,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -478,7 +487,7 @@ function BulkEditPage() {
                                                                     children: s.name
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                    lineNumber: 298,
+                                                                    lineNumber: 305,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -486,49 +495,49 @@ function BulkEditPage() {
                                                                     children: s.code
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                    lineNumber: 299,
+                                                                    lineNumber: 306,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                            lineNumber: 297,
+                                                            lineNumber: 304,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                    lineNumber: 285,
+                                                    lineNumber: 292,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
                                                     className: "w-5 h-5 text-[#4a6670] opacity-0 group-hover:opacity-100 transition-opacity"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                    lineNumber: 302,
+                                                    lineNumber: 309,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, s._id, true, {
                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                            lineNumber: 280,
+                                            lineNumber: 287,
                                             columnNumber: 21
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                    lineNumber: 278,
+                                    lineNumber: 285,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                            lineNumber: 265,
+                            lineNumber: 272,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                    lineNumber: 258,
+                    lineNumber: 265,
                     columnNumber: 11
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "space-y-6 animate-in fade-in duration-500",
@@ -549,12 +558,12 @@ function BulkEditPage() {
                                                     className: "w-full h-full object-cover"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                    lineNumber: 317,
+                                                    lineNumber: 324,
                                                     columnNumber: 23
                                                 }, this) : selectedStudent.name.charAt(0)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                lineNumber: 315,
+                                                lineNumber: 322,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -564,7 +573,7 @@ function BulkEditPage() {
                                                         children: selectedStudent.name
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                        lineNumber: 327,
+                                                        lineNumber: 334,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -575,14 +584,14 @@ function BulkEditPage() {
                                                                 children: selectedStudent.code
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                lineNumber: 329,
+                                                                lineNumber: 336,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 className: "w-1.5 h-1.5 rounded-full bg-gray-300"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                lineNumber: 330,
+                                                                lineNumber: 337,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -593,25 +602,25 @@ function BulkEditPage() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                lineNumber: 331,
+                                                                lineNumber: 338,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                        lineNumber: 328,
+                                                        lineNumber: 335,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                lineNumber: 326,
+                                                lineNumber: 333,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                        lineNumber: 314,
+                                        lineNumber: 321,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -625,7 +634,7 @@ function BulkEditPage() {
                                                         children: "Total Dep."
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                        lineNumber: 338,
+                                                        lineNumber: 345,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -636,20 +645,20 @@ function BulkEditPage() {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                        lineNumber: 339,
+                                                        lineNumber: 346,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                lineNumber: 337,
+                                                lineNumber: 344,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "w-px bg-gray-200"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                lineNumber: 341,
+                                                lineNumber: 348,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -660,7 +669,7 @@ function BulkEditPage() {
                                                         children: "Total With."
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                        lineNumber: 343,
+                                                        lineNumber: 350,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -671,19 +680,19 @@ function BulkEditPage() {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                        lineNumber: 344,
+                                                        lineNumber: 351,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                lineNumber: 342,
+                                                lineNumber: 349,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                        lineNumber: 336,
+                                        lineNumber: 343,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -692,13 +701,13 @@ function BulkEditPage() {
                                         children: "Switch Student"
                                     }, void 0, false, {
                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                        lineNumber: 348,
+                                        lineNumber: 355,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                lineNumber: 313,
+                                lineNumber: 320,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -716,7 +725,7 @@ function BulkEditPage() {
                                                         children: "Date"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                        lineNumber: 361,
+                                                        lineNumber: 368,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -724,7 +733,7 @@ function BulkEditPage() {
                                                         children: "Session"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                        lineNumber: 362,
+                                                        lineNumber: 369,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -732,7 +741,7 @@ function BulkEditPage() {
                                                         children: "Type"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                        lineNumber: 363,
+                                                        lineNumber: 370,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -740,7 +749,7 @@ function BulkEditPage() {
                                                         children: "Amount"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                        lineNumber: 364,
+                                                        lineNumber: 371,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -748,7 +757,7 @@ function BulkEditPage() {
                                                         children: "Reason"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                        lineNumber: 365,
+                                                        lineNumber: 372,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -756,18 +765,18 @@ function BulkEditPage() {
                                                         children: "Actions"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                        lineNumber: 366,
+                                                        lineNumber: 373,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                lineNumber: 360,
+                                                lineNumber: 367,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                            lineNumber: 359,
+                                            lineNumber: 366,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -785,7 +794,7 @@ function BulkEditPage() {
                                                                         children: "Date"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                        lineNumber: 374,
+                                                                        lineNumber: 381,
                                                                         columnNumber: 29
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -795,7 +804,7 @@ function BulkEditPage() {
                                                                                 className: "absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                                lineNumber: 376,
+                                                                                lineNumber: 383,
                                                                                 columnNumber: 31
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -805,24 +814,24 @@ function BulkEditPage() {
                                                                                 className: "w-full pl-9 pr-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-bold text-[#171532] outline-none transition-all"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                                lineNumber: 377,
+                                                                                lineNumber: 384,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                        lineNumber: 375,
+                                                                        lineNumber: 382,
                                                                         columnNumber: 29
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                lineNumber: 373,
+                                                                lineNumber: 380,
                                                                 columnNumber: 27
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                            lineNumber: 372,
+                                                            lineNumber: 379,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -835,7 +844,7 @@ function BulkEditPage() {
                                                                         children: "Session"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                        lineNumber: 388,
+                                                                        lineNumber: 395,
                                                                         columnNumber: 29
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -848,7 +857,7 @@ function BulkEditPage() {
                                                                                 children: "24-25"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                                lineNumber: 394,
+                                                                                lineNumber: 401,
                                                                                 columnNumber: 31
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -856,7 +865,7 @@ function BulkEditPage() {
                                                                                 children: "25-26"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                                lineNumber: 395,
+                                                                                lineNumber: 402,
                                                                                 columnNumber: 31
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -864,24 +873,24 @@ function BulkEditPage() {
                                                                                 children: "26-27"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                                lineNumber: 396,
+                                                                                lineNumber: 403,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                        lineNumber: 389,
+                                                                        lineNumber: 396,
                                                                         columnNumber: 29
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                lineNumber: 387,
+                                                                lineNumber: 394,
                                                                 columnNumber: 27
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                            lineNumber: 386,
+                                                            lineNumber: 393,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -894,7 +903,7 @@ function BulkEditPage() {
                                                                         children: "Type"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                        lineNumber: 402,
+                                                                        lineNumber: 409,
                                                                         columnNumber: 29
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -907,7 +916,7 @@ function BulkEditPage() {
                                                                                 children: "Deposit"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                                lineNumber: 410,
+                                                                                lineNumber: 417,
                                                                                 columnNumber: 31
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -915,24 +924,24 @@ function BulkEditPage() {
                                                                                 children: "Withdraw"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                                lineNumber: 411,
+                                                                                lineNumber: 418,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                        lineNumber: 403,
+                                                                        lineNumber: 410,
                                                                         columnNumber: 29
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                lineNumber: 401,
+                                                                lineNumber: 408,
                                                                 columnNumber: 27
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                            lineNumber: 400,
+                                                            lineNumber: 407,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -945,7 +954,7 @@ function BulkEditPage() {
                                                                         children: "Amount"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                        lineNumber: 417,
+                                                                        lineNumber: 424,
                                                                         columnNumber: 29
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -956,7 +965,7 @@ function BulkEditPage() {
                                                                                 children: "₹"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                                lineNumber: 419,
+                                                                                lineNumber: 426,
                                                                                 columnNumber: 31
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -973,24 +982,24 @@ function BulkEditPage() {
                                                                                 placeholder: "0.00"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                                lineNumber: 420,
+                                                                                lineNumber: 427,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                        lineNumber: 418,
+                                                                        lineNumber: 425,
                                                                         columnNumber: 29
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                lineNumber: 416,
+                                                                lineNumber: 423,
                                                                 columnNumber: 27
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                            lineNumber: 415,
+                                                            lineNumber: 422,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1003,7 +1012,7 @@ function BulkEditPage() {
                                                                         children: "Reason"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                        lineNumber: 438,
+                                                                        lineNumber: 445,
                                                                         columnNumber: 29
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1014,18 +1023,18 @@ function BulkEditPage() {
                                                                         placeholder: "Reason for transaction..."
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                        lineNumber: 439,
+                                                                        lineNumber: 446,
                                                                         columnNumber: 29
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                lineNumber: 437,
+                                                                lineNumber: 444,
                                                                 columnNumber: 27
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                            lineNumber: 436,
+                                                            lineNumber: 443,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1038,7 +1047,7 @@ function BulkEditPage() {
                                                                         children: "Actions"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                        lineNumber: 450,
+                                                                        lineNumber: 457,
                                                                         columnNumber: 29
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1053,7 +1062,7 @@ function BulkEditPage() {
                                                                                         className: "w-4 h-4"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                                        lineNumber: 458,
+                                                                                        lineNumber: 465,
                                                                                         columnNumber: 35
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1061,34 +1070,34 @@ function BulkEditPage() {
                                                                                         children: "Save"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                                        lineNumber: 459,
+                                                                                        lineNumber: 466,
                                                                                         columnNumber: 35
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                                lineNumber: 453,
+                                                                                lineNumber: 460,
                                                                                 columnNumber: 33
                                                                             }, this),
                                                                             tx.status === 'saving' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
                                                                                 className: "w-5 h-5 animate-spin text-[#4a6670]"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                                lineNumber: 462,
+                                                                                lineNumber: 469,
                                                                                 columnNumber: 58
                                                                             }, this),
                                                                             tx.status === 'saved' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle2$3e$__["CheckCircle2"], {
                                                                                 className: "w-5 h-5 text-green-500"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                                lineNumber: 463,
+                                                                                lineNumber: 470,
                                                                                 columnNumber: 57
                                                                             }, this),
                                                                             tx.status === 'error' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertCircle$3e$__["AlertCircle"], {
                                                                                 className: "w-5 h-5 text-red-500"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                                lineNumber: 464,
+                                                                                lineNumber: 471,
                                                                                 columnNumber: 57
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1099,51 +1108,51 @@ function BulkEditPage() {
                                                                                     className: "w-4 h-4"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                                    lineNumber: 471,
+                                                                                    lineNumber: 478,
                                                                                     columnNumber: 33
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                                lineNumber: 466,
+                                                                                lineNumber: 473,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                        lineNumber: 451,
+                                                                        lineNumber: 458,
                                                                         columnNumber: 29
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                                lineNumber: 449,
+                                                                lineNumber: 456,
                                                                 columnNumber: 27
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                            lineNumber: 448,
+                                                            lineNumber: 455,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, tx.id, true, {
                                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                                    lineNumber: 371,
+                                                    lineNumber: 378,
                                                     columnNumber: 23
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                            lineNumber: 369,
+                                            lineNumber: 376,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                    lineNumber: 358,
+                                    lineNumber: 365,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                lineNumber: 357,
+                                lineNumber: 364,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1156,41 +1165,41 @@ function BulkEditPage() {
                                             className: "w-5 h-5"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                            lineNumber: 487,
+                                            lineNumber: 494,
                                             columnNumber: 19
                                         }, this),
                                         "Add New Transaction Row"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                    lineNumber: 483,
+                                    lineNumber: 490,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                                lineNumber: 482,
+                                lineNumber: 489,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                        lineNumber: 312,
+                        lineNumber: 319,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/admin/bulk-edit/page.tsx",
-                    lineNumber: 310,
+                    lineNumber: 317,
                     columnNumber: 11
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/admin/bulk-edit/page.tsx",
-            lineNumber: 196,
+            lineNumber: 203,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/admin/bulk-edit/page.tsx",
-        lineNumber: 195,
+        lineNumber: 202,
         columnNumber: 5
     }, this);
 }

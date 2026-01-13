@@ -3006,6 +3006,13 @@
   }
 
   @media (hover: hover) {
+    .hover\:border-\[\#4a6670\]\/20:hover {
+      border-color: #4a667033;
+      border-color: lab(41.2653% -8.66638 -9.16503 / .2);
+    }
+  }
+
+  @media (hover: hover) {
     .hover\:border-\[\#4a6670\]\/30:hover {
       border-color: #4a66704d;
       border-color: lab(41.2653% -8.6664 -9.16502 / .3);
