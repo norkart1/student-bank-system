@@ -158,7 +158,11 @@ export default function BulkEditPage() {
 
   const saveTransaction = async (index: number) => {
     if (!selectedStudent) return
+    
+    // Create a local copy of the transaction row to work with
     const tx = transactions[index]
+    if (!tx) return;
+    
     const amount = parseFloat(tx.amount) || 0;
     const formattedAmount = Number(amount.toFixed(2));
 
@@ -166,7 +170,7 @@ export default function BulkEditPage() {
 
     setTransactions(prev => {
       const next = [...prev]
-      next[index].status = 'saving'
+      if (next[index]) next[index].status = 'saving'
       return next
     })
 
@@ -187,15 +191,19 @@ export default function BulkEditPage() {
       
       const savedData = await res.json()
 
+      // Local update for immediate feedback
       setTransactions(prev => {
         const next = [...prev]
-        next[index].status = 'saved'
-        // Automatically remove the row after 1.5 seconds if it was saved successfully
-        setTimeout(() => {
-          setTransactions(current => current.filter((_, i) => i !== index))
-          // Refresh history after save
-          fetchHistory()
-        }, 1500)
+        const currentTx = next.find(t => t.id === tx.id)
+        if (currentTx) {
+          currentTx.status = 'saved'
+          // Automatically remove the row after 1.5 seconds if it was saved successfully
+          setTimeout(() => {
+            setTransactions(current => current.filter(t => t.id !== tx.id))
+            // Refresh history after save
+            fetchHistory()
+          }, 1500)
+        }
         return next
       })
       
@@ -208,7 +216,8 @@ export default function BulkEditPage() {
     } catch (error) {
       setTransactions(prev => {
         const next = [...prev]
-        next[index].status = 'error'
+        const currentTx = next.find(t => t.id === tx.id)
+        if (currentTx) currentTx.status = 'error'
         return next
       })
       toast.error(`Failed to save transaction`)
@@ -218,12 +227,18 @@ export default function BulkEditPage() {
   const handleSaveAll = async () => {
     if (!selectedStudent) return
     setIsSavingAll(true)
-    for (let i = 0; i < transactions.length; i++) {
-      const tx = transactions[i]
-      if ((parseFloat(tx.amount) || 0) > 0 && tx.status !== 'saved') {
-        await saveTransaction(i)
+    
+    // Filter transactions that need saving
+    const toSave = transactions.filter(tx => (parseFloat(tx.amount) || 0) > 0 && tx.status !== 'saved')
+    
+    // Save them sequentially to avoid race conditions or DB locks
+    for (const tx of toSave) {
+      const index = transactions.findIndex(t => t.id === tx.id)
+      if (index !== -1) {
+        await saveTransaction(index)
       }
     }
+    
     setIsSavingAll(false)
     toast.success("All transactions processed")
   }
