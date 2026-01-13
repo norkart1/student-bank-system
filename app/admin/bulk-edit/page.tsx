@@ -309,9 +309,9 @@ export default function BulkEditPage() {
               </div>
 
               {/* Transactions Table */}
-              <div className="border-t border-gray-50 overflow-x-auto">
-                <table className="w-full border-collapse">
-                  <thead>
+              <div className="border-t border-gray-50">
+                <table className="w-full border-collapse block md:table">
+                  <thead className="hidden md:table-header-group">
                     <tr className="bg-gray-50/50">
                       <th className="px-4 py-4 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">Date</th>
                       <th className="px-4 py-4 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">Session</th>
@@ -321,93 +321,111 @@ export default function BulkEditPage() {
                       <th className="px-4 py-4 text-center text-[10px] font-black text-gray-400 uppercase tracking-widest">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-50">
+                  <tbody className="divide-y divide-gray-50 block md:table-row-group">
                     {transactions.map((tx, index) => (
-                      <tr key={tx.id} className="hover:bg-gray-50/30 transition-colors">
-                        <td className="px-4 py-4">
-                          <div className="relative w-36">
-                            <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                            <input
-                              type="date"
-                              value={tx.date}
-                              onChange={(e) => handleInputChange(index, 'date', e.target.value)}
-                              className="w-full pl-9 pr-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-bold text-[#171532] outline-none transition-all"
-                            />
+                      <tr key={tx.id} className="hover:bg-gray-50/30 transition-colors block md:table-row p-4 md:p-0 space-y-4 md:space-y-0">
+                        <td className="px-0 py-0 md:px-4 md:py-4 block md:table-cell">
+                          <div className="flex flex-col md:block gap-1">
+                            <span className="md:hidden text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Date</span>
+                            <div className="relative w-full md:w-36">
+                              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                              <input
+                                type="date"
+                                value={tx.date}
+                                onChange={(e) => handleInputChange(index, 'date', e.target.value)}
+                                className="w-full pl-9 pr-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-bold text-[#171532] outline-none transition-all"
+                              />
+                            </div>
                           </div>
                         </td>
-                        <td className="px-4 py-4">
-                          <select
-                            value={tx.academicYear}
-                            onChange={(e) => handleInputChange(index, 'academicYear', e.target.value)}
-                            className="w-24 px-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-bold text-[#171532] outline-none transition-all cursor-pointer"
-                          >
-                            <option value="2024-25">24-25</option>
-                            <option value="2025-26">25-26</option>
-                            <option value="2026-27">26-27</option>
-                          </select>
+                        <td className="px-0 py-0 md:px-4 md:py-4 block md:table-cell">
+                          <div className="flex flex-col md:block gap-1">
+                            <span className="md:hidden text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Session</span>
+                            <select
+                              value={tx.academicYear}
+                              onChange={(e) => handleInputChange(index, 'academicYear', e.target.value)}
+                              className="w-full md:w-24 px-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-bold text-[#171532] outline-none transition-all cursor-pointer"
+                            >
+                              <option value="2024-25">24-25</option>
+                              <option value="2025-26">25-26</option>
+                              <option value="2026-27">26-27</option>
+                            </select>
+                          </div>
                         </td>
-                        <td className="px-4 py-4">
-                          <select
-                            value={tx.type}
-                            onChange={(e) => handleInputChange(index, 'type', e.target.value as any)}
-                            className={`w-24 px-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-black outline-none transition-all cursor-pointer ${
-                              tx.type === 'deposit' ? 'text-green-600' : 'text-red-600'
-                            }`}
-                          >
-                            <option value="deposit">Deposit</option>
-                            <option value="withdraw">Withdraw</option>
-                          </select>
+                        <td className="px-0 py-0 md:px-4 md:py-4 block md:table-cell">
+                          <div className="flex flex-col md:block gap-1">
+                            <span className="md:hidden text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Type</span>
+                            <select
+                              value={tx.type}
+                              onChange={(e) => handleInputChange(index, 'type', e.target.value as any)}
+                              className={`w-full md:w-24 px-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-black outline-none transition-all cursor-pointer ${
+                                tx.type === 'deposit' ? 'text-green-600' : 'text-red-600'
+                              }`}
+                            >
+                              <option value="deposit">Deposit</option>
+                              <option value="withdraw">Withdraw</option>
+                            </select>
+                          </div>
                         </td>
-                        <td className="px-4 py-4">
-                          <div className="relative w-32">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">₹</span>
+                        <td className="px-0 py-0 md:px-4 md:py-4 block md:table-cell">
+                          <div className="flex flex-col md:block gap-1">
+                            <span className="md:hidden text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Amount</span>
+                            <div className="relative w-full md:w-32">
+                              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">₹</span>
+                              <input
+                                type="text"
+                                inputMode="decimal"
+                                value={tx.amount}
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  if (val === "" || /^\d*\.?\d*$/.test(val)) {
+                                    handleInputChange(index, 'amount', val);
+                                  }
+                                }}
+                                className="w-full pl-7 pr-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-black text-[#171532] outline-none transition-all"
+                                placeholder="0.00"
+                              />
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-0 py-0 md:px-4 md:py-4 block md:table-cell">
+                          <div className="flex flex-col md:block gap-1">
+                            <span className="md:hidden text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Reason</span>
                             <input
                               type="text"
-                              inputMode="decimal"
-                              value={tx.amount}
-                              onChange={(e) => {
-                                const val = e.target.value;
-                                if (val === "" || /^\d*\.?\d*$/.test(val)) {
-                                  handleInputChange(index, 'amount', val);
-                                }
-                              }}
-                              className="w-full pl-7 pr-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-black text-[#171532] outline-none transition-all"
-                              placeholder="0.00"
+                              value={tx.reason}
+                              onChange={(e) => handleInputChange(index, 'reason', e.target.value)}
+                              className="w-full px-4 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-bold text-[#171532] outline-none transition-all"
+                              placeholder="Reason for transaction..."
                             />
                           </div>
                         </td>
-                        <td className="px-4 py-4">
-                          <input
-                            type="text"
-                            value={tx.reason}
-                            onChange={(e) => handleInputChange(index, 'reason', e.target.value)}
-                            className="w-full px-4 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-bold text-[#171532] outline-none transition-all"
-                            placeholder="Reason for transaction..."
-                          />
-                        </td>
-                        <td className="px-4 py-4">
-                          <div className="flex items-center justify-center gap-3">
-                            {tx.status === 'idle' && (
-                              <button
-                                onClick={() => saveTransaction(index)}
-                                className="flex items-center gap-2 px-3 py-2 bg-[#4a6670] text-white rounded-xl hover:bg-[#3d565e] transition-all active:scale-90 shadow-sm"
-                                title="Save Row"
+                        <td className="px-0 py-0 md:px-4 md:py-4 block md:table-cell">
+                          <div className="flex flex-col md:block gap-1">
+                            <span className="md:hidden text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 text-center">Actions</span>
+                            <div className="flex items-center justify-center gap-3">
+                              {tx.status === 'idle' && (
+                                <button
+                                  onClick={() => saveTransaction(index)}
+                                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-3 py-2 bg-[#4a6670] text-white rounded-xl hover:bg-[#3d565e] transition-all active:scale-90 shadow-sm"
+                                  title="Save Row"
+                                >
+                                  <Save className="w-4 h-4" />
+                                  <span className="text-[10px] font-black uppercase tracking-tighter">Save</span>
+                                </button>
+                              )}
+                              {tx.status === 'saving' && <Loader2 className="w-5 h-5 animate-spin text-[#4a6670]" />}
+                              {tx.status === 'saved' && <CheckCircle2 className="w-5 h-5 text-green-500" />}
+                              {tx.status === 'error' && <AlertCircle className="w-5 h-5 text-red-500" />}
+                              
+                              <button 
+                                onClick={() => removeRow(index)}
+                                className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all active:scale-90"
+                                title="Delete Row"
                               >
-                                <Save className="w-4 h-4" />
-                                <span className="text-[10px] font-black uppercase tracking-tighter">Save</span>
+                                <Trash2 className="w-4 h-4" />
                               </button>
-                            )}
-                            {tx.status === 'saving' && <Loader2 className="w-5 h-5 animate-spin text-[#4a6670]" />}
-                            {tx.status === 'saved' && <CheckCircle2 className="w-5 h-5 text-green-500" />}
-                            {tx.status === 'error' && <AlertCircle className="w-5 h-5 text-red-500" />}
-                            
-                            <button 
-                              onClick={() => removeRow(index)}
-                              className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all active:scale-90"
-                              title="Delete Row"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
+                            </div>
                           </div>
                         </td>
                       </tr>
