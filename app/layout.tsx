@@ -19,27 +19,27 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://jdsa-students-bank.vercel.app'),
-  title: 'JDSA Students Bank - Educational Banking System',
+  title: 'JDSA Bank - Educational Banking System',
   description: 'Banking Made Simple for Students. A comprehensive, secure banking system designed specifically for educational institutions. Manage student accounts, deposits, withdrawals, and transactions with ease.',
   keywords: ['student banking', 'educational banking', 'account management', 'student accounts', 'banking system'],
   authors: [{ name: 'JDSA' }],
   creator: 'JDSA',
-  publisher: 'JDSA Students Bank',
+  publisher: 'JDSA Bank',
   
   // Open Graph / Social Media
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://jdsa-students-bank.vercel.app',
-    siteName: 'JDSA Students Bank',
-    title: 'JDSA Students Bank',
+    siteName: 'JDSA Bank',
+    title: 'JDSA Bank',
     description: 'Banking Made Simple for Students - A comprehensive banking system for educational institutions',
     images: [
       {
         url: '/placeholder-logo.png',
         width: 1200,
         height: 630,
-        alt: 'JDSA Students Bank',
+        alt: 'JDSA Bank',
       },
     ],
   },
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   // Twitter/X Card
   twitter: {
     card: 'summary_large_image',
-    title: 'JDSA Students Bank',
+    title: 'JDSA Bank',
     description: 'Banking Made Simple for Students',
     images: ['/placeholder-logo.png'],
   },
