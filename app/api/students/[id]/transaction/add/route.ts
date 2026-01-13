@@ -8,9 +8,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
     const { id } = await params
     const body = await req.json()
-    const { date, type, amount } = body
+    const { date, type } = body
+    const amount = Number(parseFloat(body.amount).toFixed(2))
 
-    if (!date || !type || amount === undefined) {
+    if (!date || !type || isNaN(amount)) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 

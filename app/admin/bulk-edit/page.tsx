@@ -117,7 +117,8 @@ export default function BulkEditPage() {
   const saveTransaction = async (index: number) => {
     if (!selectedStudent) return
     const tx = transactions[index]
-    const amount = parseFloat(tx.amount) || 0
+    const amount = parseFloat(tx.amount) || 0;
+    const formattedAmount = Number(amount.toFixed(2));
 
     if (amount <= 0) return
 
@@ -133,7 +134,7 @@ export default function BulkEditPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: tx.type,
-          amount: amount,
+          amount: formattedAmount,
           reason: tx.reason || `Bulk Edit ${tx.type}`,
           date: tx.date,
           academicYear: tx.academicYear
@@ -151,7 +152,7 @@ export default function BulkEditPage() {
       // Update selected student balance locally
       setSelectedStudent(prev => prev ? {
         ...prev,
-        balance: tx.type === 'deposit' ? prev.balance + amount : prev.balance - amount
+        balance: tx.type === 'deposit' ? prev.balance + formattedAmount : prev.balance - formattedAmount
       } : null)
 
     } catch (error) {
