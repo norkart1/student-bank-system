@@ -430,7 +430,5 @@ export default function BulkEditPage() {
         )}
       </div>
     </div>
-      </div>
-    </div>
   )
 }
