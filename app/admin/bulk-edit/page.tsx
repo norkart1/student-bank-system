@@ -147,6 +147,10 @@ export default function BulkEditPage() {
       setTransactions(prev => {
         const next = [...prev]
         next[index].status = 'saved'
+        // Automatically remove the row after 1.5 seconds if it was saved successfully
+        setTimeout(() => {
+          setTransactions(current => current.filter((_, i) => i !== index))
+        }, 1500)
         return next
       })
       
