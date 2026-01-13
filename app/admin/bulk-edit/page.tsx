@@ -188,18 +188,12 @@ export default function BulkEditPage() {
       setTransactions(prev => {
         const next = [...prev]
         next[index].status = 'saved'
+        // Automatically remove the row after 1.5 seconds if it was saved successfully
         setTimeout(() => {
-          setTransactions(current => {
-            const updated = [...current]
-            if (updated[index]) {
-              updated[index].status = 'idle'
-              updated[index].amount = ""
-            }
-            return updated
-          })
+          setTransactions(current => current.filter((_, i) => i !== index))
           // Refresh history after save
           fetchHistory()
-        }, 1000)
+        }, 1500)
         return next
       })
       
@@ -595,12 +589,6 @@ export default function BulkEditPage() {
                           }`}>
                             ₹{h.amount.toFixed(2)}
                           </p>
-                          <button 
-                            onClick={() => deleteHistoryItem(h._id)}
-                            className="p-2 text-gray-300 hover:text-red-500 rounded-lg transition-all opacity-0 group-hover:opacity-100"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
                         </div>
                       </div>
                     ))
