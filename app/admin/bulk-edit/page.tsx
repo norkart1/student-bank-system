@@ -649,7 +649,7 @@ export default function BulkEditPage() {
                               }`}>
                                 ₹{h.amount.toFixed(2)}
                               </p>
-                              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                              <div className="flex items-center gap-1 opacity-100">
                                 <button 
                                   onClick={() => startEditingHistory(h)}
                                   className="p-1.5 text-gray-400 hover:text-[#4a6670] hover:bg-white rounded-lg transition-all"
