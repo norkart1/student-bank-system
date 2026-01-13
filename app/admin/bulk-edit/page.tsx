@@ -147,9 +147,16 @@ export default function BulkEditPage() {
       setTransactions(prev => {
         const next = [...prev]
         next[index].status = 'saved'
-        // Automatically remove the row after 1.5 seconds if it was saved successfully
+        // Reset status to idle after 1.5 seconds so user can edit again
         setTimeout(() => {
-          setTransactions(current => current.filter((_, i) => i !== index))
+          setTransactions(current => {
+            const updated = [...current]
+            if (updated[index]) {
+              updated[index].status = 'idle'
+              updated[index].amount = "" // Optional: clear amount but keep fields
+            }
+            return updated
+          })
         }, 1500)
         return next
       })
