@@ -446,16 +446,16 @@ export default function AdminDashboard() {
         lineColor: [0, 0, 0],
       },
       headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0],
+        fillColor: [74, 102, 112], // #4a6670
+        textColor: [255, 255, 255],
         fontStyle: "bold",
         lineWidth: 0.1,
       },
       columnStyles: {
         0: { cellWidth: 40 },
-        1: { cellWidth: 40 },
-        2: { cellWidth: 40 },
-        3: { cellWidth: 40 },
+        1: { cellWidth: 40, textColor: [22, 163, 74] }, // Green for Deposits
+        2: { cellWidth: 40, textColor: [220, 38, 38] }, // Red for Withdrawals
+        3: { cellWidth: 40, fontStyle: "bold" },
       },
       margin: { left: (pageWidth - 160) / 2 },
     })

@@ -338,16 +338,16 @@ function UserDashboard() {
             align: "center"
         });
         // User Details Section
-        doc.setFontSize(11);
+        doc.setFontSize(10);
         doc.setTextColor(23, 21, 50);
-        doc.text(`Student Name: ${userData?.name || "N/A"}`, 14, 42);
-        doc.text(`Student Code: ${userData?.code || "N/A"}`, 14, 48);
+        doc.text(`Student Name: ${userData?.name || "N/A"}`, 14, 45);
+        doc.text(`Student Code: ${userData?.code || "N/A"}`, 14, 51);
+        doc.text(`Academic Session: ${selectedAcademicYear}`, 14, 57);
         doc.text(`Current Balance: ₹${(userData?.balance || 0).toLocaleString("en-IN", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
-        })}`, 14, 54);
-        doc.text(`Academic Session: ${selectedAcademicYear}`, 14, 60);
-        doc.text(`Generated on: ${new Date().toLocaleString()}`, pageWidth - 14, 42, {
+        })}`, 14, 63);
+        doc.text(`Generated on: ${new Date().toLocaleString()}`, pageWidth - 14, 45, {
             align: "right"
         });
         const columns = [
@@ -379,7 +379,7 @@ function UserDashboard() {
             ];
         });
         (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$jspdf$2d$autotable$2f$dist$2f$jspdf$2e$plugin$2e$autotable$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])(doc, {
-            startY: 70,
+            startY: 75,
             head: [
                 [
                     "Date",
@@ -409,14 +409,14 @@ function UserDashboard() {
             },
             headStyles: {
                 fillColor: [
+                    74,
+                    102,
+                    112
+                ],
+                textColor: [
                     255,
                     255,
                     255
-                ],
-                textColor: [
-                    0,
-                    0,
-                    0
                 ],
                 fontStyle: "bold",
                 lineWidth: 0.1
@@ -426,13 +426,24 @@ function UserDashboard() {
                     cellWidth: 40
                 },
                 1: {
-                    cellWidth: 40
+                    cellWidth: 40,
+                    textColor: [
+                        22,
+                        163,
+                        74
+                    ]
                 },
                 2: {
-                    cellWidth: 40
+                    cellWidth: 40,
+                    textColor: [
+                        220,
+                        38,
+                        38
+                    ]
                 },
                 3: {
-                    cellWidth: 40
+                    cellWidth: 40,
+                    fontStyle: "bold"
                 }
             },
             margin: {
