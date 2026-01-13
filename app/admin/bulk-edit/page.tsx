@@ -187,73 +187,82 @@ export default function BulkEditPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
+    <div className="min-h-screen bg-[#f8f9fa] p-4 md:p-6">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+          <div className="flex items-center gap-3">
             <button 
               onClick={() => router.back()} 
-              className="w-10 h-10 flex items-center justify-center hover:bg-white rounded-full transition-colors shadow-sm"
+              className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 rounded-xl transition-all"
             >
               <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
             </button>
-            <h1 className="text-xl font-bold text-[#171532]">Bulk Transaction Edit</h1>
+            <div>
+              <h1 className="text-xl font-extrabold text-[#171532]">Manage Transactions</h1>
+              <p className="text-xs text-gray-500 font-medium">Bulk Edit Mode</p>
+            </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <button
               onClick={() => {
                 setSelectedStudent(null)
                 setTransactions([])
               }}
-              className="p-2.5 bg-white border border-gray-200 rounded-xl shadow-sm transition-all active:scale-95"
-              title="Reset"
+              className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all active:scale-95 shadow-sm"
             >
-              <X className="w-5 h-5 text-gray-600" />
+              <X className="w-4 h-4" />
+              Reset
             </button>
             <button
               onClick={handleSaveAll}
               disabled={isSavingAll || !selectedStudent || transactions.length === 0}
-              className="p-2.5 bg-[#4a6670] text-white rounded-xl shadow-sm transition-all active:scale-95 disabled:opacity-50"
-              title="Save All"
+              className="flex items-center gap-2 px-5 py-2 bg-[#4a6670] text-white rounded-xl text-sm font-bold shadow-md hover:bg-[#3d565e] transition-all active:scale-95 disabled:opacity-50"
             >
-              {isSavingAll ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
+              {isSavingAll ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+              Save All
             </button>
           </div>
         </div>
 
         {!selectedStudent ? (
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center max-w-xl mx-auto">
-            <div className="w-16 h-16 bg-[#4a6670]/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Search className="w-8 h-8 text-[#4a6670]" />
+          <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-10 text-center max-w-xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="w-20 h-20 bg-[#4a6670]/10 rounded-3xl flex items-center justify-center mx-auto mb-6 rotate-3 hover:rotate-0 transition-transform duration-300">
+              <Search className="w-10 h-10 text-[#4a6670]" />
             </div>
-            <h2 className="text-lg font-bold text-[#171532] mb-2">Find a Student</h2>
-            <p className="text-sm text-gray-500 mb-6">Search for a student to add multiple transactions at once.</p>
+            <h2 className="text-2xl font-black text-[#171532] mb-3">Select Student</h2>
+            <p className="text-gray-500 font-medium mb-8">Search for a student to start adding or editing transactions.</p>
             
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <div className="relative group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-[#4a6670] transition-colors" />
               <input
                 type="text"
-                placeholder="Search by name or code..."
+                placeholder="Search name or student code..."
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value)
                   setShowSearch(true)
                 }}
-                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#4a6670]/20"
+                className="w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-transparent focus:border-[#4a6670]/20 focus:bg-white rounded-2xl text-base font-bold text-[#171532] outline-none transition-all shadow-inner"
               />
               {showSearch && searchResults.length > 0 && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl z-50 max-h-60 overflow-y-auto">
+                <div className="absolute top-full left-0 right-0 mt-3 bg-white border border-gray-100 rounded-2xl shadow-2xl z-50 max-h-72 overflow-y-auto p-2 animate-in fade-in zoom-in-95 duration-200">
                   {searchResults.map(s => (
                     <button
                       key={s._id}
                       onClick={() => selectStudent(s)}
-                      className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-50 last:border-0 flex items-center justify-between"
+                      className="w-full px-4 py-4 text-left hover:bg-[#4a6670]/5 rounded-xl flex items-center justify-between transition-colors group"
                     >
-                      <div>
-                        <p className="text-sm font-bold text-[#171532]">{s.name}</p>
-                        <p className="text-xs text-gray-500 font-mono">{s.code}</p>
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 bg-[#4a6670] rounded-lg flex items-center justify-center text-white font-black text-lg">
+                          {s.name.charAt(0)}
+                        </div>
+                        <div>
+                          <p className="text-sm font-black text-[#171532] group-hover:text-[#4a6670] transition-colors">{s.name}</p>
+                          <p className="text-xs text-gray-500 font-mono tracking-tighter">{s.code}</p>
+                        </div>
                       </div>
-                      <Plus className="w-4 h-4 text-[#4a6670]" />
+                      <Plus className="w-5 h-5 text-[#4a6670] opacity-0 group-hover:opacity-100 transition-opacity" />
                     </button>
                   ))}
                 </div>
@@ -261,145 +270,166 @@ export default function BulkEditPage() {
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="p-6 bg-[#4a6670]/5 border-b border-gray-100 flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[#4a6670] rounded-full flex items-center justify-center text-white font-bold">
-                  {selectedStudent.name.charAt(0)}
-                </div>
-                <div>
-                  <h2 className="font-bold text-[#171532]">{selectedStudent.name}</h2>
-                  <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
-                    <p className="text-xs text-gray-500 font-mono">{selectedStudent.code}</p>
-                    <p className="text-xs font-bold text-[#4a6670]">Balance: ₹{selectedStudent.balance.toFixed(2)}</p>
-                    <div className="flex gap-3 border-l border-gray-300 pl-4">
-                      <p className="text-[10px] font-bold text-green-600">Total Dep: ₹{calculateTotals().deposit.toFixed(2)}</p>
-                      <p className="text-[10px] font-bold text-red-600">Total With: ₹{calculateTotals().withdraw.toFixed(2)}</p>
+          <div className="space-y-6 animate-in fade-in duration-500">
+            {/* Student Info Card */}
+            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="flex items-center gap-5">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#4a6670] to-[#171532] rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-[#4a6670]/20">
+                    {selectedStudent.name.charAt(0)}
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-black text-[#171532]">{selectedStudent.name}</h2>
+                    <div className="flex items-center gap-3 mt-1">
+                      <span className="px-2.5 py-0.5 bg-gray-100 rounded-lg text-[10px] font-bold text-gray-500 tracking-widest font-mono">{selectedStudent.code}</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-gray-300" />
+                      <span className="text-xs font-black text-[#4a6670]">Current Balance: ₹{selectedStudent.balance.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
-              </div>
-              <button 
-                onClick={() => setSelectedStudent(null)}
-                className="text-xs font-bold text-[#4a6670] hover:underline"
-              >
-                Change Student
-              </button>
-            </div>
+                
+                <div className="flex gap-4 p-4 bg-[#f8f9fa] rounded-2xl border border-gray-50">
+                  <div className="text-center px-4">
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Dep.</p>
+                    <p className="text-lg font-black text-green-600">₹{calculateTotals().deposit.toFixed(2)}</p>
+                  </div>
+                  <div className="w-px bg-gray-200" />
+                  <div className="text-center px-4">
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total With.</p>
+                    <p className="text-lg font-black text-red-600">₹{calculateTotals().withdraw.toFixed(2)}</p>
+                  </div>
+                </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-gray-50 text-left text-[10px] font-bold text-gray-500 uppercase tracking-wider">
-                    <th className="px-2 py-4 border-b border-gray-100 w-32">Date</th>
-                    <th className="px-2 py-4 border-b border-gray-100 w-20">Session</th>
-                    <th className="px-2 py-4 border-b border-gray-100 w-20">Type</th>
-                    <th className="px-2 py-4 border-b border-gray-100 w-24">Amount</th>
-                    <th className="px-2 py-4 border-b border-gray-100">Reason</th>
-                    <th className="px-2 py-4 border-b border-gray-100 w-16 text-center">St.</th>
-                    <th className="px-2 py-4 border-b border-gray-100 w-10"></th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {transactions.map((tx, index) => (
-                    <tr key={tx.id} className="hover:bg-gray-50/50 transition-colors">
-                      <td className="px-2 py-4">
-                        <div className="relative">
-                          <Calendar className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
-                          <input
-                            type="date"
-                            value={tx.date}
-                            onChange={(e) => handleInputChange(index, 'date', e.target.value)}
-                            className="w-full pl-7 pr-1 py-1.5 border border-gray-200 rounded-lg text-[10px] focus:outline-none"
-                          />
-                        </div>
-                      </td>
-                      <td className="px-2 py-4">
-                        <select
-                          value={tx.academicYear}
-                          onChange={(e) => handleInputChange(index, 'academicYear', e.target.value)}
-                          className="w-full px-1 py-1.5 border border-gray-200 rounded-lg text-[10px] focus:outline-none"
-                        >
-                          <option value="2024-25">24-25</option>
-                          <option value="2025-26">25-26</option>
-                          <option value="2026-27">26-27</option>
-                        </select>
-                      </td>
-                      <td className="px-2 py-4">
-                        <select
-                          value={tx.type}
-                          onChange={(e) => handleInputChange(index, 'type', e.target.value as any)}
-                          className={`w-full px-1 py-1.5 border border-gray-200 rounded-lg text-[10px] font-bold focus:outline-none ${
-                            tx.type === 'deposit' ? 'text-green-600' : 'text-red-600'
-                          }`}
-                        >
-                          <option value="deposit">Dep</option>
-                          <option value="withdraw">With</option>
-                        </select>
-                      </td>
-                      <td className="px-2 py-4">
-                        <input
-                          type="text"
-                          inputMode="decimal"
-                          value={tx.amount}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            if (val === "" || /^\d*\.?\d*$/.test(val)) {
-                              handleInputChange(index, 'amount', val);
-                            }
-                          }}
-                          className="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-[10px] focus:outline-none font-bold"
-                          placeholder="0.00"
-                        />
-                      </td>
-                      <td className="px-2 py-4">
-                        <input
-                          type="text"
-                          value={tx.reason}
-                          onChange={(e) => handleInputChange(index, 'reason', e.target.value)}
-                          className="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-[10px] focus:outline-none"
-                          placeholder="Note..."
-                        />
-                      </td>
-                      <td className="px-2 py-4 text-center">
-                        {tx.status === 'idle' && (
-                          <button
-                            onClick={() => saveTransaction(index)}
-                            className="p-1.5 bg-[#4a6670]/10 text-[#4a6670] rounded-lg hover:bg-[#4a6670]/20 transition-all"
-                            title="Save Row"
-                          >
-                            <Save className="w-3.5 h-3.5" />
-                          </button>
-                        )}
-                        {tx.status === 'saving' && <Loader2 className="w-3.5 h-3.5 animate-spin text-gray-400 mx-auto" />}
-                        {tx.status === 'saved' && <CheckCircle2 className="w-3.5 h-3.5 text-green-500 mx-auto" />}
-                        {tx.status === 'error' && <AlertCircle className="w-3.5 h-3.5 text-red-500 mx-auto" />}
-                      </td>
-                      <td className="px-2 py-4">
-                        <button 
-                          onClick={() => removeRow(index)}
-                          className="p-1 text-gray-300 hover:text-red-500 rounded-lg transition-all"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </td>
+                <button 
+                  onClick={() => setSelectedStudent(null)}
+                  className="px-4 py-2 text-xs font-black text-[#4a6670] bg-[#4a6670]/5 hover:bg-[#4a6670]/10 rounded-xl transition-all"
+                >
+                  Switch Student
+                </button>
+              </div>
+
+              {/* Transactions Table */}
+              <div className="border-t border-gray-50 overflow-x-auto">
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="bg-gray-50/50">
+                      <th className="px-4 py-4 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">Date</th>
+                      <th className="px-4 py-4 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">Session</th>
+                      <th className="px-4 py-4 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">Type</th>
+                      <th className="px-4 py-4 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">Amount</th>
+                      <th className="px-4 py-4 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">Reason</th>
+                      <th className="px-4 py-4 text-center text-[10px] font-black text-gray-400 uppercase tracking-widest">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            
-            <div className="p-4 border-t border-gray-100 flex justify-center">
-              <button
-                onClick={addTransactionRow}
-                className="flex items-center gap-2 px-6 py-2 bg-[#4a6670]/10 text-[#4a6670] rounded-xl font-bold text-sm hover:bg-[#4a6670]/20 transition-all"
-              >
-                <Plus className="w-4 h-4" />
-                Add Another Transaction
-              </button>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50">
+                    {transactions.map((tx, index) => (
+                      <tr key={tx.id} className="hover:bg-gray-50/30 transition-colors">
+                        <td className="px-4 py-4">
+                          <div className="relative w-36">
+                            <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                            <input
+                              type="date"
+                              value={tx.date}
+                              onChange={(e) => handleInputChange(index, 'date', e.target.value)}
+                              className="w-full pl-9 pr-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-bold text-[#171532] outline-none transition-all"
+                            />
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <select
+                            value={tx.academicYear}
+                            onChange={(e) => handleInputChange(index, 'academicYear', e.target.value)}
+                            className="w-24 px-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-bold text-[#171532] outline-none transition-all cursor-pointer"
+                          >
+                            <option value="2024-25">24-25</option>
+                            <option value="2025-26">25-26</option>
+                            <option value="2026-27">26-27</option>
+                          </select>
+                        </td>
+                        <td className="px-4 py-4">
+                          <select
+                            value={tx.type}
+                            onChange={(e) => handleInputChange(index, 'type', e.target.value as any)}
+                            className={`w-24 px-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-black outline-none transition-all cursor-pointer ${
+                              tx.type === 'deposit' ? 'text-green-600' : 'text-red-600'
+                            }`}
+                          >
+                            <option value="deposit">Deposit</option>
+                            <option value="withdraw">Withdraw</option>
+                          </select>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="relative w-32">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">₹</span>
+                            <input
+                              type="text"
+                              inputMode="decimal"
+                              value={tx.amount}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                if (val === "" || /^\d*\.?\d*$/.test(val)) {
+                                  handleInputChange(index, 'amount', val);
+                                }
+                              }}
+                              className="w-full pl-7 pr-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-black text-[#171532] outline-none transition-all"
+                              placeholder="0.00"
+                            />
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <input
+                            type="text"
+                            value={tx.reason}
+                            onChange={(e) => handleInputChange(index, 'reason', e.target.value)}
+                            className="w-full px-4 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-bold text-[#171532] outline-none transition-all"
+                            placeholder="Reason for transaction..."
+                          />
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="flex items-center justify-center gap-3">
+                            {tx.status === 'idle' && (
+                              <button
+                                onClick={() => saveTransaction(index)}
+                                className="flex items-center gap-2 px-3 py-2 bg-[#4a6670] text-white rounded-xl hover:bg-[#3d565e] transition-all active:scale-90 shadow-sm"
+                                title="Save Row"
+                              >
+                                <Save className="w-4 h-4" />
+                                <span className="text-[10px] font-black uppercase tracking-tighter">Save</span>
+                              </button>
+                            )}
+                            {tx.status === 'saving' && <Loader2 className="w-5 h-5 animate-spin text-[#4a6670]" />}
+                            {tx.status === 'saved' && <CheckCircle2 className="w-5 h-5 text-green-500" />}
+                            {tx.status === 'error' && <AlertCircle className="w-5 h-5 text-red-500" />}
+                            
+                            <button 
+                              onClick={() => removeRow(index)}
+                              className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all active:scale-90"
+                              title="Delete Row"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              
+              <div className="p-6 bg-gray-50/50 flex justify-center">
+                <button
+                  onClick={addTransactionRow}
+                  className="flex items-center gap-2 px-8 py-3 bg-white border-2 border-dashed border-gray-200 text-[#4a6670] rounded-2xl font-black text-sm hover:border-[#4a6670]/30 hover:bg-white transition-all active:scale-95 shadow-sm"
+                >
+                  <Plus className="w-5 h-5" />
+                  Add New Transaction Row
+                </button>
+              </div>
             </div>
           </div>
         )}
+      </div>
+    </div>
       </div>
     </div>
   )
