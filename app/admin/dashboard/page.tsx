@@ -403,7 +403,7 @@ export default function AdminDashboard() {
     let yPosition = 20
 
     doc.setFontSize(16)
-    doc.text('JDSA Bank Report', margin, yPosition)
+    doc.text('JDSA STUDENTS BANK Report', margin, yPosition)
     yPosition += 10
 
     doc.setFontSize(10)
