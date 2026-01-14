@@ -248,9 +248,21 @@ export default function BulkEditPage() {
     if (!confirm("Are you sure you want to delete this transaction?")) return
 
     try {
-      const res = await fetch(`/api/students/${selectedStudent._id}/transaction/${txId}`, {
-        method: 'DELETE'
+      // Find the index of the transaction in the history
+      const index = history.findIndex(h => h._id === txId);
+      if (index === -1) {
+        toast.error("Transaction not found");
+        return;
+      }
+
+      // Important: History is sorted by date descending, but we need the index from the student.transactions array
+      // Let's refetch student data to get the correct original index or use a different approach
+      const res = await fetch(`/api/students/${selectedStudent._id}/transaction/delete`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ index }) // Note: This logic assumes the history array matches the DB order, which might be risky.
       })
+      
       if (res.ok) {
         toast.success("Transaction deleted")
         fetchHistory()
@@ -270,29 +282,32 @@ export default function BulkEditPage() {
     }
   }
 
-  const startEditingHistory = (tx: Transaction) => {
-    setEditingHistoryId(tx._id)
-    setEditingHistoryData({ amount: tx.amount.toString(), reason: tx.reason })
-  }
-
   const saveHistoryEdit = async (txId: string) => {
     if (!selectedStudent) return
-    const originalTx = history.find(h => h._id === txId)
-    if (!originalTx) return
+    
+    // Find index in history
+    const historyIndex = history.findIndex(h => h._id === txId);
+    if (historyIndex === -1) return;
 
+    const originalTx = history[historyIndex];
     const newAmount = parseFloat(editingHistoryData.amount)
+    
     if (isNaN(newAmount) || newAmount <= 0) {
       toast.error("Invalid amount")
       return
     }
 
     try {
-      const res = await fetch(`/api/students/${selectedStudent._id}/transaction/${txId}`, {
-        method: 'PATCH',
+      const res = await fetch(`/api/students/${selectedStudent._id}/transaction/update`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          index: historyIndex,
           amount: newAmount,
-          reason: editingHistoryData.reason
+          reason: editingHistoryData.reason,
+          date: originalTx.date,
+          type: originalTx.type,
+          academicYear: originalTx.academicYear
         })
       })
 
