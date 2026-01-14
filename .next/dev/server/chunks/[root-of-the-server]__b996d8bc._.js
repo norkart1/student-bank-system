@@ -66,7 +66,10 @@ async function connectDB() {
     }
     if (!cached.promise) {
         const opts = {
-            bufferCommands: false
+            bufferCommands: false,
+            maxPoolSize: 10,
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 45000
         };
         cached.promise = __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__["default"].connect(MONGODB_URI, opts).then((mongoose)=>{
             return mongoose;
@@ -135,7 +138,7 @@ const studentSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mong
     academicYear: {
         type: String,
         required: true,
-        default: '2024-25'
+        default: '2025-26'
     },
     balance: {
         type: Number,
@@ -146,6 +149,12 @@ const studentSchema = new __TURBOPACK__imported__module__$5b$externals$5d2f$mong
     ]
 }, {
     timestamps: true
+});
+studentSchema.index({
+    code: 1,
+    academicYear: 1
+}, {
+    unique: true
 });
 const Student = __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__["default"].models.Student || __TURBOPACK__imported__module__$5b$externals$5d2f$mongoose__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__["default"].model('Student', studentSchema);
 }),
