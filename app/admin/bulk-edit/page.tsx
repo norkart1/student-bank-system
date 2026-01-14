@@ -651,56 +651,78 @@ export default function BulkEditPage() {
                             <p className="text-[10px] text-gray-400 font-bold">{h.date} • {h.academicYear}</p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-4">
-                          {editingHistoryId === h._id ? (
-                            <div className="flex items-center gap-2">
-                              <input 
-                                type="text"
-                                value={editingHistoryData.amount}
-                                onChange={(e) => setEditingHistoryData({ ...editingHistoryData, amount: e.target.value })}
-                                className="w-20 px-2 py-1 bg-white border border-gray-200 rounded-lg text-xs font-bold outline-none"
-                              />
-                              <div className="flex items-center gap-1">
-                                <button 
-                                  onClick={() => saveHistoryEdit(h._id)}
-                                  className="p-1.5 text-green-600 hover:bg-green-50 rounded-lg transition-all"
-                                  title="Save Changes"
-                                >
-                                  <Save className="w-3.5 h-3.5" />
-                                </button>
-                                <button 
-                                  onClick={() => setEditingHistoryId(null)}
-                                  className="p-1.5 text-gray-400 hover:bg-gray-50 rounded-lg transition-all"
-                                  title="Cancel"
-                                >
-                                  <X className="w-3.5 h-3.5" />
-                                </button>
+                          <div className="flex items-center gap-4">
+                            {editingHistoryId === h._id ? (
+                              <div className="flex items-center gap-2">
+                                <input 
+                                  type="text"
+                                  value={editingHistoryData.amount}
+                                  onChange={(e) => setEditingHistoryData({ ...editingHistoryData, amount: e.target.value })}
+                                  className="w-20 px-2 py-1 bg-white border border-gray-200 rounded-lg text-xs font-bold outline-none"
+                                />
+                                <div className="flex items-center gap-2">
+                                  <button 
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      saveHistoryEdit(h._id);
+                                    }}
+                                    className="flex items-center justify-center p-3 bg-green-500 text-white rounded-xl hover:bg-green-600 active:scale-95 shadow-md transition-all cursor-pointer z-10"
+                                    title="Save Changes"
+                                  >
+                                    <Save className="w-5 h-5" />
+                                  </button>
+                                  <button 
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      setEditingHistoryId(null);
+                                    }}
+                                    className="flex items-center justify-center p-3 bg-gray-100 text-gray-500 rounded-xl hover:bg-gray-200 active:scale-95 transition-all cursor-pointer z-10"
+                                    title="Cancel"
+                                  >
+                                    <X className="w-5 h-5" />
+                                  </button>
+                                </div>
                               </div>
-                            </div>
-                          ) : (
-                            <>
-                              <p className={`text-sm font-black ${
-                                h.type === 'deposit' ? 'text-green-600' : 'text-red-600'
-                              }`}>
-                                ₹{h.amount.toFixed(2)}
-                              </p>
-                              <div className="flex items-center gap-1 opacity-100">
-                                <button 
-                                  onClick={() => startEditingHistory(h)}
-                                  className="p-1.5 text-gray-400 hover:text-[#4a6670] hover:bg-white rounded-lg transition-all"
-                                >
-                                  <Edit className="w-3.5 h-3.5" />
-                                </button>
-                                <button 
-                                  onClick={() => deleteHistoryItem(h._id)}
-                                  className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-white rounded-lg transition-all"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                              </div>
-                            </>
-                          )}
-                        </div>
+                            ) : (
+                              <>
+                                <p className={`text-sm font-black ${
+                                  h.type === 'deposit' ? 'text-green-600' : 'text-red-600'
+                                }`}>
+                                  ₹{h.amount.toFixed(2)}
+                                </p>
+                                <div className="flex items-center gap-2">
+                                  <button 
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      startEditingHistory(h);
+                                    }}
+                                    className="p-3 text-gray-400 hover:text-[#4a6670] hover:bg-white rounded-xl transition-all active:scale-95 cursor-pointer z-10"
+                                    title="Edit Transaction"
+                                  >
+                                    <Edit className="w-5 h-5" />
+                                  </button>
+                                  <button 
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      deleteHistoryItem(h._id);
+                                    }}
+                                    className="p-3 text-gray-400 hover:text-red-500 hover:bg-white rounded-xl transition-all active:scale-95 cursor-pointer z-10"
+                                    title="Delete Transaction"
+                                  >
+                                    <Trash2 className="w-5 h-5" />
+                                  </button>
+                                </div>
+                              </>
+                            )}
+                          </div>
                       </div>
                     ))
                   )}
