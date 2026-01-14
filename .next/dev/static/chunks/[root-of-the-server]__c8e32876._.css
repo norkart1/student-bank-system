@@ -1304,6 +1304,10 @@
     min-width: 8rem;
   }
 
+  .min-w-\[80px\] {
+    min-width: 80px;
+  }
+
   .min-w-\[500px\] {
     min-width: 500px;
   }
