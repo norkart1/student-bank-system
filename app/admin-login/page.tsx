@@ -63,7 +63,15 @@ export default function AdminLoginPage() {
           </div>
         </Link>
 
-        <div className="mb-10">
+        <div className="mb-10 flex flex-col items-center md:items-start text-center md:text-left">
+          <div className="w-24 h-24 mb-6 relative rounded-2xl overflow-hidden shadow-lg border-2 border-[#4a6670]/10">
+            <Image
+              src="/students_logo.png"
+              alt="JDSA Students Bank"
+              fill
+              className="object-cover"
+            />
+          </div>
           <h1 className="text-3xl md:text-4xl font-bold text-[#171532] leading-tight">
             Admin<br />Portal
           </h1>

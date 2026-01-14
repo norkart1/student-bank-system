@@ -1495,6 +1495,11 @@
     border-color: #4a6670;
   }
 
+  .border-\[\#4a6670\]\/10 {
+    border-color: #4a66701a;
+    border-color: lab(41.2653% -8.66638 -9.16503 / .1);
+  }
+
   .border-\[\#5a7680\]\/50 {
     border-color: #5a768080;
     border-color: lab(47.7146% -8.60015 -8.99942 / .5);
@@ -3831,6 +3836,12 @@
   }
 
   @media (min-width: 48rem) {
+    .md\:items-start {
+      align-items: flex-start;
+    }
+  }
+
+  @media (min-width: 48rem) {
     .md\:justify-center {
       justify-content: center;
     }
@@ -3883,6 +3894,12 @@
   @media (min-width: 48rem) {
     .md\:py-16 {
       padding-block: calc(var(--spacing) * 16);
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .md\:text-left {
+      text-align: left;
     }
   }
 
