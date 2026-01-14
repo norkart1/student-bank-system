@@ -282,6 +282,11 @@ export default function BulkEditPage() {
     }
   }
 
+  const startEditingHistory = (tx: Transaction) => {
+    setEditingHistoryId(tx._id)
+    setEditingHistoryData({ amount: tx.amount.toString(), reason: tx.reason })
+  }
+
   const saveHistoryEdit = async (txId: string) => {
     if (!selectedStudent) return
     
