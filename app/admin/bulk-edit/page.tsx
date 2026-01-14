@@ -290,11 +290,10 @@ export default function BulkEditPage() {
   const saveHistoryEdit = async (txId: string) => {
     if (!selectedStudent) return
     
-    // Find index in history
-    const historyIndex = history.findIndex(h => h._id === txId);
-    if (historyIndex === -1) return;
+    // Find transaction in history
+    const historyItem = history.find(h => h._id === txId);
+    if (!historyItem) return;
 
-    const originalTx = history[historyIndex];
     const newAmount = parseFloat(editingHistoryData.amount)
     
     if (isNaN(newAmount) || newAmount <= 0) {
@@ -307,12 +306,9 @@ export default function BulkEditPage() {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          index: historyIndex,
+          txId: txId, // Send the stable database ID
           amount: newAmount,
-          reason: editingHistoryData.reason,
-          date: originalTx.date,
-          type: originalTx.type,
-          academicYear: originalTx.academicYear
+          reason: editingHistoryData.reason
         })
       })
 
@@ -321,7 +317,7 @@ export default function BulkEditPage() {
         setEditingHistoryId(null)
         fetchHistory()
         // Update balance locally
-        const diff = originalTx.type === 'deposit' ? newAmount - originalTx.amount : originalTx.amount - newAmount
+        const diff = historyItem.type === 'deposit' ? newAmount - historyItem.amount : historyItem.amount - newAmount
         setSelectedStudent(prev => prev ? { ...prev, balance: prev.balance + diff } : null)
       } else {
         throw new Error("Failed to update")
