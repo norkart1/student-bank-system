@@ -576,15 +576,20 @@ export default function BulkEditPage() {
                         <td className="px-0 py-0 md:px-4 md:py-4 block md:table-cell">
                           <div className="flex flex-col md:block gap-1">
                             <span className="md:hidden text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 text-center">Actions</span>
-                            <div className="flex items-center justify-center gap-4">
+                            <div className="flex items-center justify-center gap-4 py-2">
                               {tx.status === 'idle' && (
                                 <button
-                                  onClick={() => saveTransaction(index)}
-                                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-[#4a6670] text-white rounded-xl hover:bg-[#3d565e] transition-all active:scale-90 shadow-md min-w-[80px]"
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    saveTransaction(index);
+                                  }}
+                                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-[#4a6670] text-white rounded-2xl hover:bg-[#3d565e] active:scale-95 shadow-lg min-w-[100px] cursor-pointer z-10"
                                   title="Save Row"
                                 >
                                   <Save className="w-5 h-5" />
-                                  <span className="text-[10px] font-black uppercase tracking-tighter">Save</span>
+                                  <span className="text-xs font-black uppercase tracking-tighter">Save</span>
                                 </button>
                               )}
                               {tx.status === 'saving' && <Loader2 className="w-6 h-6 animate-spin text-[#4a6670]" />}
@@ -592,8 +597,13 @@ export default function BulkEditPage() {
                               {tx.status === 'error' && <AlertCircle className="w-6 h-6 text-red-500" />}
                               
                               <button 
-                                onClick={() => removeRow(index)}
-                                className="p-3 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all active:scale-90"
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  removeRow(index);
+                                }}
+                                className="p-4 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all active:scale-95 cursor-pointer z-10"
                                 title="Delete Row"
                               >
                                 <Trash2 className="w-5 h-5" />
