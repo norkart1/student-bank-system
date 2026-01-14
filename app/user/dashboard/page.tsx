@@ -132,7 +132,9 @@ export default function UserDashboard() {
 
     const columns = ["S.No", "Date", "Academic Year", "Type", "Amount", "Balance"]
     let runningBalance = 0
-    const filteredTxs = userData?.transactions?.filter((t: any) => (t.academicYear || "2025-26") === selectedAcademicYear) || []
+    const filteredTxs = (userData?.transactions || [])
+      .filter((t: any) => (t.academicYear || "2025-26") === selectedAcademicYear)
+      .sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime())
     
     const rows = filteredTxs.map((t: any, idx: number) => {
       if (t.type === "deposit") runningBalance += t.amount || 0
@@ -192,7 +194,11 @@ export default function UserDashboard() {
     let runningBalance = 0
     data.push(['S.No', 'Date', 'Deposit', 'Withdraw', 'Balance'])
 
-    userData?.transactions?.forEach((t: any, idx: number) => {
+    const sortedTxs = (userData?.transactions || [])
+      .filter((t: any) => (t.academicYear || '2025-26') === selectedAcademicYear)
+      .sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime())
+
+    sortedTxs.forEach((t: any, idx: number) => {
       if (t.type === 'deposit') {
         runningBalance += t.amount || 0
       } else {
@@ -387,57 +393,59 @@ export default function UserDashboard() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#e5e7eb]">
-                    {userData.transactions
-                      .filter((t: any) => (t.academicYear || '2025-26') === selectedAcademicYear)
-                      .map((transaction: any, idx: number) => {
-                      // Calculate running balance for filtered transactions
-                      let runningBalance = 0
-                      const filteredTxs = userData.transactions.filter((t: any) => (t.academicYear || '2025-26') === selectedAcademicYear)
-                      for (let i = 0; i <= idx; i++) {
-                        if (filteredTxs[i].type === 'deposit') {
-                          runningBalance += filteredTxs[i].amount || 0
-                        } else {
-                          runningBalance -= filteredTxs[i].amount || 0
-                        }
-                      }
+                    {(() => {
+                      const sortedTxs = [...(userData.transactions || [])]
+                        .filter((t: any) => (t.academicYear || '2025-26') === selectedAcademicYear)
+                        .sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
                       
-                      return (
-                        <tr key={idx} className={idx % 2 === 0 ? 'bg-[#f8f9fa]' : 'bg-white hover:bg-[#f1f5f9] transition-colors'}>
-                          <td className="px-3 py-3 font-semibold text-[#171532]">
-                            <div className="flex flex-col gap-1">
-                              <span>{idx + 1}</span>
-                              <span className="text-[9px] bg-[#4a6670]/10 text-[#4a6670] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider w-fit">
-                                {transaction.academicYear || '2025-26'}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="px-3 py-3 text-[#747384] text-xs leading-relaxed">
-                            {transaction.date || '-'}
-                          </td>
-                          <td className="px-3 py-3 text-right">
-                            {transaction.type === 'deposit' ? (
-                              <span className="inline-flex items-center gap-1 bg-green-50 px-2 py-1 rounded-md font-bold text-green-700 text-xs">
-                                <span className="text-[10px]">↓</span>₹{transaction.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                              </span>
-                            ) : (
-                              <span className="text-[#cbd5e1]">-</span>
-                            )}
-                          </td>
-                          <td className="px-3 py-3 text-right">
-                            {transaction.type === 'withdraw' ? (
-                              <span className="inline-flex items-center gap-1 bg-red-50 px-2 py-1 rounded-md font-bold text-red-700 text-xs">
-                                <span className="text-[10px]">↑</span>₹{transaction.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                              </span>
-                            ) : (
-                              <span className="text-[#cbd5e1]">-</span>
-                            )}
-                          </td>
-                          <td className="px-3 py-3 text-right font-bold text-[#4a6670] tabular-nums">
-                            ₹{runningBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </td>
-                        </tr>
-                      )
-                    })}
+                      return sortedTxs.map((transaction: any, idx: number) => {
+                        let runningBalance = 0;
+                        for (let i = 0; i <= idx; i++) {
+                          if (sortedTxs[i].type === 'deposit') {
+                            runningBalance += sortedTxs[i].amount || 0;
+                          } else {
+                            runningBalance -= sortedTxs[i].amount || 0;
+                          }
+                        }
+                        
+                        return (
+                          <tr key={idx} className={idx % 2 === 0 ? 'bg-[#f8f9fa]' : 'bg-white hover:bg-[#f1f5f9] transition-colors'}>
+                            <td className="px-3 py-3 font-semibold text-[#171532]">
+                              <div className="flex flex-col gap-1">
+                                <span>{idx + 1}</span>
+                                <span className="text-[9px] bg-[#4a6670]/10 text-[#4a6670] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider w-fit">
+                                  {transaction.academicYear || '2025-26'}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="px-3 py-3 text-[#747384] text-xs leading-relaxed">
+                              {transaction.date || '-'}
+                            </td>
+                            <td className="px-3 py-3 text-right">
+                              {transaction.type === 'deposit' ? (
+                                <span className="inline-flex items-center gap-1 bg-green-50 px-2 py-1 rounded-md font-bold text-green-700 text-xs">
+                                  <span className="text-[10px]">↓</span>₹{transaction.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </span>
+                              ) : (
+                                <span className="text-[#cbd5e1]">-</span>
+                              )}
+                            </td>
+                            <td className="px-3 py-3 text-right">
+                              {transaction.type === 'withdraw' ? (
+                                <span className="inline-flex items-center gap-1 bg-red-50 px-2 py-1 rounded-md font-bold text-red-700 text-xs">
+                                  <span className="text-[10px]">↑</span>₹{transaction.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </span>
+                              ) : (
+                                <span className="text-[#cbd5e1]">-</span>
+                              )}
+                            </td>
+                            <td className="px-3 py-3 text-right font-bold text-[#4a6670] tabular-nums">
+                              ₹{runningBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </td>
+                          </tr>
+                        )
+                      });
+                    })()}
                   </tbody>
                 </table>
               </div>
@@ -479,16 +487,21 @@ export default function UserDashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {userData.transactions
-                    .filter((t: any) => (t.academicYear || '2025-26') === selectedAcademicYear)
-                    .map((transaction: any, idx: number) => {
-                    let runningBalance = 0
-                    const filteredTxs = userData.transactions.filter((t: any) => (t.academicYear || '2025-26') === selectedAcademicYear)
-                    for (let i = 0; i <= idx; i++) {
-                      if (filteredTxs[i].type === 'deposit') runningBalance += filteredTxs[i].amount || 0
-                      else runningBalance -= filteredTxs[i].amount || 0
-                    }
+                  {(() => {
+                    const sortedTxs = [...(userData.transactions || [])]
+                      .filter((t: any) => (t.academicYear || '2025-26') === selectedAcademicYear)
+                      .sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
                     
+                    return sortedTxs.map((transaction: any, idx: number) => {
+                      let runningBalance = 0;
+                      for (let i = 0; i <= idx; i++) {
+                        if (sortedTxs[i].type === 'deposit') {
+                          runningBalance += sortedTxs[i].amount || 0;
+                        } else {
+                          runningBalance -= sortedTxs[i].amount || 0;
+                        }
+                      }
+                      
                       return (
                         <tr key={idx} className={idx % 2 === 0 ? 'bg-[#f8f9fa]' : 'bg-white hover:bg-[#f1f5f9] transition-colors'}>
                           <td className="px-2 py-3 font-bold text-[#171532]">{idx + 1}</td>
@@ -503,26 +516,28 @@ export default function UserDashboard() {
                             ₹{runningBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                           </td>
                         </tr>
-                      )
-                  })}
+                      );
+                    });
+                  })()}
                 </tbody>
               </table>
             </div>
-          </div>
-          
-          <div className="p-4 bg-white border-t border-gray-200 grid grid-cols-2 gap-3">
-            <button 
-              onClick={handlePrint}
-              className="flex items-center justify-center gap-2 bg-[#4a6670] text-white py-3 rounded-xl font-bold"
-            >
-              <Printer className="w-5 h-5" /> Print
-            </button>
-            <button 
-              onClick={() => setIsLedgerFullscreen(false)}
-              className="bg-gray-100 text-gray-700 py-3 rounded-xl font-bold"
-            >
-              Close
-            </button>
+            
+            <div className="mt-4 flex flex-col gap-3 p-4">
+              <button 
+                onClick={downloadPDF}
+                className="w-full flex items-center justify-center gap-3 bg-red-500 text-white py-4 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-all"
+              >
+                <Printer className="w-5 h-5" />
+                Print Full Ledger
+              </button>
+              <button 
+                onClick={() => setIsLedgerFullscreen(false)}
+                className="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-100 text-[#747384] py-4 rounded-2xl font-black text-sm active:scale-95 transition-all"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
