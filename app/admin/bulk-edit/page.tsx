@@ -576,27 +576,27 @@ export default function BulkEditPage() {
                         <td className="px-0 py-0 md:px-4 md:py-4 block md:table-cell">
                           <div className="flex flex-col md:block gap-1">
                             <span className="md:hidden text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 text-center">Actions</span>
-                            <div className="flex items-center justify-center gap-3">
+                            <div className="flex items-center justify-center gap-4">
                               {tx.status === 'idle' && (
                                 <button
                                   onClick={() => saveTransaction(index)}
-                                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-3 py-2 bg-[#4a6670] text-white rounded-xl hover:bg-[#3d565e] transition-all active:scale-90 shadow-sm"
+                                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-[#4a6670] text-white rounded-xl hover:bg-[#3d565e] transition-all active:scale-90 shadow-md min-w-[80px]"
                                   title="Save Row"
                                 >
-                                  <Save className="w-4 h-4" />
+                                  <Save className="w-5 h-5" />
                                   <span className="text-[10px] font-black uppercase tracking-tighter">Save</span>
                                 </button>
                               )}
-                              {tx.status === 'saving' && <Loader2 className="w-5 h-5 animate-spin text-[#4a6670]" />}
-                              {tx.status === 'saved' && <CheckCircle2 className="w-5 h-5 text-green-500" />}
-                              {tx.status === 'error' && <AlertCircle className="w-5 h-5 text-red-500" />}
+                              {tx.status === 'saving' && <Loader2 className="w-6 h-6 animate-spin text-[#4a6670]" />}
+                              {tx.status === 'saved' && <CheckCircle2 className="w-6 h-6 text-green-500" />}
+                              {tx.status === 'error' && <AlertCircle className="w-6 h-6 text-red-500" />}
                               
                               <button 
                                 onClick={() => removeRow(index)}
-                                className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all active:scale-90"
+                                className="p-3 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all active:scale-90"
                                 title="Delete Row"
                               >
-                                <Trash2 className="w-4 h-4" />
+                                <Trash2 className="w-5 h-5" />
                               </button>
                             </div>
                           </div>
