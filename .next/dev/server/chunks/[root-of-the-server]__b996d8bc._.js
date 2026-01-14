@@ -182,7 +182,7 @@ async function PUT(req, { params }) {
         await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$mongodb$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["connectDB"])();
         const { id } = await params;
         const body = await req.json();
-        const { index, date, type, amount, academicYear } = body;
+        const { txId, amount, reason } = body;
         const student = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Student$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Student"].findById(id);
         if (!student) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
@@ -191,23 +191,22 @@ async function PUT(req, { params }) {
                 status: 404
             });
         }
-        if (index < 0 || index >= student.transactions.length) {
+        // Find transaction by its unique database ID
+        const txIndex = student.transactions.findIndex((t)=>t._id.toString() === txId);
+        if (txIndex === -1) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: "Invalid transaction index"
+                error: "Transaction not found"
             }, {
-                status: 400
+                status: 404
             });
         }
-        const oldTransaction = student.transactions[index];
+        const oldTransaction = student.transactions[txIndex];
         const oldAmount = oldTransaction.type === 'deposit' ? oldTransaction.amount : -oldTransaction.amount;
-        const newAmount = type === 'deposit' ? amount : -amount;
+        const newAmount = oldTransaction.type === 'deposit' ? amount : -amount;
         const difference = newAmount - oldAmount;
-        student.transactions[index] = {
-            date,
-            type,
-            amount,
-            academicYear
-        };
+        // Update only the fields that changed, keeping date and type stable
+        student.transactions[txIndex].amount = amount;
+        student.transactions[txIndex].reason = reason || student.transactions[txIndex].reason;
         student.balance += difference;
         student.markModified('transactions');
         await student.save();
