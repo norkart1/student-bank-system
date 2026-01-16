@@ -24,9 +24,16 @@ export function PWAInstall() {
       setDeferredPrompt(e)
       // Show the UI
       setIsVisible(true)
+      
+      // OPTIONAL: Automatically trigger the prompt as soon as it's available
+      // e.prompt(); 
     }
 
     window.addEventListener('beforeinstallprompt', handler)
+    window.addEventListener('appinstalled', () => {
+      setIsVisible(false)
+      setDeferredPrompt(null)
+    })
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handler)
