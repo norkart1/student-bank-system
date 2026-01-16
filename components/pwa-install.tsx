@@ -35,21 +35,31 @@ export function PWAInstall() {
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) {
-      // For some browsers, we can try to use the navigator.install() if available (experimental)
-      // but generally, we need the event.
-      alert('To install JDSA Bank, please tap the browser menu (three dots) and select "Add to Home Screen" or "Install App".')
+      // Direct instructions for mobile users when the prompt isn't ready
+      const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+      const isAndroid = /Android/.test(navigator.userAgent);
+      
+      if (isiOS) {
+        alert('To add to Home Screen:\n1. Tap the Share button (square with arrow)\n2. Scroll down and tap "Add to Home Screen"');
+      } else if (isAndroid) {
+        alert('To add to Home Screen:\n1. Tap the three dots (⋮) in top right\n2. Tap "Install app" or "Add to Home screen"');
+      } else {
+        alert('Please use your browser menu to "Install" or "Add to Home Screen".');
+      }
       return
     }
 
     // Show the prompt
-    deferredPrompt.prompt()
-    
-    // Wait for the user to respond to the prompt
-    const { outcome } = await deferredPrompt.userChoice
-    
-    // We've used the prompt, and can't use it again, throw it away
-    setDeferredPrompt(null)
-    setIsVisible(false)
+    try {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setDeferredPrompt(null);
+        setIsVisible(false);
+      }
+    } catch (err) {
+      console.error('Install error:', err);
+    }
   }
 
   const handleCancel = () => {
