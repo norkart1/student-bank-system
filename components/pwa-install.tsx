@@ -34,7 +34,10 @@ export function PWAInstall() {
   }, [])
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return
+    if (!deferredPrompt) {
+      alert('To install the app, please use your browser menu and select "Add to Home Screen" or "Install App".')
+      return
+    }
 
     // Show the prompt
     deferredPrompt.prompt()
