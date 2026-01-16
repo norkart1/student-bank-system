@@ -3,10 +3,12 @@
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight } from "lucide-react"
+import { PWAInstall } from "@/components/pwa-install"
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#f5f5f7] dark:bg-slate-900 flex flex-col items-center justify-center px-6 py-8">
+      <PWAInstall />
       <div className="flex flex-col items-center max-w-md w-full">
         <div className="relative w-full max-w-[320px] mb-10 flex items-center justify-center">
           <Image 

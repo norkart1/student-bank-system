@@ -65,6 +65,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/admin/bulk-edit/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/admin/bulk-edit">> = Specific
+  const handler = {} as typeof import("../../app/admin/bulk-edit/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/admin/dashboard/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/admin/dashboard">> = Specific
@@ -78,6 +87,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends AppPageConfig<"/admin/manage-transactions">> = Specific
   const handler = {} as typeof import("../../app/admin/manage-transactions/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/admin/qr-download/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/admin/qr-download">> = Specific
+  const handler = {} as typeof import("../../app/admin/qr-download/page.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
@@ -132,6 +150,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends AppPageConfig<"/user/dashboard">> = Specific
   const handler = {} as typeof import("../../app/user/dashboard/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/admin/bulk-delete/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/admin/bulk-delete">> = Specific
+  const handler = {} as typeof import("../../app/api/admin/bulk-delete/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

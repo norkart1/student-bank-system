@@ -140,6 +140,7 @@
     --color-pink-100: #fce7f3;
     --color-slate-50: #f8fafc;
     --color-slate-200: #e2e8f0;
+    --color-slate-300: #cad5e2;
     --color-slate-400: #90a1b9;
     --color-slate-500: #62748e;
     --color-slate-600: #45556c;
@@ -257,6 +258,7 @@
       --color-pink-100: lab(93.5864% 9.01193 -3.15079);
       --color-slate-50: lab(98.1434% -.369519 -1.05966);
       --color-slate-200: lab(91.7353% -.998765 -4.76968);
+      --color-slate-300: lab(84.7652% -1.94535 -7.93337);
       --color-slate-400: lab(65.5349% -2.25151 -14.5072);
       --color-slate-500: lab(48.0876% -2.03595 -16.5814);
       --color-slate-600: lab(35.5623% -1.74978 -15.4316);
@@ -1409,6 +1411,10 @@
     border-radius: var(--radius-3xl);
   }
 
+  .rounded-\[40px\] {
+    border-radius: 40px;
+  }
+
   .rounded-full {
     border-radius: 3.40282e38px;
   }
@@ -1651,6 +1657,10 @@
     background-color: #22c55e;
   }
 
+  .bg-\[\#171532\] {
+    background-color: #171532;
+  }
+
   .bg-\[\#EF4444\] {
     background-color: #ef4444;
   }
@@ -1683,6 +1693,10 @@
 
   .bg-\[\#f0f0f0\] {
     background-color: #f0f0f0;
+  }
+
+  .bg-\[\#f0f4f8\] {
+    background-color: #f0f4f8;
   }
 
   .bg-\[\#f0f4ff\] {
@@ -2437,6 +2451,10 @@
     color: #7056b2;
   }
 
+  .text-\[\#71717a\] {
+    color: #71717a;
+  }
+
   .text-\[\#171532\] {
     color: #171532;
   }
@@ -2862,6 +2880,10 @@
     user-select: none;
   }
 
+  .slide-in-from-bottom-10 {
+    --tw-enter-translate-y: calc(.1 * 100%);
+  }
+
   .zoom-in-95 {
     --tw-enter-scale: .95;
   }
@@ -3245,6 +3267,12 @@
   @media (hover: hover) {
     .hover\:bg-slate-700:hover {
       background-color: var(--color-slate-700);
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:bg-transparent:hover {
+      background-color: #0000;
     }
   }
 
@@ -3713,6 +3741,12 @@
   }
 
   @media (min-width: 40rem) {
+    .sm\:justify-center {
+      justify-content: center;
+    }
+  }
+
+  @media (min-width: 40rem) {
     .sm\:justify-end {
       justify-content: flex-end;
     }
@@ -4032,6 +4066,10 @@
 
   .dark\:text-slate-200:is(.dark *) {
     color: var(--color-slate-200);
+  }
+
+  .dark\:text-slate-300:is(.dark *) {
+    color: var(--color-slate-300);
   }
 
   .dark\:text-slate-400:is(.dark *) {
