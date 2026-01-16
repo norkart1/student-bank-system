@@ -55,42 +55,35 @@ export function PWAInstall() {
   if (!mounted || !isVisible) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-end bg-black/40 backdrop-blur-sm p-4 sm:justify-center">
-      <div className="w-full max-w-[280px] bg-white dark:bg-slate-800 rounded-[32px] p-6 shadow-2xl flex flex-col items-center animate-in fade-in zoom-in slide-in-from-bottom-10 duration-300">
-        <div className="w-16 h-16 bg-[#f0f4f8] dark:bg-slate-700 rounded-2xl flex items-center justify-center mb-4">
-          <Download className="w-8 h-8 text-[#4a6670] dark:text-slate-300" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-[2px] p-6">
+      <div className="w-full max-w-[340px] bg-white dark:bg-slate-900 rounded-[24px] p-6 shadow-xl flex flex-col items-center animate-in fade-in zoom-in duration-200">
+        <div className="w-12 h-12 bg-red-50 dark:bg-red-900/20 rounded-full flex items-center justify-center mb-4 ring-8 ring-red-50/50 dark:ring-red-900/10">
+          <Download className="w-6 h-6 text-red-500" />
         </div>
 
-        <h2 className="text-xl font-bold text-[#171532] dark:text-white mb-2 text-center">
+        <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-2 text-center">
           Install JDSA Bank
         </h2>
         
-        <p className="text-sm text-[#71717a] dark:text-slate-400 text-center mb-6 leading-snug">
+        <p className="text-[14px] text-slate-500 dark:text-slate-400 text-center mb-8 leading-snug px-2">
           Download our app to your home screen for quick and easy access to your account.
         </p>
 
-        <div className="w-full space-y-2">
-          <Button 
-            onClick={handleInstallClick}
-            className="w-full h-11 bg-[#4a6670] hover:bg-[#3d565e] text-white text-base font-semibold rounded-xl shadow-md transition-all"
-          >
-            Download App
-          </Button>
-          
+        <div className="w-full flex gap-3">
           <Button 
             onClick={handleCancel}
             variant="ghost"
-            className="w-full h-10 text-[#71717a] dark:text-slate-400 text-base font-semibold rounded-xl hover:bg-transparent"
+            className="flex-1 h-12 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium rounded-xl transition-all"
           >
             Cancel
           </Button>
-        </div>
-      </div>
-      
-      {/* Bottom Bar mimic from screenshot */}
-      <div className="w-full max-w-[280px] mt-3">
-        <div className="w-full h-12 bg-[#171532] rounded-xl flex items-center justify-center gap-2 text-white text-sm font-medium cursor-pointer" onClick={handleCancel}>
-          Find Your Account <ArrowRight className="w-3.5 h-3.5" />
+          
+          <Button 
+            onClick={handleInstallClick}
+            className="flex-1 h-12 bg-[#f84b4b] hover:bg-[#e43d3d] text-white text-sm font-medium rounded-xl shadow-sm transition-all"
+          >
+            Download
+          </Button>
         </div>
       </div>
     </div>
