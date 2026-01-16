@@ -93,7 +93,7 @@ export default function UserDashboard() {
   useEffect(() => {
     const interval = setInterval(() => {
       loadUserData()
-    }, 5000)
+    }, 10000) // Increased to 10s for production stability
 
     return () => clearInterval(interval)
   }, [isLoading, selectedAcademicYear])
@@ -103,7 +103,8 @@ export default function UserDashboard() {
     if (data.type === 'balance-changed' || data.type === 'transaction-added') {
       setRealTimeStatus(true)
       loadUserData()
-      setTimeout(() => setRealTimeStatus(false), 2000)
+      const timer = setTimeout(() => setRealTimeStatus(false), 2000)
+      return () => clearTimeout(timer)
     }
   })
 
