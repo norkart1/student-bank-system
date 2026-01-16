@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Wallet, User, ArrowUpRight, ArrowDownRight, History, QrCode, Download, Printer, Zap } from "lucide-react"
 import { useTheme } from "next-themes"
@@ -503,7 +503,7 @@ export default function UserDashboard() {
 
                     let globalIdx = 0;
                     return Object.entries(groupedTxs).map(([monthYear, transactions]) => (
-                      <div key={monthYear} className="contents">
+                      <React.Fragment key={monthYear}>
                         <tr className="bg-gray-50/50">
                           <td colSpan={5} className="px-2 py-2 text-[10px] font-bold text-[#4a6670] uppercase tracking-wider border-y border-gray-100">
                             {monthYear}
@@ -540,7 +540,7 @@ export default function UserDashboard() {
                             </tr>
                           );
                         })}
-                      </div>
+                      </React.Fragment>
                     ));
                   })()}
                 </tbody>
