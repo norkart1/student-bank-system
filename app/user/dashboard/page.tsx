@@ -550,7 +550,7 @@ export default function UserDashboard() {
             <div className="mt-4 flex flex-col gap-3 p-4">
               <button 
                 onClick={downloadPDF}
-                className="w-full flex items-center justify-center gap-3 bg-red-500 text-white py-4 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-all"
+                className="w-full flex items-center justify-center gap-3 bg-[#4a6670] text-white py-4 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-all"
               >
                 <Printer className="w-5 h-5" />
                 Print Full Ledger
