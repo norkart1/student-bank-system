@@ -6,26 +6,27 @@ import { Button } from '@/components/ui/button'
 
 export function PWAInstall() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(true) // Force visibility initially for testing
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
+    
+    // Check if app is already installed
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsVisible(false)
+    }
+
     const handler = (e: Event) => {
       // Prevent Chrome 67 and earlier from automatically showing the prompt
       e.preventDefault()
       // Stash the event so it can be triggered later.
       setDeferredPrompt(e)
-      // Update UI notify the user they can add to home screen
+      // Show the UI
       setIsVisible(true)
     }
 
     window.addEventListener('beforeinstallprompt', handler)
-
-    // Check if app is already installed
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      setIsVisible(false)
-    }
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handler)
