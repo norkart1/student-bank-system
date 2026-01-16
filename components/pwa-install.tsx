@@ -55,24 +55,24 @@ export function PWAInstall() {
   if (!mounted || !isVisible) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-end bg-black/40 backdrop-blur-sm p-6 sm:justify-center">
-      <div className="w-full max-w-sm bg-white dark:bg-slate-800 rounded-[40px] p-8 shadow-2xl flex flex-col items-center animate-in fade-in zoom-in slide-in-from-bottom-10 duration-300">
-        <div className="w-20 h-20 bg-[#f0f4f8] dark:bg-slate-700 rounded-3xl flex items-center justify-center mb-6">
-          <Download className="w-10 h-10 text-[#4a6670] dark:text-slate-300" />
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-end bg-black/40 backdrop-blur-sm p-4 sm:justify-center">
+      <div className="w-full max-w-[280px] bg-white dark:bg-slate-800 rounded-[32px] p-6 shadow-2xl flex flex-col items-center animate-in fade-in zoom-in slide-in-from-bottom-10 duration-300">
+        <div className="w-16 h-16 bg-[#f0f4f8] dark:bg-slate-700 rounded-2xl flex items-center justify-center mb-4">
+          <Download className="w-8 h-8 text-[#4a6670] dark:text-slate-300" />
         </div>
 
-        <h2 className="text-2xl font-bold text-[#171532] dark:text-white mb-3 text-center">
+        <h2 className="text-xl font-bold text-[#171532] dark:text-white mb-2 text-center">
           Install JDSA Bank
         </h2>
         
-        <p className="text-[#71717a] dark:text-slate-400 text-center mb-8 leading-relaxed">
+        <p className="text-sm text-[#71717a] dark:text-slate-400 text-center mb-6 leading-snug">
           Download our app to your home screen for quick and easy access to your account.
         </p>
 
-        <div className="w-full space-y-3">
+        <div className="w-full space-y-2">
           <Button 
             onClick={handleInstallClick}
-            className="w-full h-14 bg-[#4a6670] hover:bg-[#3d565e] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all"
+            className="w-full h-11 bg-[#4a6670] hover:bg-[#3d565e] text-white text-base font-semibold rounded-xl shadow-md transition-all"
           >
             Download App
           </Button>
@@ -80,7 +80,7 @@ export function PWAInstall() {
           <Button 
             onClick={handleCancel}
             variant="ghost"
-            className="w-full h-14 text-[#71717a] dark:text-slate-400 text-lg font-semibold rounded-2xl hover:bg-transparent"
+            className="w-full h-10 text-[#71717a] dark:text-slate-400 text-base font-semibold rounded-xl hover:bg-transparent"
           >
             Cancel
           </Button>
@@ -88,9 +88,9 @@ export function PWAInstall() {
       </div>
       
       {/* Bottom Bar mimic from screenshot */}
-      <div className="w-full max-w-sm mt-4">
-        <div className="w-full h-16 bg-[#171532] rounded-2xl flex items-center justify-center gap-2 text-white font-medium cursor-pointer" onClick={handleCancel}>
-          Find Your Account <ArrowRight className="w-4 h-4" />
+      <div className="w-full max-w-[280px] mt-3">
+        <div className="w-full h-12 bg-[#171532] rounded-xl flex items-center justify-center gap-2 text-white text-sm font-medium cursor-pointer" onClick={handleCancel}>
+          Find Your Account <ArrowRight className="w-3.5 h-3.5" />
         </div>
       </div>
     </div>
