@@ -41,31 +41,21 @@ export function PWAInstall() {
   }, [])
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) {
-      // Direct instructions for mobile users when the prompt isn't ready
-      const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
-      const isAndroid = /Android/.test(navigator.userAgent);
-      
-      if (isiOS) {
-        alert('To add to Home Screen:\n1. Tap the Share button (square with arrow)\n2. Scroll down and tap "Add to Home Screen"');
-      } else if (isAndroid) {
-        alert('To add to Home Screen:\n1. Tap the three dots (⋮) in top right\n2. Tap "Install app" or "Add to Home screen"');
-      } else {
-        alert('Please use your browser menu to "Install" or "Add to Home Screen".');
-      }
-      return
-    }
+    if (!deferredPrompt) return;
 
-    // Show the prompt
     try {
+      // Trigger the browser's official install prompt immediately
       deferredPrompt.prompt();
+      
+      // Wait for the user's choice
       const { outcome } = await deferredPrompt.userChoice;
+      
       if (outcome === 'accepted') {
         setDeferredPrompt(null);
         setIsVisible(false);
       }
     } catch (err) {
-      console.error('Install error:', err);
+      console.error('Install prompt failed:', err);
     }
   }
 
