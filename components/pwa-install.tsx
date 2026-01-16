@@ -7,8 +7,10 @@ import { Button } from '@/components/ui/button'
 export function PWAInstall() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
   const [isVisible, setIsVisible] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     const handler = (e: Event) => {
       // Prevent Chrome 67 and earlier from automatically showing the prompt
       e.preventDefault()
@@ -49,7 +51,7 @@ export function PWAInstall() {
     setIsVisible(false)
   }
 
-  if (!isVisible) return null
+  if (!mounted || !isVisible) return null
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-end bg-black/40 backdrop-blur-sm p-6 sm:justify-center">
