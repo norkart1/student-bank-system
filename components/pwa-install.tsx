@@ -41,11 +41,16 @@ export function PWAInstall() {
   }, [])
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+      // If we don't have the event yet, we can't show the prompt.
+      // But we can try to "nudge" the browser or just wait.
+      // For immediate feedback, we'll log it.
+      return;
+    }
 
     try {
       // Trigger the browser's official install prompt immediately
-      deferredPrompt.prompt();
+      await deferredPrompt.prompt();
       
       // Wait for the user's choice
       const { outcome } = await deferredPrompt.userChoice;
