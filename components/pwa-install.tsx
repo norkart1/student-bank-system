@@ -35,16 +35,9 @@ export function PWAInstall() {
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) {
-      // If we don't have the prompt, try to trigger the native one if possible 
-      // or show guidance. But for "automatic" feel, we need to ensure the prompt is caught.
-      window.dispatchEvent(new Event('beforeinstallprompt'));
-      
-      // Short delay to see if handler caught it
-      setTimeout(() => {
-        if (!deferredPrompt) {
-          alert('To install the app, please use your browser menu and select "Add to Home Screen" or "Install App".')
-        }
-      }, 500);
+      // For some browsers, we can try to use the navigator.install() if available (experimental)
+      // but generally, we need the event.
+      alert('To install JDSA Bank, please tap the browser menu (three dots) and select "Add to Home Screen" or "Install App".')
       return
     }
 
@@ -53,7 +46,6 @@ export function PWAInstall() {
     
     // Wait for the user to respond to the prompt
     const { outcome } = await deferredPrompt.userChoice
-    console.log(`User response to the install prompt: ${outcome}`)
     
     // We've used the prompt, and can't use it again, throw it away
     setDeferredPrompt(null)
