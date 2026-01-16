@@ -148,12 +148,24 @@ export default function BulkEditPage() {
   }
 
   const calculateTotals = () => {
-    return transactions.reduce((acc, tx) => {
+    const bulkTotals = transactions.reduce((acc, tx) => {
       const amt = parseFloat(tx.amount) || 0
       if (tx.type === 'deposit') acc.deposit += amt
       else acc.withdraw += amt
       return acc
     }, { deposit: 0, withdraw: 0 })
+
+    const historyTotals = history.reduce((acc, tx) => {
+      const amt = tx.amount || 0
+      if (tx.type === 'deposit') acc.deposit += amt
+      else acc.withdraw += amt
+      return acc
+    }, { deposit: 0, withdraw: 0 })
+
+    return {
+      deposit: bulkTotals.deposit + historyTotals.deposit,
+      withdraw: bulkTotals.withdraw + historyTotals.withdraw
+    }
   }
 
   const saveTransaction = async (index: number) => {
