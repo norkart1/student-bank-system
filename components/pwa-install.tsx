@@ -35,7 +35,16 @@ export function PWAInstall() {
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) {
-      alert('To install the app, please use your browser menu and select "Add to Home Screen" or "Install App".')
+      // If we don't have the prompt, try to trigger the native one if possible 
+      // or show guidance. But for "automatic" feel, we need to ensure the prompt is caught.
+      window.dispatchEvent(new Event('beforeinstallprompt'));
+      
+      // Short delay to see if handler caught it
+      setTimeout(() => {
+        if (!deferredPrompt) {
+          alert('To install the app, please use your browser menu and select "Add to Home Screen" or "Install App".')
+        }
+      }, 500);
       return
     }
 
