@@ -195,9 +195,10 @@ export default function UserDashboard() {
     data.push(['S.No', 'Date', 'Deposit', 'Withdraw', 'Balance'])
 
     const sortedTxs = (userData?.transactions || [])
-      .filter((t: any) => (t.academicYear || '2025-26') === selectedAcademicYear)
+      .filter((t: any) => (t.academicYear || "2025-26") === selectedAcademicYear)
       .sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
+    // Grouping by Month/Year for Excel if needed or just listing
     sortedTxs.forEach((t: any, idx: number) => {
       if (t.type === 'deposit') {
         runningBalance += t.amount || 0
@@ -492,32 +493,55 @@ export default function UserDashboard() {
                       .filter((t: any) => (t.academicYear || '2025-26') === selectedAcademicYear)
                       .sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
                     
-                    return sortedTxs.map((transaction: any, idx: number) => {
-                      let runningBalance = 0;
-                      for (let i = 0; i <= idx; i++) {
-                        if (sortedTxs[i].type === 'deposit') {
-                          runningBalance += sortedTxs[i].amount || 0;
-                        } else {
-                          runningBalance -= sortedTxs[i].amount || 0;
-                        }
-                      }
-                      
-                      return (
-                        <tr key={idx} className={idx % 2 === 0 ? 'bg-[#f8f9fa]' : 'bg-white hover:bg-[#f1f5f9] transition-colors'}>
-                          <td className="px-2 py-3 font-bold text-[#171532]">{idx + 1}</td>
-                          <td className="px-2 py-3 text-[#747384] font-medium truncate">{transaction.date || '-'}</td>
-                          <td className="px-2 py-3 text-right text-green-600 font-bold tabular-nums">
-                            {transaction.type === 'deposit' ? `₹${transaction.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-'}
-                          </td>
-                          <td className="px-2 py-3 text-right text-red-600 font-bold tabular-nums">
-                            {transaction.type === 'withdraw' ? `₹${transaction.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-'}
-                          </td>
-                          <td className="px-2 py-3 text-right font-black text-[#4a6670] bg-gray-50/50 tabular-nums">
-                            ₹{runningBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    const groupedTxs: { [key: string]: any[] } = {};
+                    sortedTxs.forEach(tx => {
+                      const date = new Date(tx.date);
+                      const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+                      if (!groupedTxs[monthYear]) groupedTxs[monthYear] = [];
+                      groupedTxs[monthYear].push(tx);
+                    });
+
+                    let globalIdx = 0;
+                    return Object.entries(groupedTxs).map(([monthYear, transactions]) => (
+                      <div key={monthYear} className="contents">
+                        <tr className="bg-gray-50/50">
+                          <td colSpan={5} className="px-2 py-2 text-[10px] font-bold text-[#4a6670] uppercase tracking-wider border-y border-gray-100">
+                            {monthYear}
                           </td>
                         </tr>
-                      );
-                    });
+                        {transactions.map((transaction, idx) => {
+                          globalIdx++;
+                          let runningBalance = 0;
+                          const currentTxTime = new Date(transaction.date).getTime();
+                          
+                          // Correctly calculate running balance up to this specific transaction
+                          sortedTxs.forEach(t => {
+                            if (new Date(t.date).getTime() <= currentTxTime) {
+                              if (t.type === 'deposit') runningBalance += t.amount || 0;
+                              else runningBalance -= t.amount || 0;
+                            }
+                          });
+                          
+                          return (
+                            <tr key={`${monthYear}-${idx}`} className={globalIdx % 2 === 0 ? 'bg-[#f8f9fa]' : 'bg-white hover:bg-[#f1f5f9] transition-colors'}>
+                              <td className="px-2 py-3 font-bold text-[#171532]">{globalIdx}</td>
+                              <td className="px-2 py-3 text-[#747384] font-medium truncate">
+                                {new Date(transaction.date).toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                              </td>
+                              <td className="px-2 py-3 text-right text-green-600 font-bold tabular-nums">
+                                {transaction.type === 'deposit' ? `₹${transaction.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-'}
+                              </td>
+                              <td className="px-2 py-3 text-right text-red-600 font-bold tabular-nums">
+                                {transaction.type === 'withdraw' ? `₹${transaction.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-'}
+                              </td>
+                              <td className="px-2 py-3 text-right text-[#4a6670] font-bold tabular-nums">
+                                ₹{runningBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </div>
+                    ));
                   })()}
                 </tbody>
               </table>
