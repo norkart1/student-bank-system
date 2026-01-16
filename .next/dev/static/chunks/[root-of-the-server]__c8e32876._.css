@@ -1859,6 +1859,10 @@
     background-color: lab(55.7852% 65.6164 40.7976 / .95);
   }
 
+  .bg-\[\#c9c9ce\] {
+    background-color: #c9c9ce;
+  }
+
   .bg-\[\#c17f59\] {
     background-color: #c17f59;
   }
@@ -1889,10 +1893,6 @@
 
   .bg-\[\#f8f9fa\] {
     background-color: #f8f9fa;
-  }
-
-  .bg-\[\#f84b4b\] {
-    background-color: #f84b4b;
   }
 
   .bg-\[\#fffacd\] {
@@ -2075,10 +2075,6 @@
 
   .bg-slate-100 {
     background-color: var(--color-slate-100);
-  }
-
-  .bg-slate-200 {
-    background-color: var(--color-slate-200);
   }
 
   .bg-slate-600 {
@@ -2654,6 +2650,10 @@
     color: #10b981;
   }
 
+  .text-\[\#7056B2\] {
+    color: #7056b2;
+  }
+
   .text-\[\#171532\] {
     color: #171532;
   }
@@ -2680,10 +2680,6 @@
 
   .text-\[\#f39c12\] {
     color: #f39c12;
-  }
-
-  .text-\[\#f84b4b\] {
-    color: #f84b4b;
   }
 
   .text-amber-700 {
@@ -3020,13 +3016,13 @@
     --tw-ring-color: #4a6670;
   }
 
-  .ring-red-50\/50 {
-    --tw-ring-color: #fef2f280;
+  .ring-slate-100\/50 {
+    --tw-ring-color: #f1f5f980;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
-    .ring-red-50\/50 {
-      --tw-ring-color: color-mix(in oklab, var(--color-red-50) 50%, transparent);
+    .ring-slate-100\/50 {
+      --tw-ring-color: color-mix(in oklab, var(--color-slate-100) 50%, transparent);
     }
   }
 
@@ -3349,12 +3345,6 @@
   @media (hover: hover) {
     .hover\:bg-\[\#e8eef5\]:hover {
       background-color: #e8eef5;
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-\[\#e43d3d\]:hover {
-      background-color: #e43d3d;
     }
   }
 
@@ -4264,16 +4254,6 @@
     }
   }
 
-  .dark\:bg-red-900\/20:is(.dark *) {
-    background-color: #82181a33;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .dark\:bg-red-900\/20:is(.dark *) {
-      background-color: color-mix(in oklab, var(--color-red-900) 20%, transparent);
-    }
-  }
-
   .dark\:bg-slate-700:is(.dark *) {
     background-color: var(--color-slate-700);
   }
@@ -4327,13 +4307,13 @@
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
-  .dark\:ring-red-900\/10:is(.dark *) {
-    --tw-ring-color: #82181a1a;
+  .dark\:ring-slate-800\/10:is(.dark *) {
+    --tw-ring-color: #1d293d1a;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
-    .dark\:ring-red-900\/10:is(.dark *) {
-      --tw-ring-color: color-mix(in oklab, var(--color-red-900) 10%, transparent);
+    .dark\:ring-slate-800\/10:is(.dark *) {
+      --tw-ring-color: color-mix(in oklab, var(--color-slate-800) 10%, transparent);
     }
   }
 

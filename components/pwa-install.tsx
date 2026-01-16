@@ -57,8 +57,8 @@ export function PWAInstall() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-[2px] p-6">
       <div className="w-full max-w-[340px] bg-white dark:bg-slate-900 rounded-[24px] p-6 shadow-xl flex flex-col items-center animate-in fade-in zoom-in duration-200">
-        <div className="w-12 h-12 bg-red-50 dark:bg-red-900/20 rounded-full flex items-center justify-center mb-4 ring-8 ring-red-50/50 dark:ring-red-900/10">
-          <Download className="w-6 h-6 text-red-500" />
+        <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4 ring-8 ring-slate-100/50 dark:ring-slate-800/10">
+          <Download className="w-6 h-6 text-[#4a6670]" />
         </div>
 
         <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-2 text-center">
@@ -80,7 +80,7 @@ export function PWAInstall() {
           
           <Button 
             onClick={handleInstallClick}
-            className="flex-1 h-12 bg-[#f84b4b] hover:bg-[#e43d3d] text-white text-sm font-medium rounded-xl shadow-sm transition-all"
+            className="flex-1 h-12 bg-[#4a6670] hover:bg-[#3d565e] text-white text-sm font-medium rounded-xl shadow-sm transition-all"
           >
             Download
           </Button>
