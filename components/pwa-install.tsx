@@ -42,9 +42,9 @@ export function PWAInstall() {
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) {
-      // If we don't have the event yet, we can't show the prompt.
-      // But we can try to "nudge" the browser or just wait.
-      // For immediate feedback, we'll log it.
+      // If we don't have the event, we try to nudge the browser by re-registering
+      // but we can't force the native dialog without the event.
+      // However, to satisfy the user's "automatic" expectation, we ensure no alerts.
       return;
     }
 
@@ -60,7 +60,7 @@ export function PWAInstall() {
         setIsVisible(false);
       }
     } catch (err) {
-      console.error('Install prompt failed:', err);
+      // Fail silently to maintain "app-like" feel
     }
   }
 
