@@ -1859,10 +1859,6 @@
     background-color: lab(55.7852% 65.6164 40.7976 / .95);
   }
 
-  .bg-\[\#c9c9ce\] {
-    background-color: #c9c9ce;
-  }
-
   .bg-\[\#c17f59\] {
     background-color: #c17f59;
   }
@@ -2079,6 +2075,10 @@
 
   .bg-slate-100 {
     background-color: var(--color-slate-100);
+  }
+
+  .bg-slate-200 {
+    background-color: var(--color-slate-200);
   }
 
   .bg-slate-600 {
@@ -2654,10 +2654,6 @@
     color: #10b981;
   }
 
-  .text-\[\#7056B2\] {
-    color: #7056b2;
-  }
-
   .text-\[\#171532\] {
     color: #171532;
   }
@@ -2684,6 +2680,10 @@
 
   .text-\[\#f39c12\] {
     color: #f39c12;
+  }
+
+  .text-\[\#f84b4b\] {
+    color: #f84b4b;
   }
 
   .text-amber-700 {

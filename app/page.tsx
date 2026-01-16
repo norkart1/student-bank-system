@@ -22,19 +22,19 @@ export default function Home() {
         </div>
 
         <div className="text-center mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-[#171532] dark:text-white">
-            Welcome to <span className="text-[#7056B2]">JDSA Students Bank</span>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">
+            Welcome to <span className="text-[#f84b4b]">JDSA Students Bank</span>
           </h1>
         </div>
 
         <div className="flex gap-2 mb-6">
-          <div className="w-2 h-2 rounded-full bg-[#c9c9ce]"></div>
-          <div className="w-6 h-2 rounded-full bg-[#4a6670]"></div>
-          <div className="w-2 h-2 rounded-full bg-[#c9c9ce]"></div>
+          <div className="w-2 h-2 rounded-full bg-slate-200"></div>
+          <div className="w-6 h-2 rounded-full bg-[#f84b4b]"></div>
+          <div className="w-2 h-2 rounded-full bg-slate-200"></div>
         </div>
 
         <Link href="/login" className="w-full">
-          <button className="w-full h-14 bg-[#4a6670] hover:bg-[#3d565e] dark:bg-slate-700 dark:hover:bg-slate-600 text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 flex items-center justify-center gap-2">
+          <button className="w-full h-14 bg-[#f84b4b] hover:bg-[#e43d3d] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 flex items-center justify-center gap-2">
             Find Your Account
             <ArrowRight className="w-5 h-5" />
           </button>
