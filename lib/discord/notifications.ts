@@ -3,11 +3,6 @@ import { TextChannel, EmbedBuilder } from 'discord.js';
 
 const GUILD_ID = process.env.DISCORD_GUILD_ID;
 
-export async function sendTransactionNotification(studentName: string, amount: number, type: 'deposit' | 'withdraw', balance: number) {
-  try {
-    await initDiscord();
-    
-    const guild = await discordClient.guilds.fetch(GUILD_ID!);
     const channels = await guild.channels.fetch();
     
     // Find or create a 'transactions' channel
