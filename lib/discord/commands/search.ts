@@ -53,7 +53,7 @@ export async function handleModal(interaction: ModalSubmitInteraction) {
     const embed = new EmbedBuilder()
       .setTitle(`Student Profile: ${student.name}`)
       .setColor(0x2d6a4f)
-      .setThumbnail(student.profileImage || null)
+      .setThumbnail(student.profileImage && student.profileImage.startsWith('http') ? student.profileImage : null)
       .addFields(
         { name: 'Student Code', value: `\`${student.code || 'N/A'}\``, inline: true },
         { name: 'Current Balance', value: `**₹${(Number(student.balance) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}**`, inline: true },
