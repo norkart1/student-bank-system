@@ -10,8 +10,8 @@ export default function Home() {
       <div className="flex flex-col items-center max-w-md w-full">
         <div className="relative w-full max-w-[320px] mb-10 flex items-center justify-center">
           <Image 
-            src="/students.png" 
-            alt="Students" 
+            src="/masjid.png" 
+            alt="Masjid" 
             width={320} 
             height={320}
             style={{ width: 'auto', height: 'auto' }}
