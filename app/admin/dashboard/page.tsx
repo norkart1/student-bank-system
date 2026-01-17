@@ -188,7 +188,8 @@ export default function AdminDashboard() {
               studentId: student._id,
               update: {
                 balance: student.balance,
-                amount: amount
+                amount: amount,
+                studentName: student.name
               }
             })
           })
@@ -294,7 +295,8 @@ export default function AdminDashboard() {
               studentId: student._id,
               update: {
                 balance: student.balance,
-                amount: amount
+                amount: amount,
+                studentName: student.name
               }
             })
           })
