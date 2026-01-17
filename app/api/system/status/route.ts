@@ -1,19 +1,8 @@
 import { NextResponse } from 'next/server';
 import os from 'os';
 import { MongoClient } from 'mongodb';
-import { initDiscord, discordClient } from '@/lib/discord/client';
-
 export async function GET() {
   try {
-    // Check Discord Status
-    let discordStatus = 'OFFLINE';
-    try {
-      await initDiscord();
-      discordStatus = discordClient.isReady() ? 'ONLINE' : 'OFFLINE';
-    } catch (err) {
-      console.error('Discord status check failed:', err);
-    }
-
     // Get RAM usage (real system data)
     const totalMemory = os.totalmem();
     const freeMemory = os.freemem();
@@ -111,9 +100,6 @@ export async function GET() {
       network: {
         status: 'STABLE',
         description: 'Connection healthy'
-      },
-      discord: {
-        status: discordStatus
       },
       responseTime: responseTime,
       uptime: Math.floor(os.uptime())
