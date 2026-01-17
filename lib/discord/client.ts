@@ -27,31 +27,21 @@ async function registerCommands() {
   if (!DISCORD_BOT_TOKEN || !CLIENT_ID || !GUILD_ID) return;
   const rest = new REST({ version: '10' }).setToken(DISCORD_BOT_TOKEN);
   try {
-    console.log(chalk.blue('Clearing old commands and refreshing new commands.'));
+    console.log(chalk.blue('Refreshing application (/) commands.'));
     
-    // Clear all existing global commands
-    await rest.put(
-      Routes.applicationCommands(CLIENT_ID),
-      { body: [] },
-    );
-    
-    // Clear and re-register guild commands
-    await rest.put(
-      Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
-      { body: [] },
-    );
-    
+    // Register commands to the specific guild for instant updates
     await rest.put(
       Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
       { body: commands },
     );
     
-    // Also update global commands
+    // Clear global commands to avoid duplicates
     await rest.put(
       Routes.applicationCommands(CLIENT_ID),
-      { body: commands },
+      { body: [] },
     );
-    console.log(chalk.green('Successfully reloaded application (/) commands.'));
+
+    console.log(chalk.green('Successfully reloaded application (/) commands for the guild and cleared global duplicates.'));
   } catch (error) {
     console.error(chalk.red(error));
   }
