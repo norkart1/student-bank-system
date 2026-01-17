@@ -89,12 +89,20 @@ export async function initDiscord() {
 
       if (commandName === 'total-balance') {
         try {
-          // Dynamic import to avoid circular dependency
           const { default: mongoose } = await import('mongoose');
+          
+          // Ensure we are connected
+          if (mongoose.connection.readyState === 0) {
+            const MONGODB_URI = process.env.MONGODB_URI;
+            if (MONGODB_URI) {
+              await mongoose.connect(MONGODB_URI);
+            }
+          }
+
           const dbName = process.env.MONGODB_URI?.split('/').pop()?.split('?')[0] || 'test';
           const db = mongoose.connection.useDb(dbName);
           const students = await db.collection('students').find({}).toArray();
-          const total = students.reduce((sum, s) => sum + (s.balance || 0), 0);
+          const total = students.reduce((sum, s) => sum + (Number(s.balance) || 0), 0);
           
           const embed = new EmbedBuilder()
             .setTitle('Bank Status: Total Balance')
@@ -105,8 +113,10 @@ export async function initDiscord() {
 
           await interaction.reply({ embeds: [embed] });
         } catch (err) {
-          console.error(err);
-          await interaction.reply({ content: 'Error fetching total balance.', ephemeral: true });
+          console.error('Error fetching total balance:', err);
+          if (!interaction.replied) {
+            await interaction.reply({ content: 'Error fetching total balance. Please ensure the database is connected.', ephemeral: true });
+          }
         }
       }
 
@@ -114,6 +124,15 @@ export async function initDiscord() {
         const query = interaction.options.getString('query');
         try {
           const { default: mongoose } = await import('mongoose');
+          
+          // Ensure we are connected
+          if (mongoose.connection.readyState === 0) {
+            const MONGODB_URI = process.env.MONGODB_URI;
+            if (MONGODB_URI) {
+              await mongoose.connect(MONGODB_URI);
+            }
+          }
+
           const dbName = process.env.MONGODB_URI?.split('/').pop()?.split('?')[0] || 'test';
           const db = mongoose.connection.useDb(dbName);
           
@@ -133,15 +152,17 @@ export async function initDiscord() {
             .setColor(0x2d6a4f)
             .addFields(
               { name: 'Code', value: student.code || 'N/A', inline: true },
-              { name: 'Balance', value: `₹${(student.balance || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`, inline: true },
+              { name: 'Balance', value: `₹${(Number(student.balance) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`, inline: true },
               { name: 'Academic Year', value: student.academicYear || 'N/A', inline: true }
             )
             .setTimestamp();
 
           await interaction.reply({ embeds: [embed] });
         } catch (err) {
-          console.error(err);
-          await interaction.reply({ content: 'Error searching for student.', ephemeral: true });
+          console.error('Error searching student:', err);
+          if (!interaction.replied) {
+            await interaction.reply({ content: 'Error searching for student. Please ensure the database is connected.', ephemeral: true });
+          }
         }
       }
     });
