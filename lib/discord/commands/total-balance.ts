@@ -31,8 +31,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     await interaction.reply({ embeds: [embed] });
   } catch (err) {
     console.error('Error fetching total balance:', err);
-    if (!interaction.replied) {
-      await interaction.reply({ content: 'Error fetching total balance. Please ensure the database is connected.', ephemeral: true });
+    if (!interaction.replied && !interaction.deferred) {
+      await interaction.reply({ content: 'Error fetching total balance. Please ensure the database is connected.', flags: ['Ephemeral'] });
     }
   }
 }
