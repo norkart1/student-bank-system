@@ -53,11 +53,13 @@ export async function handleModal(interaction: ModalSubmitInteraction) {
     const embed = new EmbedBuilder()
       .setTitle(`Student Profile: ${student.name}`)
       .setColor(0x2d6a4f)
+      .setThumbnail(student.profileImage || null)
       .addFields(
-        { name: 'Code', value: student.code || 'N/A', inline: true },
-        { name: 'Balance', value: `₹${(Number(student.balance) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`, inline: true },
-        { name: 'Academic Year', value: student.academicYear || 'N/A', inline: true }
+        { name: 'Student Code', value: `\`${student.code || 'N/A'}\``, inline: true },
+        { name: 'Current Balance', value: `**₹${(Number(student.balance) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}**`, inline: true },
+        { name: 'Academic Session', value: student.academicYear || 'N/A', inline: false }
       )
+      .setFooter({ text: 'JDSA Student Bank • Secure Educational Banking' })
       .setTimestamp();
 
     await interaction.editReply({ embeds: [embed] });
