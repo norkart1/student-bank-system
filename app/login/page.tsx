@@ -235,10 +235,19 @@ export default function SearchPage() {
           Don't have an account code? Contact administration for assistance.
         </p>
 
-        <div className="text-center mt-6">
+        <div className="flex flex-col items-center gap-4 mt-8">
           <Link href="/admin-login" className="text-xs text-[#2d6a4f] hover:text-[#1b4332] underline transition-colors">
             Admin Login
           </Link>
+          <div className="flex gap-4 text-[10px] text-[#6b7280]">
+            <Link href="/privacy" className="hover:text-[#2d6a4f] hover:underline transition-colors">
+              Privacy Policy
+            </Link>
+            <span>•</span>
+            <Link href="/terms" className="hover:text-[#2d6a4f] hover:underline transition-colors">
+              Terms of Service
+            </Link>
+          </div>
         </div>
       </div>
 
