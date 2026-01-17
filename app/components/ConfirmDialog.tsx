@@ -49,7 +49,7 @@ export function ConfirmDialog({
               className={`px-4 py-2 rounded-lg text-sm font-medium text-white flex items-center gap-2 transition-colors ${
                 isDangerous
                   ? "bg-red-600 hover:bg-red-700 disabled:opacity-50"
-                  : "bg-[#4a6670] hover:bg-[#3d565e] disabled:opacity-50"
+                  : "bg-[#2d6a4f] hover:bg-[#1b4332] disabled:opacity-50"
               }`}
             >
               {isLoading && <Loader className="w-4 h-4 animate-spin" />}

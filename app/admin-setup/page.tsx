@@ -69,7 +69,7 @@ export default function AdminSetupPage() {
         <button
           onClick={handleInitialize}
           disabled={loading}
-          className="w-full bg-[#4a6670] hover:bg-[#3d565e] disabled:opacity-70 text-white font-semibold py-3 rounded-xl transition-colors mb-4"
+          className="w-full bg-[#2d6a4f] hover:bg-[#1b4332] disabled:opacity-70 text-white font-semibold py-3 rounded-xl transition-colors mb-4"
         >
           {loading ? 'Initializing...' : 'Initialize Admin Account'}
         </button>

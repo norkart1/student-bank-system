@@ -104,7 +104,7 @@ export default function QRDownloadPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader2 className="w-8 h-8 animate-spin text-[#4a6670]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#2d6a4f]" />
       </div>
     )
   }
@@ -124,14 +124,14 @@ export default function QRDownloadPage() {
                 onClick={() => router.back()} 
                 className="w-10 h-10 flex items-center justify-center hover:bg-white rounded-full transition-colors shadow-sm"
               >
-                <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+                <ChevronLeft className="w-6 h-6 text-[#2d6a4f]" />
               </button>
               <h1 className="text-xl font-bold text-[#171532]">QR Download</h1>
             </div>
           <div className="flex gap-2">
             <button
               onClick={handlePrint}
-              className="p-2.5 bg-[#4a6670] hover:bg-[#3d565e] text-white rounded-xl shadow-sm transition-all active:scale-95"
+              className="p-2.5 bg-[#2d6a4f] hover:bg-[#1b4332] text-white rounded-xl shadow-sm transition-all active:scale-95"
               title="Print QR Codes"
             >
               <Printer className="w-5 h-5" />
@@ -155,12 +155,12 @@ export default function QRDownloadPage() {
                 placeholder="Search by name or code..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4a6670] transition-all"
+                className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] transition-all"
               />
             </div>
             <button
               onClick={selectAll}
-              className="px-6 py-2.5 bg-white border border-gray-200 rounded-xl font-bold text-[#4a6670] hover:bg-gray-50 transition-all shadow-sm"
+              className="px-6 py-2.5 bg-white border border-gray-200 rounded-xl font-bold text-[#2d6a4f] hover:bg-gray-50 transition-all shadow-sm"
             >
               {selectedIds.size === filteredStudents.length && filteredStudents.length > 0 ? "Deselect All" : "Select All"}
             </button>
@@ -183,12 +183,12 @@ export default function QRDownloadPage() {
                   onClick={() => toggleSelect(student._id)}
                   className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
                     selectedIds.has(student._id)
-                      ? "bg-[#4a6670]/5 border-[#4a6670] ring-1 ring-[#4a6670]"
+                      ? "bg-[#2d6a4f]/5 border-[#2d6a4f] ring-1 ring-[#2d6a4f]"
                       : "bg-white border-gray-100 hover:border-gray-300"
                   }`}
                 >
                   {selectedIds.has(student._id) ? (
-                    <CheckCircle className="w-5 h-5 text-[#4a6670]" />
+                    <CheckCircle className="w-5 h-5 text-[#2d6a4f]" />
                   ) : (
                     <Circle className="w-5 h-5 text-gray-300" />
                   )}

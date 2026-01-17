@@ -401,7 +401,7 @@ export default function AdminDashboard() {
 
     // Title & Header
     doc.setFontSize(20)
-    doc.setTextColor(74, 102, 112) // #4a6670
+    doc.setTextColor(74, 102, 112) // #2d6a4f
     doc.text("JDSA STUDENTS BANK", pageWidth / 2, 20, { align: "center" })
 
     doc.setFontSize(14)
@@ -446,7 +446,7 @@ export default function AdminDashboard() {
         lineColor: [0, 0, 0],
       },
       headStyles: {
-        fillColor: [74, 102, 112], // #4a6670
+        fillColor: [74, 102, 112], // #2d6a4f
         textColor: [255, 255, 255],
         fontStyle: "bold",
         lineWidth: 0.1,
@@ -487,7 +487,7 @@ export default function AdminDashboard() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] dark:hover:bg-slate-700 rounded-lg transition-colors">
-            <ChevronLeft className="w-5 h-5 text-[#4a6670] dark:text-gray-300" />
+            <ChevronLeft className="w-5 h-5 text-[#2d6a4f] dark:text-gray-300" />
           </button>
           <h2 className="text-lg font-bold text-[#171532] dark:text-white">Reports</h2>
         </div>
@@ -498,7 +498,7 @@ export default function AdminDashboard() {
           {theme === 'dark' ? (
             <Sun className="w-5 h-5 text-[#f39c12] dark:text-[#f39c12]" />
           ) : (
-            <Moon className="w-5 h-5 text-[#4a6670]" />
+            <Moon className="w-5 h-5 text-[#2d6a4f]" />
           )}
         </button>
       </div>
@@ -656,11 +656,11 @@ export default function AdminDashboard() {
           <div className="px-6 py-5 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between">
             <h3 className="text-xl font-bold text-[#171532] dark:text-white">Deposit Amount</h3>
             <div className="flex items-center gap-2 bg-[#f8f9fa] dark:bg-slate-700 px-3 py-1.5 rounded-lg border border-[#e8e8e8] dark:border-slate-600">
-              <CalendarRange className="w-3.5 h-3.5 text-[#4a6670] dark:text-slate-400" />
+              <CalendarRange className="w-3.5 h-3.5 text-[#2d6a4f] dark:text-slate-400" />
               <select
                 value={selectedAcademicYear}
                 onChange={(e) => setSelectedAcademicYear(e.target.value)}
-                className="bg-transparent text-xs font-bold text-[#4a6670] dark:text-slate-200 focus:outline-none cursor-pointer"
+                className="bg-transparent text-xs font-bold text-[#2d6a4f] dark:text-slate-200 focus:outline-none cursor-pointer"
               >
                 <option value="2023-24">2023-24</option>
                 <option value="2024-25">2024-25</option>
@@ -696,7 +696,7 @@ export default function AdminDashboard() {
               <div className="relative">
                 <button
                   onClick={() => setShowDepositDropdown(!showDepositDropdown)}
-                  className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white text-left flex items-center justify-between hover:border-[#4a6670] dark:hover:border-slate-500 transition-colors"
+                  className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white text-left flex items-center justify-between hover:border-[#2d6a4f] dark:hover:border-slate-500 transition-colors"
                 >
                   <span>{selectedStudentIndex !== null ? students[selectedStudentIndex]?.name : 'Choose a student...'}</span>
                   <svg className={`w-5 h-5 transition-transform ${showDepositDropdown ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -731,7 +731,7 @@ export default function AdminDashboard() {
                 value={transactionAmount}
                 onChange={(e) => setTransactionAmount(e.target.value)}
                 placeholder="Enter amount"
-                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532] dark:text-white placeholder:text-[#a0a0a0]"
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#2d6a4f] focus:ring-2 focus:ring-[#2d6a4f]/10 text-[#171532] dark:text-white placeholder:text-[#a0a0a0]"
               />
             </div>
 
@@ -741,7 +741,7 @@ export default function AdminDashboard() {
                 type="date"
                 value={transactionDate}
                 onChange={(e) => setTransactionDate(e.target.value)}
-                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532] dark:text-white"
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#2d6a4f] focus:ring-2 focus:ring-[#2d6a4f]/10 text-[#171532] dark:text-white"
               />
             </div>
 
@@ -752,7 +752,7 @@ export default function AdminDashboard() {
                 value={transactionReason}
                 onChange={(e) => setTransactionReason(e.target.value)}
                 placeholder="e.g., Scholarship, Gift"
-                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532] dark:text-white placeholder:text-[#a0a0a0]"
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#2d6a4f] focus:ring-2 focus:ring-[#2d6a4f]/10 text-[#171532] dark:text-white placeholder:text-[#a0a0a0]"
               />
             </div>
 
@@ -791,11 +791,11 @@ export default function AdminDashboard() {
           <div className="px-6 py-5 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between">
             <h3 className="text-xl font-bold text-[#171532] dark:text-white">Withdraw Amount</h3>
             <div className="flex items-center gap-2 bg-[#f8f9fa] dark:bg-slate-700 px-3 py-1.5 rounded-lg border border-[#e8e8e8] dark:border-slate-600">
-              <CalendarRange className="w-3.5 h-3.5 text-[#4a6670] dark:text-slate-400" />
+              <CalendarRange className="w-3.5 h-3.5 text-[#2d6a4f] dark:text-slate-400" />
               <select
                 value={selectedAcademicYear}
                 onChange={(e) => setSelectedAcademicYear(e.target.value)}
-                className="bg-transparent text-xs font-bold text-[#4a6670] dark:text-slate-200 focus:outline-none cursor-pointer"
+                className="bg-transparent text-xs font-bold text-[#2d6a4f] dark:text-slate-200 focus:outline-none cursor-pointer"
               >
                 <option value="2023-24">2023-24</option>
                 <option value="2024-25">2024-25</option>
@@ -831,7 +831,7 @@ export default function AdminDashboard() {
               <div className="relative">
                 <button
                   onClick={() => setShowWithdrawDropdown(!showWithdrawDropdown)}
-                  className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white text-left flex items-center justify-between hover:border-[#4a6670] dark:hover:border-slate-500 transition-colors"
+                  className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl text-[#171532] dark:text-white text-left flex items-center justify-between hover:border-[#2d6a4f] dark:hover:border-slate-500 transition-colors"
                 >
                   <span>{selectedStudentIndex !== null ? students[selectedStudentIndex]?.name : 'Choose a student...'}</span>
                   <svg className={`w-5 h-5 transition-transform ${showWithdrawDropdown ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -867,7 +867,7 @@ export default function AdminDashboard() {
                 value={transactionAmount}
                 onChange={(e) => setTransactionAmount(e.target.value)}
                 placeholder="Enter amount"
-                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532] dark:text-white placeholder:text-[#a0a0a0]"
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#2d6a4f] focus:ring-2 focus:ring-[#2d6a4f]/10 text-[#171532] dark:text-white placeholder:text-[#a0a0a0]"
               />
             </div>
 
@@ -877,7 +877,7 @@ export default function AdminDashboard() {
                 type="date"
                 value={transactionDate}
                 onChange={(e) => setTransactionDate(e.target.value)}
-                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532] dark:text-white"
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#2d6a4f] focus:ring-2 focus:ring-[#2d6a4f]/10 text-[#171532] dark:text-white"
               />
             </div>
 
@@ -888,7 +888,7 @@ export default function AdminDashboard() {
                 value={transactionReason}
                 onChange={(e) => setTransactionReason(e.target.value)}
                 placeholder="e.g., School supplies, Emergency"
-                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532] dark:text-white placeholder:text-[#a0a0a0]"
+                className="w-full px-4 py-3 bg-[#f8f9fa] dark:bg-slate-700 border border-[#e8e8e8] dark:border-slate-600 rounded-xl focus:outline-none focus:border-[#2d6a4f] focus:ring-2 focus:ring-[#2d6a4f]/10 text-[#171532] dark:text-white placeholder:text-[#a0a0a0]"
               />
             </div>
 
@@ -1314,7 +1314,7 @@ export default function AdminDashboard() {
     <>
       <div className="flex items-center gap-3 mb-6">
         <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
-          <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+          <ChevronLeft className="w-6 h-6 text-[#2d6a4f]" />
         </button>
         <h2 className="text-lg font-bold text-[#171532]">Academic Year</h2>
       </div>
@@ -1324,7 +1324,7 @@ export default function AdminDashboard() {
           <label className="block text-sm font-bold text-[#171532]">Select Active Academic Year</label>
           <button 
             onClick={() => setShowAddYearForm(true)}
-            className="flex items-center gap-1.5 bg-[#4a6670] text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-[#3d565e] transition-all"
+            className="flex items-center gap-1.5 bg-[#2d6a4f] text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-[#1b4332] transition-all"
           >
             <Plus className="w-3.5 h-3.5" />
             Add New
@@ -1334,7 +1334,7 @@ export default function AdminDashboard() {
         {showAddYearForm && (
           <div className="bg-[#f8f9fa] border-2 border-dashed border-[#e8e8e8] rounded-xl p-4 space-y-3 animate-in fade-in zoom-in duration-200">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-[#4a6670]">New Academic Session</span>
+            <span className="text-xs font-bold text-[#2d6a4f]">New Academic Session</span>
             <button onClick={() => setShowAddYearForm(false)} className="text-[#747384] hover:text-red-500">
               <X className="w-4 h-4" />
             </button>
@@ -1345,7 +1345,7 @@ export default function AdminDashboard() {
               value={newYearInput}
               onChange={(e) => setNewYearYearInput(e.target.value)}
               placeholder="e.g., 2026-27"
-              className="flex-1 px-3 py-2 bg-white border border-[#e8e8e8] rounded-lg text-sm focus:outline-none focus:border-[#4a6670]"
+              className="flex-1 px-3 py-2 bg-white border border-[#e8e8e8] rounded-lg text-sm focus:outline-none focus:border-[#2d6a4f]"
             />
             <button
               onClick={handleAddAcademicYear}
@@ -1368,8 +1368,8 @@ export default function AdminDashboard() {
               }}
               className={`w-full p-4 rounded-xl text-left font-bold transition-all border-2 ${
                 selectedAcademicYear === year
-                  ? "bg-[#4a6670] border-[#4a6670] text-white shadow-md scale-[1.02]"
-                  : "bg-[#f8f9fa] border-[#e8e8e8] text-[#171532] hover:border-[#4a6670]/30"
+                  ? "bg-[#2d6a4f] border-[#2d6a4f] text-white shadow-md scale-[1.02]"
+                  : "bg-[#f8f9fa] border-[#e8e8e8] text-[#171532] hover:border-[#2d6a4f]/30"
               }`}
             >
               <div className="flex items-center justify-between">
@@ -1418,7 +1418,7 @@ export default function AdminDashboard() {
     <>
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#4a6670] to-[#3d565e] flex items-center justify-center text-white font-bold text-lg">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] flex items-center justify-center text-white font-bold text-lg">
             A
           </div>
           <div>
@@ -1428,12 +1428,12 @@ export default function AdminDashboard() {
         </div>
         <div className="flex items-center gap-2">
           <button className="w-10 h-10 bg-[#f0f0f0] rounded-lg flex items-center justify-center">
-            <Bell className="w-5 h-5 text-[#4a6670]" />
+            <Bell className="w-5 h-5 text-[#2d6a4f]" />
           </button>
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-2xl p-5 mb-6 shadow-lg">
+      <div className="bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-2xl p-5 mb-6 shadow-lg">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
             <Wallet className="w-6 h-6 text-white" />
@@ -1450,7 +1450,7 @@ export default function AdminDashboard() {
                 className="bg-white/10 hover:bg-white/20 border-none text-white text-xs font-bold py-1 px-2 rounded-lg focus:ring-0 cursor-pointer transition-colors"
               >
                 {academicYears.map(year => (
-                  <option key={year} value={year} className="bg-[#3d565e] text-white">
+                  <option key={year} value={year} className="bg-[#1b4332] text-white">
                     {year}
                   </option>
                 ))}
@@ -1488,7 +1488,7 @@ export default function AdminDashboard() {
         <button 
           onClick={() => setShowDepositModal(true)}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
             <ArrowDownRight className="w-6 h-6 text-white" />
           </div>
           <span className="text-sm font-bold text-[#171532]">Deposit</span>
@@ -1496,7 +1496,7 @@ export default function AdminDashboard() {
         <button 
           onClick={() => setShowWithdrawModal(true)}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
             <ArrowUpRight className="w-6 h-6 text-white" />
           </div>
           <span className="text-sm font-bold text-[#171532]">Withdraw</span>
@@ -1504,7 +1504,7 @@ export default function AdminDashboard() {
         <button 
           onClick={() => router.push("/admin/qr-download")}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
             <QrCode className="w-6 h-6 text-white" />
           </div>
           <span className="text-sm font-bold text-[#171532]">QR Code</span>
@@ -1513,7 +1513,7 @@ export default function AdminDashboard() {
         <button 
           onClick={() => setActiveTab("calendar")}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
             <Calendar className="w-6 h-6 text-white" />
           </div>
           <span className="text-sm font-bold text-[#171532]">Calendar</span>
@@ -1521,7 +1521,7 @@ export default function AdminDashboard() {
         <button 
           onClick={() => setActiveTab("status")}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
             <AlertCircle className="w-6 h-6 text-white" />
           </div>
           <span className="text-sm font-bold text-[#171532]">Status</span>
@@ -1529,7 +1529,7 @@ export default function AdminDashboard() {
         <button 
           onClick={() => window.location.href = '/admin/reports'}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
             <BarChart3 className="w-6 h-6 text-white" />
           </div>
           <span className="text-sm font-bold text-[#171532]">Reports</span>
@@ -1537,7 +1537,7 @@ export default function AdminDashboard() {
         <button 
           onClick={() => setActiveTab("ai")}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center transition-colors">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center transition-colors">
             <Sparkles className="w-6 h-6 text-white" />
           </div>
           <span className="text-sm font-bold text-[#171532]">AI</span>
@@ -1546,7 +1546,7 @@ export default function AdminDashboard() {
         <button 
           onClick={() => setActiveTab("year")}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center transition-colors">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center transition-colors">
             <CalendarRange className="w-6 h-6 text-white" />
           </div>
           <span className="text-sm font-bold text-[#171532]">Session</span>
@@ -1555,7 +1555,7 @@ export default function AdminDashboard() {
         <button 
           onClick={() => router.push("/admin/bulk-edit")}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
             <Edit className="w-6 h-6 text-white" />
           </div>
           <span className="text-sm font-bold text-[#171532]">Edit</span>
@@ -1575,7 +1575,7 @@ export default function AdminDashboard() {
     
     return (
       <>
-        <div className="flex items-center gap-3 mb-6 bg-gradient-to-r from-[#4a6670] to-[#3d565e] text-white rounded-2xl p-4 border-2 border-[#5a7680]/50 shadow-md">
+        <div className="flex items-center gap-3 mb-6 bg-gradient-to-r from-[#2d6a4f] to-[#1b4332] text-white rounded-2xl p-4 border-2 border-[#5a7680]/50 shadow-md">
           <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-white/20 rounded-lg transition-colors">
             <ChevronLeft className="w-6 h-6 text-white" />
           </button>
@@ -1608,7 +1608,7 @@ export default function AdminDashboard() {
                   {isTop3 ? (
                     <div className="text-2xl flex-shrink-0">{medal}</div>
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#4a6670] to-[#3d565e] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                       {index + 1}
                     </div>
                   )}
@@ -1656,7 +1656,7 @@ export default function AdminDashboard() {
               {student?.profileImage ? (
                 <img src={student.profileImage} alt={student?.name || 'Student'} className="w-24 h-24 rounded-full object-cover shadow-lg" />
               ) : (
-                <div className={`w-24 h-24 rounded-full ${avatarColors[viewingIndex % avatarColors.length]} flex items-center justify-center text-3xl font-bold text-[#4a6670]`}>
+                <div className={`w-24 h-24 rounded-full ${avatarColors[viewingIndex % avatarColors.length]} flex items-center justify-center text-3xl font-bold text-[#2d6a4f]`}>
                   {student?.name?.charAt(0) || 'S'}
                 </div>
               )}
@@ -1882,7 +1882,7 @@ export default function AdminDashboard() {
                 type="number"
                 value={editTxAmount}
                 onChange={(e) => setEditTxAmount(e.target.value)}
-                className="w-full px-4 py-2 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670]"
+                className="w-full px-4 py-2 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#2d6a4f]"
               />
             </div>
 
@@ -1892,7 +1892,7 @@ export default function AdminDashboard() {
                 type="date"
                 value={editTxDate}
                 onChange={(e) => setEditTxDate(e.target.value)}
-                className="w-full px-4 py-2 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670]"
+                className="w-full px-4 py-2 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#2d6a4f]"
               />
             </div>
 
@@ -1902,7 +1902,7 @@ export default function AdminDashboard() {
                 type="text"
                 value={editTxReason}
                 onChange={(e) => setEditTxReason(e.target.value)}
-                className="w-full px-4 py-2 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670]"
+                className="w-full px-4 py-2 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#2d6a4f]"
               />
             </div>
 
@@ -1911,7 +1911,7 @@ export default function AdminDashboard() {
               <select
                 value={selectedAcademicYear}
                 onChange={(e) => setSelectedAcademicYear(e.target.value)}
-                className="w-full px-4 py-2 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670]"
+                className="w-full px-4 py-2 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#2d6a4f]"
               >
                 <option value="2023-24">2023-24</option>
                 <option value="2024-25">2024-25</option>
@@ -1933,7 +1933,7 @@ export default function AdminDashboard() {
             </button>
             <button
               onClick={handleUpdateTransaction}
-              className="flex-1 py-2.5 bg-[#4a6670] text-white rounded-xl font-bold text-sm"
+              className="flex-1 py-2.5 bg-[#2d6a4f] text-white rounded-xl font-bold text-sm"
             >
               Save Changes
             </button>
@@ -1991,7 +1991,7 @@ export default function AdminDashboard() {
     return (
       <div className="flex flex-col h-full pb-20">
         {/* Header */}
-        <div className="flex items-center justify-between gap-3 pb-4 bg-gradient-to-r from-[#4a6670] to-[#3d565e] text-white rounded-2xl p-4 mb-4 border-2 border-[#5a7680]/50 shadow-md">
+        <div className="flex items-center justify-between gap-3 pb-4 bg-gradient-to-r from-[#2d6a4f] to-[#1b4332] text-white rounded-2xl p-4 mb-4 border-2 border-[#5a7680]/50 shadow-md">
           <div className="flex items-center gap-3">
             <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-white/20 rounded-lg transition-colors flex-shrink-0">
               <ChevronLeft className="w-5 h-5 text-white" />
@@ -2072,7 +2072,7 @@ export default function AdminDashboard() {
 
         {/* Input Section - Fixed at bottom */}
         <div className="fixed bottom-28 left-4 right-4 bg-white border-2 border-[#e5e7eb] rounded-xl p-3 space-y-2">
-          <p className="text-xs font-bold text-[#4a6670]">✨ ASK JDSA AI</p>
+          <p className="text-xs font-bold text-[#2d6a4f]">✨ ASK JDSA AI</p>
           <div className="flex items-center gap-2">
             <input
               type="text"
@@ -2111,7 +2111,7 @@ export default function AdminDashboard() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
-            <ChevronLeft className="w-5 h-5 text-[#4a6670]" />
+            <ChevronLeft className="w-5 h-5 text-[#2d6a4f]" />
           </button>
           <div>
             <h2 className="text-lg font-bold text-[#171532]">All Accounts</h2>
@@ -2121,7 +2121,7 @@ export default function AdminDashboard() {
           <select
             value={selectedAcademicYear}
             onChange={(e) => setSelectedAcademicYear(e.target.value)}
-            className="px-3 py-2 bg-white border border-[#e5e7eb] rounded-xl text-xs font-semibold text-[#4a6670] focus:outline-none focus:ring-2 focus:ring-[#4a6670]/10 transition-all"
+            className="px-3 py-2 bg-white border border-[#e5e7eb] rounded-xl text-xs font-semibold text-[#2d6a4f] focus:outline-none focus:ring-2 focus:ring-[#2d6a4f]/10 transition-all"
           >
             <option value="all">All Sessions</option>
             {academicYears.map(year => (
@@ -2130,7 +2130,7 @@ export default function AdminDashboard() {
           </select>
           <button 
             onClick={() => setShowCreateForm(true)}
-            className="flex items-center gap-1.5 bg-gradient-to-r from-[#4a6670] to-[#3d565e] text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-md shadow-[#4a6670]/20 hover:shadow-lg transition-all active:scale-95"
+            className="flex items-center gap-1.5 bg-gradient-to-r from-[#2d6a4f] to-[#1b4332] text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-md shadow-[#2d6a4f]/20 hover:shadow-lg transition-all active:scale-95"
           >
             <Plus className="w-4 h-4" />
             Add
@@ -2145,7 +2145,7 @@ export default function AdminDashboard() {
           placeholder="Search students by name or code..."
           value={studentSearchQuery}
           onChange={(e) => setStudentSearchQuery(e.target.value)}
-          className="w-full pl-10 pr-4 py-3 bg-white border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#4a6670]/10 transition-all"
+          className="w-full pl-10 pr-4 py-3 bg-white border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6a4f]/10 transition-all"
         />
       </div>
 
@@ -2176,7 +2176,7 @@ export default function AdminDashboard() {
                   className="grid grid-cols-12 gap-3 p-4 hover:bg-[#f8f9fa] cursor-pointer transition-colors"
                 >
                   <div className="col-span-8 flex items-center gap-2">
-                    <div className={`w-8 h-8 rounded-full ${avatarColors[originalIndex % avatarColors.length]} flex items-center justify-center text-xs font-bold text-[#4a6670] flex-shrink-0`}>
+                    <div className={`w-8 h-8 rounded-full ${avatarColors[originalIndex % avatarColors.length]} flex items-center justify-center text-xs font-bold text-[#2d6a4f] flex-shrink-0`}>
                       {student.name.charAt(0)}
                     </div>
                     <div className="flex flex-col truncate">
@@ -2216,7 +2216,7 @@ export default function AdminDashboard() {
                     id="useOldCode"
                     checked={useOldCode}
                     onChange={(e) => setUseOldCode(e.target.checked)}
-                    className="w-4 h-4 text-[#4a6670]"
+                    className="w-4 h-4 text-[#2d6a4f]"
                   />
                   <label htmlFor="useOldCode" className="text-sm font-medium text-blue-800">Use existing student code</label>
                 </div>
@@ -2237,11 +2237,11 @@ export default function AdminDashboard() {
                         }
                       }}
                       placeholder="e.g., JD-1234"
-                      className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl text-[#171532] focus:outline-none focus:border-[#4a6670]"
+                      className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl text-[#171532] focus:outline-none focus:border-[#2d6a4f]"
                     />
                     {isSearchingOldStudent && (
                       <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                        <Loader className="w-4 h-4 animate-spin text-[#4a6670]" />
+                        <Loader className="w-4 h-4 animate-spin text-[#2d6a4f]" />
                       </div>
                     )}
                   </div>
@@ -2254,10 +2254,10 @@ export default function AdminDashboard() {
                     {newStudent.profileImage ? (
                       <img src={newStudent.profileImage} alt="Profile" className="w-full h-full object-cover" />
                     ) : (
-                      <Camera className="w-10 h-10 text-[#4a6670]" />
+                      <Camera className="w-10 h-10 text-[#2d6a4f]" />
                     )}
                   </div>
-                  <label htmlFor="profileImageInput" className="absolute bottom-1 right-1 w-7 h-7 bg-[#4a6670] rounded-full flex items-center justify-center shadow-lg hover:bg-[#3d565e] transition-colors cursor-pointer">
+                  <label htmlFor="profileImageInput" className="absolute bottom-1 right-1 w-7 h-7 bg-[#2d6a4f] rounded-full flex items-center justify-center shadow-lg hover:bg-[#1b4332] transition-colors cursor-pointer">
                     <Plus className="w-4 h-4 text-white" />
                   </label>
                   <input
@@ -2276,7 +2276,7 @@ export default function AdminDashboard() {
                   type="text"
                   value={newStudent.name}
                   onChange={(e) => setNewStudent({...newStudent, name: e.target.value})}
-                  className="w-full px-4 py-3.5 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:bg-white focus:ring-2 focus:ring-[#4a6670]/10 transition-all text-[#171532] placeholder:text-[#a0a0a0]"
+                  className="w-full px-4 py-3.5 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#2d6a4f] focus:bg-white focus:ring-2 focus:ring-[#2d6a4f]/10 transition-all text-[#171532] placeholder:text-[#a0a0a0]"
                   placeholder="Enter full name"
                 />
               </div>
@@ -2287,7 +2287,7 @@ export default function AdminDashboard() {
                   <select
                     value={newStudent.academicYear}
                     onChange={(e) => setNewStudent({...newStudent, academicYear: e.target.value})}
-                    className="w-full px-4 py-3.5 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:bg-white focus:ring-2 focus:ring-[#4a6670]/10 transition-all text-[#171532]"
+                    className="w-full px-4 py-3.5 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#2d6a4f] focus:bg-white focus:ring-2 focus:ring-[#2d6a4f]/10 transition-all text-[#171532]"
                   >
                     {academicYears.map(year => (
                       <option key={year} value={year}>{year}</option>
@@ -2299,7 +2299,7 @@ export default function AdminDashboard() {
 
               <button
                 onClick={showEditForm ? handleUpdateAccount : handleCreateAccount}
-                className="w-full bg-[#4a6670] text-white py-4 rounded-xl font-semibold hover:bg-[#3d565e] transition-all shadow-lg shadow-[#4a6670]/20 mt-2"
+                className="w-full bg-[#2d6a4f] text-white py-4 rounded-xl font-semibold hover:bg-[#1b4332] transition-all shadow-lg shadow-[#2d6a4f]/20 mt-2"
               >
                 {showEditForm ? 'Update Account' : 'Create Account'}
               </button>
@@ -2326,11 +2326,11 @@ export default function AdminDashboard() {
       <>
         <div className="flex items-center gap-3 mb-6">
           <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
-            <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+            <ChevronLeft className="w-6 h-6 text-[#2d6a4f]" />
           </button>
           <h2 className="text-lg font-bold text-[#171532]">Calendar</h2>
         </div>
-        <div className="bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-2xl p-6 shadow-lg border border-[#5a7680]/50">
+        <div className="bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-2xl p-6 shadow-lg border border-[#5a7680]/50">
           <div className="text-center mb-6">
             <p className="text-2xl font-bold text-white">{today.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
           </div>
@@ -2373,7 +2373,7 @@ export default function AdminDashboard() {
         <div className="flex items-center justify-between gap-3 mb-6">
           <div className="flex items-center gap-3">
             <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors">
-              <ChevronLeft className="w-6 h-6 text-[#4a6670] dark:text-gray-300" />
+              <ChevronLeft className="w-6 h-6 text-[#2d6a4f] dark:text-gray-300" />
             </button>
             <h2 className="text-xl font-bold text-[#171532] dark:text-white">System Status</h2>
           </div>
@@ -2525,7 +2525,7 @@ export default function AdminDashboard() {
           <div className="space-y-5">
             <h2 className="text-lg font-bold text-[#171532]">Admin Profile</h2>
             
-            <div className="bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-2xl p-8 text-white">
+            <div className="bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-2xl p-8 text-white">
               <div className="flex flex-col items-center text-center space-y-3">
                 <img src="/admin-profile.jpg" alt="Admin Profile" className="w-32 h-32 rounded-full object-cover shadow-lg border-4 border-white/20" />
                 <div>
@@ -2590,7 +2590,7 @@ export default function AdminDashboard() {
                 onClick={() => setShowPasswordReset(!showPasswordReset)}
                 className="w-full flex items-center gap-3 bg-white border border-[#e5e7eb] rounded-xl p-4 hover:bg-[#f8f9fa] transition-colors"
               >
-                <Lock className="w-5 h-5 text-[#4a6670]" />
+                <Lock className="w-5 h-5 text-[#2d6a4f]" />
                 <span className="font-medium text-[#171532]">Reset Password</span>
               </button>
 
@@ -2608,7 +2608,7 @@ export default function AdminDashboard() {
                 }}
                 className="w-full flex items-center gap-3 bg-white border border-[#e5e7eb] rounded-xl p-4 hover:bg-[#f8f9fa] transition-colors"
               >
-                <Share2 className="w-5 h-5 text-[#4a6670]" />
+                <Share2 className="w-5 h-5 text-[#2d6a4f]" />
                 <span className="font-medium text-[#171532]">Share Website</span>
               </button>
 
@@ -2683,7 +2683,7 @@ export default function AdminDashboard() {
                         type="password"
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
-                        className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532]"
+                        className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#2d6a4f] focus:ring-2 focus:ring-[#2d6a4f]/10 text-[#171532]"
                         placeholder="Enter current password"
                       />
                     </div>
@@ -2693,7 +2693,7 @@ export default function AdminDashboard() {
                         type="password"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
-                        className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532]"
+                        className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#2d6a4f] focus:ring-2 focus:ring-[#2d6a4f]/10 text-[#171532]"
                         placeholder="Enter new password (min 6 characters)"
                       />
                     </div>
@@ -2703,7 +2703,7 @@ export default function AdminDashboard() {
                         type="password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#4a6670] focus:ring-2 focus:ring-[#4a6670]/10 text-[#171532]"
+                        className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#e8e8e8] rounded-xl focus:outline-none focus:border-[#2d6a4f] focus:ring-2 focus:ring-[#2d6a4f]/10 text-[#171532]"
                         placeholder="Confirm new password"
                       />
                     </div>
@@ -2743,7 +2743,7 @@ export default function AdminDashboard() {
                           toast.error("Error changing password")
                         }
                       }}
-                      className="w-full bg-[#4a6670] text-white py-3 rounded-xl font-semibold hover:bg-[#3d565e] transition-colors"
+                      className="w-full bg-[#2d6a4f] text-white py-3 rounded-xl font-semibold hover:bg-[#1b4332] transition-colors"
                     >
                       Change Password
                     </button>
@@ -2774,7 +2774,7 @@ export default function AdminDashboard() {
             className={`flex items-center justify-center p-2 rounded-xl transition-all ${
               activeTab === "home"
                 ? "bg-[#c17f59] text-white shadow-md"
-                : "text-[#4a6670]"
+                : "text-[#2d6a4f]"
             }`}
             title="Home"
           >
@@ -2786,7 +2786,7 @@ export default function AdminDashboard() {
             className={`flex items-center justify-center p-2 rounded-xl transition-all ${
               activeTab === "accounts"
                 ? "bg-[#c17f59] text-white shadow-md"
-                : "text-[#4a6670]"
+                : "text-[#2d6a4f]"
             }`}
             title="Accounts"
           >
@@ -2794,13 +2794,13 @@ export default function AdminDashboard() {
           </button>
 
           <Link href="/admin/manage-transactions">
-            <button className="flex items-center justify-center p-2 rounded-xl transition-all text-[#4a6670] hover:bg-[#f0f0f0]" title="Edit Transactions">
+            <button className="flex items-center justify-center p-2 rounded-xl transition-all text-[#2d6a4f] hover:bg-[#f0f0f0]" title="Edit Transactions">
               <Edit className="w-5 h-5" />
             </button>
           </Link>
 
           <Link href="/admin/upload-transactions">
-            <button className="flex items-center justify-center p-2 rounded-xl transition-all text-[#4a6670] hover:bg-[#f0f0f0]" title="Upload Transactions">
+            <button className="flex items-center justify-center p-2 rounded-xl transition-all text-[#2d6a4f] hover:bg-[#f0f0f0]" title="Upload Transactions">
               <Upload className="w-5 h-5" />
             </button>
           </Link>
@@ -2810,7 +2810,7 @@ export default function AdminDashboard() {
             className={`flex items-center justify-center p-2 rounded-xl transition-all ${
               activeTab === "profile"
                 ? "bg-[#c17f59] text-white shadow-md"
-                : "text-[#4a6670]"
+                : "text-[#2d6a4f]"
             }`}
             title="Admin Profile"
           >

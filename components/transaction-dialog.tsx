@@ -84,7 +84,7 @@ export function TransactionDialog({ open, onOpenChange, student, allStudents = [
                 placeholder="Enter amount"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="w-full bg-white border border-[#e5e7eb] rounded-lg px-4 py-3 text-[#171532] placeholder-[#d1d5db] focus:outline-none focus:border-[#4a6670]"
+                className="w-full bg-white border border-[#e5e7eb] rounded-lg px-4 py-3 text-[#171532] placeholder-[#d1d5db] focus:outline-none focus:border-[#2d6a4f]"
                 required
               />
             </div>
@@ -96,7 +96,7 @@ export function TransactionDialog({ open, onOpenChange, student, allStudents = [
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full bg-white border border-[#e5e7eb] rounded-lg px-4 py-3 text-[#171532] focus:outline-none focus:border-[#4a6670]"
+                className="w-full bg-white border border-[#e5e7eb] rounded-lg px-4 py-3 text-[#171532] focus:outline-none focus:border-[#2d6a4f]"
                 required
               />
             </div>
@@ -109,7 +109,7 @@ export function TransactionDialog({ open, onOpenChange, student, allStudents = [
                 placeholder="e.g., Scholarship, Gift"
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
-                className="w-full bg-white border border-[#e5e7eb] rounded-lg px-4 py-3 text-[#171532] placeholder-[#d1d5db] focus:outline-none focus:border-[#4a6670]"
+                className="w-full bg-white border border-[#e5e7eb] rounded-lg px-4 py-3 text-[#171532] placeholder-[#d1d5db] focus:outline-none focus:border-[#2d6a4f]"
               />
             </div>
 

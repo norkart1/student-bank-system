@@ -152,7 +152,7 @@ export default function ManageTransactions() {
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-center min-h-screen">
             <div className="text-center">
-              <div className="w-12 h-12 border-4 border-[#e5e7eb] border-t-[#4a6670] rounded-full animate-spin mx-auto"></div>
+              <div className="w-12 h-12 border-4 border-[#e5e7eb] border-t-[#2d6a4f] rounded-full animate-spin mx-auto"></div>
               <p className="mt-4 text-[#747384]">Loading students...</p>
             </div>
           </div>
@@ -170,7 +170,7 @@ export default function ManageTransactions() {
             onClick={() => router.back()}
             className="p-2 hover:bg-white rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-[#4a6670]" />
+            <ArrowLeft className="w-5 h-5 text-[#2d6a4f]" />
           </button>
           <h1 className="text-3xl font-bold text-[#171532]">Manage Transactions</h1>
         </div>
@@ -185,7 +185,7 @@ export default function ManageTransactions() {
               placeholder="Search by name or code..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2 border border-[#e5e7eb] rounded-lg mb-4 focus:outline-none focus:border-[#4a6670]"
+              className="w-full px-4 py-2 border border-[#e5e7eb] rounded-lg mb-4 focus:outline-none focus:border-[#2d6a4f]"
             />
 
             <div className="space-y-2 max-h-96 overflow-y-auto">
@@ -196,7 +196,7 @@ export default function ManageTransactions() {
                     onClick={() => setSelectedStudent(student)}
                     className={`w-full p-3 rounded-lg text-left transition-colors ${
                       selectedStudent?._id === student._id
-                        ? "bg-[#4a6670] text-white"
+                        ? "bg-[#2d6a4f] text-white"
                         : "bg-[#f8f9fa] hover:bg-[#e8eef5] text-[#171532]"
                     }`}
                   >
@@ -224,7 +224,7 @@ export default function ManageTransactions() {
                     {selectedStudent.transactions.map((transaction, idx) => (
                       <div
                         key={idx}
-                        className="border border-[#e5e7eb] rounded-lg p-4 hover:border-[#4a6670] transition-colors"
+                        className="border border-[#e5e7eb] rounded-lg p-4 hover:border-[#2d6a4f] transition-colors"
                       >
                         {editingIndex === idx ? (
                           <div className="space-y-3">
@@ -239,7 +239,7 @@ export default function ManageTransactions() {
                                 onChange={(e) =>
                                   setEditValues({ ...editValues, date: e.target.value })
                                 }
-                                className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:border-[#4a6670]"
+                                className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:border-[#2d6a4f]"
                               />
                             </div>
 
@@ -255,7 +255,7 @@ export default function ManageTransactions() {
                                 onChange={(e) =>
                                   setEditValues({ ...editValues, amount: e.target.value })
                                 }
-                                className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:border-[#4a6670]"
+                                className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:border-[#2d6a4f]"
                               />
                             </div>
 
@@ -268,7 +268,7 @@ export default function ManageTransactions() {
                                 onChange={(e) =>
                                   setEditValues({ ...editValues, academicYear: e.target.value })
                                 }
-                                className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:border-[#4a6670]"
+                                className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:border-[#2d6a4f]"
                               >
                                 <option value="2023-24">2023-24</option>
                                 <option value="2024-25">2024-25</option>
@@ -290,7 +290,7 @@ export default function ManageTransactions() {
                               <button
                                 onClick={() => handleSaveTransaction(idx)}
                                 disabled={isSaving}
-                                className="flex-1 flex items-center justify-center gap-2 bg-[#4a6670] hover:bg-[#3d565e] disabled:opacity-50 disabled:cursor-not-allowed text-white px-3 py-2 rounded-lg font-semibold transition-colors"
+                                className="flex-1 flex items-center justify-center gap-2 bg-[#2d6a4f] hover:bg-[#1b4332] disabled:opacity-50 disabled:cursor-not-allowed text-white px-3 py-2 rounded-lg font-semibold transition-colors"
                               >
                                 {isSaving ? (
                                   <>

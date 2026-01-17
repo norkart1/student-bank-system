@@ -77,13 +77,13 @@ export default function RegisterPage() {
       {/* Form Section */}
       <div className="w-full md:w-1/2 flex flex-col px-6 md:px-12 py-8 md:py-16 justify-start md:justify-center">
         <Link href="/login">
-          <div className="w-10 h-10 bg-[#4a6670] rounded-full flex items-center justify-center hover:bg-[#3d565e] transition-colors mb-8">
+          <div className="w-10 h-10 bg-[#2d6a4f] rounded-full flex items-center justify-center hover:bg-[#1b4332] transition-colors mb-8">
             <ArrowLeft className="w-5 h-5 text-white" />
           </div>
         </Link>
 
         <div className="mb-10 flex flex-col items-center md:items-start text-center md:text-left">
-          <div className="w-24 h-24 mb-6 relative rounded-2xl overflow-hidden shadow-lg border-2 border-[#4a6670]/10">
+          <div className="w-24 h-24 mb-6 relative rounded-2xl overflow-hidden shadow-lg border-2 border-[#2d6a4f]/10">
             <Image
               src="/students_logo.png"
               alt="JDSA Students Bank"
@@ -108,7 +108,7 @@ export default function RegisterPage() {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               required
-              className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#4a6670]/30 focus:border-[#4a6670]"
+              className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#2d6a4f]/30 focus:border-[#2d6a4f]"
             />
           </div>
 
@@ -122,7 +122,7 @@ export default function RegisterPage() {
               value={code}
               onChange={(e) => setCode(e.target.value)}
               required
-              className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#4a6670]/30 focus:border-[#4a6670]"
+              className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#2d6a4f]/30 focus:border-[#2d6a4f]"
             />
           </div>
 
@@ -141,14 +141,14 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full h-14 bg-[#4a6670] hover:bg-[#3d565e] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 disabled:opacity-70 mt-6"
+            className="w-full h-14 bg-[#2d6a4f] hover:bg-[#1b4332] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 disabled:opacity-70 mt-6"
           >
             {isLoading ? "Creating account..." : "Create Account"}
           </button>
 
           <p className="text-center text-[#747384] text-sm mt-4">
             Already have an account?{" "}
-            <Link href="/login" className="text-[#4a6670] font-semibold hover:underline">
+            <Link href="/login" className="text-[#2d6a4f] font-semibold hover:underline">
               Login here
             </Link>
           </p>

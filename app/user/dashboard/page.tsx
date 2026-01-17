@@ -115,7 +115,7 @@ export default function UserDashboard() {
 
     // Title & Header
     doc.setFontSize(20)
-    doc.setTextColor(74, 102, 112) // #4a6670
+    doc.setTextColor(45, 106, 79) // Masjid Green #2d6a4f
     doc.text("JDSA STUDENTS BANK", pageWidth / 2, 20, { align: "center" })
 
     doc.setFontSize(14)
@@ -165,7 +165,7 @@ export default function UserDashboard() {
         lineColor: [0, 0, 0],
       },
       headStyles: {
-        fillColor: [74, 102, 112], // #4a6670
+        fillColor: [45, 106, 79], // Masjid Green #2d6a4f
         textColor: [255, 255, 255],
         fontStyle: "bold",
         lineWidth: 0.1,
@@ -246,7 +246,7 @@ export default function UserDashboard() {
       <div className="min-h-screen bg-gradient-to-br from-[#f8f9fa] to-[#e8eef5] flex items-center justify-center p-4">
         <div className="text-center">
           <div className="inline-block">
-            <div className="w-12 h-12 border-4 border-[#e5e7eb] border-t-[#4a6670] rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-[#e5e7eb] border-t-[#2d6a4f] rounded-full animate-spin"></div>
           </div>
           <p className="mt-4 text-[#747384]">Loading your profile...</p>
         </div>
@@ -265,7 +265,7 @@ export default function UserDashboard() {
             {userData?.profileImage ? (
               <img src={userData.profileImage} alt={userData?.name} className="w-20 h-20 rounded-full object-cover mb-4 shadow-md" />
             ) : (
-              <div className="w-20 h-20 bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-full flex items-center justify-center text-white font-bold text-3xl mb-4">
+              <div className="w-20 h-20 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-full flex items-center justify-center text-white font-bold text-3xl mb-4">
                 {userData?.name?.charAt(0).toUpperCase() || 'U'}
               </div>
             )}
@@ -274,7 +274,7 @@ export default function UserDashboard() {
           </div>
 
           {/* Balance Card */}
-          <div className="bg-gradient-to-br from-[#4a6670] to-[#3d565e] rounded-xl p-5 mb-6 shadow-md">
+          <div className="bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl p-5 mb-6 shadow-md">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
                 <Wallet className="w-5 h-5 text-white" />
@@ -306,7 +306,7 @@ export default function UserDashboard() {
           {/* Profile Info and QR Code Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-3 p-3 bg-[#f8f9fa] rounded-lg">
-              <User className="w-5 h-5 text-[#4a6670]" />
+              <User className="w-5 h-5 text-[#2d6a4f]" />
               <div>
                 <p className="text-xs text-[#747384]">Full Name</p>
                 <p className="font-semibold text-[#171532]">{userData?.name || 'User'}</p>
@@ -316,7 +316,7 @@ export default function UserDashboard() {
             {/* QR Code Section */}
             <div className="bg-[#f8f9fa] rounded-lg p-4 flex flex-col items-center">
               <div className="flex items-center gap-2 mb-3 w-full">
-                <QrCode className="w-4 h-4 text-[#4a6670]" />
+                <QrCode className="w-4 h-4 text-[#2d6a4f]" />
                 <p className="text-xs text-[#747384] font-medium">Scan to View Results</p>
               </div>
               <div className="bg-white p-2 rounded border border-[#e5e7eb]">
@@ -335,7 +335,7 @@ export default function UserDashboard() {
           <div className="mt-6 grid grid-cols-3 gap-2">
             <button
               onClick={handlePrint}
-              className="flex items-center justify-center gap-2 bg-[#4a6670] hover:bg-[#3d565e] text-white px-3 py-2 rounded-lg font-semibold text-xs transition-colors"
+              className="flex items-center justify-center gap-2 bg-[#2d6a4f] hover:bg-[#1b4332] text-white px-3 py-2 rounded-lg font-semibold text-xs transition-colors"
               title="Print Dashboard"
             >
               <Printer className="w-4 h-4" />
@@ -375,10 +375,10 @@ export default function UserDashboard() {
                 onClick={() => setIsLedgerFullscreen(true)}
               >
                 <div className="flex items-center gap-2">
-                  <History className="w-5 h-5 text-[#4a6670]" />
+                  <History className="w-5 h-5 text-[#2d6a4f]" />
                   <h3 className="font-semibold text-[#171532]">Transaction Ledger</h3>
                 </div>
-                <Zap className="w-4 h-4 text-[#4a6670] animate-pulse" />
+                <Zap className="w-4 h-4 text-[#2d6a4f] animate-pulse" />
               </div>
               <div 
                 className="overflow-x-auto rounded-xl border border-[#e5e7eb] cursor-pointer"
@@ -386,12 +386,12 @@ export default function UserDashboard() {
               >
                 <table className="w-full text-sm border-collapse min-w-[500px]">
                   <thead>
-                    <tr className="bg-[#4a6670] text-white">
-                      <th className="px-3 py-3 text-left font-semibold border-b border-[#3d565e]">S.No</th>
-                      <th className="px-3 py-3 text-left font-semibold border-b border-[#3d565e]">Date</th>
-                      <th className="px-3 py-3 text-right font-semibold border-b border-[#3d565e]">Deposit</th>
-                      <th className="px-3 py-3 text-right font-semibold border-b border-[#3d565e]">Withdraw</th>
-                      <th className="px-3 py-3 text-right font-semibold border-b border-[#3d565e]">Balance</th>
+                    <tr className="bg-[#2d6a4f] text-white">
+                      <th className="px-3 py-3 text-left font-semibold border-b border-[#1b4332]">S.No</th>
+                      <th className="px-3 py-3 text-left font-semibold border-b border-[#1b4332]">Date</th>
+                      <th className="px-3 py-3 text-right font-semibold border-b border-[#1b4332]">Deposit</th>
+                      <th className="px-3 py-3 text-right font-semibold border-b border-[#1b4332]">Withdraw</th>
+                      <th className="px-3 py-3 text-right font-semibold border-b border-[#1b4332]">Balance</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#e5e7eb]">
@@ -415,7 +415,7 @@ export default function UserDashboard() {
                             <td className="px-3 py-3 font-semibold text-[#171532]">
                               <div className="flex flex-col gap-1">
                                 <span>{idx + 1}</span>
-                                <span className="text-[9px] bg-[#4a6670]/10 text-[#4a6670] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider w-fit">
+                                <span className="text-[9px] bg-[#2d6a4f]/10 text-[#2d6a4f] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider w-fit">
                                   {transaction.academicYear || '2025-26'}
                                 </span>
                               </div>
@@ -441,7 +441,7 @@ export default function UserDashboard() {
                                 <span className="text-[#cbd5e1]">-</span>
                               )}
                             </td>
-                            <td className="px-3 py-3 text-right font-bold text-[#4a6670] tabular-nums">
+                            <td className="px-3 py-3 text-right font-bold text-[#2d6a4f] tabular-nums">
                               ₹{runningBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </td>
                           </tr>
@@ -460,7 +460,7 @@ export default function UserDashboard() {
       {/* Fullscreen Ledger Modal */}
       {isLedgerFullscreen && (
         <div className="fixed inset-0 bg-white z-50 overflow-hidden flex flex-col animate-in fade-in zoom-in duration-200">
-          <div className="bg-[#4a6670] text-white p-4 flex items-center justify-between shadow-md">
+          <div className="bg-[#2d6a4f] text-white p-4 flex items-center justify-between shadow-md">
             <div className="flex items-center gap-3">
               <History className="w-6 h-6" />
               <div>
@@ -480,7 +480,7 @@ export default function UserDashboard() {
             <div className="w-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
               <table className="w-full text-[11px] sm:text-sm border-collapse table-fixed">
                 <thead>
-                  <tr className="bg-gray-100 text-[#4a6670]">
+                  <tr className="bg-gray-100 text-[#2d6a4f]">
                     <th className="w-[10%] px-2 py-3 text-left font-bold border-b border-gray-200">#</th>
                     <th className="w-[25%] px-2 py-3 text-left font-bold border-b border-gray-200">Date</th>
                     <th className="w-[20%] px-2 py-3 text-right font-bold border-b border-gray-200">Dep.</th>
@@ -506,7 +506,7 @@ export default function UserDashboard() {
                     return Object.entries(groupedTxs).map(([monthYear, transactions]) => (
                       <React.Fragment key={monthYear}>
                         <tr className="bg-gray-50/50">
-                          <td colSpan={5} className="px-2 py-2 text-[10px] font-bold text-[#4a6670] uppercase tracking-wider border-y border-gray-100">
+                          <td colSpan={5} className="px-2 py-2 text-[10px] font-bold text-[#2d6a4f] uppercase tracking-wider border-y border-gray-100">
                             {monthYear}
                           </td>
                         </tr>
@@ -535,7 +535,7 @@ export default function UserDashboard() {
                               <td className="px-2 py-3 text-right text-red-600 font-bold tabular-nums">
                                 {transaction.type === 'withdraw' ? `₹${transaction.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-'}
                               </td>
-                              <td className="px-2 py-3 text-right text-[#4a6670] font-bold tabular-nums">
+                              <td className="px-2 py-3 text-right text-[#2d6a4f] font-bold tabular-nums">
                                 ₹{runningBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                               </td>
                             </tr>
@@ -551,7 +551,7 @@ export default function UserDashboard() {
             <div className="mt-4 flex flex-col gap-3 p-4">
               <button 
                 onClick={downloadPDF}
-                className="w-full flex items-center justify-center gap-3 bg-[#4a6670] text-white py-4 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-all"
+                className="w-full flex items-center justify-center gap-3 bg-[#2d6a4f] text-white py-4 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-all"
               >
                 <Printer className="w-5 h-5" />
                 Print Full Ledger

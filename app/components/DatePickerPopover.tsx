@@ -35,7 +35,7 @@ export function DatePickerPopover({ value, onChange, placeholder = "Select date"
           placeholder={placeholder}
           value={value}
           readOnly
-          className="flex-1 px-3 py-2 border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:border-[#4a6670] cursor-pointer bg-white"
+          className="flex-1 px-3 py-2 border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:border-[#2d6a4f] cursor-pointer bg-white"
           onClick={() => setIsOpen(!isOpen)}
         />
         <button
@@ -43,7 +43,7 @@ export function DatePickerPopover({ value, onChange, placeholder = "Select date"
           onClick={() => setIsOpen(!isOpen)}
           className="p-2 hover:bg-[#f8f9fa] rounded-lg transition-colors"
         >
-          <Calendar className="w-5 h-5 text-[#4a6670]" />
+          <Calendar className="w-5 h-5 text-[#2d6a4f]" />
         </button>
       </div>
 

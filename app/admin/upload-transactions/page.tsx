@@ -253,7 +253,7 @@ export default function UploadTransactions() {
             onClick={() => router.back()}
             className="p-2 hover:bg-white rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-[#4a6670]" />
+            <ArrowLeft className="w-5 h-5 text-[#2d6a4f]" />
           </button>
           <h1 className="text-3xl font-bold text-[#171532]">Upload Transactions</h1>
         </div>
@@ -264,7 +264,7 @@ export default function UploadTransactions() {
             <h2 className="text-xl font-semibold text-[#171532] mb-4">Import Excel or CSV File</h2>
 
             <div
-              className="border-2 border-dashed border-[#d1d5db] rounded-xl p-8 text-center cursor-pointer hover:border-[#4a6670] hover:bg-[#f8f9fa] transition-all"
+              className="border-2 border-dashed border-[#d1d5db] rounded-xl p-8 text-center cursor-pointer hover:border-[#2d6a4f] hover:bg-[#f8f9fa] transition-all"
               onClick={() => fileInputRef.current?.click()}
             >
               <Upload className="w-12 h-12 text-[#747384] mx-auto mb-3" />
@@ -364,7 +364,7 @@ export default function UploadTransactions() {
                 <button
                   onClick={handleUpload}
                   disabled={isLoading}
-                  className="w-full flex items-center justify-center gap-2 bg-[#4a6670] hover:bg-[#3d565e] disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-3 rounded-lg font-semibold transition-colors"
+                  className="w-full flex items-center justify-center gap-2 bg-[#2d6a4f] hover:bg-[#1b4332] disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-3 rounded-lg font-semibold transition-colors"
                 >
                   {isLoading ? (
                     <>

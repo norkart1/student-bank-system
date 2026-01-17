@@ -27,12 +27,12 @@ export default function Home() {
 
         <div className="flex gap-2 mb-6">
           <div className="w-2 h-2 rounded-full bg-[#c9c9ce]"></div>
-          <div className="w-6 h-2 rounded-full bg-[#4a6670]"></div>
+          <div className="w-6 h-2 rounded-full bg-[#2d6a4f]"></div>
           <div className="w-2 h-2 rounded-full bg-[#c9c9ce]"></div>
         </div>
 
         <Link href="/login" className="w-full">
-          <button className="w-full h-14 bg-[#4a6670] hover:bg-[#3d565e] dark:bg-slate-700 dark:hover:bg-slate-600 text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 flex items-center justify-center gap-2">
+          <button className="w-full h-14 bg-[#2d6a4f] hover:bg-[#1b4332] dark:bg-slate-700 dark:hover:bg-slate-600 text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 flex items-center justify-center gap-2">
             Find Your Account
             <ArrowRight className="w-5 h-5" />
           </button>

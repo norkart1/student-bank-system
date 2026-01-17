@@ -144,7 +144,7 @@ export default function SearchPage() {
       {/* Form Section */}
       <div className="w-full md:w-1/2 flex flex-col px-6 md:px-12 py-8 md:py-16 justify-start md:justify-center">
         <Link href="/">
-          <div className="w-10 h-10 bg-[#4a6670] rounded-full flex items-center justify-center hover:bg-[#3d565e] transition-colors mb-8">
+          <div className="w-10 h-10 bg-[#2d6a4f] rounded-full flex items-center justify-center hover:bg-[#1b4332] transition-colors mb-8">
             <ArrowLeft className="w-5 h-5 text-white" />
           </div>
         </Link>
@@ -164,7 +164,7 @@ export default function SearchPage() {
               onClick={() => setSearchType("code")}
               className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
                 searchType === "code"
-                  ? "bg-[#4a6670] text-white"
+                  ? "bg-[#2d6a4f] text-white"
                   : "bg-[#e5e7eb] text-[#171532] hover:bg-[#d1d5db]"
               }`}
             >
@@ -175,7 +175,7 @@ export default function SearchPage() {
               onClick={() => setSearchType("name")}
               className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
                 searchType === "name"
-                  ? "bg-[#4a6670] text-white"
+                  ? "bg-[#2d6a4f] text-white"
                   : "bg-[#e5e7eb] text-[#171532] hover:bg-[#d1d5db]"
               }`}
             >
@@ -195,14 +195,14 @@ export default function SearchPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 required
-                className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#4a6670]/30 focus:border-[#4a6670]"
+                className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#2d6a4f]/30 focus:border-[#2d6a4f]"
               />
             </div>
             <button
               type="button"
               onClick={() => setShowQRScanner(true)}
               disabled={isLoading}
-              className="h-14 px-4 bg-[#4a6670] hover:bg-[#3d565e] text-white rounded-xl transition-colors flex items-center justify-center disabled:opacity-50"
+              className="h-14 px-4 bg-[#2d6a4f] hover:bg-[#1b4332] text-white rounded-xl transition-colors flex items-center justify-center disabled:opacity-50"
               title="Scan QR Code"
             >
               <QrCode className="w-5 h-5" />
@@ -218,7 +218,7 @@ export default function SearchPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full h-14 bg-[#4a6670] hover:bg-[#3d565e] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 disabled:opacity-70 mt-6 flex items-center justify-center gap-2"
+            className="w-full h-14 bg-[#2d6a4f] hover:bg-[#1b4332] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 disabled:opacity-70 mt-6 flex items-center justify-center gap-2"
           >
             {isLoading ? (
               <>
@@ -236,7 +236,7 @@ export default function SearchPage() {
         </p>
 
         <div className="text-center mt-6">
-          <Link href="/admin-login" className="text-xs text-[#4a6670] hover:text-[#3d565e] underline transition-colors">
+          <Link href="/admin-login" className="text-xs text-[#2d6a4f] hover:text-[#1b4332] underline transition-colors">
             Admin Login
           </Link>
         </div>
@@ -280,7 +280,7 @@ export default function SearchPage() {
                 )}
                 {/* QR Frame Overlay */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-64 h-64 border-4 border-[#4a6670] rounded-3xl shadow-[inset_0_0_20px_rgba(74,102,112,0.3)]" />
+                  <div className="w-64 h-64 border-4 border-[#2d6a4f] rounded-3xl shadow-[inset_0_0_20px_rgba(74,102,112,0.3)]" />
                 </div>
               </div>
 

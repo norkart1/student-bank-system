@@ -342,7 +342,7 @@ export default function BulkEditPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader2 className="w-8 h-8 animate-spin text-[#4a6670]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#2d6a4f]" />
       </div>
     )
   }
@@ -358,7 +358,7 @@ export default function BulkEditPage() {
                 onClick={() => router.back()} 
                 className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 rounded-xl transition-all"
               >
-                <ChevronLeft className="w-6 h-6 text-[#4a6670]" />
+                <ChevronLeft className="w-6 h-6 text-[#2d6a4f]" />
               </button>
               <div>
                 <h1 className="text-xl font-extrabold text-[#171532]">Manage Transactions</h1>
@@ -379,7 +379,7 @@ export default function BulkEditPage() {
               <button
                 onClick={handleSaveAll}
                 disabled={isSavingAll || !selectedStudent || transactions.length === 0}
-                className="flex items-center gap-2 px-5 py-2 bg-[#4a6670] text-white rounded-xl text-sm font-bold shadow-md hover:bg-[#3d565e] transition-all active:scale-95 disabled:opacity-50"
+                className="flex items-center gap-2 px-5 py-2 bg-[#2d6a4f] text-white rounded-xl text-sm font-bold shadow-md hover:bg-[#1b4332] transition-all active:scale-95 disabled:opacity-50"
               >
                 {isSavingAll ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                 Save All
@@ -402,7 +402,7 @@ export default function BulkEditPage() {
             <button
               onClick={handleSaveAll}
               disabled={isSavingAll || !selectedStudent || transactions.length === 0}
-              className="flex-1 flex items-center justify-center gap-2 px-5 py-2 bg-[#4a6670] text-white rounded-xl text-sm font-bold shadow-md hover:bg-[#3d565e] transition-all active:scale-95 disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-5 py-2 bg-[#2d6a4f] text-white rounded-xl text-sm font-bold shadow-md hover:bg-[#1b4332] transition-all active:scale-95 disabled:opacity-50"
             >
               {isSavingAll ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               Save All
@@ -412,14 +412,14 @@ export default function BulkEditPage() {
 
         {!selectedStudent ? (
           <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-10 text-center max-w-xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="w-20 h-20 bg-[#4a6670]/10 rounded-3xl flex items-center justify-center mx-auto mb-6 rotate-3 hover:rotate-0 transition-transform duration-300">
-              <Search className="w-10 h-10 text-[#4a6670]" />
+            <div className="w-20 h-20 bg-[#2d6a4f]/10 rounded-3xl flex items-center justify-center mx-auto mb-6 rotate-3 hover:rotate-0 transition-transform duration-300">
+              <Search className="w-10 h-10 text-[#2d6a4f]" />
             </div>
             <h2 className="text-2xl font-black text-[#171532] mb-3">Select Student</h2>
             <p className="text-gray-500 font-medium mb-8">Search for a student to start adding or editing transactions.</p>
             
             <div className="relative group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-[#4a6670] transition-colors" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-[#2d6a4f] transition-colors" />
               <input
                 type="text"
                 placeholder="Search name or student code..."
@@ -428,7 +428,7 @@ export default function BulkEditPage() {
                   setSearchQuery(e.target.value)
                   setShowSearch(true)
                 }}
-                className="w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-transparent focus:border-[#4a6670]/20 focus:bg-white rounded-2xl text-base font-bold text-[#171532] outline-none transition-all shadow-inner"
+                className="w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-transparent focus:border-[#2d6a4f]/20 focus:bg-white rounded-2xl text-base font-bold text-[#171532] outline-none transition-all shadow-inner"
               />
               {showSearch && searchResults.length > 0 && (
                 <div className="absolute top-full left-0 right-0 mt-3 bg-white border border-gray-100 rounded-2xl shadow-2xl z-50 max-h-72 overflow-y-auto p-2 animate-in fade-in zoom-in-95 duration-200">
@@ -436,10 +436,10 @@ export default function BulkEditPage() {
                     <button
                       key={s._id}
                       onClick={() => selectStudent(s)}
-                      className="w-full px-4 py-4 text-left hover:bg-[#4a6670]/5 rounded-xl flex items-center justify-between transition-colors group"
+                      className="w-full px-4 py-4 text-left hover:bg-[#2d6a4f]/5 rounded-xl flex items-center justify-between transition-colors group"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-[#4a6670] rounded-lg flex items-center justify-center text-white font-black text-lg overflow-hidden relative">
+                        <div className="w-10 h-10 bg-[#2d6a4f] rounded-lg flex items-center justify-center text-white font-black text-lg overflow-hidden relative">
                           {s.profileImage ? (
                             <img 
                               src={s.profileImage} 
@@ -451,11 +451,11 @@ export default function BulkEditPage() {
                           )}
                         </div>
                         <div>
-                          <p className="text-sm font-black text-[#171532] group-hover:text-[#4a6670] transition-colors">{s.name}</p>
+                          <p className="text-sm font-black text-[#171532] group-hover:text-[#2d6a4f] transition-colors">{s.name}</p>
                           <p className="text-xs text-gray-500 font-mono tracking-tighter">{s.code}</p>
                         </div>
                       </div>
-                      <Plus className="w-5 h-5 text-[#4a6670] opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <Plus className="w-5 h-5 text-[#2d6a4f] opacity-0 group-hover:opacity-100 transition-opacity" />
                     </button>
                   ))}
                 </div>
@@ -468,7 +468,7 @@ export default function BulkEditPage() {
             <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="p-6 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-5">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#4a6670] to-[#171532] rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-[#4a6670]/20 overflow-hidden relative">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#2d6a4f] to-[#171532] rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-[#2d6a4f]/20 overflow-hidden relative">
                     {selectedStudent.profileImage ? (
                       <img 
                         src={selectedStudent.profileImage} 
@@ -484,7 +484,7 @@ export default function BulkEditPage() {
                     <div className="flex items-center gap-3 mt-1">
                       <span className="px-2.5 py-0.5 bg-gray-100 rounded-lg text-[10px] font-bold text-gray-500 tracking-widest font-mono">{selectedStudent.code}</span>
                       <span className="w-1.5 h-1.5 rounded-full bg-gray-300" />
-                      <span className="text-xs font-black text-[#4a6670]">Current Balance: ₹{selectedStudent.balance.toFixed(2)}</span>
+                      <span className="text-xs font-black text-[#2d6a4f]">Current Balance: ₹{selectedStudent.balance.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
@@ -503,7 +503,7 @@ export default function BulkEditPage() {
 
                 <button 
                   onClick={() => setSelectedStudent(null)}
-                  className="px-4 py-2 text-xs font-black text-[#4a6670] bg-[#4a6670]/5 hover:bg-[#4a6670]/10 rounded-xl transition-all"
+                  className="px-4 py-2 text-xs font-black text-[#2d6a4f] bg-[#2d6a4f]/5 hover:bg-[#2d6a4f]/10 rounded-xl transition-all"
                 >
                   Switch Student
                 </button>
@@ -534,7 +534,7 @@ export default function BulkEditPage() {
                                 type="date"
                                 value={tx.date}
                                 onChange={(e) => handleInputChange(index, 'date', e.target.value)}
-                                className="w-full pl-9 pr-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-bold text-[#171532] outline-none transition-all"
+                                className="w-full pl-9 pr-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#2d6a4f]/10 focus:bg-white rounded-xl text-xs font-bold text-[#171532] outline-none transition-all"
                               />
                             </div>
                           </div>
@@ -545,7 +545,7 @@ export default function BulkEditPage() {
                             <select
                               value={tx.academicYear}
                               onChange={(e) => handleInputChange(index, 'academicYear', e.target.value)}
-                              className="w-full md:w-24 px-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-bold text-[#171532] outline-none transition-all cursor-pointer"
+                              className="w-full md:w-24 px-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#2d6a4f]/10 focus:bg-white rounded-xl text-xs font-bold text-[#171532] outline-none transition-all cursor-pointer"
                             >
                               <option value="2024-25">24-25</option>
                               <option value="2025-26">25-26</option>
@@ -559,7 +559,7 @@ export default function BulkEditPage() {
                             <select
                               value={tx.type}
                               onChange={(e) => handleInputChange(index, 'type', e.target.value as any)}
-                              className={`w-full md:w-24 px-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-black outline-none transition-all cursor-pointer ${
+                              className={`w-full md:w-24 px-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#2d6a4f]/10 focus:bg-white rounded-xl text-xs font-black outline-none transition-all cursor-pointer ${
                                 tx.type === 'deposit' ? 'text-green-600' : 'text-red-600'
                               }`}
                             >
@@ -583,7 +583,7 @@ export default function BulkEditPage() {
                                     handleInputChange(index, 'amount', val);
                                   }
                                 }}
-                                className="w-full pl-7 pr-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-black text-[#171532] outline-none transition-all"
+                                className="w-full pl-7 pr-3 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#2d6a4f]/10 focus:bg-white rounded-xl text-xs font-black text-[#171532] outline-none transition-all"
                                 placeholder="0.00"
                               />
                             </div>
@@ -596,7 +596,7 @@ export default function BulkEditPage() {
                               type="text"
                               value={tx.reason}
                               onChange={(e) => handleInputChange(index, 'reason', e.target.value)}
-                              className="w-full px-4 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#4a6670]/10 focus:bg-white rounded-xl text-xs font-bold text-[#171532] outline-none transition-all"
+                              className="w-full px-4 py-2 bg-[#f8f9fa] border-2 border-transparent focus:border-[#2d6a4f]/10 focus:bg-white rounded-xl text-xs font-bold text-[#171532] outline-none transition-all"
                               placeholder="Reason for transaction..."
                             />
                           </div>
@@ -613,14 +613,14 @@ export default function BulkEditPage() {
                                     e.stopPropagation();
                                     saveTransaction(index);
                                   }}
-                                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-[#4a6670] text-white rounded-2xl hover:bg-[#3d565e] active:scale-95 shadow-lg min-w-[100px] cursor-pointer z-10"
+                                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-[#2d6a4f] text-white rounded-2xl hover:bg-[#1b4332] active:scale-95 shadow-lg min-w-[100px] cursor-pointer z-10"
                                   title="Save Row"
                                 >
                                   <Save className="w-5 h-5" />
                                   <span className="text-xs font-black uppercase tracking-tighter">Save</span>
                                 </button>
                               )}
-                              {tx.status === 'saving' && <Loader2 className="w-6 h-6 animate-spin text-[#4a6670]" />}
+                              {tx.status === 'saving' && <Loader2 className="w-6 h-6 animate-spin text-[#2d6a4f]" />}
                               {tx.status === 'saved' && <CheckCircle2 className="w-6 h-6 text-green-500" />}
                               {tx.status === 'error' && <AlertCircle className="w-6 h-6 text-red-500" />}
                               
@@ -648,7 +648,7 @@ export default function BulkEditPage() {
               <div className="p-6 bg-gray-50/50 flex justify-center">
                 <button
                   onClick={addTransactionRow}
-                  className="flex items-center gap-2 px-8 py-3 bg-white border-2 border-dashed border-gray-200 text-[#4a6670] rounded-2xl font-black text-sm hover:border-[#4a6670]/30 hover:bg-white transition-all active:scale-95 shadow-sm"
+                  className="flex items-center gap-2 px-8 py-3 bg-white border-2 border-dashed border-gray-200 text-[#2d6a4f] rounded-2xl font-black text-sm hover:border-[#2d6a4f]/30 hover:bg-white transition-all active:scale-95 shadow-sm"
                 >
                   <Plus className="w-5 h-5" />
                   Add New Transaction Row
@@ -659,7 +659,7 @@ export default function BulkEditPage() {
               <div className="mt-8 border-t border-gray-100 p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-sm font-black text-[#171532] uppercase tracking-widest">Recent Transactions</h3>
-                  {isHistoryLoading && <Loader2 className="w-4 h-4 animate-spin text-[#4a6670]" />}
+                  {isHistoryLoading && <Loader2 className="w-4 h-4 animate-spin text-[#2d6a4f]" />}
                 </div>
                 
                 <div className="space-y-3">
@@ -667,7 +667,7 @@ export default function BulkEditPage() {
                     <p className="text-center py-8 text-xs text-gray-400 font-bold">No recent transactions</p>
                   ) : (
                     history.slice(0, 5).map((h) => (
-                      <div key={h._id} className="flex items-center justify-between p-4 bg-[#f8f9fa] rounded-2xl border border-gray-50 group hover:border-[#4a6670]/20 transition-all">
+                      <div key={h._id} className="flex items-center justify-between p-4 bg-[#f8f9fa] rounded-2xl border border-gray-50 group hover:border-[#2d6a4f]/20 transition-all">
                         <div className="flex items-center gap-4">
                           <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black ${
                             h.type === 'deposit' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
@@ -730,7 +730,7 @@ export default function BulkEditPage() {
                                       e.stopPropagation();
                                       startEditingHistory(h);
                                     }}
-                                    className="p-3 text-gray-400 hover:text-[#4a6670] hover:bg-white rounded-xl transition-all active:scale-95 cursor-pointer z-10"
+                                    className="p-3 text-gray-400 hover:text-[#2d6a4f] hover:bg-white rounded-xl transition-all active:scale-95 cursor-pointer z-10"
                                     title="Edit Transaction"
                                   >
                                     <Edit className="w-5 h-5" />
