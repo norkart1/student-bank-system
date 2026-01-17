@@ -2485,9 +2485,11 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-2 gap-3 mb-8">
             <div className="bg-white dark:bg-slate-700 rounded-lg p-3 border border-gray-200 dark:border-slate-600">
               <p className="text-[#747384] dark:text-gray-400 text-xs mb-1">MongoDB</p>
-              <p className="text-[#171532] dark:text-white font-bold text-sm mb-2">{Math.max((systemStatus?.mongodb?.used * 1024 || 0)).toFixed(1)} MB</p>
+              <p className="text-[#171532] dark:text-white font-bold text-sm mb-2">
+                {systemStatus?.mongodb?.used || 0} {systemStatus?.mongodb?.unit || 'MB'}
+              </p>
               <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
-                <div className="h-full bg-orange-500" style={{width: `${systemStatus?.mongodb?.percentage || 29}%`}}></div>
+                <div className="h-full bg-orange-500" style={{width: `${systemStatus?.mongodb?.percentage || 0}%`}}></div>
               </div>
             </div>
             <div className="bg-white dark:bg-slate-700 rounded-lg p-3 border border-gray-200 dark:border-slate-600">
