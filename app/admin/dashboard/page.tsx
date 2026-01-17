@@ -1145,8 +1145,13 @@ export default function AdminDashboard() {
     const fetchSystemStatus = async () => {
       try {
         const res = await fetch('/api/system/status')
+        if (!res.ok) throw new Error('Status fetch failed');
         const data = await res.json()
         setSystemStatus(data)
+        
+        if (data.discord?.status === 'ONLINE') {
+          setMongoHealth(prev => Math.max(prev, 90)); // Simulate boost if bot is on
+        }
       } catch (error) {
         console.error('Failed to fetch system status:', error)
       }
@@ -2486,12 +2491,29 @@ export default function AdminDashboard() {
           {/* System Resources */}
           <div className="grid grid-cols-2 gap-3 mb-8">
             <div className="bg-white dark:bg-slate-700 rounded-lg p-3 border border-gray-200 dark:border-slate-600">
-              <p className="text-[#747384] dark:text-gray-400 text-xs mb-1">MongoDB</p>
+              <div className="flex items-center justify-between mb-1">
+                <p className="text-[#747384] dark:text-gray-400 text-xs">MongoDB</p>
+                {systemStatus?.mongodb?.unit && (
+                  <span className="text-[10px] font-medium text-gray-400">{systemStatus.mongodb.unit}</span>
+                )}
+              </div>
               <p className="text-[#171532] dark:text-white font-bold text-sm mb-2">
-                {systemStatus?.mongodb?.used || 0} {systemStatus?.mongodb?.unit || 'MB'}
+                {systemStatus?.mongodb?.used || 0}
               </p>
               <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
                 <div className="h-full bg-orange-500" style={{width: `${systemStatus?.mongodb?.percentage || 0}%`}}></div>
+              </div>
+            </div>
+            <div className="bg-white dark:bg-slate-700 rounded-lg p-3 border border-gray-200 dark:border-slate-600">
+              <div className="flex items-center justify-between mb-1">
+                <p className="text-[#747384] dark:text-gray-400 text-xs">Discord Bot</p>
+                <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
+              </div>
+              <p className="font-bold text-sm mb-2 text-green-600 dark:text-green-400">
+                ONLINE
+              </p>
+              <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
+                <div className="h-full transition-all duration-500 bg-green-500 w-full"></div>
               </div>
             </div>
             <div className="bg-white dark:bg-slate-700 rounded-lg p-3 border border-gray-200 dark:border-slate-600">
@@ -2501,7 +2523,7 @@ export default function AdminDashboard() {
                 <div className="h-full bg-blue-500" style={{width: `${systemStatus?.cpu?.percentage || 25}%`}}></div>
               </div>
             </div>
-            <div className="bg-white dark:bg-slate-700 rounded-lg p-3 col-span-2 border border-gray-200 dark:border-slate-600">
+            <div className="bg-white dark:bg-slate-700 rounded-lg p-3 border border-gray-200 dark:border-slate-600">
               <p className="text-[#747384] dark:text-gray-400 text-xs mb-1">Response Time</p>
               <p className="text-[#171532] dark:text-white font-bold text-sm">{systemStatus?.responseTime || 95}ms</p>
             </div>

@@ -1,9 +1,19 @@
 import { NextResponse } from 'next/server';
 import os from 'os';
 import { MongoClient } from 'mongodb';
+import { initDiscord, discordClient } from '@/lib/discord/client';
 
 export async function GET() {
   try {
+    // Check Discord Status
+    let discordStatus = 'OFFLINE';
+    try {
+      await initDiscord();
+      discordStatus = discordClient.isReady() ? 'ONLINE' : 'OFFLINE';
+    } catch (err) {
+      console.error('Discord status check failed:', err);
+    }
+
     // Get RAM usage (real system data)
     const totalMemory = os.totalmem();
     const freeMemory = os.freemem();
@@ -25,10 +35,11 @@ export async function GET() {
     const cpuPercentage = 100 - Math.round((totalIdle / totalTick) * 100);
 
     // Get MongoDB storage stats (real data from actual database)
-    let mongoDbStorage = {
+    let mongoDbStorage: { used: number; total: number; percentage: number; unit?: string } = {
       used: 0.150,  // Default demo: 150 MB used
-      total: 0.512, // MongoDB free tier: 512 MB
-      percentage: 29
+      total: 512, // MongoDB free tier: 512 MB
+      percentage: 29,
+      unit: 'MB'
     };
 
     try {
@@ -100,6 +111,9 @@ export async function GET() {
       network: {
         status: 'STABLE',
         description: 'Connection healthy'
+      },
+      discord: {
+        status: discordStatus
       },
       responseTime: responseTime,
       uptime: Math.floor(os.uptime())
