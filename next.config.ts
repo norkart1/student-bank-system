@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ['discord.js', 'zlib-sync', 'bufferutil', 'utf-8-validate', 'mongoose', 'mongodb', 'bcryptjs'],
   webpack: (config, { isServer }) => {
     if (isServer) {
-      config.externals.push('discord.js', 'zlib-sync', 'bufferutil', 'utf-8-validate', 'mongoose', 'mongodb', 'bcryptjs');
+      config.externals = [...(config.externals || []), 'discord.js', 'zlib-sync', 'bufferutil', 'utf-8-validate', 'mongoose', 'mongodb', 'bcryptjs'];
     }
     return config;
   },
