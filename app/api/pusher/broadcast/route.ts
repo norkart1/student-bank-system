@@ -21,6 +21,19 @@ export async function POST(req: NextRequest) {
         'balance-changed',
         update
       );
+
+      // Send Discord notification
+      try {
+        const { sendTransactionNotification } = await import('@/lib/discord/notifications');
+        await sendTransactionNotification(
+          update.studentName || `Student ID: ${studentId}`, 
+          update.amount, 
+          update.amount > 0 ? 'deposit' : 'withdraw', 
+          update.balance
+        );
+      } catch (err) {
+        console.error('Discord notification failed:', err);
+      }
     } else if (type === 'students-list-update') {
       // Notify admin of student list changes
       await pusher.trigger(
