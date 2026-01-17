@@ -77,7 +77,6 @@
     "utf-8-validate": "^6.0.6",
     "vaul": "^1.1.2",
     "xlsx": "^0.18.5",
-    "zlib-sync": "^0.1.10",
     "zod": "3.25.76"
   },
   "devDependencies": {
