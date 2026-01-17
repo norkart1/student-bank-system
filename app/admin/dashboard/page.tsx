@@ -118,6 +118,87 @@ export default function AdminDashboard() {
   const [showQRScanner, setShowQRScanner] = useState(false)
   const [qrScannerStep, setQrScannerStep] = useState<'scan' | 'result'>('scan')
   const [scannedStudent, setScannedStudent] = useState<Student | null>(null)
+  const [showSearchDialog, setShowSearchDialog] = useState(false)
+  const [searchDialogQuery, setSearchDialogQuery] = useState("")
+  const [searchDialogType, setSearchDialogType] = useState<"code" | "name">("code")
+  const [isSearchDialogLoading, setIsSearchDialogLoading] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const qrScannerRef = useRef<any>(null)
+  const [isScannerReady, setIsScannerReady] = useState(false)
+
+  useEffect(() => {
+    if (showQRScanner && videoRef.current) {
+      const initScanner = async () => {
+        const QrScanner = (await import('qr-scanner')).default
+        const qrScanner = new QrScanner(
+          videoRef.current!,
+          (result) => {
+            if (result?.data) {
+              const scannedValue = result.data.toString().trim()
+              setSearchDialogQuery(scannedValue)
+              setSearchDialogType("code")
+              setShowQRScanner(false)
+              handleSearchDialogSubmit(null, scannedValue)
+            }
+          },
+          {
+            preferredCamera: "environment",
+            highlightScanRegion: true,
+            highlightCodeOutline: true,
+          }
+        )
+        qrScannerRef.current = qrScanner
+        qrScanner.start()
+          .then(() => setIsScannerReady(true))
+          .catch(err => {
+            console.error(err)
+            setShowQRScanner(false)
+            toast.error("Camera access denied")
+          })
+      }
+      initScanner()
+      return () => {
+        if (qrScannerRef.current) {
+          qrScannerRef.current.destroy()
+          qrScannerRef.current = null
+        }
+      }
+    }
+  }, [showQRScanner])
+
+  const handleSearchDialogSubmit = async (e: any, overrideQuery?: string) => {
+    if (e) e.preventDefault()
+    const query = overrideQuery || searchDialogQuery
+    if (!query) return
+
+    setIsSearchDialogLoading(true)
+    try {
+      const endpoint = searchDialogType === "code" 
+        ? `code=${encodeURIComponent(query.toUpperCase())}` 
+        : `name=${encodeURIComponent(query)}`
+      
+      const res = await fetch(`/api/students/search?${endpoint}`)
+      if (!res.ok) {
+        toast.error("Student not found")
+        setIsSearchDialogLoading(false)
+        return
+      }
+
+      const student = await res.json()
+      const index = students.findIndex(s => s._id === student._id)
+      if (index !== -1) {
+        setViewingIndex(index)
+        setShowSearchDialog(false)
+        setSearchDialogQuery("")
+      } else {
+        toast.error("Student not found in current list")
+      }
+    } catch (err) {
+      toast.error("Search failed")
+    } finally {
+      setIsSearchDialogLoading(false)
+    }
+  }
 
   const handleDeposit = async () => {
     if (!transactionAmount || isNaN(parseFloat(transactionAmount)) || parseFloat(transactionAmount) <= 0) {
