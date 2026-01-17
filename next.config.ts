@@ -4,12 +4,6 @@ const nextConfig: NextConfig = {
   reactStrictMode: false,
   allowedDevOrigins: [".replit.dev", ".kirk.replit.dev", ".picard.replit.dev", ".janeway.replit.dev"],
   serverExternalPackages: ['discord.js', 'zlib-sync', 'bufferutil', 'utf-8-validate', 'mongoose', 'mongodb', 'bcryptjs'],
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.externals = [...(config.externals || []), 'discord.js', 'zlib-sync', 'bufferutil', 'utf-8-validate', 'mongoose', 'mongodb', 'bcryptjs'];
-    }
-    return config;
-  },
   images: {
     remotePatterns: [
       {
