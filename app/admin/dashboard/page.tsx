@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Home, Users, CreditCard, MoreHorizontal, Send, QrCode, Bell, Grid3X3, ArrowDownRight, ArrowUpRight, Wallet, Plus, X, Camera, Trophy, Edit, Trash2, BarChart3, Sparkles, HelpCircle, MessageSquare, Settings, LogOut, Share2, Star, Lock, Info, ChevronLeft, Activity, Moon, Sun, Download, Calendar, AlertCircle, Zap, Search, Upload, CalendarRange, Loader } from "lucide-react"
@@ -129,32 +129,38 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (showQRScanner && videoRef.current) {
       const initScanner = async () => {
-        const QrScanner = (await import('qr-scanner')).default
-        const qrScanner = new QrScanner(
-          videoRef.current!,
-          (result) => {
-            if (result?.data) {
-              const scannedValue = result.data.toString().trim()
-              setSearchDialogQuery(scannedValue)
-              setSearchDialogType("code")
-              setShowQRScanner(false)
-              handleSearchDialogSubmit(null, scannedValue)
+        try {
+          const QrScanner = (await import('qr-scanner')).default
+          const qrScanner = new QrScanner(
+            videoRef.current!,
+            (result) => {
+              if (result?.data) {
+                const scannedValue = result.data.toString().trim()
+                setSearchDialogQuery(scannedValue)
+                setSearchDialogType("code")
+                setShowQRScanner(false)
+                handleSearchDialogSubmit(null, scannedValue)
+              }
+            },
+            {
+              preferredCamera: "environment",
+              highlightScanRegion: true,
+              highlightCodeOutline: true,
             }
-          },
-          {
-            preferredCamera: "environment",
-            highlightScanRegion: true,
-            highlightCodeOutline: true,
-          }
-        )
-        qrScannerRef.current = qrScanner
-        qrScanner.start()
-          .then(() => setIsScannerReady(true))
-          .catch(err => {
-            console.error(err)
-            setShowQRScanner(false)
-            toast.error("Camera access denied")
-          })
+          )
+          qrScannerRef.current = qrScanner
+          qrScanner.start()
+            .then(() => setIsScannerReady(true))
+            .catch(err => {
+              console.error(err)
+              setShowQRScanner(false)
+              toast.error("Camera access denied")
+            })
+        } catch (err) {
+          console.error("QR Scanner dynamic import failed:", err)
+          setShowQRScanner(false)
+          toast.error("Failed to load scanner")
+        }
       }
       initScanner()
       return () => {
@@ -1515,6 +1521,13 @@ export default function AdminDashboard() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <button 
+            onClick={() => setShowSearchDialog(true)}
+            className="w-10 h-10 bg-[#f0f0f0] dark:bg-slate-700 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors"
+            title="Search Student"
+          >
+            <Search className="w-5 h-5 text-[#2d6a4f] dark:text-gray-300" />
+          </button>
           <button className="w-10 h-10 bg-[#f0f0f0] rounded-lg flex items-center justify-center">
             <Bell className="w-5 h-5 text-[#2d6a4f]" />
           </button>
