@@ -84,21 +84,25 @@ export async function initDiscord() {
 
     // Handle Interaction
     discordClient.on(Events.InteractionCreate, async interaction => {
-      if (interaction.isChatInputCommand()) {
-        const { commandName } = interaction;
-        console.log(chalk.gray(`Command executed: ${commandName}`));
+      try {
+        if (interaction.isChatInputCommand()) {
+          const { commandName } = interaction;
+          console.log(chalk.gray(`Command executed: ${commandName}`));
 
-        if (commandName === 'total-balance') {
-          await totalBalanceCommand.execute(interaction);
-        }
+          if (commandName === 'total-balance') {
+            await totalBalanceCommand.execute(interaction);
+          }
 
-        if (commandName === 'search') {
-          await searchCommand.execute(interaction);
+          if (commandName === 'search') {
+            await searchCommand.execute(interaction);
+          }
+        } else if (interaction.isModalSubmit()) {
+          if (interaction.customId === 'studentSearchModal') {
+            await searchCommand.handleModal(interaction);
+          }
         }
-      } else if (interaction.isModalSubmit()) {
-        if (interaction.customId === 'studentSearchModal') {
-          await searchCommand.handleModal(interaction);
-        }
+      } catch (error) {
+        console.error(chalk.red('Interaction processing error:'), error);
       }
     });
 

@@ -23,8 +23,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 }
 
 export async function handleModal(interaction: ModalSubmitInteraction) {
-  const query = interaction.fields.getTextInputValue('searchQuery');
-  await interaction.deferReply({ ephemeral: true });
+  try {
+    const query = interaction.fields.getTextInputValue('searchQuery');
+    await interaction.deferReply({ flags: ['Ephemeral'] });
 
   try {
     const { default: mongoose } = await import('mongoose');
@@ -67,4 +68,7 @@ export async function handleModal(interaction: ModalSubmitInteraction) {
     console.error('Error searching student:', err);
     await interaction.editReply({ content: 'Error searching for student. Please ensure the database is connected.' });
   }
+} catch (error) {
+  console.error('Modal handling error:', error);
+}
 }
