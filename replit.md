@@ -72,10 +72,6 @@ Preferred communication style: Simple, everyday language.
 - **xlsx**: Excel file import/export for bulk operations
 - **html2canvas**: Screenshot generation for printable content
 
-### Other Key Libraries
-- **qrcode.react**: QR code generation for student identification
-- **qr-scanner**: Camera-based QR code scanning
-- **react-day-picker**: Date selection components
-- **date-fns**: Date formatting and manipulation
-- **next-themes**: Theme management (dark/light mode)
-- **sonner**: Toast notifications
+### Messaging & Notifications
+- **Discord**: Manual integration using `discord.js` for server-side notifications and bot interactions. Secrets stored: `DISCORD_BOT_TOKEN`, `DISCORD_CLIENT_ID`, `DISCORD_GUILD_ID`.
+- **Pusher**: Real-time WebSocket communication for live updates
