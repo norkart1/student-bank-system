@@ -49,11 +49,23 @@ export async function initDiscord() {
   try {
     console.log('Attempting Discord login...');
     
-    discordClient.once(Events.ClientReady, async (c) => {
+    discordClient.on(Events.ClientReady, async (c) => {
       console.log(`Discord bot logged in as ${c.user.tag}`);
       c.user.setActivity('JDSA Student Bank', { type: ActivityType.Watching });
       c.user.setStatus('online');
       await registerCommands();
+    });
+
+    discordClient.on(Events.Error, (error) => {
+      console.error('Discord client error:', error);
+    });
+
+    discordClient.on(Events.ShardDisconnect, (event) => {
+      console.warn('Discord shard disconnected:', event);
+    });
+
+    discordClient.on(Events.ShardReconnecting, (id) => {
+      console.log(`Discord shard ${id} reconnecting...`);
     });
 
     // Handle Commands
