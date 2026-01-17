@@ -38,22 +38,24 @@ export async function GET() {
         await client.connect();
         
         try {
-          // Get database stats from 'test' database (default)
-          const testDb = client.db('test');
-          const stats = await testDb.command({ dbStats: 1 });
+          // Get database stats from the database specified in URI or 'test'
+          const dbName = mongoUri.split('/').pop()?.split('?')[0] || 'test';
+          const db = client.db(dbName);
+          const stats = await db.command({ dbStats: 1 });
           
-          // Calculate storage in MB (free tier is 512 MB)
-          const usedMB = (stats.dataSize || 0) / (1024 * 1024);
-          const usedGB = usedMB / 1024;
-          const totalGB = 0.512; // Free tier limit in GB
+          // Calculate storage (free tier limit is 512 MB)
+          // stats.storageSize is the total amount of storage allocated to this database for its data
+          const usedMB = (stats.storageSize || 0) / (1024 * 1024);
+          const totalMB = 512; 
           
           // Ensure at least 0.1 MB is shown if database has data
-          const displayMB = Math.max(usedMB, 0.1);
+          const displayMB = usedMB > 0 ? Math.max(usedMB, 0.1) : 0;
           
           mongoDbStorage = {
-            used: parseFloat((displayMB / 1024).toFixed(3)), // Convert back to GB for calculation
-            total: totalGB,
-            percentage: Math.min(Math.round((usedGB / totalGB) * 100), 100)
+            used: parseFloat(displayMB.toFixed(2)),
+            total: totalMB,
+            percentage: Math.min(Math.round((usedMB / totalMB) * 100), 100),
+            unit: 'MB'
           };
         } finally {
           await client.close();
@@ -63,9 +65,10 @@ export async function GET() {
       console.error('Failed to fetch MongoDB stats:', mongoError);
       // Fallback to demo data
       mongoDbStorage = {
-        used: 0.150,
-        total: 0.512,
-        percentage: 29
+        used: 1.0,
+        total: 512,
+        percentage: 1,
+        unit: 'MB'
       };
     }
 
@@ -89,7 +92,7 @@ export async function GET() {
         used: mongoDbStorage.used,
         total: mongoDbStorage.total,
         percentage: mongoDbStorage.percentage,
-        unit: 'GB'
+        unit: mongoDbStorage.unit
       },
       cpu: {
         percentage: Math.min(cpuPercentage, 99)
