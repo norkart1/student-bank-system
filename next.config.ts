@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   reactStrictMode: false,
   allowedDevOrigins: [".replit.dev", ".kirk.replit.dev", ".picard.replit.dev", ".janeway.replit.dev"],
   serverExternalPackages: ['discord.js', 'zlib-sync', 'bufferutil', 'utf-8-validate', 'mongoose', 'mongodb', 'bcryptjs'],
+  webpack: (config) => {
+    return config;
+  },
   images: {
     remotePatterns: [
       {
