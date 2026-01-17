@@ -4,12 +4,6 @@ const nextConfig: NextConfig = {
   reactStrictMode: false,
   allowedDevOrigins: [".replit.dev", ".kirk.replit.dev", ".picard.replit.dev", ".janeway.replit.dev"],
   serverExternalPackages: ['discord.js', 'zlib-sync', 'bufferutil', 'utf-8-validate', 'mongoose', 'mongodb', 'bcryptjs'],
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   images: {
     remotePatterns: [
       {
