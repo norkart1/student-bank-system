@@ -12,11 +12,17 @@ import {
   CreditCard,
   User as UserIcon,
   ChevronRight,
-  Loader
+  Loader,
+  Bell,
+  Wallet,
+  ArrowDownLeft,
+  ArrowUpRight,
+  ChevronDown
 } from "lucide-react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
+import { format } from "date-fns"
 
 export default function TeacherDashboard() {
   const router = useRouter()
@@ -24,6 +30,12 @@ export default function TeacherDashboard() {
   const [searchQuery, setSearchQuery] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [teacher, setTeacher] = useState<any>(null)
+  const [currentDate, setCurrentDate] = useState(new Date())
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentDate(new Date()), 1000)
+    return () => clearInterval(timer)
+  }, [])
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -61,151 +73,193 @@ export default function TeacherDashboard() {
     s.code.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
+  const totalBalance = students.reduce((acc, s) => acc + (s.balance || 0), 0)
+  const totalDeposited = students.reduce((acc, s) => {
+    const deposits = s.transactions?.filter((t: any) => t.type === 'deposit') || []
+    return acc + deposits.reduce((sum: number, t: any) => sum + t.amount, 0)
+  }, 0)
+  const totalWithdrawn = students.reduce((acc, s) => {
+    const withdrawals = s.transactions?.filter((t: any) => t.type === 'withdrawal') || []
+    return acc + withdrawals.reduce((sum: number, t: any) => sum + t.amount, 0)
+  }, 0)
+
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f5f5f7]">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <Loader className="w-8 h-8 animate-spin text-[#2d6a4f]" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f5f7]">
-      {/* Header */}
-      <header className="bg-white border-b border-[#e5e7eb] sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/login" className="p-2 hover:bg-[#f5f5f7] rounded-full transition-colors">
-              <ArrowLeft className="w-5 h-5 text-[#6b7280]" />
-            </Link>
-            <h1 className="text-xl font-bold text-[#171532]">Teacher Portal</h1>
+    <div className="min-h-screen bg-white">
+      {/* Top Navigation */}
+      <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-16 bg-[#2d4b3d] rounded-full flex items-center justify-center text-white text-2xl font-bold">
+            {teacher?.name?.charAt(0) || 'T'}
           </div>
-          <div className="flex items-center gap-4">
-            <div className="text-right hidden sm:block">
-              <p className="text-sm font-medium text-[#171532]">{teacher?.name}</p>
-              <p className="text-xs text-[#6b7280]">Staff Member</p>
+          <div>
+            <h1 className="text-3xl font-bold text-[#1a1a2e]">
+              {format(currentDate, 'HH') < '12' ? 'Morning' : 'Afternoon'},<br />
+              {teacher?.name?.split(' ')[0]}!
+            </h1>
+            <p className="text-[#94a3b8] text-sm mt-1">
+              {format(currentDate, 'MMM dd, yyyy, hh:mm a')}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <button className="w-12 h-12 bg-[#f8fafc] rounded-2xl flex items-center justify-center text-[#64748b] hover:bg-gray-100 transition-colors">
+            <Search className="w-5 h-5" />
+          </button>
+          <button className="w-12 h-12 bg-[#f8fafc] rounded-2xl flex items-center justify-center text-[#64748b] hover:bg-gray-100 transition-colors">
+            <Bell className="w-5 h-5" />
+          </button>
+          <button 
+            onClick={handleLogout}
+            className="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center text-red-500 hover:bg-red-100 transition-colors"
+          >
+            <LogOut className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+
+      <main className="max-w-7xl mx-auto px-6 pb-12">
+        {/* Main Balance Card */}
+        <div className="bg-[#1e4636] rounded-[2.5rem] p-8 text-white shadow-2xl relative overflow-hidden mb-10">
+          <div className="flex justify-between items-start mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center">
+                <Wallet className="w-6 h-6" />
+              </div>
+              <p className="text-white/80 font-medium">Total Balance</p>
             </div>
-            <button 
-              onClick={handleLogout}
-              className="p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors"
-              title="Logout"
-            >
-              <LogOut className="w-5 h-5" />
+            <button className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-medium">
+              2025-26 <ChevronDown className="w-4 h-4" />
             </button>
           </div>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card className="border-none shadow-sm bg-white">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[#2d6a4f]/10 rounded-2xl flex items-center justify-center">
-                  <Users className="w-6 h-6 text-[#2d6a4f]" />
-                </div>
-                <div>
-                  <p className="text-sm text-[#6b7280]">Total Accounts</p>
-                  <p className="text-2xl font-bold text-[#171532]">{students.length}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
           
-          <Card className="border-none shadow-sm bg-white">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-blue-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-[#6b7280]">Total Balance</p>
-                  <p className="text-2xl font-bold text-[#171532]">
-                    RM {students.reduce((acc, s) => acc + (s.balance || 0), 0).toLocaleString()}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <h2 className="text-5xl font-bold mb-10">
+            RM {totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+          </h2>
 
-          <Card className="border-none shadow-sm bg-white">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center">
-                  <History className="w-6 h-6 text-purple-600" />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
+                  <ArrowDownLeft className="w-5 h-5 text-green-400" />
                 </div>
-                <div>
-                  <p className="text-sm text-[#6b7280]">Active Session</p>
-                  <p className="text-2xl font-bold text-[#171532]">Live</p>
+                <p className="text-white/70 text-sm">Deposited</p>
+              </div>
+              <p className="text-2xl font-bold">
+                RM {totalDeposited.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+              </p>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center">
+                  <ArrowUpRight className="w-5 h-5 text-red-400" />
                 </div>
+                <p className="text-white/70 text-sm">Withdrawn</p>
               </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Search & List */}
-        <div className="bg-white rounded-3xl shadow-sm border border-[#e5e7eb] overflow-hidden">
-          <div className="p-6 border-b border-[#f0f0f0]">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <h2 className="text-xl font-bold text-[#171532]">Student Accounts</h2>
-              <div className="relative max-w-sm w-full">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9ca3af]" />
-                <Input 
-                  placeholder="Search by name or code..."
-                  className="pl-10 h-10 bg-[#f9fafb] border-none rounded-xl"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
+              <p className="text-2xl font-bold">
+                RM {totalWithdrawn.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+              </p>
             </div>
           </div>
+        </div>
 
+        {/* Options / Action Cards */}
+        <div className="mb-10">
+          <h3 className="text-2xl font-bold text-[#1a1a2e] mb-6">Options</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <Link href="/teacher/dashboard/deposit" className="group">
+              <div className="bg-white border border-gray-100 rounded-[2rem] p-6 shadow-sm hover:shadow-md transition-all flex flex-col items-center gap-4">
+                <div className="w-16 h-16 bg-[#e7f5ee] rounded-3xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <ArrowDownLeft className="w-8 h-8 text-[#2d6a4f]" />
+                </div>
+                <p className="font-bold text-[#1a1a2e]">Deposit</p>
+              </div>
+            </Link>
+            
+            <Link href="/teacher/dashboard/withdraw" className="group">
+              <div className="bg-white border border-gray-100 rounded-[2rem] p-6 shadow-sm hover:shadow-md transition-all flex flex-col items-center gap-4">
+                <div className="w-16 h-16 bg-[#fef2f2] rounded-3xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <ArrowUpRight className="w-8 h-8 text-red-500" />
+                </div>
+                <p className="font-bold text-[#1a1a2e]">Withdraw</p>
+              </div>
+            </Link>
+
+            <div className="bg-white border border-gray-100 rounded-[2rem] p-6 shadow-sm hover:shadow-md transition-all flex flex-col items-center gap-4 cursor-not-allowed opacity-60">
+              <div className="w-16 h-16 bg-[#f1f5f9] rounded-3xl flex items-center justify-center">
+                <History className="w-8 h-8 text-[#64748b]" />
+              </div>
+              <p className="font-bold text-[#1a1a2e]">History</p>
+            </div>
+
+            <div className="bg-white border border-gray-100 rounded-[2rem] p-6 shadow-sm hover:shadow-md transition-all flex flex-col items-center gap-4 cursor-not-allowed opacity-60">
+              <div className="w-16 h-16 bg-[#f1f5f9] rounded-3xl flex items-center justify-center">
+                <Users className="w-8 h-8 text-[#64748b]" />
+              </div>
+              <p className="font-bold text-[#1a1a2e]">Accounts</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Student Accounts List */}
+        <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
+          <div className="p-8 border-b border-gray-50 flex items-center justify-between">
+            <h3 className="text-2xl font-bold text-[#1a1a2e]">Student Accounts</h3>
+            <div className="relative w-64">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input 
+                placeholder="Search students..."
+                className="pl-10 h-12 bg-gray-50 border-none rounded-2xl"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-[#f9fafb] text-left">
-                  <th className="px-6 py-4 text-xs font-semibold text-[#6b7280] uppercase">Student</th>
-                  <th className="px-6 py-4 text-xs font-semibold text-[#6b7280] uppercase">Code</th>
-                  <th className="px-6 py-4 text-xs font-semibold text-[#6b7280] uppercase">Current Balance</th>
-                  <th className="px-6 py-4 text-xs font-semibold text-[#6b7280] uppercase text-right">Actions</th>
+                <tr className="text-left bg-gray-50/50">
+                  <th className="px-8 py-5 text-sm font-semibold text-gray-400 uppercase tracking-wider">Student</th>
+                  <th className="px-8 py-5 text-sm font-semibold text-gray-400 uppercase tracking-wider">Code</th>
+                  <th className="px-8 py-5 text-sm font-semibold text-gray-400 uppercase tracking-wider">Balance</th>
+                  <th className="px-8 py-5 text-sm font-semibold text-gray-400 uppercase tracking-wider text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#f0f0f0]">
+              <tbody className="divide-y divide-gray-50">
                 {filteredStudents.map((student) => (
-                  <tr key={student._id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-full flex items-center justify-center text-white text-xs font-bold">
+                  <tr key={student._id} className="hover:bg-gray-50/80 transition-colors">
+                    <td className="px-8 py-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 bg-[#e7f5ee] text-[#2d6a4f] rounded-2xl flex items-center justify-center font-bold">
                           {student.name.charAt(0)}
                         </div>
-                        <span className="font-medium text-[#171532]">{student.name}</span>
+                        <span className="font-bold text-[#1a1a2e]">{student.name}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
-                      <span className="text-sm font-mono text-[#6b7280]">{student.code}</span>
+                    <td className="px-8 py-6">
+                      <span className="text-gray-500 font-medium px-3 py-1 bg-gray-100 rounded-lg">{student.code}</span>
                     </td>
-                    <td className="px-6 py-4">
-                      <span className="text-sm font-bold text-[#2d6a4f]">RM {student.balance?.toLocaleString() || '0'}</span>
+                    <td className="px-8 py-6 font-bold text-[#1a1a2e]">
+                      RM {student.balance?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-8 py-6 text-right">
                       <Link 
                         href={`/teacher/dashboard/transactions/${student._id}`}
-                        className="inline-flex items-center gap-1 text-xs font-medium text-[#2d6a4f] hover:underline"
+                        className="bg-[#f8fafc] text-[#64748b] px-4 py-2 rounded-xl text-sm font-bold hover:bg-[#2d6a4f] hover:text-white transition-all inline-flex items-center gap-2"
                       >
-                        View Transactions
-                        <ChevronRight className="w-3 h-3" />
+                        Details <ChevronRight className="w-4 h-4" />
                       </Link>
                     </td>
                   </tr>
                 ))}
-                {filteredStudents.length === 0 && (
-                  <tr>
-                    <td colSpan={4} className="px-6 py-12 text-center text-[#6b7280]">
-                      No accounts found matching your search.
-                    </td>
-                  </tr>
-                )}
               </tbody>
             </table>
           </div>
