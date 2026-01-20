@@ -42,12 +42,19 @@ export default function TeacherDashboard() {
 
   const [selectedDate, setSelectedDate] = useState(new Date())
 
-  // Generate 30 days around selected date for scrolling
+  // Generate 60 days around current date for scrolling
   const calendarDays = Array.from({ length: 60 }, (_, i) => {
     const d = new Date();
     d.setDate(d.getDate() - 30 + i);
     return d;
   });
+
+  useEffect(() => {
+    const el = document.getElementById(`date-${format(selectedDate, 'yyyy-MM-dd')}`);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+  }, [selectedDate]);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentDate(new Date()), 1000)
@@ -226,7 +233,7 @@ export default function TeacherDashboard() {
                     <Calendar
                       mode="single"
                       selected={selectedDate}
-                      onSelect={(date) => date && setSelectedDate(date)}
+                      onSelect={(date: Date | undefined) => date && setSelectedDate(date)}
                       initialFocus
                     />
                   </PopoverContent>
@@ -235,13 +242,14 @@ export default function TeacherDashboard() {
             </div>
             
             {/* Horizontal Scrollable Calendar */}
-            <div className="flex overflow-x-auto no-scrollbar gap-3 pb-2 -mx-2 px-2 snap-x">
+            <div className="flex overflow-x-auto no-scrollbar gap-3 pb-2 -mx-2 px-2 snap-x scroll-smooth">
               {calendarDays.map((date, i) => {
                 const dayName = format(date, 'eee').substring(0, 2);
                 const isSelected = format(date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd');
                 return (
                   <button 
                     key={i} 
+                    id={`date-${format(date, 'yyyy-MM-dd')}`}
                     onClick={() => setSelectedDate(new Date(date))}
                     className="flex flex-col items-center gap-2 flex-shrink-0 snap-center"
                   >
