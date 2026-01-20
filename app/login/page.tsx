@@ -236,12 +236,15 @@ export default function SearchPage() {
         </p>
 
         <div className="flex flex-col items-center gap-4 mt-8">
-          <div className="flex gap-6">
+          <div className="flex flex-wrap justify-center gap-6">
             <Link href="/admin-login" className="text-xs text-[#2d6a4f] hover:text-[#1b4332] underline transition-colors">
               Admin Login
             </Link>
             <Link href="/teacher-login" className="text-xs text-[#2d6a4f] hover:text-[#1b4332] underline transition-colors">
               Teacher Login
+            </Link>
+            <Link href="/committee-login" className="text-xs text-[#2d6a4f] hover:text-[#1b4332] underline transition-colors">
+              Committee Login
             </Link>
           </div>
           <div className="flex gap-4 text-[10px] text-[#6b7280]">
