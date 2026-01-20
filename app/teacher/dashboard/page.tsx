@@ -31,6 +31,9 @@ export default function TeacherDashboard() {
   const [isLoading, setIsLoading] = useState(true)
   const [teacher, setTeacher] = useState<any>(null)
   const [currentDate, setCurrentDate] = useState(new Date())
+  const [selectedAcademicYear, setSelectedAcademicYear] = useState("2025-26")
+  const [academicYears, setAcademicYears] = useState(["2023-24", "2024-25", "2025-26", "2026-27"])
+  const [showYearDropdown, setShowYearDropdown] = useState(false)
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentDate(new Date()), 1000)
@@ -69,17 +72,19 @@ export default function TeacherDashboard() {
   }
 
   const filteredStudents = students.filter(s => 
-    s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    s.code.toLowerCase().includes(searchQuery.toLowerCase())
+    (s.academicYear === selectedAcademicYear) &&
+    (s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    s.code.toLowerCase().includes(searchQuery.toLowerCase()))
   )
 
-  const totalBalance = students.reduce((acc, s) => acc + (s.balance || 0), 0)
-  const totalDeposited = students.reduce((acc, s) => {
-    const deposits = s.transactions?.filter((t: any) => t.type === 'deposit') || []
+  const studentsInYear = students.filter(s => s.academicYear === selectedAcademicYear)
+  const totalBalance = studentsInYear.reduce((acc, s) => acc + (s.balance || 0), 0)
+  const totalDeposited = studentsInYear.reduce((acc, s) => {
+    const deposits = s.transactions?.filter((t: any) => t.type === 'deposit' && t.academicYear === selectedAcademicYear) || []
     return acc + deposits.reduce((sum: number, t: any) => sum + t.amount, 0)
   }, 0)
-  const totalWithdrawn = students.reduce((acc, s) => {
-    const withdrawals = s.transactions?.filter((t: any) => t.type === 'withdrawal') || []
+  const totalWithdrawn = studentsInYear.reduce((acc, s) => {
+    const withdrawals = s.transactions?.filter((t: any) => t.type === 'withdrawal' && t.academicYear === selectedAcademicYear) || []
     return acc + withdrawals.reduce((sum: number, t: any) => sum + t.amount, 0)
   }, 0)
 
@@ -124,8 +129,34 @@ export default function TeacherDashboard() {
           <div className="bg-[#818cf8] rounded-[2rem] p-8 text-white shadow-lg relative overflow-hidden group">
             <div className="flex justify-between items-start mb-6">
               <p className="text-white/80 text-lg font-medium">Total Balance</p>
-              <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center">
-                <Wallet className="w-6 h-6 text-white" />
+              <div className="relative">
+                <button 
+                  onClick={() => setShowYearDropdown(!showYearDropdown)}
+                  className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-medium hover:bg-white/30 transition-colors"
+                >
+                  {selectedAcademicYear} <ChevronDown className="w-4 h-4" />
+                </button>
+                
+                {showYearDropdown && (
+                  <div className="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-20">
+                    {academicYears.map((year) => (
+                      <button
+                        key={year}
+                        onClick={() => {
+                          setSelectedAcademicYear(year)
+                          setShowYearDropdown(false)
+                        }}
+                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${
+                          selectedAcademicYear === year 
+                            ? 'bg-[#818cf8] text-white' 
+                            : 'text-[#1a1a2e] hover:bg-gray-50'
+                        }`}
+                      >
+                        {year}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
             <div className="flex flex-col">
