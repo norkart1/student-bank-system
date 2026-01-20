@@ -17,7 +17,8 @@ import {
   Wallet,
   ArrowDownLeft,
   ArrowUpRight,
-  ChevronDown
+  ChevronDown,
+  Activity
 } from "lucide-react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
@@ -164,8 +165,8 @@ export default function TeacherDashboard() {
                 ₹ {totalBalance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               </p>
               <div className="flex items-center gap-2 text-sm text-white/90">
-                <TrendingUp className="w-4 h-4" />
-                <span>+11.02% Live</span>
+                <Activity className="w-4 h-4" />
+                <span>Live Status</span>
               </div>
             </div>
           </div>
@@ -174,43 +175,26 @@ export default function TeacherDashboard() {
         {/* Options / Action Cards */}
         <div className="mb-10">
           <h3 className="text-2xl font-bold text-[#1a1a2e] mb-6">Options</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <Link href="/teacher/dashboard/deposit" className="group">
+          <div className="grid grid-cols-1 gap-6">
+            <button 
+              onClick={() => {
+                const accountsSection = document.getElementById('student-accounts');
+                if (accountsSection) accountsSection.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="group"
+            >
               <div className="bg-white border border-gray-100 rounded-[2rem] p-6 shadow-sm hover:shadow-md transition-all flex flex-col items-center gap-4">
-                <div className="w-16 h-16 bg-[#e7f5ee] rounded-3xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <ArrowDownLeft className="w-8 h-8 text-[#2d6a4f]" />
+                <div className="w-16 h-16 bg-[#f1f5f9] rounded-3xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Users className="w-8 h-8 text-[#2d6a4f]" />
                 </div>
-                <p className="font-bold text-[#1a1a2e]">Deposit</p>
+                <p className="font-bold text-[#1a1a2e]">Accounts</p>
               </div>
-            </Link>
-            
-            <Link href="/teacher/dashboard/withdraw" className="group">
-              <div className="bg-white border border-gray-100 rounded-[2rem] p-6 shadow-sm hover:shadow-md transition-all flex flex-col items-center gap-4">
-                <div className="w-16 h-16 bg-[#fef2f2] rounded-3xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <ArrowUpRight className="w-8 h-8 text-red-500" />
-                </div>
-                <p className="font-bold text-[#1a1a2e]">Withdraw</p>
-              </div>
-            </Link>
-
-            <div className="bg-white border border-gray-100 rounded-[2rem] p-6 shadow-sm hover:shadow-md transition-all flex flex-col items-center gap-4 cursor-not-allowed opacity-60">
-              <div className="w-16 h-16 bg-[#f1f5f9] rounded-3xl flex items-center justify-center">
-                <History className="w-8 h-8 text-[#64748b]" />
-              </div>
-              <p className="font-bold text-[#1a1a2e]">History</p>
-            </div>
-
-            <div className="bg-white border border-gray-100 rounded-[2rem] p-6 shadow-sm hover:shadow-md transition-all flex flex-col items-center gap-4 cursor-not-allowed opacity-60">
-              <div className="w-16 h-16 bg-[#f1f5f9] rounded-3xl flex items-center justify-center">
-                <Users className="w-8 h-8 text-[#64748b]" />
-              </div>
-              <p className="font-bold text-[#1a1a2e]">Accounts</p>
-            </div>
+            </button>
           </div>
         </div>
 
         {/* Student Accounts Grid */}
-        <div className="mb-10">
+        <div id="student-accounts" className="mb-10">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-2xl font-bold text-[#1a1a2e]">Student Accounts</h3>
             <div className="relative w-64">

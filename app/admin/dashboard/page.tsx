@@ -1558,6 +1558,10 @@ export default function AdminDashboard() {
               </select>
             </div>
             <p className="text-2xl font-bold text-white">₹{totalBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+            <div className="flex items-center gap-2 text-[10px] text-white/60 mt-1">
+              <Activity className="w-3 h-3" />
+              <span>Live Status</span>
+            </div>
           </div>
         </div>
         
@@ -1585,81 +1589,14 @@ export default function AdminDashboard() {
       </div>
 
       <h2 className="text-lg font-bold text-[#171532] mb-4">Options</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 gap-4 mb-6">
         <button 
-          onClick={() => setShowDepositModal(true)}
+          onClick={() => setActiveTab("accounts")}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
-            <ArrowDownRight className="w-6 h-6 text-white" />
+            <Users className="w-6 h-6 text-white" />
           </div>
-          <span className="text-sm font-bold text-[#171532]">Deposit</span>
-        </button>
-        <button 
-          onClick={() => setShowWithdrawModal(true)}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
-            <ArrowUpRight className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-sm font-bold text-[#171532]">Withdraw</span>
-        </button>
-        <button 
-          onClick={() => router.push("/admin/qr-download")}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
-            <QrCode className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-sm font-bold text-[#171532]">QR Code</span>
-        </button>
-
-        <button 
-          onClick={() => setActiveTab("calendar")}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
-            <Calendar className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-sm font-bold text-[#171532]">Calendar</span>
-        </button>
-        <button 
-          onClick={() => setActiveTab("status")}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
-            <AlertCircle className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-sm font-bold text-[#171532]">Status</span>
-        </button>
-        <button 
-          onClick={() => window.location.href = '/admin/reports'}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
-            <BarChart3 className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-sm font-bold text-[#171532]">Reports</span>
-        </button>
-        <button 
-          onClick={() => setActiveTab("ai")}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center transition-colors">
-            <Sparkles className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-sm font-bold text-[#171532]">AI</span>
-        </button>
-
-        <button 
-          onClick={() => setActiveTab("year")}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center transition-colors">
-            <CalendarRange className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-sm font-bold text-[#171532]">Session</span>
-        </button>
-
-        <button 
-          onClick={() => router.push("/admin/bulk-edit")}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
-            <Edit className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-sm font-bold text-[#171532]">Edit</span>
+          <span className="text-sm font-bold text-[#171532]">Accounts</span>
         </button>
       </div>
     </>
