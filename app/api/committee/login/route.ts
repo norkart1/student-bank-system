@@ -3,6 +3,7 @@ import { Admin } from '@/lib/models/Admin';
 import { Session } from '@/lib/models/Session';
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,19 +14,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Username and password required' }, { status: 400 });
     }
 
-    // Special hardcoded credentials for teacher as requested
-    if (username === 'teacher' && password === '12345') {
+    // Special hardcoded credentials for committee as requested
+    if (username === 'com' && password === '12345') {
       const token = crypto.randomBytes(32).toString('hex');
       const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
       const session = new Session({
         token,
-        userId: 'teacher_hardcoded_id',
-        userType: 'teacher',
+        userId: 'committee_hardcoded_id',
+        userType: 'committee',
         userData: {
-          id: 'teacher_hardcoded_id',
-          name: 'Teacher User',
-          username: 'teacher',
+          id: 'committee_hardcoded_id',
+          name: 'Committee Member',
+          username: 'com',
         },
         expiresAt,
       });
@@ -35,10 +36,10 @@ export async function POST(req: NextRequest) {
       const response = NextResponse.json({
         success: true,
         token,
-        teacher: {
-          id: 'teacher_hardcoded_id',
-          username: 'teacher',
-          name: 'Teacher User',
+        committee: {
+          id: 'committee_hardcoded_id',
+          username: 'com',
+          name: 'Committee Member',
         },
       });
 
@@ -52,15 +53,11 @@ export async function POST(req: NextRequest) {
       return response;
     }
 
-    // For now, let's allow teachers to be a type of Admin or a specific Teacher model if it exists
-    // Given the prompt, I'll check if a Teacher model exists, otherwise I'll use Admin with a role check
-    // Actually, I'll create a dedicated Teacher model if it doesn't exist, but for the API I'll assume we might use Admin for now to unblock
-    
-    const user = await Admin.findOne({ username, role: 'teacher' });
+    // Check database for committee users if any
+    const user = await Admin.findOne({ username, role: 'committee' });
 
     if (!user) {
-      // Fallback to checking any admin if we haven't set up roles yet, or just fail for security
-      return NextResponse.json({ error: 'Invalid teacher credentials' }, { status: 401 });
+      return NextResponse.json({ error: 'Invalid committee credentials' }, { status: 401 });
     }
 
     const isPasswordValid = await user.comparePassword(password);
@@ -75,7 +72,7 @@ export async function POST(req: NextRequest) {
     const session = new Session({
       token,
       userId: user._id.toString(),
-      userType: 'teacher',
+      userType: 'committee',
       userData: {
         id: user._id.toString(),
         name: user.name,
@@ -89,7 +86,7 @@ export async function POST(req: NextRequest) {
     const response = NextResponse.json({
       success: true,
       token,
-      teacher: {
+      committee: {
         id: user._id,
         username: user.username,
         name: user.name,
@@ -105,7 +102,7 @@ export async function POST(req: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error('Teacher login error:', error);
+    console.error('Committee login error:', error);
     return NextResponse.json({ error: 'Login failed' }, { status: 500 });
   }
 }
