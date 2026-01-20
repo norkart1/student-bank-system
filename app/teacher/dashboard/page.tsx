@@ -36,6 +36,8 @@ export default function TeacherDashboard() {
   const [academicYears, setAcademicYears] = useState(["2023-24", "2024-25", "2025-26", "2026-27"])
   const [showYearDropdown, setShowYearDropdown] = useState(false)
 
+  const [selectedDate, setSelectedDate] = useState(new Date())
+
   useEffect(() => {
     const timer = setInterval(() => setCurrentDate(new Date()), 1000)
     return () => clearInterval(timer)
@@ -90,7 +92,11 @@ export default function TeacherDashboard() {
     }))
   ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
-  const recentTransactions = allTransactions.slice(0, 5)
+  const transactionsOnSelectedDate = allTransactions.filter(t => 
+    format(new Date(t.date), 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd')
+  )
+
+  const recentTransactions = transactionsOnSelectedDate.length > 0 ? transactionsOnSelectedDate : allTransactions.slice(0, 5)
 
   if (isLoading) {
     return (
@@ -203,18 +209,22 @@ export default function TeacherDashboard() {
               {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((day, i) => {
                 const date = new Date();
                 date.setDate(date.getDate() - (date.getDay() - i));
-                const isToday = new Date().getDay() === i;
+                const isSelected = format(date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd');
                 return (
-                  <div key={day} className="flex flex-col items-center gap-2">
+                  <button 
+                    key={day} 
+                    onClick={() => setSelectedDate(new Date(date))}
+                    className="flex flex-col items-center gap-2"
+                  >
                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{day}</span>
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-colors ${
-                      isToday 
+                      isSelected 
                         ? 'bg-[#1890ff] text-white shadow-md' 
                         : 'text-[#1a1a2e] hover:bg-gray-50'
                     }`}>
                       {date.getDate()}
                     </div>
-                  </div>
+                  </button>
                 );
               })}
             </div>
