@@ -195,9 +195,6 @@ export default function TeacherDashboard() {
           </div>
         </div>
 
-        {/* Main Balance Card (Hidden or Minimized in favor of new theme if preferred, but keeping functional parts) */}
-        <div className="bg-[#1e4636] rounded-[2.5rem] p-8 text-white shadow-2xl relative overflow-hidden mb-10 hidden md:block">
-
         {/* Options / Action Cards */}
         <div className="mb-10">
           <h3 className="text-2xl font-bold text-[#1a1a2e] mb-6">Options</h3>
