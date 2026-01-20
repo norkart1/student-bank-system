@@ -224,16 +224,23 @@ export default function TeacherDashboard() {
             {recentTransactions.length > 0 ? (
               recentTransactions.map((transaction, idx) => (
                 <div key={idx} className="relative pl-14 flex items-start justify-between group">
-                  <div className={`absolute left-0 w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm z-10 transition-transform group-hover:scale-110 flex items-center justify-center bg-gray-50`}>
-                    <div className="w-full h-full flex items-center justify-center text-[#1a1a2e] font-bold text-sm">
+                  <div className={`absolute left-0 w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm z-10 transition-transform group-hover:scale-110 flex items-center justify-center ${
+                    transaction.type === 'deposit' ? 'bg-[#e7f5ee]' : 'bg-red-50'
+                  }`}>
+                    <div className={`w-full h-full flex items-center justify-center font-bold text-sm ${
+                      transaction.type === 'deposit' ? 'text-[#2d6a4f]' : 'text-red-500'
+                    }`}>
                       {transaction.studentName.charAt(0)}
                     </div>
                   </div>
                   
                   <div className="flex-1 pt-1">
                     <div className="flex flex-col">
-                      <span className="font-bold text-[#1a1a2e] text-sm leading-tight">
-                        {transaction.studentName} {transaction.type === 'deposit' ? 'deposited' : 'withdrew'} ₹{transaction.amount.toLocaleString('en-IN')}
+                      <span className="font-bold text-[#1a1a2e] text-[15px] leading-tight uppercase tracking-tight">
+                        {transaction.studentName}
+                      </span>
+                      <span className="font-bold text-[#1a1a2e] text-[15px] leading-tight">
+                        {transaction.type === 'deposit' ? 'deposited' : 'withdrew'} ₹{transaction.amount.toLocaleString('en-IN')}
                       </span>
                       <span className="text-xs text-gray-400 mt-1">
                         {format(new Date(transaction.date), 'MMM dd, yyyy')}
