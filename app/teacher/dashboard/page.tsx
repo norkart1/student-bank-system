@@ -102,7 +102,7 @@ export default function TeacherDashboard() {
           <div>
             <h1 className="text-3xl font-bold text-[#1a1a2e]">
               {format(currentDate, 'HH') < '12' ? 'Morning' : 'Afternoon'},<br />
-              {teacher?.name?.split(' ')[0]}!
+              Teacher!
             </h1>
             <p className="text-[#94a3b8] text-sm mt-1">
               {format(currentDate, 'MMM dd, yyyy, hh:mm a')}
