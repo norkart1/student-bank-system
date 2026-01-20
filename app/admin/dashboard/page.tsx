@@ -1590,14 +1590,14 @@ export default function AdminDashboard() {
 
       <h2 className="text-lg font-bold text-[#171532] mb-4">Options</h2>
       <div className="grid grid-cols-1 gap-4 mb-6">
-        <button 
-          onClick={() => setActiveTab("accounts")}
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm">
+        <Link 
+          href="/admin/accounts"
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm w-full text-center">
           <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
             <Users className="w-6 h-6 text-white" />
           </div>
           <span className="text-sm font-bold text-[#171532]">Accounts</span>
-        </button>
+        </Link>
       </div>
     </>
   )
