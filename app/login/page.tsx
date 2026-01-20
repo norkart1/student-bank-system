@@ -243,9 +243,6 @@ export default function SearchPage() {
             <Link href="/teacher-login" className="text-xs text-[#2d6a4f] hover:text-[#1b4332] underline transition-colors">
               Teacher Login
             </Link>
-            <Link href="/committee-login" className="text-xs text-[#2d6a4f] hover:text-[#1b4332] underline transition-colors">
-              Committee Login
-            </Link>
           </div>
           <div className="flex gap-4 text-[10px] text-[#6b7280]">
             <Link href="/privacy" className="hover:text-[#2d6a4f] hover:underline transition-colors">

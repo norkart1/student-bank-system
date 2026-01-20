@@ -18,7 +18,7 @@ const sessionSchema = new Schema<ISession>(
   {
     token: { type: String, required: true, unique: true, index: true },
     userId: { type: String, required: true, index: true },
-    userType: { type: String, enum: ['admin', 'user', 'teacher', 'committee'], required: true },
+    userType: { type: String, enum: ['admin', 'user', 'teacher'], required: true },
     userData: {
       id: { type: String, required: true },
       name: { type: String, required: true },
