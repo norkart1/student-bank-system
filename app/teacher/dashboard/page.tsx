@@ -37,6 +37,26 @@ export default function TeacherDashboard() {
   const [showYearDropdown, setShowYearDropdown] = useState(false)
 
   const [selectedDate, setSelectedDate] = useState(new Date())
+  const [viewDate, setViewDate] = useState(new Date())
+
+  const calendarDays = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(viewDate);
+    const dayOfWeek = d.getDay();
+    d.setDate(d.getDate() - dayOfWeek + i);
+    return d;
+  });
+
+  const nextWeek = () => {
+    const next = new Date(viewDate);
+    next.setDate(next.getDate() + 7);
+    setViewDate(next);
+  };
+
+  const prevWeek = () => {
+    const prev = new Date(viewDate);
+    prev.setDate(prev.getDate() - 7);
+    setViewDate(prev);
+  };
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentDate(new Date()), 1000)
@@ -202,21 +222,33 @@ export default function TeacherDashboard() {
         {/* Recent Activity Timeline */}
         <div className="bg-white border border-gray-100 rounded-[2rem] p-8 shadow-sm">
           <div className="flex flex-col mb-8">
-            <h3 className="text-xl font-bold text-[#1a1a2e] mb-6">What's on the road?</h3>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-[#1a1a2e]">What's on the road?</h3>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold text-[#1a1a2e]">{format(viewDate, 'MMMM yyyy')}</span>
+                <div className="flex gap-1 ml-2">
+                  <button onClick={prevWeek} className="p-1 hover:bg-gray-100 rounded-lg transition-colors">
+                    <ChevronRight className="w-4 h-4 rotate-180" />
+                  </button>
+                  <button onClick={nextWeek} className="p-1 hover:bg-gray-100 rounded-lg transition-colors">
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
             
             {/* Calendar Days */}
             <div className="flex justify-between items-center px-2 mb-4">
-              {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((day, i) => {
-                const date = new Date();
-                date.setDate(date.getDate() - (date.getDay() - i));
+              {calendarDays.map((date, i) => {
+                const dayName = format(date, 'eee').substring(0, 2);
                 const isSelected = format(date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd');
                 return (
                   <button 
-                    key={day} 
+                    key={i} 
                     onClick={() => setSelectedDate(new Date(date))}
                     className="flex flex-col items-center gap-2"
                   >
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{day}</span>
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{dayName}</span>
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-colors ${
                       isSelected 
                         ? 'bg-[#1890ff] text-white shadow-md' 
@@ -231,8 +263,8 @@ export default function TeacherDashboard() {
           </div>
 
           <div className="space-y-8 relative before:absolute before:left-6 before:top-2 before:bottom-2 before:w-px before:bg-gray-100">
-            {recentTransactions.length > 0 ? (
-              recentTransactions.map((transaction, idx) => (
+            {transactionsOnSelectedDate.length > 0 ? (
+              transactionsOnSelectedDate.map((transaction, idx) => (
                 <div key={idx} className="relative pl-14 flex items-start justify-between group">
                   <div className={`absolute left-0 w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm z-10 transition-transform group-hover:scale-110 flex items-center justify-center ${
                     transaction.type === 'deposit' ? 'bg-[#e7f5ee]' : 'bg-red-50'
