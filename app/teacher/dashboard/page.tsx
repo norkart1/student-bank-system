@@ -18,12 +18,16 @@ import {
   ArrowDownLeft,
   ArrowUpRight,
   ChevronDown,
-  Activity
+  Activity,
+  Calendar as CalendarIcon
 } from "lucide-react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
-import { format } from "date-fns"
+import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval } from "date-fns"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
+import { Button } from "@/components/ui/button"
 
 export default function TeacherDashboard() {
   const router = useRouter()
@@ -37,26 +41,13 @@ export default function TeacherDashboard() {
   const [showYearDropdown, setShowYearDropdown] = useState(false)
 
   const [selectedDate, setSelectedDate] = useState(new Date())
-  const [viewDate, setViewDate] = useState(new Date())
 
-  const calendarDays = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(viewDate);
-    const dayOfWeek = d.getDay();
-    d.setDate(d.getDate() - dayOfWeek + i);
+  // Generate 30 days around selected date for scrolling
+  const calendarDays = Array.from({ length: 60 }, (_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() - 30 + i);
     return d;
   });
-
-  const nextWeek = () => {
-    const next = new Date(viewDate);
-    next.setDate(next.getDate() + 7);
-    setViewDate(next);
-  };
-
-  const prevWeek = () => {
-    const prev = new Date(viewDate);
-    prev.setDate(prev.getDate() - 7);
-    setViewDate(prev);
-  };
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentDate(new Date()), 1000)
@@ -224,20 +215,27 @@ export default function TeacherDashboard() {
           <div className="flex flex-col mb-8">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-[#1a1a2e]">{format(viewDate, 'MMMM yyyy')}</span>
-                <div className="flex gap-1 ml-2">
-                  <button onClick={prevWeek} className="p-2 hover:bg-gray-100 rounded-lg transition-colors border border-gray-100 shadow-sm">
-                    <ChevronRight className="w-5 h-5 rotate-180 text-gray-600" />
-                  </button>
-                  <button onClick={nextWeek} className="p-2 hover:bg-gray-100 rounded-lg transition-colors border border-gray-100 shadow-sm">
-                    <ChevronRight className="w-5 h-5 text-gray-600" />
-                  </button>
-                </div>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="ghost" className="p-0 h-auto hover:bg-transparent flex items-center gap-2">
+                      <span className="text-sm font-bold text-[#1a1a2e]">{format(selectedDate, 'MMMM yyyy')}</span>
+                      <ChevronDown className="w-4 h-4 text-gray-400" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={(date) => date && setSelectedDate(date)}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
             
-            {/* Calendar Days */}
-            <div className="flex justify-between items-center px-2 mb-4 overflow-x-auto no-scrollbar gap-2">
+            {/* Horizontal Scrollable Calendar */}
+            <div className="flex overflow-x-auto no-scrollbar gap-3 pb-2 -mx-2 px-2 snap-x">
               {calendarDays.map((date, i) => {
                 const dayName = format(date, 'eee').substring(0, 2);
                 const isSelected = format(date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd');
@@ -245,13 +243,13 @@ export default function TeacherDashboard() {
                   <button 
                     key={i} 
                     onClick={() => setSelectedDate(new Date(date))}
-                    className="flex flex-col items-center gap-2"
+                    className="flex flex-col items-center gap-2 flex-shrink-0 snap-center"
                   >
                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{dayName}</span>
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-colors ${
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-sm font-bold transition-all ${
                       isSelected 
-                        ? 'bg-[#1890ff] text-white shadow-md' 
-                        : 'text-[#1a1a2e] hover:bg-gray-50'
+                        ? 'bg-[#1890ff] text-white shadow-lg scale-105' 
+                        : 'text-[#1a1a2e] bg-gray-50 hover:bg-gray-100'
                     }`}>
                       {date.getDate()}
                     </div>
