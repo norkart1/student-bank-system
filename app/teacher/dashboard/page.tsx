@@ -110,12 +110,6 @@ export default function TeacherDashboard() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <button className="w-12 h-12 bg-[#f8fafc] rounded-2xl flex items-center justify-center text-[#64748b] hover:bg-gray-100 transition-colors">
-            <Search className="w-5 h-5" />
-          </button>
-          <button className="w-12 h-12 bg-[#f8fafc] rounded-2xl flex items-center justify-center text-[#64748b] hover:bg-gray-100 transition-colors">
-            <Bell className="w-5 h-5" />
-          </button>
           <button 
             onClick={handleLogout}
             className="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center text-red-500 hover:bg-red-100 transition-colors"
@@ -127,69 +121,21 @@ export default function TeacherDashboard() {
 
       <main className="max-w-7xl mx-auto px-6 pb-12">
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
-          <div className="bg-[#818cf8] rounded-[2rem] p-6 text-white shadow-lg relative overflow-hidden group">
-            <div className="flex justify-between items-start mb-4">
-              <p className="text-white/80 text-sm font-medium">Total Balance</p>
-              <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center">
-                <Wallet className="w-5 h-5 text-white" />
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-10">
+          <div className="bg-[#818cf8] rounded-[2rem] p-8 text-white shadow-lg relative overflow-hidden group">
+            <div className="flex justify-between items-start mb-6">
+              <p className="text-white/80 text-lg font-medium">Total Balance</p>
+              <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center">
+                <Wallet className="w-6 h-6 text-white" />
               </div>
             </div>
             <div className="flex flex-col">
-              <p className="text-2xl font-bold mb-2 leading-none">
-                {totalBalance > 1000 ? (totalBalance/1000).toFixed(1) + 'k' : totalBalance}
+              <p className="text-5xl font-bold mb-4 leading-none">
+                RM {totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
               </p>
-              <div className="flex items-center gap-1 text-xs text-white/90">
-                <TrendingUp className="w-3 h-3" />
-                <span>+11.02%</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-[#1e1e1e] rounded-[2rem] p-6 text-white shadow-lg relative overflow-hidden group">
-            <div className="flex justify-between items-start mb-4">
-              <p className="text-white/80 text-sm font-medium">Total Tasks</p>
-              <div className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center">
-                <History className="w-5 h-5 text-white" />
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <p className="text-2xl font-bold mb-2 leading-none">715</p>
-              <div className="flex items-center gap-1 text-xs text-white/60">
-                <TrendingUp className="w-3 h-3 rotate-180" />
-                <span>-0.03%</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-[#1e1e1e] rounded-[2rem] p-6 text-white shadow-lg relative overflow-hidden group">
-            <div className="flex justify-between items-start mb-4">
-              <p className="text-white/80 text-sm font-medium">Members</p>
-              <div className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center">
-                <Users className="w-5 h-5 text-white" />
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <p className="text-2xl font-bold mb-2 leading-none">{students.length}</p>
-              <div className="flex items-center gap-1 text-xs text-white/90">
-                <TrendingUp className="w-3 h-3" />
-                <span>+15.03%</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-[#818cf8] rounded-[2rem] p-6 text-white shadow-lg relative overflow-hidden group">
-            <div className="flex justify-between items-start mb-4">
-              <p className="text-white/80 text-sm font-medium">Productivity</p>
-              <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-white" />
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <p className="text-2xl font-bold mb-2 leading-none">93.8%</p>
-              <div className="flex items-center gap-1 text-xs text-white/90">
-                <TrendingUp className="w-3 h-3" />
-                <span>+6.08%</span>
+              <div className="flex items-center gap-2 text-sm text-white/90">
+                <TrendingUp className="w-4 h-4" />
+                <span>+11.02% Live</span>
               </div>
             </div>
           </div>
