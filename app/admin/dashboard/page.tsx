@@ -1588,6 +1588,38 @@ export default function AdminDashboard() {
         </div>
       </div>
 
+      <div className="bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-2xl p-5 mb-6 shadow-lg">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+            <Wallet className="w-6 h-6 text-white" />
+          </div>
+          <div className="flex-1 flex flex-col">
+            <div className="flex items-center gap-2">
+              <p className="text-white/70 text-sm">Total Balance</p>
+              <select
+                value={selectedAcademicYear}
+                onChange={(e) => {
+                  setSelectedAcademicYear(e.target.value)
+                  toast.success(`Active year set to ${e.target.value}`)
+                }}
+                className="bg-white/10 hover:bg-white/20 border-none text-white text-xs font-bold py-1 px-2 rounded-lg focus:ring-0 cursor-pointer transition-colors"
+              >
+                {academicYears.map(year => (
+                  <option key={year} value={year} className="bg-[#1b4332] text-white">
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <p className="text-2xl font-bold text-white">₹{totalBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+            <div className="flex items-center gap-2 text-[10px] text-white/60 mt-1">
+              <Activity className="w-3 h-3" />
+              <span>Live Status</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <h2 className="text-lg font-bold text-[#171532] mb-4">Options</h2>
       <div className="grid grid-cols-1 gap-4 mb-6">
         <Link 

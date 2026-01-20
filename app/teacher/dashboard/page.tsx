@@ -125,6 +125,53 @@ export default function TeacherDashboard() {
       </div>
 
       <main className="max-w-7xl mx-auto px-6 pb-12">
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 gap-6 mb-8">
+          <div className="bg-[#818cf8] rounded-[2rem] p-8 text-white shadow-lg relative overflow-hidden group">
+            <div className="flex justify-between items-start mb-6">
+              <p className="text-white/80 text-lg font-medium">Total Balance</p>
+              <div className="relative">
+                <button 
+                  onClick={() => setShowYearDropdown(!showYearDropdown)}
+                  className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-medium hover:bg-white/30 transition-colors"
+                >
+                  {selectedAcademicYear} <ChevronDown className="w-4 h-4" />
+                </button>
+                
+                {showYearDropdown && (
+                  <div className="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-20">
+                    {academicYears.map((year) => (
+                      <button
+                        key={year}
+                        onClick={() => {
+                          setSelectedAcademicYear(year)
+                          setShowYearDropdown(false)
+                        }}
+                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${
+                          selectedAcademicYear === year 
+                            ? 'bg-[#818cf8] text-white' 
+                            : 'text-[#1a1a2e] hover:bg-gray-50'
+                        }`}
+                      >
+                        {year}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <p className="text-5xl font-bold mb-4 leading-none">
+                ₹ {totalBalance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+              </p>
+              <div className="flex items-center gap-2 text-sm text-white/90">
+                <Activity className="w-4 h-4" />
+                <span>Live Status</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Options / Action Cards */}
         <div className="mb-10">
           <h3 className="text-2xl font-bold text-[#1a1a2e] mb-6">Options</h3>
