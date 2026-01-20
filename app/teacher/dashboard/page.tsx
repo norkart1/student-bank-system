@@ -94,25 +94,24 @@ export default function TeacherDashboard() {
   return (
     <div className="min-h-screen bg-white">
       {/* Top Navigation */}
-      <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 bg-[#2d4b3d] rounded-full flex items-center justify-center text-white text-2xl font-bold">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 bg-[#2d4b3d] rounded-full flex items-center justify-center text-white text-lg font-bold">
             {teacher?.name?.charAt(0) || 'T'}
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-[#1a1a2e]">
-              {format(currentDate, 'HH') < '12' ? 'Morning' : 'Afternoon'},<br />
-              Teacher!
+            <h1 className="text-xl font-bold text-[#1a1a2e]">
+              {format(currentDate, 'HH') < '12' ? 'Morning' : 'Afternoon'}, {teacher?.name?.split(' ')[0] || 'Teacher'}!
             </h1>
-            <p className="text-[#94a3b8] text-sm mt-1">
+            <p className="text-[#94a3b8] text-xs">
               {format(currentDate, 'MMM dd, yyyy, hh:mm a')}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center">
           <button 
             onClick={handleLogout}
-            className="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center text-red-500 hover:bg-red-100 transition-colors"
+            className="p-3 bg-red-50 rounded-xl text-red-500 hover:bg-red-100 transition-colors"
           >
             <LogOut className="w-5 h-5" />
           </button>
@@ -121,7 +120,7 @@ export default function TeacherDashboard() {
 
       <main className="max-w-7xl mx-auto px-6 pb-12">
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-10">
+        <div className="grid grid-cols-1 gap-6 mb-8">
           <div className="bg-[#818cf8] rounded-[2rem] p-8 text-white shadow-lg relative overflow-hidden group">
             <div className="flex justify-between items-start mb-6">
               <p className="text-white/80 text-lg font-medium">Total Balance</p>
@@ -131,7 +130,7 @@ export default function TeacherDashboard() {
             </div>
             <div className="flex flex-col">
               <p className="text-5xl font-bold mb-4 leading-none">
-                RM {totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                ₹ {totalBalance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               </p>
               <div className="flex items-center gap-2 text-sm text-white/90">
                 <TrendingUp className="w-4 h-4" />
