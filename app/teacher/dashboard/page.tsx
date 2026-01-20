@@ -195,64 +195,65 @@ export default function TeacherDashboard() {
 
         {/* Recent Activity Timeline */}
         <div className="bg-white border border-gray-100 rounded-[2rem] p-8 shadow-sm">
-          <div className="flex items-center justify-between mb-8">
-            <h3 className="text-2xl font-bold text-[#1a1a2e]">Recent Activity</h3>
-            <div className="flex items-center gap-2 text-[#94a3b8] text-sm">
-              <History className="w-4 h-4" />
-              <span>Latest transactions</span>
+          <div className="flex flex-col mb-8">
+            <h3 className="text-xl font-bold text-[#1a1a2e] mb-6">What's on the road?</h3>
+            
+            {/* Calendar Days */}
+            <div className="flex justify-between items-center px-2 mb-4">
+              {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((day, i) => {
+                const date = new Date();
+                date.setDate(date.getDate() - (date.getDay() - i));
+                const isToday = new Date().getDay() === i;
+                return (
+                  <div key={day} className="flex flex-col items-center gap-2">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{day}</span>
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-colors ${
+                      isToday 
+                        ? 'bg-[#1890ff] text-white shadow-md' 
+                        : 'text-[#1a1a2e] hover:bg-gray-50'
+                    }`}>
+                      {date.getDate()}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
-          <div className="space-y-8 relative before:absolute before:left-6 before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-50">
+          <div className="space-y-8 relative before:absolute before:left-6 before:top-2 before:bottom-2 before:w-px before:bg-gray-100">
             {recentTransactions.length > 0 ? (
               recentTransactions.map((transaction, idx) => (
-                <div key={idx} className="relative pl-14 flex items-center justify-between group">
-                  <div className={`absolute left-0 w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm z-10 transition-transform group-hover:scale-110 ${
-                    transaction.type === 'deposit' 
-                      ? 'bg-[#e7f5ee] text-[#2d6a4f]' 
-                      : 'bg-red-50 text-red-500'
-                  }`}>
-                    {transaction.type === 'deposit' ? <ArrowDownLeft className="w-6 h-6" /> : <ArrowUpRight className="w-6 h-6" />}
+                <div key={idx} className="relative pl-14 flex items-start justify-between group">
+                  <div className={`absolute left-0 w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm z-10 transition-transform group-hover:scale-110 flex items-center justify-center bg-gray-50`}>
+                    <div className="w-full h-full flex items-center justify-center text-[#1a1a2e] font-bold text-sm">
+                      {transaction.studentName.charAt(0)}
+                    </div>
                   </div>
                   
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-bold text-[#1a1a2e]">{transaction.studentName}</span>
-                      <span className="text-[10px] bg-gray-100 px-2 py-0.5 rounded-full text-gray-500 font-medium uppercase tracking-wider">#{transaction.studentCode}</span>
+                  <div className="flex-1 pt-1">
+                    <div className="flex flex-col">
+                      <span className="font-bold text-[#1a1a2e] text-sm leading-tight">
+                        {transaction.studentName} {transaction.type === 'deposit' ? 'deposited' : 'withdrew'} ₹{transaction.amount.toLocaleString('en-IN')}
+                      </span>
+                      <span className="text-xs text-gray-400 mt-1">
+                        {format(new Date(transaction.date), 'MMM dd, yyyy')}
+                      </span>
                     </div>
-                    <p className="text-sm text-[#94a3b8]">
-                      {transaction.type === 'deposit' ? 'Deposited' : 'Withdrawn'} on {format(new Date(transaction.date), 'MMM dd, yyyy')}
-                    </p>
                   </div>
 
-                  <div className="text-right">
-                    <p className={`text-lg font-bold ${
-                      transaction.type === 'deposit' ? 'text-[#2d6a4f]' : 'text-red-500'
-                    }`}>
-                      {transaction.type === 'deposit' ? '+' : '-'} ₹{transaction.amount.toLocaleString('en-IN')}
-                    </p>
-                    <p className="text-[10px] text-gray-400 font-medium uppercase">{format(new Date(transaction.date), 'hh:mm a')}</p>
+                  <div className="pt-1">
+                    <div className={`w-2 h-2 rounded-full ${
+                      transaction.type === 'deposit' ? 'bg-[#52c41a]' : 'bg-[#ff4d4f]'
+                    }`} />
                   </div>
                 </div>
               ))
             ) : (
               <div className="py-12 text-center">
-                <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Activity className="w-8 h-8 text-gray-300" />
-                </div>
-                <p className="text-gray-500 font-medium">No recent transactions recorded</p>
+                <p className="text-gray-400 text-sm">No activity recorded yet</p>
               </div>
             )}
           </div>
-          
-          {recentTransactions.length > 0 && (
-            <Link 
-              href="/teacher/accounts" 
-              className="mt-10 flex items-center justify-center gap-2 text-sm font-bold text-[#2d6a4f] hover:underline"
-            >
-              View all transactions <ChevronRight className="w-4 h-4" />
-            </Link>
-          )}
         </div>
       </main>
     </div>
