@@ -80,14 +80,17 @@ export default function TeacherDashboard() {
 
   const studentsInYear = students.filter(s => s.academicYear === selectedAcademicYear)
   const totalBalance = studentsInYear.reduce((acc, s) => acc + (s.balance || 0), 0)
-  const totalDeposited = studentsInYear.reduce((acc, s) => {
-    const deposits = s.transactions?.filter((t: any) => t.type === 'deposit' && t.academicYear === selectedAcademicYear) || []
-    return acc + deposits.reduce((sum: number, t: any) => sum + t.amount, 0)
-  }, 0)
-  const totalWithdrawn = studentsInYear.reduce((acc, s) => {
-    const withdrawals = s.transactions?.filter((t: any) => t.type === 'withdrawal' && t.academicYear === selectedAcademicYear) || []
-    return acc + withdrawals.reduce((sum: number, t: any) => sum + t.amount, 0)
-  }, 0)
+
+  const allTransactions = studentsInYear.flatMap(s => 
+    (s.transactions || []).map((t: any) => ({
+      ...t,
+      studentName: s.name,
+      studentCode: s.code,
+      studentId: s._id
+    }))
+  ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+
+  const recentTransactions = allTransactions.slice(0, 5)
 
   if (isLoading) {
     return (
@@ -188,6 +191,68 @@ export default function TeacherDashboard() {
               </div>
             </Link>
           </div>
+        </div>
+
+        {/* Recent Activity Timeline */}
+        <div className="bg-white border border-gray-100 rounded-[2rem] p-8 shadow-sm">
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-2xl font-bold text-[#1a1a2e]">Recent Activity</h3>
+            <div className="flex items-center gap-2 text-[#94a3b8] text-sm">
+              <History className="w-4 h-4" />
+              <span>Latest transactions</span>
+            </div>
+          </div>
+
+          <div className="space-y-8 relative before:absolute before:left-6 before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-50">
+            {recentTransactions.length > 0 ? (
+              recentTransactions.map((transaction, idx) => (
+                <div key={idx} className="relative pl-14 flex items-center justify-between group">
+                  <div className={`absolute left-0 w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm z-10 transition-transform group-hover:scale-110 ${
+                    transaction.type === 'deposit' 
+                      ? 'bg-[#e7f5ee] text-[#2d6a4f]' 
+                      : 'bg-red-50 text-red-500'
+                  }`}>
+                    {transaction.type === 'deposit' ? <ArrowDownLeft className="w-6 h-6" /> : <ArrowUpRight className="w-6 h-6" />}
+                  </div>
+                  
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-bold text-[#1a1a2e]">{transaction.studentName}</span>
+                      <span className="text-[10px] bg-gray-100 px-2 py-0.5 rounded-full text-gray-500 font-medium uppercase tracking-wider">#{transaction.studentCode}</span>
+                    </div>
+                    <p className="text-sm text-[#94a3b8]">
+                      {transaction.type === 'deposit' ? 'Deposited' : 'Withdrawn'} on {format(new Date(transaction.date), 'MMM dd, yyyy')}
+                    </p>
+                  </div>
+
+                  <div className="text-right">
+                    <p className={`text-lg font-bold ${
+                      transaction.type === 'deposit' ? 'text-[#2d6a4f]' : 'text-red-500'
+                    }`}>
+                      {transaction.type === 'deposit' ? '+' : '-'} ₹{transaction.amount.toLocaleString('en-IN')}
+                    </p>
+                    <p className="text-[10px] text-gray-400 font-medium uppercase">{format(new Date(transaction.date), 'hh:mm a')}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="py-12 text-center">
+                <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Activity className="w-8 h-8 text-gray-300" />
+                </div>
+                <p className="text-gray-500 font-medium">No recent transactions recorded</p>
+              </div>
+            )}
+          </div>
+          
+          {recentTransactions.length > 0 && (
+            <Link 
+              href="/teacher/accounts" 
+              className="mt-10 flex items-center justify-center gap-2 text-sm font-bold text-[#2d6a4f] hover:underline"
+            >
+              View all transactions <ChevronRight className="w-4 h-4" />
+            </Link>
+          )}
         </div>
       </main>
     </div>
