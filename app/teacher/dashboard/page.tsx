@@ -20,10 +20,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function TeacherDashboard() {
   const router = useRouter()
-  const [students, setStudents] = useState([])
+  const [students, setStudents] = useState<any[]>([])
   const [searchQuery, setSearchQuery] = useState("")
   const [isLoading, setIsLoading] = useState(true)
-  const [teacher, setTeacher] = useState(null)
+  const [teacher, setTeacher] = useState<any>(null)
 
   useEffect(() => {
     const fetchDashboardData = async () => {
