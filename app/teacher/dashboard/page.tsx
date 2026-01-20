@@ -223,22 +223,21 @@ export default function TeacherDashboard() {
         <div className="bg-white border border-gray-100 rounded-[2rem] p-8 shadow-sm">
           <div className="flex flex-col mb-8">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-[#1a1a2e]">What's on the road?</h3>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-[#1a1a2e]">{format(viewDate, 'MMMM yyyy')}</span>
                 <div className="flex gap-1 ml-2">
-                  <button onClick={prevWeek} className="p-1 hover:bg-gray-100 rounded-lg transition-colors">
-                    <ChevronRight className="w-4 h-4 rotate-180" />
+                  <button onClick={prevWeek} className="p-2 hover:bg-gray-100 rounded-lg transition-colors border border-gray-100 shadow-sm">
+                    <ChevronRight className="w-5 h-5 rotate-180 text-gray-600" />
                   </button>
-                  <button onClick={nextWeek} className="p-1 hover:bg-gray-100 rounded-lg transition-colors">
-                    <ChevronRight className="w-4 h-4" />
+                  <button onClick={nextWeek} className="p-2 hover:bg-gray-100 rounded-lg transition-colors border border-gray-100 shadow-sm">
+                    <ChevronRight className="w-5 h-5 text-gray-600" />
                   </button>
                 </div>
               </div>
             </div>
             
             {/* Calendar Days */}
-            <div className="flex justify-between items-center px-2 mb-4">
+            <div className="flex justify-between items-center px-2 mb-4 overflow-x-auto no-scrollbar gap-2">
               {calendarDays.map((date, i) => {
                 const dayName = format(date, 'eee').substring(0, 2);
                 const isSelected = format(date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd');
