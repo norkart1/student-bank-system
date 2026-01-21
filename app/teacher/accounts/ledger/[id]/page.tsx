@@ -6,7 +6,14 @@ import { useParams, useRouter } from "next/navigation"
 import { 
   ArrowLeft, 
   Loader,
-  Download
+  Download,
+  Calendar,
+  ArrowDownLeft,
+  ArrowUpRight,
+  TrendingUp,
+  TrendingDown,
+  Clock,
+  User as UserIcon
 } from "lucide-react"
 import Link from "next/link"
 import { format } from "date-fns"
@@ -37,24 +44,23 @@ export default function StudentLedgerPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <Loader className="w-8 h-8 animate-spin text-[#2d6a4f]" />
+      <div className="min-h-screen flex items-center justify-center bg-[#f8fafc]">
+        <Loader className="w-8 h-8 animate-spin text-[#0f172a]" />
       </div>
     )
   }
 
   if (!student) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-white p-6">
-        <p className="text-gray-500 mb-4">Student not found</p>
-        <Link href="/teacher/accounts" className="text-[#2d6a4f] font-bold hover:underline">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8fafc] p-6">
+        <p className="text-slate-500 mb-4">Student not found</p>
+        <Link href="/teacher/accounts" className="text-indigo-600 font-bold hover:underline">
           Go back to accounts
         </Link>
       </div>
     )
   }
 
-  // Calculate Running Balances based on chronological order (Oldest to Newest)
   const sortedTransactions = [...(student.transactions || [])].sort((a: any, b: any) => 
     new Date(a.date).getTime() - new Date(b.date).getTime()
   )
@@ -69,132 +75,139 @@ export default function StudentLedgerPage() {
     return { ...t, runningBalance }
   })
 
-  // Group by month for display (Newest month first at top)
   const displayTransactions = [...processedTransactions].reverse()
-  const groupedByMonth = displayTransactions.reduce((acc: any, t: any) => {
-    const monthYear = format(new Date(t.date), 'MMMM yyyy').toUpperCase()
-    if (!acc[monthYear]) acc[monthYear] = []
-    acc[monthYear].push(t)
-    return acc
-  }, {})
 
   return (
-    <div className="min-h-screen bg-white pb-20 overflow-x-hidden">
-      <div className="max-w-4xl mx-auto px-2 sm:px-4 py-6">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8 px-2">
-          <button 
-            onClick={() => router.back()} 
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          >
-            <ArrowLeft className="w-6 h-6 text-[#1a1a2e]" />
-          </button>
-          <div className="text-center">
-            <h1 className="text-2xl font-black text-[#1a1a2e] leading-tight">Full</h1>
-            <h1 className="text-2xl font-black text-[#1a1a2e] leading-tight">Ledger</h1>
+    <div className="min-h-screen bg-[#f8fafc] pb-20">
+      {/* Dynamic Header */}
+      <div className="bg-white border-b border-slate-200 sticky top-0 z-10">
+        <div className="max-w-5xl mx-auto px-4 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => router.back()} 
+              className="p-2.5 hover:bg-slate-100 rounded-2xl transition-all active:scale-95"
+            >
+              <ArrowLeft className="w-6 h-6 text-slate-600" />
+            </button>
+            <div>
+              <h1 className="text-xl font-bold text-slate-900 tracking-tight">Ledger Statement</h1>
+              <p className="text-xs font-medium text-slate-500 uppercase tracking-widest">#{student.code}</p>
+            </div>
           </div>
-          <button className="flex items-center gap-2 bg-[#2d6a4f] text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-2xl text-xs sm:text-sm font-black shadow-sm hover:bg-[#1b4332] transition-colors">
+          <button className="flex items-center gap-2 bg-slate-900 text-white px-5 py-2.5 rounded-2xl text-sm font-bold shadow-lg shadow-slate-200 hover:bg-slate-800 transition-all active:scale-95">
             <Download className="w-4 h-4" />
-            PDF
+            <span>Export</span>
           </button>
         </div>
+      </div>
 
-        {/* Student Profile Card */}
-        <div className="bg-white border border-gray-100 rounded-[2.5rem] p-6 sm:p-8 shadow-sm mb-10 flex flex-col items-center text-center mx-2">
-          <div className="w-24 h-24 sm:w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-50 mb-6 ring-1 ring-gray-100">
-            {student.profileImage ? (
-              <img src={student.profileImage} alt={student.name} className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full bg-[#2d6a4f]/10 text-[#2d6a4f] flex items-center justify-center font-bold text-3xl">
-                {student.name.charAt(0)}
+      <div className="max-w-5xl mx-auto px-4 mt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          {/* Left: Modern Profile & Stats */}
+          <div className="lg:col-span-4 space-y-6">
+            <div className="bg-white rounded-[2.5rem] p-8 border border-slate-200/60 shadow-sm relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-110 duration-700" />
+              
+              <div className="relative">
+                <div className="w-24 h-24 rounded-[2rem] overflow-hidden border-4 border-white shadow-xl mb-6 mx-auto lg:mx-0">
+                  {student.profileImage ? (
+                    <img src={student.profileImage} alt={student.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full bg-slate-100 text-slate-400 flex items-center justify-center">
+                      <UserIcon className="w-10 h-10" />
+                    </div>
+                  )}
+                </div>
+                
+                <h2 className="text-2xl font-black text-slate-900 leading-tight mb-1 text-center lg:text-left">{student.name}</h2>
+                <p className="text-slate-500 font-medium text-center lg:text-left mb-6">Academic Year: {student.academicYear}</p>
+                
+                <div className="p-6 bg-slate-900 rounded-[2rem] text-white">
+                  <p className="text-[10px] uppercase font-bold tracking-[0.2em] opacity-60 mb-1">Total Balance</p>
+                  <h3 className="text-3xl font-black tracking-tight">₹{student.balance?.toLocaleString('en-IN')}</h3>
+                  <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] font-bold uppercase tracking-wider">
+                    <span className="text-emerald-400">Verified Account</span>
+                    <span className="px-2 py-0.5 bg-white/10 rounded-full">Active</span>
+                  </div>
+                </div>
               </div>
-            )}
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#1a1a2e] uppercase mb-3 tracking-tight">{student.name}</h2>
-          <div className="inline-block px-4 py-1.5 bg-[#e7f5ee] text-[#2d6a4f] text-[10px] sm:text-xs font-black rounded-full uppercase tracking-widest mb-8">
-            #{student.code}
-          </div>
-          
-          <div className="grid grid-cols-2 gap-x-4 gap-y-8 w-full max-w-sm">
-            <div className="flex flex-col items-center">
-              <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1.5 leading-none">Balance</p>
-              <p className="text-lg sm:text-xl font-black text-[#2d6a4f]">₹{student.balance?.toLocaleString('en-IN')}</p>
             </div>
-            <div className="flex flex-col items-center">
-              <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1.5 leading-none">Session</p>
-              <p className="text-base sm:text-lg font-black text-gray-700">{student.academicYear}</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1.5 leading-none">Trans.</p>
-              <p className="text-base sm:text-lg font-black text-gray-700">{student.transactions?.length || 0}</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1.5 leading-none">Status</p>
-              <p className="text-base sm:text-lg font-black text-[#2d6a4f]">ACTIVE</p>
-            </div>
-          </div>
-        </div>
 
-        {/* Ledger - Mobile Optimized Table */}
-        <div className="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-x-auto mx-2">
-          <table className="w-full border-collapse min-w-[340px]">
-            <thead className="bg-white border-b border-gray-50">
-              <tr>
-                <th className="pl-4 pr-1 py-5 text-left text-[12px] sm:text-[14px] font-black text-[#2d6a4f]">#</th>
-                <th className="px-2 py-5 text-left text-[12px] sm:text-[14px] font-black text-[#2d6a4f]">Date</th>
-                <th className="px-2 py-5 text-right text-[12px] sm:text-[14px] font-black text-[#2d6a4f]">Dep.</th>
-                <th className="px-2 py-5 text-right text-[12px] sm:text-[14px] font-black text-[#2d6a4f]">With.</th>
-                <th className="pl-2 pr-4 py-5 text-right text-[12px] sm:text-[14px] font-black text-[#2d6a4f]">Bal.</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50/50">
-              {Object.entries(groupedByMonth).map(([month, transactions]: [string, any]) => (
-                <React.Fragment key={month}>
-                  <tr className="bg-white">
-                    <td colSpan={5} className="px-4 py-8 text-[12px] sm:text-[14px] font-black text-[#2d6a4f] tracking-tight">
-                      {month}
-                    </td>
-                  </tr>
-                  {transactions.map((t: any) => {
-                    const globalIdx = processedTransactions.findIndex(tr => tr._id === t._id) + 1;
-                    return (
-                      <tr key={t._id} className="hover:bg-gray-50/20 transition-colors border-none">
-                        <td className="pl-4 pr-1 py-5 text-[13px] sm:text-[15px] font-black text-[#1a1a2e]">
-                          {globalIdx}
-                        </td>
-                        <td className="px-2 py-5 text-[13px] sm:text-[15px] font-medium text-gray-400 tabular-nums whitespace-nowrap">
-                          {format(new Date(t.date), 'dd/MM/yy')}
-                        </td>
-                        <td className="px-2 py-5 text-right whitespace-nowrap">
-                          {t.type === 'deposit' ? (
-                            <span className="text-[13px] sm:text-[15px] font-black text-[#2d6a4f] tabular-nums">₹{t.amount?.toLocaleString('en-IN')}</span>
-                          ) : (
-                            <span className="text-[13px] sm:text-[15px] font-black text-[#2d6a4f]">-</span>
-                          )}
-                        </td>
-                        <td className="px-2 py-5 text-right whitespace-nowrap">
-                          {t.type === 'withdrawal' ? (
-                            <span className="text-[13px] sm:text-[15px] font-black text-[#ef4444] tabular-nums">₹{t.amount?.toLocaleString('en-IN')}</span>
-                          ) : (
-                            <span className="text-[13px] sm:text-[15px] font-black text-[#ef4444]">-</span>
-                          )}
-                        </td>
-                        <td className="pl-2 pr-4 py-5 text-right whitespace-nowrap">
-                          <span className="text-[13px] sm:text-[15px] font-black text-[#1a1a2e] tabular-nums">₹{t.runningBalance?.toLocaleString('en-IN')}</span>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
-          
-          {(!student.transactions || student.transactions.length === 0) && (
-            <div className="py-20 text-center text-gray-400 font-medium px-4">
-              No transactions found
+            <div className="bg-white rounded-[2.5rem] p-6 border border-slate-200/60 shadow-sm grid grid-cols-2 gap-4">
+              <div className="p-4 bg-slate-50 rounded-3xl">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Trans.</p>
+                <p className="text-xl font-black text-slate-900">{student.transactions?.length || 0}</p>
+              </div>
+              <div className="p-4 bg-slate-50 rounded-3xl">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Status</p>
+                <p className="text-xl font-black text-slate-900">100%</p>
+              </div>
             </div>
-          )}
+          </div>
+
+          {/* Right: Modern Activity Stream */}
+          <div className="lg:col-span-8 space-y-4">
+            <div className="flex items-center justify-between px-2 mb-2">
+              <h3 className="text-lg font-bold text-slate-900">Recent Activity</h3>
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                <Clock className="w-3.5 h-3.5" />
+                <span>Real-time updates</span>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {displayTransactions.map((t: any, idx: number) => (
+                <div 
+                  key={t._id || idx} 
+                  className="bg-white border border-slate-200/60 rounded-[2rem] p-5 hover:border-slate-300 hover:shadow-md transition-all group"
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-105 ${
+                        t.type === 'deposit' 
+                          ? 'bg-emerald-50 text-emerald-600' 
+                          : 'bg-rose-50 text-rose-600'
+                      }`}>
+                        {t.type === 'deposit' ? <TrendingUp className="w-6 h-6" /> : <TrendingDown className="w-6 h-6" />}
+                      </div>
+                      
+                      <div>
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full ${
+                            t.type === 'deposit' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'
+                          }`}>
+                            {t.type}
+                          </span>
+                          <span className="text-[11px] font-bold text-slate-400">{format(new Date(t.date), 'dd MMM, yyyy')}</span>
+                        </div>
+                        <p className="text-sm font-bold text-slate-900">{t.method || 'Cash Transaction'}</p>
+                      </div>
+                    </div>
+
+                    <div className="text-right">
+                      <p className={`text-lg font-black tracking-tight ${
+                        t.type === 'deposit' ? 'text-emerald-600' : 'text-rose-600'
+                      }`}>
+                        {t.type === 'deposit' ? '+' : '-'} ₹{t.amount?.toLocaleString('en-IN')}
+                      </p>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        Bal: ₹{t.runningBalance?.toLocaleString('en-IN')}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              {(!displayTransactions.length) && (
+                <div className="py-20 bg-white border border-dashed border-slate-200 rounded-[2.5rem] flex flex-col items-center justify-center text-slate-400">
+                  <Calendar className="w-12 h-12 mb-4 opacity-20" />
+                  <p className="font-bold">No transactions recorded yet</p>
+                </div>
+              )}
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
