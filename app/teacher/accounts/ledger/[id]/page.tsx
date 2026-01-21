@@ -11,7 +11,8 @@ import {
   TrendingUp,
   TrendingDown,
   Clock,
-  User as UserIcon
+  User as UserIcon,
+  ChevronDown
 } from "lucide-react"
 import Link from "next/link"
 import { format } from "date-fns"
@@ -21,6 +22,8 @@ export default function StudentLedgerPage() {
   const router = useRouter()
   const [student, setStudent] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [selectedSession, setSelectedSession] = useState<string>("")
+  const [availableSessions, setAvailableSessions] = useState<string[]>([])
 
   useEffect(() => {
     const fetchStudent = async () => {
@@ -30,6 +33,16 @@ export default function StudentLedgerPage() {
           const data = await res.json()
           const studentData = Array.isArray(data) ? data.find((s: any) => s._id === params.id) : data
           setStudent(studentData)
+          if (studentData) {
+            setSelectedSession(studentData.academicYear)
+            // Extract unique sessions from transactions and the student's current year
+            const sessions = new Set<string>()
+            sessions.add(studentData.academicYear)
+            studentData.transactions?.forEach((t: any) => {
+              if (t.academicYear) sessions.add(t.academicYear)
+            })
+            setAvailableSessions(Array.from(sessions).sort().reverse())
+          }
         }
       } catch (err) {
         console.error("Fetch student ledger error:", err)
@@ -59,7 +72,12 @@ export default function StudentLedgerPage() {
     )
   }
 
-  const sortedTransactions = [...(student.transactions || [])].sort((a: any, b: any) => 
+  // Filter transactions by selected session
+  const filteredTransactions = student.transactions?.filter((t: any) => 
+    !selectedSession || t.academicYear === selectedSession || (!t.academicYear && selectedSession === student.academicYear)
+  ) || []
+
+  const sortedTransactions = [...filteredTransactions].sort((a: any, b: any) => 
     new Date(a.date).getTime() - new Date(b.date).getTime()
   )
 
@@ -117,7 +135,22 @@ export default function StudentLedgerPage() {
           </div>
           
           <h2 className="text-2xl font-black text-[#1a1a2e] uppercase mb-1 tracking-tight">{student.name}</h2>
-          <p className="text-xs font-bold text-slate-400 mb-6">Academic Year: {student.academicYear}</p>
+          
+          {/* Academic Session Selector */}
+          <div className="relative mb-6">
+            <select
+              value={selectedSession}
+              onChange={(e) => setSelectedSession(e.target.value)}
+              className="appearance-none bg-transparent text-xs font-bold text-slate-400 pr-8 pl-2 py-1 cursor-pointer focus:outline-none hover:text-[#1a1a2e] transition-colors text-center"
+            >
+              {availableSessions.map(session => (
+                <option key={session} value={session}>Academic Year: {session}</option>
+              ))}
+            </select>
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none">
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+            </div>
+          </div>
           
           <div className="w-full max-w-xs bg-[#1a1a2e] rounded-[2rem] p-7 text-white shadow-xl relative overflow-hidden">
             <div className="relative z-10">
@@ -136,7 +169,7 @@ export default function StudentLedgerPage() {
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="bg-white rounded-[2rem] p-5 border border-slate-50 shadow-sm flex flex-col items-center">
             <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.1em] mb-1">Trans.</p>
-            <p className="text-2xl font-black text-[#1a1a2e]">{student.transactions?.length || 0}</p>
+            <p className="text-2xl font-black text-[#1a1a2e]">{filteredTransactions.length}</p>
           </div>
           <div className="bg-white rounded-[2rem] p-5 border border-slate-50 shadow-sm flex flex-col items-center">
             <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.1em] mb-1">Status</p>
