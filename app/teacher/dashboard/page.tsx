@@ -154,7 +154,7 @@ export default function TeacherDashboard() {
       <main className="max-w-7xl mx-auto px-6 pb-12">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 gap-6 mb-8">
-          <div className="bg-[#818cf8] rounded-[2rem] p-8 text-white shadow-lg relative overflow-hidden group">
+          <div className="bg-[#2d6a4f] rounded-[2rem] p-8 text-white shadow-lg relative overflow-hidden group">
             <div className="flex justify-between items-start mb-6">
               <p className="text-white/80 text-lg font-medium">Total Balance</p>
               <div className="relative">
@@ -176,7 +176,7 @@ export default function TeacherDashboard() {
                         }}
                         className={`w-full text-left px-4 py-2 text-sm transition-colors ${
                           selectedAcademicYear === year 
-                            ? 'bg-[#818cf8] text-white' 
+                            ? 'bg-[#2d6a4f] text-white' 
                             : 'text-[#1a1a2e] hover:bg-gray-50'
                         }`}
                       >
@@ -256,7 +256,7 @@ export default function TeacherDashboard() {
                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{dayName}</span>
                     <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-sm font-bold transition-all ${
                       isSelected 
-                        ? 'bg-[#1890ff] text-white shadow-lg scale-105' 
+                        ? 'bg-[#2d6a4f] text-white shadow-lg scale-105' 
                         : 'text-[#1a1a2e] bg-gray-50 hover:bg-gray-100'
                     }`}>
                       {date.getDate()}
