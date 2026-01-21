@@ -54,7 +54,7 @@ export default function StudentLedgerPage() {
     )
   }
 
-  // Group transactions by chronological order for running balance calculation
+  // Calculate Running Balances based on chronological order (Oldest to Newest)
   const sortedTransactions = [...(student.transactions || [])].sort((a: any, b: any) => 
     new Date(a.date).getTime() - new Date(b.date).getTime()
   )
@@ -69,7 +69,7 @@ export default function StudentLedgerPage() {
     return { ...t, runningBalance }
   })
 
-  // Group by month for display (Newest month first)
+  // Group by month for display (Newest month first at top)
   const displayTransactions = [...processedTransactions].reverse()
   const groupedByMonth = displayTransactions.reduce((acc: any, t: any) => {
     const monthYear = format(new Date(t.date), 'MMMM yyyy').toUpperCase()
@@ -135,53 +135,51 @@ export default function StudentLedgerPage() {
           </div>
         </div>
 
-        {/* Complete Ledger Table Design */}
-        <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+        {/* Ledger Table - Exact Screenshot Style */}
+        <div className="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden">
           <table className="w-full border-collapse">
             <thead className="bg-white border-b border-gray-50">
               <tr>
-                <th className="pl-8 pr-2 py-6 text-left text-[14px] font-black text-[#2d6a4f]">#</th>
-                <th className="px-4 py-6 text-left text-[14px] font-black text-[#2d6a4f]">Date</th>
-                <th className="px-4 py-6 text-right text-[14px] font-black text-[#2d6a4f]">Dep.</th>
-                <th className="px-4 py-6 text-right text-[14px] font-black text-[#2d6a4f]">With.</th>
-                <th className="pl-4 pr-8 py-6 text-right text-[14px] font-black text-[#2d6a4f]">Bal.</th>
+                <th className="pl-6 pr-2 py-5 text-left text-[14px] font-black text-[#2d6a4f]">#</th>
+                <th className="px-4 py-5 text-left text-[14px] font-black text-[#2d6a4f]">Date</th>
+                <th className="px-4 py-5 text-right text-[14px] font-black text-[#2d6a4f]">Dep.</th>
+                <th className="px-4 py-5 text-right text-[14px] font-black text-[#2d6a4f]">With.</th>
+                <th className="pl-4 pr-6 py-5 text-right text-[14px] font-black text-[#2d6a4f]">Bal.</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50/50">
               {Object.entries(groupedByMonth).map(([month, transactions]: [string, any]) => (
                 <React.Fragment key={month}>
-                  <tr>
-                    <td colSpan={5} className="px-8 py-8 text-[14px] font-black text-[#2d6a4f] tracking-tight bg-white">
+                  <tr className="bg-white">
+                    <td colSpan={5} className="px-6 py-8 text-[14px] font-black text-[#2d6a4f] tracking-tight">
                       {month}
                     </td>
                   </tr>
                   {transactions.map((t: any) => {
-                    // Global index (1-based from bottom)
                     const globalIdx = processedTransactions.findIndex(tr => tr._id === t._id) + 1;
-                    
                     return (
-                      <tr key={t._id} className="hover:bg-gray-50/30 transition-colors border-none">
-                        <td className="pl-8 pr-2 py-6 text-[15px] font-black text-[#1a1a2e]">
+                      <tr key={t._id} className="hover:bg-gray-50/20 transition-colors border-none">
+                        <td className="pl-6 pr-2 py-5 text-[15px] font-black text-[#1a1a2e]">
                           {globalIdx}
                         </td>
-                        <td className="px-4 py-6 text-[15px] font-medium text-gray-400 tabular-nums">
+                        <td className="px-4 py-5 text-[15px] font-medium text-gray-400 tabular-nums">
                           {format(new Date(t.date), 'dd/MM/yyyy')}
                         </td>
-                        <td className="px-4 py-6 text-right">
+                        <td className="px-4 py-5 text-right">
                           {t.type === 'deposit' ? (
                             <span className="text-[15px] font-black text-[#2d6a4f] tabular-nums">₹{t.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                           ) : (
                             <span className="text-[15px] font-black text-[#2d6a4f]">-</span>
                           )}
                         </td>
-                        <td className="px-4 py-6 text-right">
+                        <td className="px-4 py-5 text-right">
                           {t.type === 'withdrawal' ? (
                             <span className="text-[15px] font-black text-[#ef4444] tabular-nums">₹{t.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                           ) : (
                             <span className="text-[15px] font-black text-[#ef4444]">-</span>
                           )}
                         </td>
-                        <td className="pl-4 pr-8 py-6 text-right">
+                        <td className="pl-4 pr-6 py-5 text-right">
                           <span className="text-[15px] font-black text-[#1a1a2e] tabular-nums">₹{t.runningBalance?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                         </td>
                       </tr>
