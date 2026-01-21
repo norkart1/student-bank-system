@@ -2,7 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: false,
-  serverExternalPackages: ['mongoose', 'mongodb', 'bcryptjs'],
   experimental: {
     allowedReplitOrigins: ["*.replit.dev", "*.kirk.replit.dev", "*.pike.replit.dev", "*.spock.replit.dev", "*.sisko.replit.dev", "*.riker.replit.dev", "*.picard.replit.dev"],
   },
