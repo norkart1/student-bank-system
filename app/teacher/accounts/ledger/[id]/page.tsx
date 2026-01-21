@@ -79,10 +79,10 @@ export default function StudentLedgerPage() {
   }, {})
 
   return (
-    <div className="min-h-screen bg-white pb-20">
-      <div className="max-w-4xl mx-auto px-4 py-6">
+    <div className="min-h-screen bg-white pb-20 overflow-x-hidden">
+      <div className="max-w-4xl mx-auto px-2 sm:px-4 py-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-8 px-2">
           <button 
             onClick={() => router.back()} 
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -93,15 +93,15 @@ export default function StudentLedgerPage() {
             <h1 className="text-2xl font-black text-[#1a1a2e] leading-tight">Full</h1>
             <h1 className="text-2xl font-black text-[#1a1a2e] leading-tight">Ledger</h1>
           </div>
-          <button className="flex items-center gap-2 bg-[#2d6a4f] text-white px-5 py-2.5 rounded-2xl text-sm font-black shadow-sm hover:bg-[#1b4332] transition-colors">
+          <button className="flex items-center gap-2 bg-[#2d6a4f] text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-2xl text-xs sm:text-sm font-black shadow-sm hover:bg-[#1b4332] transition-colors">
             <Download className="w-4 h-4" />
-            Export PDF
+            PDF
           </button>
         </div>
 
         {/* Student Profile Card */}
-        <div className="bg-white border border-gray-100 rounded-[2.5rem] p-8 shadow-sm mb-10 flex flex-col items-center text-center">
-          <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-50 mb-6 ring-1 ring-gray-100">
+        <div className="bg-white border border-gray-100 rounded-[2.5rem] p-6 sm:p-8 shadow-sm mb-10 flex flex-col items-center text-center mx-2">
+          <div className="w-24 h-24 sm:w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-50 mb-6 ring-1 ring-gray-100">
             {student.profileImage ? (
               <img src={student.profileImage} alt={student.name} className="w-full h-full object-cover" />
             ) : (
@@ -110,48 +110,48 @@ export default function StudentLedgerPage() {
               </div>
             )}
           </div>
-          <h2 className="text-3xl font-black text-[#1a1a2e] uppercase mb-3 tracking-tight">{student.name}</h2>
-          <div className="inline-block px-4 py-1.5 bg-[#e7f5ee] text-[#2d6a4f] text-xs font-black rounded-full uppercase tracking-widest mb-8">
+          <h2 className="text-2xl sm:text-3xl font-black text-[#1a1a2e] uppercase mb-3 tracking-tight">{student.name}</h2>
+          <div className="inline-block px-4 py-1.5 bg-[#e7f5ee] text-[#2d6a4f] text-[10px] sm:text-xs font-black rounded-full uppercase tracking-widest mb-8">
             #{student.code}
           </div>
           
-          <div className="grid grid-cols-2 gap-y-8 w-full max-w-sm">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-8 w-full max-w-sm">
             <div className="flex flex-col items-center">
-              <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1.5 leading-none">Current Balance</p>
-              <p className="text-xl font-black text-[#2d6a4f]">₹{student.balance?.toLocaleString('en-IN')}</p>
+              <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1.5 leading-none">Balance</p>
+              <p className="text-lg sm:text-xl font-black text-[#2d6a4f]">₹{student.balance?.toLocaleString('en-IN')}</p>
             </div>
             <div className="flex flex-col items-center">
               <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1.5 leading-none">Session</p>
-              <p className="text-lg font-black text-gray-700">{student.academicYear}</p>
+              <p className="text-base sm:text-lg font-black text-gray-700">{student.academicYear}</p>
             </div>
             <div className="flex flex-col items-center">
-              <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1.5 leading-none">Transactions</p>
-              <p className="text-lg font-black text-gray-700">{student.transactions?.length || 0}</p>
+              <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1.5 leading-none">Trans.</p>
+              <p className="text-base sm:text-lg font-black text-gray-700">{student.transactions?.length || 0}</p>
             </div>
             <div className="flex flex-col items-center">
               <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1.5 leading-none">Status</p>
-              <p className="text-lg font-black text-[#2d6a4f]">ACTIVE</p>
+              <p className="text-base sm:text-lg font-black text-[#2d6a4f]">ACTIVE</p>
             </div>
           </div>
         </div>
 
-        {/* Ledger Table - Exact Screenshot Style */}
-        <div className="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden">
-          <table className="w-full border-collapse">
+        {/* Ledger - Mobile Optimized Table */}
+        <div className="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-x-auto mx-2">
+          <table className="w-full border-collapse min-w-[340px]">
             <thead className="bg-white border-b border-gray-50">
               <tr>
-                <th className="pl-6 pr-2 py-5 text-left text-[14px] font-black text-[#2d6a4f]">#</th>
-                <th className="px-4 py-5 text-left text-[14px] font-black text-[#2d6a4f]">Date</th>
-                <th className="px-4 py-5 text-right text-[14px] font-black text-[#2d6a4f]">Dep.</th>
-                <th className="px-4 py-5 text-right text-[14px] font-black text-[#2d6a4f]">With.</th>
-                <th className="pl-4 pr-6 py-5 text-right text-[14px] font-black text-[#2d6a4f]">Bal.</th>
+                <th className="pl-4 pr-1 py-5 text-left text-[12px] sm:text-[14px] font-black text-[#2d6a4f]">#</th>
+                <th className="px-2 py-5 text-left text-[12px] sm:text-[14px] font-black text-[#2d6a4f]">Date</th>
+                <th className="px-2 py-5 text-right text-[12px] sm:text-[14px] font-black text-[#2d6a4f]">Dep.</th>
+                <th className="px-2 py-5 text-right text-[12px] sm:text-[14px] font-black text-[#2d6a4f]">With.</th>
+                <th className="pl-2 pr-4 py-5 text-right text-[12px] sm:text-[14px] font-black text-[#2d6a4f]">Bal.</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50/50">
               {Object.entries(groupedByMonth).map(([month, transactions]: [string, any]) => (
                 <React.Fragment key={month}>
                   <tr className="bg-white">
-                    <td colSpan={5} className="px-6 py-8 text-[14px] font-black text-[#2d6a4f] tracking-tight">
+                    <td colSpan={5} className="px-4 py-8 text-[12px] sm:text-[14px] font-black text-[#2d6a4f] tracking-tight">
                       {month}
                     </td>
                   </tr>
@@ -159,28 +159,28 @@ export default function StudentLedgerPage() {
                     const globalIdx = processedTransactions.findIndex(tr => tr._id === t._id) + 1;
                     return (
                       <tr key={t._id} className="hover:bg-gray-50/20 transition-colors border-none">
-                        <td className="pl-6 pr-2 py-5 text-[15px] font-black text-[#1a1a2e]">
+                        <td className="pl-4 pr-1 py-5 text-[13px] sm:text-[15px] font-black text-[#1a1a2e]">
                           {globalIdx}
                         </td>
-                        <td className="px-4 py-5 text-[15px] font-medium text-gray-400 tabular-nums">
-                          {format(new Date(t.date), 'dd/MM/yyyy')}
+                        <td className="px-2 py-5 text-[13px] sm:text-[15px] font-medium text-gray-400 tabular-nums whitespace-nowrap">
+                          {format(new Date(t.date), 'dd/MM/yy')}
                         </td>
-                        <td className="px-4 py-5 text-right">
+                        <td className="px-2 py-5 text-right whitespace-nowrap">
                           {t.type === 'deposit' ? (
-                            <span className="text-[15px] font-black text-[#2d6a4f] tabular-nums">₹{t.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                            <span className="text-[13px] sm:text-[15px] font-black text-[#2d6a4f] tabular-nums">₹{t.amount?.toLocaleString('en-IN')}</span>
                           ) : (
-                            <span className="text-[15px] font-black text-[#2d6a4f]">-</span>
+                            <span className="text-[13px] sm:text-[15px] font-black text-[#2d6a4f]">-</span>
                           )}
                         </td>
-                        <td className="px-4 py-5 text-right">
+                        <td className="px-2 py-5 text-right whitespace-nowrap">
                           {t.type === 'withdrawal' ? (
-                            <span className="text-[15px] font-black text-[#ef4444] tabular-nums">₹{t.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                            <span className="text-[13px] sm:text-[15px] font-black text-[#ef4444] tabular-nums">₹{t.amount?.toLocaleString('en-IN')}</span>
                           ) : (
-                            <span className="text-[15px] font-black text-[#ef4444]">-</span>
+                            <span className="text-[13px] sm:text-[15px] font-black text-[#ef4444]">-</span>
                           )}
                         </td>
-                        <td className="pl-4 pr-6 py-5 text-right">
-                          <span className="text-[15px] font-black text-[#1a1a2e] tabular-nums">₹{t.runningBalance?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                        <td className="pl-2 pr-4 py-5 text-right whitespace-nowrap">
+                          <span className="text-[13px] sm:text-[15px] font-black text-[#1a1a2e] tabular-nums">₹{t.runningBalance?.toLocaleString('en-IN')}</span>
                         </td>
                       </tr>
                     );
@@ -191,7 +191,7 @@ export default function StudentLedgerPage() {
           </table>
           
           {(!student.transactions || student.transactions.length === 0) && (
-            <div className="py-20 text-center text-gray-400 font-medium">
+            <div className="py-20 text-center text-gray-400 font-medium px-4">
               No transactions found
             </div>
           )}
