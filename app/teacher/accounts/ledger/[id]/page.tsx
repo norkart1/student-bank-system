@@ -140,6 +140,9 @@ export default function StudentLedgerPage() {
           
           <h2 className="text-2xl font-black text-[#1a1a2e] uppercase mb-1 tracking-tight">{student.name}</h2>
           
+          {/* Student Code under Name */}
+          <p className="text-[13px] font-black text-slate-400 uppercase tracking-widest mb-4">#{student.code}</p>
+          
           {/* Academic Session Selector with "All" option */}
           <div className="relative mb-6">
             <select
