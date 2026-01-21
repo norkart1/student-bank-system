@@ -54,28 +54,21 @@ export default function StudentLedgerPage() {
     )
   }
 
-  // Group transactions by Month Year
-  const groupedTransactions = student.transactions?.slice().reduce((acc: any, t: any) => {
-    const monthYear = format(new Date(t.date), 'MMMM yyyy').toUpperCase()
-    if (!acc[monthYear]) acc[monthYear] = []
-    acc[monthYear].push(t)
-    return acc
-  }, {}) || {}
-
-  let runningBalance = 0
+  // Calculate Running Balances based on chronological order
   const sortedTransactions = student.transactions?.slice().sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime()) || []
   
+  let currentRunningBalance = 0
   const transactionsWithBalance = sortedTransactions.map((t: any) => {
     if (t.type === 'deposit') {
-      runningBalance += t.amount
+      currentRunningBalance += t.amount
     } else {
-      runningBalance -= t.amount
+      currentRunningBalance -= t.amount
     }
-    return { ...t, currentBalance: runningBalance }
+    return { ...t, currentBalance: currentRunningBalance }
   })
 
-  // Group the enhanced transactions
-  const finalGrouped = transactionsWithBalance.reduce((acc: any, t: any) => {
+  // Group by Month Year for display (Descending order of months)
+  const groupedByMonth = transactionsWithBalance.slice().reverse().reduce((acc: any, t: any) => {
     const monthYear = format(new Date(t.date), 'MMMM yyyy').toUpperCase()
     if (!acc[monthYear]) acc[monthYear] = []
     acc[monthYear].push(t)
@@ -103,7 +96,7 @@ export default function StudentLedgerPage() {
           </button>
         </div>
 
-        {/* Student Profile Card (Keep unchanged per user request) */}
+        {/* Student Profile Card (Exactly matching screenshot) */}
         <div className="bg-white border border-gray-100 rounded-[2.5rem] p-8 shadow-sm mb-10 flex flex-col items-center text-center">
           <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-50 mb-6 ring-1 ring-gray-100">
             {student.profileImage ? (
@@ -139,50 +132,46 @@ export default function StudentLedgerPage() {
           </div>
         </div>
 
-        {/* New Ledger Table Design */}
-        <div className="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden">
+        {/* Complete Ledger Table Design (Exactly matching screenshot) */}
+        <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
           <table className="w-full border-collapse">
-            <thead className="bg-[#fcfcfc] border-b border-gray-50">
+            <thead className="bg-white border-b border-gray-50">
               <tr>
-                <th className="pl-6 pr-2 py-4 text-left text-[13px] font-black text-[#2d6a4f]">#</th>
-                <th className="px-4 py-4 text-left text-[13px] font-black text-[#2d6a4f]">Date</th>
-                <th className="px-4 py-4 text-right text-[13px] font-black text-[#2d6a4f]">Dep.</th>
-                <th className="px-4 py-4 text-right text-[13px] font-black text-[#2d6a4f]">With.</th>
-                <th className="pl-4 pr-6 py-4 text-right text-[13px] font-black text-[#2d6a4f]">Bal.</th>
+                <th className="pl-8 pr-2 py-6 text-left text-[14px] font-black text-[#2d6a4f]">#</th>
+                <th className="px-4 py-6 text-left text-[14px] font-black text-[#2d6a4f]">Date</th>
+                <th className="px-4 py-6 text-right text-[14px] font-black text-[#2d6a4f]">Dep.</th>
+                <th className="pl-4 pr-8 py-6 text-right text-[14px] font-black text-[#2d6a4f]">With.</th>
               </tr>
             </thead>
             <tbody>
-              {Object.entries(finalGrouped).reverse().map(([month, transactions]: [string, any]) => (
+              {Object.entries(groupedByMonth).map(([month, transactions]: [string, any]) => (
                 <React.Fragment key={month}>
-                  <tr className="bg-[#fcfcfc]/50">
-                    <td colSpan={5} className="px-6 py-4 text-[13px] font-black text-[#2d6a4f] tracking-tight">
+                  <tr>
+                    <td colSpan={4} className="px-8 py-8 text-[14px] font-black text-[#2d6a4f] tracking-tight bg-white">
                       {month}
                     </td>
                   </tr>
-                  {transactions.slice().reverse().map((t: any, idx: number) => (
-                    <tr key={t._id || idx} className="border-b border-gray-50 hover:bg-gray-50/30 transition-colors">
-                      <td className="pl-6 pr-2 py-5 text-[14px] font-black text-[#1a1a2e]">
-                        {transactions.length - idx}
+                  {transactions.map((t: any, idx: number) => (
+                    <tr key={t._id || idx} className="hover:bg-gray-50/30 transition-colors">
+                      <td className="pl-8 pr-2 py-6 text-[15px] font-black text-[#1a1a2e]">
+                        {t.type === 'deposit' ? student.transactions.filter((tr:any)=>tr.type==='deposit').indexOf(t)+1 : student.transactions.filter((tr:any)=>tr.type==='withdrawal').indexOf(t)+1}
                       </td>
-                      <td className="px-4 py-5 text-[14px] font-medium text-gray-500 tabular-nums">
+                      <td className="px-4 py-6 text-[15px] font-medium text-gray-400 tabular-nums">
                         {format(new Date(t.date), 'dd/MM/yyyy')}
                       </td>
-                      <td className="px-4 py-5 text-right">
+                      <td className="px-4 py-6 text-right">
                         {t.type === 'deposit' ? (
-                          <span className="text-[14px] font-black text-[#2d6a4f] tabular-nums">₹{t.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                          <span className="text-[15px] font-black text-[#2d6a4f] tabular-nums">₹{t.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                         ) : (
-                          <span className="text-[14px] font-black text-[#2d6a4f]">-</span>
+                          <span className="text-[15px] font-black text-[#2d6a4f]">-</span>
                         )}
                       </td>
-                      <td className="px-4 py-5 text-right">
+                      <td className="pl-4 pr-8 py-6 text-right">
                         {t.type === 'withdrawal' ? (
-                          <span className="text-[14px] font-black text-[#ef4444] tabular-nums">₹{t.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                          <span className="text-[15px] font-black text-[#ef4444] tabular-nums">₹{t.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                         ) : (
-                          <span className="text-[14px] font-black text-[#ef4444]">-</span>
+                          <span className="text-[15px] font-black text-[#ef4444]">-</span>
                         )}
-                      </td>
-                      <td className="pl-4 pr-6 py-5 text-right text-[14px] font-black text-[#1a1a2e] tabular-nums">
-                        ₹{t.currentBalance?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                       </td>
                     </tr>
                   ))}
