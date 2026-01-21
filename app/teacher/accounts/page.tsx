@@ -21,7 +21,7 @@ export default function TeacherAccountsPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [selectedAcademicYear, setSelectedAcademicYear] = useState("2025-26")
-  const [academicYears] = useState(["2023-24", "2024-25", "2025-26", "2026-27"])
+  const [academicYears, setAcademicYears] = useState<string[]>([])
   const [showYearDropdown, setShowYearDropdown] = useState(false)
 
   useEffect(() => {
@@ -31,6 +31,16 @@ export default function TeacherAccountsPage() {
         if (res.ok) {
           const data = await res.json()
           setStudents(data)
+          
+          // Dynamically extract unique academic years from students
+          const years = new Set<string>()
+          data.forEach((s: any) => {
+            if (s.academicYear) years.add(s.academicYear)
+          })
+          // Add default if empty
+          if (years.size === 0) years.add("2025-26")
+          
+          setAcademicYears(Array.from(years).sort().reverse())
         }
       } catch (err) {
         console.error("Fetch accounts error:", err)
