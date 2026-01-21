@@ -55,7 +55,7 @@ export default function StudentLedgerPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#f8fafc]">
-        <Loader className="w-8 h-8 animate-spin text-[#0f172a]" />
+        <Loader className="w-8 h-8 animate-spin text-[#2d6a4f]" />
       </div>
     )
   }
@@ -64,7 +64,7 @@ export default function StudentLedgerPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8fafc] p-6">
         <p className="text-slate-500 mb-4 text-sm font-bold">Student not found</p>
-        <Link href="/teacher/accounts" className="text-indigo-600 font-bold hover:underline">
+        <Link href="/teacher/accounts" className="text-[#2d6a4f] font-bold hover:underline">
           Go back to accounts
         </Link>
       </div>
@@ -113,7 +113,7 @@ export default function StudentLedgerPage() {
               <h1 className="text-xl font-black text-[#1a1a2e] tracking-tight leading-tight">Ledger Statement</h1>
             </div>
           </div>
-          <button className="flex items-center gap-1.5 bg-[#1a1a2e] text-white px-5 py-2.5 rounded-2xl text-[11px] font-black shadow-lg hover:bg-slate-800 active:scale-95 transition-all">
+          <button className="flex items-center gap-1.5 bg-[#2d6a4f] text-white px-5 py-2.5 rounded-2xl text-[11px] font-black shadow-lg hover:bg-[#166534] active:scale-95 transition-all">
             <Download className="w-3.5 h-3.5" />
             <span>EXPORT</span>
           </button>
@@ -123,7 +123,7 @@ export default function StudentLedgerPage() {
       <div className="max-w-4xl mx-auto px-4 mt-6">
         {/* Compact Student Profile Card */}
         <div className="bg-white border border-slate-100 rounded-[2.5rem] p-6 shadow-sm mb-6 flex flex-col items-center text-center relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-50/40 rounded-full -mr-12 -mt-12" />
+          <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50/40 rounded-full -mr-12 -mt-12" />
           
           <div className="relative mb-6">
             <div className="w-24 h-24 rounded-[2rem] overflow-hidden border-4 border-white shadow-xl bg-slate-50">
@@ -159,13 +159,13 @@ export default function StudentLedgerPage() {
             </div>
           </div>
           
-          <div className="w-full max-w-xs bg-[#1a1a2e] rounded-[2rem] p-7 text-white shadow-xl relative overflow-hidden">
+          <div className="w-full max-w-xs bg-[#2d6a4f] rounded-[2rem] p-7 text-white shadow-xl relative overflow-hidden">
             <div className="relative z-10">
-              <p className="text-[9px] uppercase font-black tracking-[0.2em] text-slate-400 mb-1.5">Total Balance</p>
+              <p className="text-[9px] uppercase font-black tracking-[0.2em] text-white/80 mb-1.5">Total Balance</p>
               <h3 className="text-4xl font-black tracking-tight mb-6 text-white leading-none">₹{student.balance?.toLocaleString('en-IN')}</h3>
-              <div className="flex items-center justify-between border-t border-white/5 pt-4">
-                <span className="text-[9px] font-black uppercase tracking-widest text-emerald-400">Verified</span>
-                <span className="px-3 py-1 bg-white/5 rounded-full text-[9px] font-black uppercase tracking-widest">Active</span>
+              <div className="flex items-center justify-between border-t border-white/10 pt-4">
+                <span className="text-[9px] font-black uppercase tracking-widest text-white/90">Verified</span>
+                <span className="px-3 py-1 bg-white/10 rounded-full text-[9px] font-black uppercase tracking-widest">Active</span>
               </div>
             </div>
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
