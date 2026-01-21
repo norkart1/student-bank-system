@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { 
   Users, 
@@ -43,7 +43,7 @@ export default function TeacherDashboard() {
   const [selectedDate, setSelectedDate] = useState(new Date())
 
   // Generate calendar days for the selected month in the popover
-  const calendarDays = React.useMemo(() => {
+  const calendarDays = useMemo(() => {
     const start = startOfMonth(selectedDate);
     const end = endOfMonth(selectedDate);
     return eachDayOfInterval({ start, end });
