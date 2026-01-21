@@ -6,10 +6,7 @@ import { useParams, useRouter } from "next/navigation"
 import { 
   ArrowLeft, 
   Loader,
-  Download,
-  Calendar,
-  ArrowDownLeft,
-  ArrowUpRight
+  Download
 } from "lucide-react"
 import Link from "next/link"
 import { format } from "date-fns"
@@ -57,28 +54,58 @@ export default function StudentLedgerPage() {
     )
   }
 
+  // Group transactions by Month Year
+  const groupedTransactions = student.transactions?.slice().reduce((acc: any, t: any) => {
+    const monthYear = format(new Date(t.date), 'MMMM yyyy').toUpperCase()
+    if (!acc[monthYear]) acc[monthYear] = []
+    acc[monthYear].push(t)
+    return acc
+  }, {}) || {}
+
+  let runningBalance = 0
+  const sortedTransactions = student.transactions?.slice().sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime()) || []
+  
+  const transactionsWithBalance = sortedTransactions.map((t: any) => {
+    if (t.type === 'deposit') {
+      runningBalance += t.amount
+    } else {
+      runningBalance -= t.amount
+    }
+    return { ...t, currentBalance: runningBalance }
+  })
+
+  // Group the enhanced transactions
+  const finalGrouped = transactionsWithBalance.reduce((acc: any, t: any) => {
+    const monthYear = format(new Date(t.date), 'MMMM yyyy').toUpperCase()
+    if (!acc[monthYear]) acc[monthYear] = []
+    acc[monthYear].push(t)
+    return acc
+  }, {})
+
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-4xl mx-auto px-6 py-8">
+    <div className="min-h-screen bg-white pb-20">
+      <div className="max-w-4xl mx-auto px-4 py-6">
+        {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={() => router.back()} 
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            >
-              <ArrowLeft className="w-6 h-6 text-[#1a1a2e]" />
-            </button>
-            <h1 className="text-2xl font-bold text-[#1a1a2e]">Full Ledger</h1>
+          <button 
+            onClick={() => router.back()} 
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <ArrowLeft className="w-6 h-6 text-[#1a1a2e]" />
+          </button>
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-[#1a1a2e]">Full</h1>
+            <h1 className="text-2xl font-bold text-[#1a1a2e]">Ledger</h1>
           </div>
-          <button className="flex items-center gap-2 bg-[#2d6a4f] text-white px-4 py-2 rounded-xl text-sm font-bold shadow-lg hover:bg-[#1b4332] transition-colors">
+          <button className="flex items-center gap-2 bg-[#2d6a4f] text-white px-5 py-2.5 rounded-2xl text-sm font-bold shadow-sm hover:bg-[#1b4332] transition-colors">
             <Download className="w-4 h-4" />
             Export PDF
           </button>
         </div>
 
-        {/* Student Profile Summary */}
-        <div className="bg-white border border-gray-100 rounded-[2rem] p-8 shadow-sm mb-8 flex flex-col md:flex-row items-center gap-8">
-          <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-[#e7f5ee] shadow-md bg-gray-50 flex-shrink-0">
+        {/* Student Profile Card (Keep unchanged per user request) */}
+        <div className="bg-white border border-gray-100 rounded-[2.5rem] p-8 shadow-sm mb-10 flex flex-col items-center text-center">
+          <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-50 mb-6 ring-1 ring-gray-100">
             {student.profileImage ? (
               <img src={student.profileImage} alt={student.name} className="w-full h-full object-cover" />
             ) : (
@@ -87,90 +114,79 @@ export default function StudentLedgerPage() {
               </div>
             )}
           </div>
-          <div className="flex-1 text-center md:text-left">
-            <div className="flex flex-col md:flex-row md:items-center gap-2 mb-2">
-              <h2 className="text-2xl font-bold text-[#1a1a2e] uppercase">{student.name}</h2>
-              <span className="inline-block px-3 py-1 bg-[#e7f5ee] text-[#2d6a4f] text-[10px] font-bold rounded-full uppercase tracking-wider mx-auto md:mx-0 w-fit">
-                #{student.code}
-              </span>
+          <h2 className="text-3xl font-black text-[#1a1a2e] uppercase mb-3 tracking-tight">{student.name}</h2>
+          <div className="inline-block px-4 py-1.5 bg-[#e7f5ee] text-[#2d6a4f] text-xs font-black rounded-full uppercase tracking-widest mb-8">
+            #{student.code}
+          </div>
+          
+          <div className="grid grid-cols-2 gap-y-8 w-full max-w-sm">
+            <div className="flex flex-col items-center">
+              <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1.5">Current Balance</p>
+              <p className="text-xl font-black text-[#2d6a4f]">₹{student.balance?.toLocaleString('en-IN')}</p>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-              <div>
-                <p className="text-[10px] text-gray-400 uppercase font-bold mb-1">Current Balance</p>
-                <p className="text-lg font-bold text-[#2d6a4f]">₹{student.balance?.toLocaleString('en-IN')}</p>
-              </div>
-              <div>
-                <p className="text-[10px] text-gray-400 uppercase font-bold mb-1">Session</p>
-                <p className="text-sm font-bold text-gray-600">{student.academicYear}</p>
-              </div>
-              <div>
-                <p className="text-[10px] text-gray-400 uppercase font-bold mb-1">Transactions</p>
-                <p className="text-sm font-bold text-gray-600">{student.transactions?.length || 0}</p>
-              </div>
-              <div>
-                <p className="text-[10px] text-gray-400 uppercase font-bold mb-1">Status</p>
-                <p className="text-sm font-bold text-[#2d6a4f]">ACTIVE</p>
-              </div>
+            <div className="flex flex-col items-center">
+              <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1.5">Session</p>
+              <p className="text-lg font-black text-gray-700">{student.academicYear}</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1.5">Transactions</p>
+              <p className="text-lg font-black text-gray-700">{student.transactions?.length || 0}</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1.5">Status</p>
+              <p className="text-lg font-black text-[#2d6a4f]">ACTIVE</p>
             </div>
           </div>
         </div>
 
-        {/* Transaction History Table matching the screenshot */}
+        {/* New Ledger Table Design */}
         <div className="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden">
-          <table className="w-full">
+          <table className="w-full border-collapse">
             <thead className="bg-[#fcfcfc] border-b border-gray-50">
               <tr>
-                <th className="px-8 py-4 text-left text-[11px] font-bold text-gray-400 uppercase tracking-wider">Date</th>
-                <th className="px-8 py-4 text-left text-[11px] font-bold text-gray-400 uppercase tracking-wider text-center">Type</th>
-                <th className="px-8 py-4 text-right text-[11px] font-bold text-gray-400 uppercase tracking-wider">Method</th>
+                <th className="pl-6 pr-2 py-4 text-left text-[13px] font-black text-[#2d6a4f]">#</th>
+                <th className="px-4 py-4 text-left text-[13px] font-black text-[#2d6a4f]">Date</th>
+                <th className="px-4 py-4 text-right text-[13px] font-black text-[#2d6a4f]">Dep.</th>
+                <th className="px-4 py-4 text-right text-[13px] font-black text-[#2d6a4f]">With.</th>
+                <th className="pl-4 pr-6 py-4 text-right text-[13px] font-black text-[#2d6a4f]">Bal.</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
-              {student.transactions?.slice().reverse().map((t: any, idx: number) => (
-                <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
-                  <td className="px-8 py-6">
-                    <div className="flex flex-col">
-                      <span className="text-[15px] font-bold text-[#1a1a2e] leading-tight">
-                        {format(new Date(t.date), 'MMM')}
-                      </span>
-                      <span className="text-[15px] font-bold text-[#1a1a2e] leading-tight">
-                        {format(new Date(t.date), 'dd,')}
-                      </span>
-                      <span className="text-[15px] font-bold text-[#1a1a2e] leading-tight">
-                        {format(new Date(t.date), 'yyyy')}
-                      </span>
-                      <span className="text-[11px] text-gray-400 font-medium mt-1 uppercase">
-                        {format(new Date(t.date), 'hh:mm')}
-                      </span>
-                      <span className="text-[11px] text-gray-400 font-medium uppercase">
-                        {format(new Date(t.date), 'aa')}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6">
-                    <div className="flex items-center justify-center gap-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        t.type === 'deposit' ? 'bg-[#e7f5ee] text-[#2d6a4f]' : 'bg-red-50 text-red-500'
-                      }`}>
+            <tbody>
+              {Object.entries(finalGrouped).reverse().map(([month, transactions]: [string, any]) => (
+                <React.Fragment key={month}>
+                  <tr className="bg-[#fcfcfc]/50">
+                    <td colSpan={5} className="px-6 py-4 text-[13px] font-black text-[#2d6a4f] tracking-tight">
+                      {month}
+                    </td>
+                  </tr>
+                  {transactions.slice().reverse().map((t: any, idx: number) => (
+                    <tr key={t._id || idx} className="border-b border-gray-50 hover:bg-gray-50/30 transition-colors">
+                      <td className="pl-6 pr-2 py-5 text-[14px] font-black text-[#1a1a2e]">
+                        {transactions.length - idx}
+                      </td>
+                      <td className="px-4 py-5 text-[14px] font-medium text-gray-500 tabular-nums">
+                        {format(new Date(t.date), 'dd/MM/yyyy')}
+                      </td>
+                      <td className="px-4 py-5 text-right">
                         {t.type === 'deposit' ? (
-                          <ArrowDownLeft className="w-5 h-5" />
+                          <span className="text-[14px] font-black text-[#2d6a4f] tabular-nums">₹{t.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                         ) : (
-                          <ArrowUpRight className="w-5 h-5" />
+                          <span className="text-[14px] font-black text-[#2d6a4f]">-</span>
                         )}
-                      </div>
-                      <span className={`text-[11px] font-bold uppercase tracking-wider ${
-                        t.type === 'deposit' ? 'text-[#2d6a4f]' : 'text-red-500'
-                      }`}>
-                        {t.type}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6 text-right">
-                    <span className="text-[13px] font-bold text-gray-400 uppercase tracking-wider">
-                      {t.method || 'CASH'}
-                    </span>
-                  </td>
-                </tr>
+                      </td>
+                      <td className="px-4 py-5 text-right">
+                        {t.type === 'withdrawal' ? (
+                          <span className="text-[14px] font-black text-[#ef4444] tabular-nums">₹{t.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                        ) : (
+                          <span className="text-[14px] font-black text-[#ef4444]">-</span>
+                        )}
+                      </td>
+                      <td className="pl-4 pr-6 py-5 text-right text-[14px] font-black text-[#1a1a2e] tabular-nums">
+                        ₹{t.currentBalance?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                      </td>
+                    </tr>
+                  ))}
+                </React.Fragment>
               ))}
             </tbody>
           </table>
