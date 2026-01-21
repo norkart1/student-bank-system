@@ -8,9 +8,11 @@ import {
   Loader,
   Download,
   Calendar,
-  History
+  History,
+  ArrowDownLeft,
+  ArrowUpRight
 } from "lucide-react"
-import { format, parseISO, startOfMonth } from "date-fns"
+import { format } from "date-fns"
 
 export default function StudentLedgerPage() {
   const params = useParams()
@@ -55,103 +57,78 @@ export default function StudentLedgerPage() {
     )
   }
 
-  // Group transactions by month
-  const groupedTransactions: { [key: string]: any[] } = {}
-  let runningBalance = 0
-  const sortedTransactions = [...(student.transactions || [])].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-  
-  const processedTransactions = sortedTransactions.map(t => {
-    if (t.type === 'deposit') {
-      runningBalance += t.amount
-    } else {
-      runningBalance -= t.amount
-    }
-    return { ...t, balanceAfter: runningBalance }
-  })
-
-  processedTransactions.forEach(t => {
-    const monthKey = format(new Date(t.date), 'MMMM yyyy')
-    if (!groupedTransactions[monthKey]) {
-      groupedTransactions[monthKey] = []
-    }
-    groupedTransactions[monthKey].push(t)
-  })
-
   return (
-    <div className="min-h-screen bg-white pb-10">
-      {/* Dark Green Header */}
-      <div className="bg-[#2d4b3d] text-white px-6 py-6 sticky top-0 z-10 shadow-md">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button onClick={() => router.back()} className="p-2 hover:bg-white/10 rounded-full transition-colors">
-              <History className="w-6 h-6" />
-            </button>
-            <div>
-              <h1 className="text-xl font-bold">Full Ledger</h1>
-              <p className="text-white/70 text-sm">{student.academicYear} Session</p>
-            </div>
-          </div>
-          <button className="bg-white/20 p-2 rounded-full hover:bg-white/30 transition-colors">
-            <Download className="w-6 h-6" />
-          </button>
+    <div className="min-h-screen bg-white">
+      {/* Transaction History Header */}
+      <div className="px-6 py-6 border-b border-gray-50">
+        <div className="max-w-4xl mx-auto flex items-center gap-3">
+          <Calendar className="w-6 h-6 text-gray-400" />
+          <h1 className="text-2xl font-bold text-[#1a1a2e]">Transaction History</h1>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 mt-4">
-        <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
-          <table className="w-full text-sm">
-            <thead className="bg-[#f8fcf9] border-b border-gray-100">
+      <div className="max-w-4xl mx-auto px-4 mt-6">
+        <div className="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-[#fcfcfc] border-b border-gray-50">
               <tr>
-                <th className="px-3 py-4 text-left font-bold text-[#2d4b3d] w-10">#</th>
-                <th className="px-3 py-4 text-left font-bold text-[#2d4b3d]">Date</th>
-                <th className="px-3 py-4 text-center font-bold text-[#2d4b3d]">Dep.</th>
-                <th className="px-3 py-4 text-center font-bold text-[#2d4b3d]">With.</th>
-                <th className="px-3 py-4 text-right font-bold text-[#2d4b3d]">Bal.</th>
+                <th className="px-6 py-4 text-left text-[11px] font-bold text-gray-400 uppercase tracking-wider">Date</th>
+                <th className="px-6 py-4 text-left text-[11px] font-bold text-gray-400 uppercase tracking-wider text-center">Type</th>
+                <th className="px-6 py-4 text-right text-[11px] font-bold text-gray-400 uppercase tracking-wider">Method</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {Object.keys(groupedTransactions).map((monthKey) => (
-                <React.Fragment key={monthKey}>
-                  {/* Month Header Row */}
-                  <tr className="bg-white">
-                    <td colSpan={5} className="px-3 py-3 text-[11px] font-bold text-[#2d6a4f] uppercase tracking-wider bg-white">
-                      {monthKey}
-                    </td>
-                  </tr>
-                  {groupedTransactions[monthKey].map((t, idx) => (
-                    <tr key={idx} className="hover:bg-gray-50/50 transition-colors border-b border-gray-50">
-                      <td className="px-3 py-4 text-xs font-bold text-[#1a1a2e]">
-                        {idx + 1}
-                      </td>
-                      <td className="px-3 py-4 text-xs font-medium text-gray-500">
-                        {format(new Date(t.date), 'dd/MM/yyyy')}
-                      </td>
-                      <td className="px-3 py-4 text-center">
+              {student.transactions?.slice().reverse().map((t: any, idx: number) => (
+                <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
+                  <td className="px-6 py-6">
+                    <div className="flex flex-col">
+                      <span className="text-[15px] font-bold text-[#1a1a2e] leading-tight">
+                        {format(new Date(t.date), 'MMM')}
+                      </span>
+                      <span className="text-[15px] font-bold text-[#1a1a2e] leading-tight">
+                        {format(new Date(t.date), 'dd,')}
+                      </span>
+                      <span className="text-[15px] font-bold text-[#1a1a2e] leading-tight">
+                        {format(new Date(t.date), 'yyyy')}
+                      </span>
+                      <span className="text-[11px] text-gray-400 font-medium mt-1 uppercase">
+                        {format(new Date(t.date), 'hh:mm')}
+                      </span>
+                      <span className="text-[11px] text-gray-400 font-medium uppercase">
+                        {format(new Date(t.date), 'aa')}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-6">
+                    <div className="flex items-center justify-center gap-3">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        t.type === 'deposit' ? 'bg-[#e7f5ee] text-[#2d6a4f]' : 'bg-red-50 text-red-500'
+                      }`}>
                         {t.type === 'deposit' ? (
-                          <span className="text-xs font-bold text-[#2d6a4f]">₹{t.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                          <ArrowDownLeft className="w-5 h-5" />
                         ) : (
-                          <span className="text-xs font-bold text-gray-300">-</span>
+                          <ArrowUpRight className="w-5 h-5" />
                         )}
-                      </td>
-                      <td className="px-3 py-4 text-center">
-                        {t.type === 'withdrawal' ? (
-                          <span className="text-xs font-bold text-red-500">₹{t.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
-                        ) : (
-                          <span className="text-xs font-bold text-gray-300">-</span>
-                        )}
-                      </td>
-                      <td className="px-3 py-4 text-right text-xs font-bold text-[#1a1a2e]">
-                        ₹{t.balanceAfter.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                      </td>
-                    </tr>
-                  ))}
-                </React.Fragment>
+                      </div>
+                      <span className={`text-xs font-bold uppercase tracking-wider ${
+                        t.type === 'deposit' ? 'text-[#2d6a4f]' : 'text-red-500'
+                      }`}>
+                        {t.type}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-6 text-right">
+                    <span className="text-[13px] font-bold text-gray-400 uppercase tracking-wider">
+                      {t.method || 'CASH'}
+                    </span>
+                  </td>
+                </tr>
               ))}
             </tbody>
           </table>
           
-          {Object.keys(groupedTransactions).length === 0 && (
-            <div className="py-20 text-center text-gray-400">
+          {(!student.transactions || student.transactions.length === 0) && (
+            <div className="py-20 text-center text-gray-400 font-medium">
               No transactions found
             </div>
           )}
