@@ -42,19 +42,19 @@ export default function TeacherDashboard() {
 
   const [selectedDate, setSelectedDate] = useState(new Date())
 
-  // Generate 60 days around current date for scrolling
-  const calendarDays = Array.from({ length: 60 }, (_, i) => {
-    const d = new Date();
-    d.setDate(d.getDate() - 30 + i);
-    return d;
-  });
+  // Generate calendar days for the selected month in the popover
+  const calendarDays = React.useMemo(() => {
+    const start = startOfMonth(selectedDate);
+    const end = endOfMonth(selectedDate);
+    return eachDayOfInterval({ start, end });
+  }, [selectedDate]);
 
   useEffect(() => {
     const el = document.getElementById(`date-${format(selectedDate, 'yyyy-MM-dd')}`);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
     }
-  }, [selectedDate]);
+  }, [selectedDate, calendarDays]);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentDate(new Date()), 1000)
