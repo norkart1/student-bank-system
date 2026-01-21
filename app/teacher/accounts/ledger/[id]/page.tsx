@@ -9,8 +9,7 @@ import {
   Download,
   Calendar,
   ArrowDownLeft,
-  ArrowUpRight,
-  User as UserIcon
+  ArrowUpRight
 } from "lucide-react"
 import Link from "next/link"
 import { format } from "date-fns"
@@ -116,63 +115,71 @@ export default function StudentLedgerPage() {
           </div>
         </div>
 
-        {/* Transaction History */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-bold text-[#1a1a2e] mb-4 flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-gray-400" />
-            Transaction History
-          </h3>
-          
-          <div className="bg-white border border-gray-100 rounded-[2rem] overflow-hidden shadow-sm">
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-100">
-                <tr>
-                  <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-wider">Date</th>
-                  <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-wider">Type</th>
-                  <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-wider">Method</th>
-                  <th className="px-6 py-4 text-right text-[10px] font-bold text-gray-400 uppercase tracking-wider">Amount</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {student.transactions?.slice().reverse().map((t: any, idx: number) => (
-                  <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
-                    <td className="px-6 py-4">
-                      <p className="text-sm font-bold text-[#1a1a2e]">{format(new Date(t.date), 'MMM dd, yyyy')}</p>
-                      <p className="text-[10px] text-gray-400 uppercase">{format(new Date(t.date), 'hh:mm a')}</p>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                          t.type === 'deposit' ? 'bg-[#e7f5ee] text-[#2d6a4f]' : 'bg-red-50 text-red-500'
-                        }`}>
-                          {t.type === 'deposit' ? <ArrowDownLeft className="w-3.5 h-3.5" /> : <ArrowUpRight className="w-3.5 h-3.5" />}
-                        </div>
-                        <span className={`text-[10px] font-bold uppercase ${
-                          t.type === 'deposit' ? 'text-[#2d6a4f]' : 'text-red-500'
-                        }`}>{t.type}</span>
+        {/* Transaction History Table matching the screenshot */}
+        <div className="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-[#fcfcfc] border-b border-gray-50">
+              <tr>
+                <th className="px-8 py-4 text-left text-[11px] font-bold text-gray-400 uppercase tracking-wider">Date</th>
+                <th className="px-8 py-4 text-left text-[11px] font-bold text-gray-400 uppercase tracking-wider text-center">Type</th>
+                <th className="px-8 py-4 text-right text-[11px] font-bold text-gray-400 uppercase tracking-wider">Method</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {student.transactions?.slice().reverse().map((t: any, idx: number) => (
+                <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
+                  <td className="px-8 py-6">
+                    <div className="flex flex-col">
+                      <span className="text-[15px] font-bold text-[#1a1a2e] leading-tight">
+                        {format(new Date(t.date), 'MMM')}
+                      </span>
+                      <span className="text-[15px] font-bold text-[#1a1a2e] leading-tight">
+                        {format(new Date(t.date), 'dd,')}
+                      </span>
+                      <span className="text-[15px] font-bold text-[#1a1a2e] leading-tight">
+                        {format(new Date(t.date), 'yyyy')}
+                      </span>
+                      <span className="text-[11px] text-gray-400 font-medium mt-1 uppercase">
+                        {format(new Date(t.date), 'hh:mm')}
+                      </span>
+                      <span className="text-[11px] text-gray-400 font-medium uppercase">
+                        {format(new Date(t.date), 'aa')}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-8 py-6">
+                    <div className="flex items-center justify-center gap-3">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        t.type === 'deposit' ? 'bg-[#e7f5ee] text-[#2d6a4f]' : 'bg-red-50 text-red-500'
+                      }`}>
+                        {t.type === 'deposit' ? (
+                          <ArrowDownLeft className="w-5 h-5" />
+                        ) : (
+                          <ArrowUpRight className="w-5 h-5" />
+                        )}
                       </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="text-xs font-medium text-gray-500 uppercase">{t.method || 'CASH'}</span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <p className={`text-sm font-bold ${
+                      <span className={`text-[11px] font-bold uppercase tracking-wider ${
                         t.type === 'deposit' ? 'text-[#2d6a4f]' : 'text-red-500'
                       }`}>
-                        {t.type === 'deposit' ? '+' : '-'} ₹{t.amount?.toLocaleString('en-IN')}
-                      </p>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            
-            {(!student.transactions || student.transactions.length === 0) && (
-              <div className="py-20 text-center">
-                <p className="text-gray-400 font-medium">No transactions found</p>
-              </div>
-            )}
-          </div>
+                        {t.type}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-8 py-6 text-right">
+                    <span className="text-[13px] font-bold text-gray-400 uppercase tracking-wider">
+                      {t.method || 'CASH'}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          
+          {(!student.transactions || student.transactions.length === 0) && (
+            <div className="py-20 text-center text-gray-400 font-medium">
+              No transactions found
+            </div>
+          )}
         </div>
       </div>
     </div>
