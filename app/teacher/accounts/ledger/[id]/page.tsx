@@ -22,7 +22,7 @@ export default function StudentLedgerPage() {
   const router = useRouter()
   const [student, setStudent] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [selectedSession, setSelectedSession] = useState<string>("")
+  const [selectedSession, setSelectedSession] = useState<string>("all")
   const [availableSessions, setAvailableSessions] = useState<string[]>([])
 
   useEffect(() => {
@@ -34,7 +34,6 @@ export default function StudentLedgerPage() {
           const studentData = Array.isArray(data) ? data.find((s: any) => s._id === params.id) : data
           setStudent(studentData)
           if (studentData) {
-            setSelectedSession(studentData.academicYear)
             // Extract unique sessions from transactions and the student's current year
             const sessions = new Set<string>()
             sessions.add(studentData.academicYear)
@@ -72,17 +71,19 @@ export default function StudentLedgerPage() {
     )
   }
 
-  // Filter transactions by selected session
+  // Filter transactions by selected session (or show all)
   const filteredTransactions = student.transactions?.filter((t: any) => 
-    !selectedSession || t.academicYear === selectedSession || (!t.academicYear && selectedSession === student.academicYear)
+    selectedSession === "all" || t.academicYear === selectedSession || (!t.academicYear && selectedSession === student.academicYear)
   ) || []
 
-  const sortedTransactions = [...filteredTransactions].sort((a: any, b: any) => 
+  // Always calculate running balance based on ALL transactions to keep it accurate,
+  // but we will only display the ones filtered by session.
+  const sortedAllTransactions = [...(student.transactions || [])].sort((a: any, b: any) => 
     new Date(a.date).getTime() - new Date(b.date).getTime()
   )
 
   let runningBalance = 0
-  const processedTransactions = sortedTransactions.map((t: any) => {
+  const processedAllTransactions = sortedAllTransactions.map((t: any) => {
     if (t.type === 'deposit') {
       runningBalance += t.amount
     } else {
@@ -91,7 +92,10 @@ export default function StudentLedgerPage() {
     return { ...t, runningBalance }
   })
 
-  const displayTransactions = [...processedTransactions].reverse()
+  // Get only the ones we want to display
+  const displayTransactions = processedAllTransactions
+    .filter(t => selectedSession === "all" || t.academicYear === selectedSession || (!t.academicYear && selectedSession === student.academicYear))
+    .reverse()
 
   return (
     <div className="min-h-screen bg-[#f8fafc] pb-10 overflow-x-hidden">
@@ -136,13 +140,14 @@ export default function StudentLedgerPage() {
           
           <h2 className="text-2xl font-black text-[#1a1a2e] uppercase mb-1 tracking-tight">{student.name}</h2>
           
-          {/* Academic Session Selector */}
+          {/* Academic Session Selector with "All" option */}
           <div className="relative mb-6">
             <select
               value={selectedSession}
               onChange={(e) => setSelectedSession(e.target.value)}
               className="appearance-none bg-transparent text-xs font-bold text-slate-400 pr-8 pl-2 py-1 cursor-pointer focus:outline-none hover:text-[#1a1a2e] transition-colors text-center"
             >
+              <option value="all">All Academic Sessions</option>
               {availableSessions.map(session => (
                 <option key={session} value={session}>Academic Year: {session}</option>
               ))}
@@ -169,7 +174,7 @@ export default function StudentLedgerPage() {
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="bg-white rounded-[2rem] p-5 border border-slate-50 shadow-sm flex flex-col items-center">
             <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.1em] mb-1">Trans.</p>
-            <p className="text-2xl font-black text-[#1a1a2e]">{filteredTransactions.length}</p>
+            <p className="text-2xl font-black text-[#1a1a2e]">{displayTransactions.length}</p>
           </div>
           <div className="bg-white rounded-[2rem] p-5 border border-slate-50 shadow-sm flex flex-col items-center">
             <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.1em] mb-1">Status</p>
@@ -179,7 +184,9 @@ export default function StudentLedgerPage() {
 
         {/* Recent Activity Header */}
         <div className="flex items-center justify-between mb-5 px-1">
-          <h3 className="text-lg font-black text-[#1a1a2e] tracking-tight">Recent Activity</h3>
+          <h3 className="text-lg font-black text-[#1a1a2e] tracking-tight">
+            {selectedSession === "all" ? "Full History" : "Session Activity"}
+          </h3>
           <div className="flex items-center gap-1.5 text-[9px] font-black text-slate-400 uppercase tracking-[0.1em]">
             <Clock className="w-3 h-3" />
             <span>Real-time</span>
@@ -213,6 +220,9 @@ export default function StudentLedgerPage() {
                       <span className="text-[10px] font-bold text-slate-400 truncate">{format(new Date(t.date), 'dd MMM, yy')}</span>
                     </div>
                     <p className="text-[13px] font-black text-[#1a1a2e] truncate">{t.method || 'Cash'}</p>
+                    {selectedSession === "all" && (
+                      <p className="text-[9px] font-bold text-slate-300 uppercase leading-none mt-1">{t.academicYear}</p>
+                    )}
                   </div>
                 </div>
 
