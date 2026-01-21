@@ -111,7 +111,6 @@ export default function StudentLedgerPage() {
             </button>
             <div>
               <h1 className="text-xl font-black text-[#1a1a2e] tracking-tight leading-tight">Ledger Statement</h1>
-              <p className="text-[14px] font-black text-slate-400 tracking-tight leading-none mt-1">#{student.code}</p>
             </div>
           </div>
           <button className="flex items-center gap-1.5 bg-[#1a1a2e] text-white px-5 py-2.5 rounded-2xl text-[11px] font-black shadow-lg hover:bg-slate-800 active:scale-95 transition-all">
