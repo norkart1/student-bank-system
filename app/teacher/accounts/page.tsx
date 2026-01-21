@@ -20,7 +20,7 @@ export default function TeacherAccountsPage() {
   const [students, setStudents] = useState<any[]>([])
   const [searchQuery, setSearchQuery] = useState("")
   const [isLoading, setIsLoading] = useState(true)
-  const [selectedAcademicYear, setSelectedAcademicYear] = useState("2025-26")
+  const [selectedAcademicYear, setSelectedAcademicYear] = useState("")
   const [academicYears, setAcademicYears] = useState<string[]>([])
   const [showYearDropdown, setShowYearDropdown] = useState(false)
 
@@ -32,15 +32,20 @@ export default function TeacherAccountsPage() {
           const data = await res.json()
           setStudents(data)
           
-          // Dynamically extract unique academic years from students
           const years = new Set<string>()
           data.forEach((s: any) => {
             if (s.academicYear) years.add(s.academicYear)
           })
-          // Add default if empty
-          if (years.size === 0) years.add("2025-26")
           
-          setAcademicYears(Array.from(years).sort().reverse())
+          if (years.size === 0) {
+            years.add("2025-26")
+            setSelectedAcademicYear("2025-26")
+          } else {
+            const sortedYears = Array.from(years).sort().reverse()
+            setAcademicYears(sortedYears)
+            // Default to the first (latest) session found
+            setSelectedAcademicYear(sortedYears[0])
+          }
         }
       } catch (err) {
         console.error("Fetch accounts error:", err)
