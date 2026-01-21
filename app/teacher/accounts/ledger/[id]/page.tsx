@@ -64,7 +64,7 @@ export default function StudentLedgerPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8fafc] p-6">
         <p className="text-slate-500 mb-4 text-sm font-bold">Student not found</p>
-        <Link href="/teacher/accounts" className="text-[#1a1a2e] font-black text-xs uppercase tracking-widest hover:underline">
+        <Link href="/teacher/accounts" className="text-indigo-600 font-bold hover:underline">
           Go back to accounts
         </Link>
       </div>
@@ -110,8 +110,8 @@ export default function StudentLedgerPage() {
               <ArrowLeft className="w-7 h-7 text-[#1a1a2e]" />
             </button>
             <div>
-              <h1 className="text-lg font-black text-[#1a1a2e] tracking-tight leading-tight">Ledger Statement</h1>
-              <p className="text-[10px] font-bold text-slate-400 tracking-wider leading-none">#{student.code}</p>
+              <h1 className="text-xl font-black text-[#1a1a2e] tracking-tight leading-tight">Ledger Statement</h1>
+              <p className="text-[14px] font-black text-slate-400 tracking-tight leading-none mt-1">#{student.code}</p>
             </div>
           </div>
           <button className="flex items-center gap-1.5 bg-[#1a1a2e] text-white px-5 py-2.5 rounded-2xl text-[11px] font-black shadow-lg hover:bg-slate-800 active:scale-95 transition-all">
