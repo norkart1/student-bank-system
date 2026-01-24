@@ -2,9 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: false,
-  experimental: {
-    allowedReplitOrigins: ["*.replit.dev", "*.kirk.replit.dev", "*.pike.replit.dev", "*.spock.replit.dev", "*.sisko.replit.dev", "*.riker.replit.dev", "*.picard.replit.dev"],
-  },
   typescript: {
     ignoreBuildErrors: true,
   },

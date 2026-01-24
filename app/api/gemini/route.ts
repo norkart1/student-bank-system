@@ -1,8 +1,18 @@
 import { GoogleGenAI } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+export async function POST(request: NextRequest) {
+  try {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json(
+        { response: "I'm sorry, but the Gemini AI assistant is currently unavailable because the API key is not configured. Please contact the administrator to set up the GEMINI_API_KEY." },
+        { status: 200 }
+      );
+    }
 
+    const ai = new GoogleGenAI(apiKey);
+    const { message, studentContext, adminName } = await request.json();
 export async function POST(request: NextRequest) {
   try {
     const { message, studentContext, adminName } = await request.json();
