@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -11,10 +11,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const ai = new GoogleGenAI(apiKey);
-    const { message, studentContext, adminName } = await request.json();
-export async function POST(request: NextRequest) {
-  try {
+    const genAI = new GoogleGenerativeAI(apiKey);
     const { message, studentContext, adminName } = await request.json();
 
     if (!message) {
@@ -24,8 +21,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Build comprehensive context for AI
-    let fullContext = `You are an AI assistant for JDSA Students Bank admin dashboard. 
+    const fullContext = `You are an AI assistant for JDSA Students Bank admin dashboard. 
 Current Admin: ${adminName || "Admin"}
 
 System Information:
@@ -33,13 +29,13 @@ ${studentContext ? `Student Database: ${studentContext}` : ""}
 
 User Request: ${message}`;
 
-    const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const result = await model.generateContent(fullContext);
     const response = await result.response;
     const text = response.text();
 
     return NextResponse.json({ response: text });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Gemini API Error:", error);
     return NextResponse.json(
       { error: "Failed to process request" },
