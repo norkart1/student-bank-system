@@ -1588,48 +1588,79 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-2xl p-5 mb-6 shadow-lg">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-            <Wallet className="w-6 h-6 text-white" />
-          </div>
-          <div className="flex-1 flex flex-col">
-            <div className="flex items-center gap-2">
-              <p className="text-white/70 text-sm">Total Balance</p>
-              <select
-                value={selectedAcademicYear}
-                onChange={(e) => {
-                  setSelectedAcademicYear(e.target.value)
-                  toast.success(`Active year set to ${e.target.value}`)
-                }}
-                className="bg-white/10 hover:bg-white/20 border-none text-white text-xs font-bold py-1 px-2 rounded-lg focus:ring-0 cursor-pointer transition-colors"
-              >
-                {academicYears.map(year => (
-                  <option key={year} value={year} className="bg-[#1b4332] text-white">
-                    {year}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <p className="text-2xl font-bold text-white">₹{totalBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-            <div className="flex items-center gap-2 text-[10px] text-white/60 mt-1">
-              <Activity className="w-3 h-3" />
-              <span>Live Status</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <h2 className="text-lg font-bold text-[#171532] mb-4">Options</h2>
-      <div className="grid grid-cols-1 gap-4 mb-6">
+      <div className="grid grid-cols-2 gap-4 mb-6">
         <Link 
           href="/admin/accounts"
-          className="bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col items-center gap-3 hover:bg-[#f8f9fa] transition-all shadow-sm w-full text-center">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
-            <Users className="w-6 h-6 text-white" />
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
+            <Users className="w-5 h-5 text-white" />
           </div>
-          <span className="text-sm font-bold text-[#171532]">Accounts</span>
+          <span className="text-xs font-bold text-[#171532]">Accounts</span>
         </Link>
+        <button 
+          onClick={() => setShowQRScanner(true)}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
+            <QrCode className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-xs font-bold text-[#171532]">QR Scanner</span>
+        </button>
+        <button 
+          onClick={() => setActiveTab("leaderboard")}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
+            <Trophy className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-xs font-bold text-[#171532]">Leaderboard</span>
+        </button>
+        <button 
+          onClick={() => setActiveTab("reports")}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
+            <BarChart3 className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-xs font-bold text-[#171532]">Reports</span>
+        </button>
+        <button 
+          onClick={() => setShowDepositModal(true)}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
+            <ArrowDownRight className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-xs font-bold text-[#171532]">Deposit</span>
+        </button>
+        <button 
+          onClick={() => setShowWithdrawModal(true)}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
+            <ArrowUpRight className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-xs font-bold text-[#171532]">Withdraw</span>
+        </button>
+      </div>
+
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-bold text-[#171532]">Recent Transactions</h2>
+      </div>
+      <div className="space-y-3 mb-8">
+        {students.flatMap(s => (s.transactions || []).map(t => ({...t, studentName: s.name, studentId: s._id})))
+          .sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime())
+          .slice(0, 5)
+          .map((tx, idx) => (
+            <div key={idx} className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex items-center gap-3">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${tx.type === 'deposit' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+                {tx.type === 'deposit' ? '+' : '-'}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-[#171532] truncate">{tx.studentName}</p>
+                <p className="text-[10px] text-[#747384]">{tx.date} • {tx.reason || 'No reason'}</p>
+              </div>
+              <p className={`font-bold ${tx.type === 'deposit' ? 'text-green-600' : 'text-red-600'}`}>
+                ₹{tx.amount.toLocaleString('en-IN')}
+              </p>
+            </div>
+          ))}
       </div>
     </>
   )
