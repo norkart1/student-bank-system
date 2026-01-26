@@ -1607,10 +1607,18 @@ export default function AdminDashboard() {
           <span className="text-xs font-bold text-[#171532]">Bulk Add</span>
         </Link>
         <button 
-          onClick={() => setShowQRScanner(true)}
+          onClick={() => router.push("/admin/qr-download")}
           className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
           <div className="w-10 h-10 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
             <QrCode className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-xs font-bold text-[#171532]">QR Download</span>
+        </button>
+        <button 
+          onClick={() => setShowQRScanner(true)}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center">
+            <Camera className="w-5 h-5 text-white" />
           </div>
           <span className="text-xs font-bold text-[#171532]">QR Scanner</span>
         </button>
