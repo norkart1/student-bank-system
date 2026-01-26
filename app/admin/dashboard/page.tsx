@@ -2771,19 +2771,23 @@ export default function AdminDashboard() {
                       onClick={() => setViewingIndex(students.indexOf(student))}
                       className="grid grid-cols-[auto_1fr_auto] items-center gap-4 px-6 py-5 hover:bg-[#fcfcfc] transition-colors cursor-pointer group"
                     >
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold ${avatarColors[idx % avatarColors.length]} text-[#171532] border-2 border-white shadow-sm group-hover:scale-110 transition-transform`}>
-                        {student.name.charAt(0)}
+                      <div className={`w-12 h-12 rounded-full flex-shrink-0 flex items-center justify-center text-lg font-bold ${avatarColors[idx % avatarColors.length]} text-[#171532] border-2 border-white shadow-sm group-hover:scale-110 transition-transform`}>
+                        {student.profileImage ? (
+                          <img src={student.profileImage} alt={student.name} className="w-full h-full rounded-full object-cover" />
+                        ) : (
+                          student.name.charAt(0)
+                        )}
                       </div>
-                      <div className="flex flex-col min-w-0">
-                        <span className="font-bold text-[#171532] text-lg truncate group-hover:text-[#2d6a4f] transition-colors">
+                      <div className="flex flex-col min-w-0 flex-1">
+                        <span className="font-bold text-[#171532] text-base md:text-lg truncate group-hover:text-[#2d6a4f] transition-colors leading-tight">
                           {student.name}
                         </span>
-                        <span className="text-xs font-bold text-[#9ca3af] uppercase tracking-widest mt-0.5">
+                        <span className="text-[10px] md:text-xs font-bold text-[#9ca3af] uppercase tracking-widest mt-0.5">
                           {student.code} • {student.academicYear}
                         </span>
                       </div>
-                      <div className="text-right">
-                        <span className="text-lg font-bold text-[#2d6a4f] bg-[#2d6a4f]/5 px-3 py-1.5 rounded-lg border border-[#2d6a4f]/10 shadow-inner">
+                      <div className="text-right flex-shrink-0">
+                        <span className="text-sm md:text-lg font-bold text-[#2d6a4f] bg-[#2d6a4f]/5 px-2.5 py-1.5 rounded-lg border border-[#2d6a4f]/10 shadow-inner inline-block whitespace-nowrap">
                           ₹{student.balance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
                       </div>
