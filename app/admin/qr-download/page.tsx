@@ -201,9 +201,9 @@ export default function QRDownloadPage() {
             </div>
           </div>
 
-          {/* A4 Preview Container - Visible for Print, Hidden for Web (using visibility: hidden instead of fixed position) */}
-          <div className="bg-white mx-auto print:m-0 print:block hidden" style={{ width: '210mm', minHeight: '297mm', padding: '10mm' }}>
-            <div ref={printRef} className="bg-white">
+          {/* A4 Preview Container - Visible for Print and Preview */}
+          <div className="bg-white mx-auto print:m-0 block lg:sticky lg:top-8" style={{ width: '210mm', minHeight: '297mm', padding: '10mm' }}>
+            <div ref={printRef} className="bg-white p-4 border border-gray-200 shadow-xl print:shadow-none print:border-none">
               <h2 className="text-center text-xl font-bold mb-6 text-gray-800">JDSA Student QR Codes</h2>
               
               <div className="grid grid-cols-7 gap-2">
@@ -211,7 +211,7 @@ export default function QRDownloadPage() {
                   <div key={student._id} className="flex flex-col items-center p-2 border border-gray-100 rounded">
                     <div className="bg-white p-1">
                       <QRCodeSVG 
-                        value={`https://jdsa-students-bank.vercel.app/login?code=${student.code}`} 
+                        value={`${window.location.origin}/login?code=${student.code}`} 
                         size={80} 
                         level="M" 
                       />
