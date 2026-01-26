@@ -48,7 +48,8 @@ export default function AdminDashboard() {
   const [totalBalance, setTotalBalance] = useState(0)
   const [totalDeposited, setTotalDeposited] = useState(0)
   const [totalWithdrawn, setTotalWithdrawn] = useState(0)
-  const [academicYears, setAcademicYears] = useState(["2023-24", "2024-25", "2025-26", "2026-27"])
+  const [academicYears, setAcademicYears] = useState<string[]>([])
+  const [isLoadingSessions, setIsLoadingSessions] = useState(true)
   const [showAddYearForm, setShowAddYearForm] = useState(false)
   const [newYearInput, setNewYearYearInput] = useState("")
   const [students, setStudents] = useState<Student[]>([])
@@ -1389,7 +1390,38 @@ export default function AdminDashboard() {
     return null
   }
 
-  const handleAddAcademicYear = () => {
+  useEffect(() => {
+    const fetchSessions = async () => {
+      try {
+        const res = await fetch('/api/academic-sessions');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.length > 0) {
+            setAcademicYears(data.map((s: any) => s.year));
+          } else {
+            // Default sessions if none exist
+            const defaults = ["2023-24", "2024-25", "2025-26", "2026-27"];
+            setAcademicYears(defaults);
+            // Optionally seed them to DB
+            for (const year of defaults) {
+              await fetch('/api/academic-sessions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ year })
+              });
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch sessions:', error);
+      } finally {
+        setIsLoadingSessions(false);
+      }
+    };
+    fetchSessions();
+  }, []);
+
+  const handleAddAcademicYear = async () => {
     if (!newYearInput || !/^\d{4}-\d{2}$/.test(newYearInput)) {
       toast.error("Invalid format. Use YYYY-YY (e.g., 2026-27)")
       return
@@ -1398,10 +1430,26 @@ export default function AdminDashboard() {
       toast.error("Year already exists")
       return
     }
-    setAcademicYears(prev => [...prev, newYearInput].sort())
-    setNewYearYearInput("")
-    setShowAddYearForm(false)
-    toast.success(`Academic year ${newYearInput} added!`)
+    
+    try {
+      const res = await fetch('/api/academic-sessions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ year: newYearInput })
+      });
+
+      if (res.ok) {
+        setAcademicYears(prev => [...prev, newYearInput].sort())
+        setNewYearYearInput("")
+        setShowAddYearForm(false)
+        toast.success(`Academic year ${newYearInput} added!`)
+      } else {
+        const err = await res.json();
+        toast.error(err.error || "Failed to save session");
+      }
+    } catch (error) {
+      toast.error("Failed to connect to server");
+    }
   }
 
   const renderYearTab = () => (
