@@ -2649,6 +2649,59 @@ export default function AdminDashboard() {
         {renderNotification()}
         {showDepositModal && renderDepositModal()}
         {showWithdrawModal && renderWithdrawModal()}
+        
+        {showQRScanner && (
+          <div className="fixed inset-0 bg-black/90 backdrop-blur-xl z-[100] flex flex-col items-center justify-center p-6 animate-in fade-in duration-300">
+            <button 
+              onClick={() => setShowQRScanner(false)} 
+              className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white backdrop-blur-md transition-all active:scale-95"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            
+            <div className="relative w-full max-w-sm aspect-square bg-black rounded-[2.5rem] overflow-hidden border-4 border-white/20 shadow-2xl">
+              <video ref={videoRef} className="w-full h-full object-cover" />
+              
+              <div className="absolute inset-0 border-[4rem] border-black/40 pointer-events-none">
+                <div className="w-full h-full border-2 border-white/50 rounded-3xl relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent animate-scan shadow-[0_0_15px_rgba(239,68,68,0.5)]" />
+                  
+                  <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-white rounded-tl-xl" />
+                  <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-white rounded-tr-xl" />
+                  <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-white rounded-bl-xl" />
+                  <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-white rounded-br-xl" />
+                </div>
+              </div>
+
+              {!isScannerReady && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 text-white gap-4">
+                  <Loader className="w-10 h-10 animate-spin text-[#2d6a4f]" />
+                  <span className="font-bold text-lg tracking-tight">Accessing Camera...</span>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-8 text-center space-y-2">
+              <h3 className="text-white font-bold text-xl tracking-tight">Scan Student QR Code</h3>
+              <p className="text-white/60 text-sm max-w-xs mx-auto">
+                Align the QR code within the frame to automatically scan and search for the student
+              </p>
+            </div>
+
+            <style jsx>{`
+              @keyframes scan {
+                0% { top: 0%; opacity: 0; }
+                10% { opacity: 1; }
+                90% { opacity: 1; }
+                100% { top: 100%; opacity: 0; }
+              }
+              .animate-scan {
+                animation: scan 2s linear infinite;
+              }
+            `}</style>
+          </div>
+        )}
+
         {activeTab === "home" && renderHomeTab()}
         {activeTab === "reports" && renderReportsTab()}
         {activeTab === "accounts" && renderAccountsTab()}
