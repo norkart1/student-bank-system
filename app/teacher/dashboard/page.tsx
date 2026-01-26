@@ -19,6 +19,7 @@ import {
   ArrowUpRight,
   ChevronDown,
   X,
+  Activity,
   Calendar as CalendarIcon
 } from "lucide-react"
 import Link from "next/link"
