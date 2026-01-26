@@ -1386,10 +1386,6 @@ export default function AdminDashboard() {
     )
   }
 
-  if (!isAuthenticated || isAuthLoading) {
-    return null
-  }
-
   useEffect(() => {
     const fetchSessions = async () => {
       try {
@@ -1420,6 +1416,10 @@ export default function AdminDashboard() {
     };
     fetchSessions();
   }, []);
+
+  if (!isAuthenticated || isAuthLoading) {
+    return null
+  }
 
   const handleAddAcademicYear = async () => {
     if (!newYearInput || !/^\d{4}-\d{2}$/.test(newYearInput)) {

@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/mongodb';
+import { connectDB } from '@/lib/mongodb';
 import { AcademicSession } from '@/lib/models/AcademicSession';
 
 export async function GET() {
   try {
-    await dbConnect();
+    await connectDB();
     const sessions = await AcademicSession.find({}).sort({ year: 1 });
     return NextResponse.json(sessions);
   } catch (error) {
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const { year } = await request.json();
     if (!year) return NextResponse.json({ error: 'Year is required' }, { status: 400 });
 
-    await dbConnect();
+    await connectDB();
     const session = await AcademicSession.create({ year });
     return NextResponse.json(session);
   } catch (error: any) {
