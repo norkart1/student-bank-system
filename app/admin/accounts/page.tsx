@@ -9,7 +9,8 @@ import {
   ChevronRight,
   Loader,
   Activity,
-  ChevronDown
+  ChevronDown,
+  X
 } from "lucide-react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
@@ -23,6 +24,9 @@ export default function AdminAccountsPage() {
   const [selectedAcademicYear, setSelectedAcademicYear] = useState("2025-26")
   const [academicYears, setAcademicYears] = useState(["2023-24", "2024-25", "2025-26", "2026-27"])
   const [showYearDropdown, setShowYearDropdown] = useState(false)
+
+  const [selectedPersonalStudent, setSelectedPersonalStudent] = useState<any | null>(null)
+  const [showDetailModal, setShowDetailModal] = useState(false)
 
   useEffect(() => {
     const fetchSessions = async () => {
@@ -141,51 +145,105 @@ export default function AdminAccountsPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredStudents.map((student) => (
             <div 
               key={student._id}
-              className="bg-white border border-gray-100 rounded-[2rem] p-6 shadow-sm hover:shadow-md transition-all relative overflow-hidden cursor-default group"
+              className="bg-white rounded-3xl p-4 shadow-sm border border-gray-100 flex flex-col items-center text-center relative group hover:shadow-md transition-all"
             >
-              <div className="flex justify-between items-start mb-6">
-                <h4 className="text-lg font-bold text-[#1a1a2e]">#{student.code}</h4>
-                <span className="px-3 py-1 bg-[#e7f5ee] text-[#2d6a4f] text-[10px] font-bold rounded-full uppercase tracking-wider">
-                  Active
-                </span>
+              <div className="w-full aspect-square mb-3 rounded-2xl overflow-hidden bg-gray-50 flex items-center justify-center">
+                {student.profileImage ? (
+                  <img 
+                    src={student.profileImage} 
+                    alt={student.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-[#818cf8]/10 flex items-center justify-center text-[#818cf8] text-2xl font-bold">
+                    {student.name.charAt(0)}
+                  </div>
+                )}
               </div>
               
-              <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-gray-50 pb-2">
-                  <span className="text-xs text-gray-400">Student Name</span>
-                  <div className="flex items-center gap-2">
-                    {student.profileImage ? (
-                      <img 
-                        src={student.profileImage} 
-                        alt={student.name}
-                        className="w-8 h-8 rounded-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-8 h-8 bg-[#818cf8]/10 rounded-full flex items-center justify-center text-[#818cf8] text-xs font-bold">
-                        {student.name.charAt(0)}
-                      </div>
-                    )}
-                    <span className="text-sm font-bold text-[#1a1a2e]">{student.name}</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between border-b border-gray-50 pb-2">
-                  <span className="text-xs text-gray-400">Current Balance</span>
-                  <span className="text-sm font-bold text-[#2d6a4f]">₹ {student.balance?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400">Academic Session</span>
-                  <span className="text-sm font-medium text-gray-600">{student.academicYear || '2025-26'}</span>
-                </div>
-              </div>
+              <h4 className="text-sm font-bold text-[#1a1a2e] mb-1 line-clamp-1">{student.name}</h4>
+              <p className="text-xs font-bold text-[#2d6a4f]">₹ {student.balance?.toLocaleString('en-IN')}</p>
+              
+              <button 
+                onClick={() => {
+                  setSelectedPersonalStudent(student)
+                  setShowDetailModal(true)
+                }}
+                className="absolute bottom-2 right-2 w-8 h-8 bg-[#4ade80] rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform active:scale-95"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
             </div>
           ))}
         </div>
+
+        {showDetailModal && selectedPersonalStudent && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+            <div className="bg-white rounded-[2.5rem] w-full max-w-lg overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+              <div className="relative h-48 bg-gradient-to-br from-[#818cf8] to-[#4f46e5] p-8">
+                <button 
+                  onClick={() => setShowDetailModal(false)}
+                  className="absolute top-6 right-6 w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+                <div className="flex items-center gap-6 mt-4">
+                  <div className="w-24 h-24 rounded-3xl border-4 border-white overflow-hidden bg-white shadow-xl">
+                    {selectedPersonalStudent.profileImage ? (
+                      <img src={selectedPersonalStudent.profileImage} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full bg-[#818cf8]/10 flex items-center justify-center text-[#818cf8] text-3xl font-bold">
+                        {selectedPersonalStudent.name.charAt(0)}
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-white">
+                    <h2 className="text-2xl font-bold mb-1">{selectedPersonalStudent.name}</h2>
+                    <p className="text-white/80 font-medium tracking-wider">#{selectedPersonalStudent.code}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-8 space-y-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gray-50 rounded-3xl p-4">
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Current Balance</p>
+                    <p className="text-xl font-bold text-[#2d6a4f]">₹ {selectedPersonalStudent.balance?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</p>
+                  </div>
+                  <div className="bg-gray-50 rounded-3xl p-4">
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Session</p>
+                    <p className="text-lg font-bold text-[#1a1a2e]">{selectedPersonalStudent.academicYear}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-sm font-bold text-[#1a1a2e] uppercase tracking-widest">Contact Information</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
+                      <span className="text-xs text-gray-400">Mobile</span>
+                      <span className="text-sm font-bold text-[#1a1a2e]">{selectedPersonalStudent.mobile || 'Not provided'}</span>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
+                      <span className="text-xs text-gray-400">Email</span>
+                      <span className="text-sm font-bold text-[#1a1a2e]">{selectedPersonalStudent.email || 'Not provided'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <button 
+                  onClick={() => router.push(`/admin/accounts/${selectedPersonalStudent._id}`)}
+                  className="w-full h-14 bg-[#1a1a2e] text-white rounded-2xl font-bold hover:bg-[#2d2d44] transition-all active:scale-95"
+                >
+                  Manage Transactions
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {filteredStudents.length === 0 && (
           <div className="text-center py-20 bg-gray-50 rounded-[2rem] border-2 border-dashed border-gray-200">
