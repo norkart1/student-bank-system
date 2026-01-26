@@ -70,7 +70,7 @@ export default function TeacherDashboard() {
           return
         }
         const authData = await authRes.json()
-        setTeacher(authData.user)
+        setTeacher(authData.userData)
 
         const studentsRes = await fetch("/api/students")
         if (studentsRes.ok) {

@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Special hardcoded credentials for teacher as requested
-    if (username === 'teacher' && password === '12345') {
+    if (username === 'teacher' && password === 'teacher123') {
       const token = crypto.randomBytes(32).toString('hex');
       const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
