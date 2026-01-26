@@ -21,8 +21,25 @@ export default function AdminAccountsPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [totalBalance, setTotalBalance] = useState(0)
   const [selectedAcademicYear, setSelectedAcademicYear] = useState("2025-26")
-  const [academicYears] = useState(["2023-24", "2024-25", "2025-26", "2026-27"])
+  const [academicYears, setAcademicYears] = useState(["2023-24", "2024-25", "2025-26", "2026-27"])
   const [showYearDropdown, setShowYearDropdown] = useState(false)
+
+  useEffect(() => {
+    const fetchSessions = async () => {
+      try {
+        const res = await fetch('/api/academic-sessions')
+        if (res.ok) {
+          const data = await res.json()
+          if (data.length > 0) {
+            setAcademicYears(data.map((s: any) => s.year))
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch sessions:', error)
+      }
+    }
+    fetchSessions()
+  }, [])
 
   useEffect(() => {
     const fetchAccounts = async () => {
@@ -141,9 +158,17 @@ export default function AdminAccountsPage() {
                 <div className="flex items-center justify-between border-b border-gray-50 pb-2">
                   <span className="text-xs text-gray-400">Student Name</span>
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-[#818cf8]/10 rounded-full flex items-center justify-center text-[#818cf8] text-xs font-bold">
-                      {student.name.charAt(0)}
-                    </div>
+                    {student.profileImage ? (
+                      <img 
+                        src={student.profileImage} 
+                        alt={student.name}
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 bg-[#818cf8]/10 rounded-full flex items-center justify-center text-[#818cf8] text-xs font-bold">
+                        {student.name.charAt(0)}
+                      </div>
+                    )}
                     <span className="text-sm font-bold text-[#1a1a2e]">{student.name}</span>
                   </div>
                 </div>
