@@ -2704,7 +2704,95 @@ export default function AdminDashboard() {
 
         {activeTab === "home" && renderHomeTab()}
         {activeTab === "reports" && renderReportsTab()}
-        {activeTab === "accounts" && renderAccountsTab()}
+        {activeTab === "accounts" && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <button onClick={() => setActiveTab("home")} className="p-2 hover:bg-[#f0f0f0] rounded-lg transition-colors">
+                  <ChevronLeft className="w-5 h-5 text-[#2d6a4f]" />
+                </button>
+                <div className="flex flex-col">
+                  <span className="text-xs font-bold text-[#747384] uppercase tracking-wider">All</span>
+                  <h2 className="text-2xl font-bold text-[#171532]">Accounts</h2>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <select
+                    value={selectedAcademicYear}
+                    onChange={(e) => {
+                      setSelectedAcademicYear(e.target.value)
+                      toast.success(`Active year set to ${e.target.value}`)
+                    }}
+                    className="appearance-none bg-white border border-[#e5e7eb] text-[#171532] text-sm font-bold py-2.5 pl-4 pr-10 rounded-xl focus:ring-2 focus:ring-[#2d6a4f]/20 focus:border-[#2d6a4f] cursor-pointer shadow-sm transition-all"
+                  >
+                    {academicYears.map(year => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#747384] pointer-events-none" />
+                </div>
+                <button
+                  onClick={() => setShowCreateForm(true)}
+                  className="bg-[#2d6a4f] text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 hover:bg-[#1b4332] transition-all shadow-lg shadow-[#2d6a4f]/20 active:scale-95"
+                >
+                  <Plus className="w-5 h-5" />
+                  <span>Add</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#9ca3af]" />
+              <input
+                type="text"
+                placeholder="Search students by name or code..."
+                value={studentSearchQuery}
+                onChange={(e) => setStudentSearchQuery(e.target.value)}
+                className="w-full h-14 pl-12 pr-4 bg-white border border-[#e5e7eb] rounded-2xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#2d6a4f]/20 focus:border-[#2d6a4f] transition-all shadow-sm"
+              />
+            </div>
+
+            <div className="bg-white rounded-3xl border border-[#e5e7eb] overflow-hidden shadow-sm">
+              <div className="grid grid-cols-[1fr_auto] gap-4 px-6 py-4 bg-[#f8f9fa] border-b border-[#e5e7eb]">
+                <span className="text-sm font-bold text-[#747384] uppercase tracking-wider">Name</span>
+                <span className="text-sm font-bold text-[#747384] uppercase tracking-wider">Balance</span>
+              </div>
+              <div className="divide-y divide-[#f0f0f0]">
+                {students
+                  .filter(s => 
+                    (s.name.toLowerCase().includes(studentSearchQuery.toLowerCase()) || 
+                     s.code?.toLowerCase().includes(studentSearchQuery.toLowerCase())) &&
+                    (s.academicYear === selectedAcademicYear)
+                  )
+                  .map((student, idx) => (
+                    <div 
+                      key={student._id || idx}
+                      onClick={() => setViewingIndex(students.indexOf(student))}
+                      className="grid grid-cols-[auto_1fr_auto] items-center gap-4 px-6 py-5 hover:bg-[#fcfcfc] transition-colors cursor-pointer group"
+                    >
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold ${avatarColors[idx % avatarColors.length]} text-[#171532] border-2 border-white shadow-sm group-hover:scale-110 transition-transform`}>
+                        {student.name.charAt(0)}
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="font-bold text-[#171532] text-lg truncate group-hover:text-[#2d6a4f] transition-colors">
+                          {student.name}
+                        </span>
+                        <span className="text-xs font-bold text-[#9ca3af] uppercase tracking-widest mt-0.5">
+                          {student.code} • {student.academicYear}
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-lg font-bold text-[#2d6a4f] bg-[#2d6a4f]/5 px-3 py-1.5 rounded-lg border border-[#2d6a4f]/10 shadow-inner">
+                          ₹{student.balance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        )}
         {activeTab === "leaderboard" && renderLeaderboardTab()}
         {activeTab === "ai" && renderAITab()}
         {activeTab === "year" && renderYearTab()}
