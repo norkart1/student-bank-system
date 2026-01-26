@@ -124,54 +124,36 @@ export default function TeacherAccountsPage() {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredStudents.map((student) => (
-            <Link 
+            <div 
               key={student._id}
-              href={`/teacher/accounts/ledger/${student._id}`}
-              className="block group"
+              className="bg-white rounded-3xl p-4 shadow-sm border border-gray-100 flex flex-col items-center text-center relative group hover:shadow-md transition-all cursor-pointer"
+              onClick={() => router.push(`/teacher/accounts/ledger/${student._id}`)}
             >
-              <div className="bg-white border border-gray-100 rounded-[2rem] p-6 shadow-sm hover:shadow-md transition-all relative overflow-hidden">
-                <div className="flex justify-between items-start mb-6">
-                  <h4 className="text-lg font-bold text-[#1a1a2e]">#{student.code}</h4>
-                  <span className="px-3 py-1 bg-[#e7f5ee] text-[#2d6a4f] text-[10px] font-bold rounded-full uppercase tracking-wider">
-                    Active
-                  </span>
-                </div>
-                
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-gray-50 pb-3">
-                    <span className="text-xs text-gray-400">Student</span>
-                    <div className="flex items-center gap-2">
-                      <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-gray-50 flex items-center justify-center">
-                        {student.profileImage ? (
-                          <img src={student.profileImage} alt={student.name} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full bg-[#2d6a4f]/10 text-[#2d6a4f] flex items-center justify-center font-bold text-sm">
-                            {student.name.charAt(0)}
-                          </div>
-                        )}
-                      </div>
-                      <span className="text-sm font-bold text-[#1a1a2e] uppercase">{student.name}</span>
-                    </div>
+              <div className="w-full aspect-square mb-3 rounded-2xl overflow-hidden bg-gray-50 flex items-center justify-center">
+                {student.profileImage ? (
+                  <img 
+                    src={student.profileImage} 
+                    alt={student.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-[#2d6a4f]/10 flex items-center justify-center text-[#2d6a4f] text-2xl font-bold">
+                    {student.name.charAt(0)}
                   </div>
-                  
-                  <div className="flex items-center justify-between border-b border-gray-50 pb-3">
-                    <span className="text-xs text-gray-400">Balance</span>
-                    <span className="text-sm font-bold text-[#2d6a4f]">₹ {student.balance?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-400">Year</span>
-                    <span className="text-sm font-medium text-gray-600">{student.academicYear || '2025-26'}</span>
-                  </div>
-                </div>
-                
-                <div className="absolute right-4 bottom-4 w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 group-hover:bg-[#2d6a4f] group-hover:text-white transition-all shadow-sm">
-                  <ChevronRight className="w-5 h-5" />
-                </div>
+                )}
               </div>
-            </Link>
+              
+              <h4 className="text-sm font-bold text-[#1a1a2e] mb-1 line-clamp-1">{student.name}</h4>
+              <p className="text-xs font-bold text-[#2d6a4f]">₹ {student.balance?.toLocaleString('en-IN')}</p>
+              
+              <button 
+                className="absolute bottom-2 right-2 w-8 h-8 bg-[#4ade80] rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform active:scale-95"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
           ))}
         </div>
 
