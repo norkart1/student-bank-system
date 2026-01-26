@@ -12,9 +12,12 @@ export default function RegisterPage() {
   const router = useRouter()
   const [fullName, setFullName] = useState("")
   const [code, setCode] = useState("")
+  const [academicYear, setAcademicYear] = useState("2025-26")
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+
+  const academicYears = ["2023-24", "2024-25", "2025-26", "2026-27"]
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -43,6 +46,7 @@ export default function RegisterPage() {
         body: JSON.stringify({
           name: fullName.trim(),
           code: code.trim().toUpperCase(),
+          academicYear: academicYear,
         }),
       })
 
@@ -124,6 +128,24 @@ export default function RegisterPage() {
               required
               className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#2d6a4f]/30 focus:border-[#2d6a4f]"
             />
+          </div>
+
+          <div className="relative">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]">
+              <Lock className="w-5 h-5" />
+            </div>
+            <select
+              value={academicYear}
+              onChange={(e) => setAcademicYear(e.target.value)}
+              required
+              className="w-full h-14 pl-12 pr-4 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] focus:ring-2 focus:ring-[#2d6a4f]/30 focus:border-[#2d6a4f] appearance-none"
+            >
+              {academicYears.map((year) => (
+                <option key={year} value={year}>
+                  {year} Academic Session
+                </option>
+              ))}
+            </select>
           </div>
 
           {error && (
