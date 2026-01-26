@@ -18,7 +18,7 @@ import {
   ArrowDownLeft,
   ArrowUpRight,
   ChevronDown,
-  Activity,
+  X,
   Calendar as CalendarIcon
 } from "lucide-react"
 import Link from "next/link"
@@ -39,8 +39,27 @@ export default function TeacherDashboard() {
   const [selectedAcademicYear, setSelectedAcademicYear] = useState("2025-26")
   const [academicYears, setAcademicYears] = useState(["2023-24", "2024-25", "2025-26", "2026-27"])
   const [showYearDropdown, setShowYearDropdown] = useState(false)
+  const [selectedPersonalStudent, setSelectedPersonalStudent] = useState<any | null>(null)
+  const [showDetailModal, setShowDetailModal] = useState(false)
 
   const [selectedDate, setSelectedDate] = useState(new Date())
+
+  useEffect(() => {
+    const fetchSessions = async () => {
+      try {
+        const res = await fetch('/api/academic-sessions')
+        if (res.ok) {
+          const data = await res.json()
+          if (data.length > 0) {
+            setAcademicYears(data.map((s: any) => s.year))
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch sessions:', error)
+      }
+    }
+    fetchSessions()
+  }, [])
 
   // Generate calendar days for the selected month in the popover
   const calendarDays = useMemo(() => {
@@ -201,21 +220,119 @@ export default function TeacherDashboard() {
 
         {/* Options / Action Cards */}
         <div className="mb-10">
-          <h3 className="text-2xl font-bold text-[#1a1a2e] mb-6">Options</h3>
-          <div className="grid grid-cols-1 gap-6">
-            <Link 
-              href="/teacher/accounts"
-              className="group"
-            >
-              <div className="bg-white border border-gray-100 rounded-[2rem] p-6 shadow-sm hover:shadow-md transition-all flex flex-col items-center gap-4">
-                <div className="w-16 h-16 bg-[#f1f5f9] rounded-3xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Users className="w-8 h-8 text-[#2d6a4f]" />
-                </div>
-                <p className="font-bold text-[#1a1a2e]">Accounts</p>
-              </div>
-            </Link>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-2xl font-bold text-[#1a1a2e]">Student Accounts</h3>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input 
+                placeholder="Search students..."
+                className="pl-10 h-10 w-48 sm:w-64 bg-gray-50 border-none rounded-xl shadow-inner focus:ring-2 focus:ring-[#2d6a4f]"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
           </div>
+          
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {filteredStudents.map((student) => (
+              <div 
+                key={student._id}
+                className="bg-white rounded-3xl p-4 shadow-sm border border-gray-100 flex flex-col items-center text-center relative group hover:shadow-md transition-all"
+              >
+                <div className="w-full aspect-square mb-3 rounded-2xl overflow-hidden bg-gray-50 flex items-center justify-center">
+                  {student.profileImage ? (
+                    <img 
+                      src={student.profileImage} 
+                      alt={student.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-[#2d6a4f]/10 flex items-center justify-center text-[#2d6a4f] text-2xl font-bold">
+                      {student.name.charAt(0)}
+                    </div>
+                  )}
+                </div>
+                
+                <h4 className="text-sm font-bold text-[#1a1a2e] mb-1 line-clamp-1">{student.name}</h4>
+                <p className="text-xs font-bold text-[#2d6a4f]">₹ {student.balance?.toLocaleString('en-IN')}</p>
+                
+                <button 
+                  onClick={() => {
+                    setSelectedPersonalStudent(student)
+                    setShowDetailModal(true)
+                  }}
+                  className="absolute bottom-2 right-2 w-8 h-8 bg-[#4ade80] rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform active:scale-95"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {filteredStudents.length === 0 && (
+            <div className="text-center py-12 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
+              <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500 text-sm">No students found in this session</p>
+            </div>
+          )}
         </div>
+
+        {showDetailModal && selectedPersonalStudent && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+            <div className="bg-white rounded-[2.5rem] w-full max-w-lg overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+              <div className="relative h-48 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] p-8">
+                <button 
+                  onClick={() => setShowDetailModal(false)}
+                  className="absolute top-6 right-6 w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+                <div className="flex items-center gap-6 mt-4">
+                  <div className="w-24 h-24 rounded-3xl border-4 border-white overflow-hidden bg-white shadow-xl">
+                    {selectedPersonalStudent.profileImage ? (
+                      <img src={selectedPersonalStudent.profileImage} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full bg-[#2d6a4f]/10 flex items-center justify-center text-[#2d6a4f] text-3xl font-bold">
+                        {selectedPersonalStudent.name.charAt(0)}
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-white">
+                    <h2 className="text-2xl font-bold mb-1">{selectedPersonalStudent.name}</h2>
+                    <p className="text-white/80 font-medium tracking-wider">#{selectedPersonalStudent.code}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-8 space-y-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gray-50 rounded-3xl p-4">
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Current Balance</p>
+                    <p className="text-xl font-bold text-[#2d6a4f]">₹ {selectedPersonalStudent.balance?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</p>
+                  </div>
+                  <div className="bg-gray-50 rounded-3xl p-4">
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Session</p>
+                    <p className="text-lg font-bold text-[#1a1a2e]">{selectedPersonalStudent.academicYear}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-sm font-bold text-[#1a1a2e] uppercase tracking-widest">Contact Information</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
+                      <span className="text-xs text-gray-400">Mobile</span>
+                      <span className="text-sm font-bold text-[#1a1a2e]">{selectedPersonalStudent.mobile || 'Not provided'}</span>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
+                      <span className="text-xs text-gray-400">Email</span>
+                      <span className="text-sm font-bold text-[#1a1a2e]">{selectedPersonalStudent.email || 'Not provided'}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Recent Activity Timeline */}
         <div className="bg-white border border-gray-100 rounded-[2rem] p-8 shadow-sm">
