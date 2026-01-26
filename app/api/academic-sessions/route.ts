@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/dbConnect';
+import dbConnect from '@/lib/mongodb';
 import { AcademicSession } from '@/lib/models/AcademicSession';
 
 export async function GET() {
