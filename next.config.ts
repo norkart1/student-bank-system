@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   serverExternalPackages: ['mongoose', 'mongodb', 'bcryptjs'],
+  allowedDevOrigins: ['*'],
   images: {
     remotePatterns: [
       {
@@ -26,10 +27,6 @@ const nextConfig: NextConfig = {
           {
             key: 'X-Content-Type-Options',
             value: 'nosniff'
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
           },
           {
             key: 'X-XSS-Protection',
