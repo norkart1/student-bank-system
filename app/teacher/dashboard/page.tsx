@@ -126,7 +126,8 @@ export default function TeacherDashboard() {
       ...t,
       studentName: s.name,
       studentCode: s.code,
-      studentId: s._id
+      studentId: s._id,
+      studentProfileImage: s.profileImage
     }))
   ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
@@ -392,11 +393,19 @@ export default function TeacherDashboard() {
                   <div className={`absolute left-0 w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm z-10 transition-transform group-hover:scale-110 flex items-center justify-center ${
                     transaction.type === 'deposit' ? 'bg-[#e7f5ee]' : 'bg-red-50'
                   }`}>
-                    <div className={`w-full h-full flex items-center justify-center font-bold text-sm ${
-                      transaction.type === 'deposit' ? 'text-[#2d6a4f]' : 'text-red-500'
-                    }`}>
-                      {transaction.studentName.charAt(0)}
-                    </div>
+                    {transaction.studentProfileImage ? (
+                      <img 
+                        src={transaction.studentProfileImage} 
+                        alt={transaction.studentName}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className={`w-full h-full flex items-center justify-center font-bold text-sm ${
+                        transaction.type === 'deposit' ? 'text-[#2d6a4f]' : 'text-red-500'
+                      }`}>
+                        {transaction.studentName.charAt(0)}
+                      </div>
+                    )}
                   </div>
                   
                   <div className="flex-1 pt-1">
