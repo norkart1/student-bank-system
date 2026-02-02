@@ -3,30 +3,48 @@ import { Admin } from '@/lib/models/Admin';
 import { Session } from '@/lib/models/Session';
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
-    const { email, otp } = await req.json();
+    const body = await req.json();
+    const { email, otp, username, password, type } = body;
 
-    if (!email || !otp) {
-      return NextResponse.json({ error: 'Email and OTP required' }, { status: 400 });
+    let admin;
+
+    if (type === 'password') {
+      if (!username || !password) {
+        return NextResponse.json({ error: 'Username and password required' }, { status: 400 });
+      }
+      admin = await Admin.findOne({ username });
+      if (!admin || !admin.password) {
+        return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+      }
+      const isMatch = await bcrypt.compare(password, admin.password);
+      if (!isMatch) {
+        return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+      }
+    } else {
+      if (!email || !otp) {
+        return NextResponse.json({ error: 'Email and OTP required' }, { status: 400 });
+      }
+
+      admin = await Admin.findOne({ 
+        email,
+        otpCode: otp,
+        otpExpires: { $gt: new Date() }
+      });
+
+      if (!admin) {
+        return NextResponse.json({ error: 'Invalid or expired OTP' }, { status: 401 });
+      }
+
+      // Clear OTP after successful login
+      admin.otpCode = undefined;
+      admin.otpExpires = undefined;
+      await admin.save();
     }
-
-    const admin = await Admin.findOne({ 
-      email,
-      otpCode: otp,
-      otpExpires: { $gt: new Date() }
-    });
-
-    if (!admin) {
-      return NextResponse.json({ error: 'Invalid or expired OTP' }, { status: 401 });
-    }
-
-    // Clear OTP after successful login
-    admin.otpCode = undefined;
-    admin.otpExpires = undefined;
-    await admin.save();
 
     // Create session token
     const token = crypto.randomBytes(32).toString('hex');
