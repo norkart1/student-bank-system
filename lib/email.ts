@@ -30,8 +30,8 @@ export const sendOTPEmail = async (to: string, otp: string) => {
             <p style="color: #4b5563; font-size: 16px; margin-bottom: 25px;">Hello Administrator,</p>
             <p style="color: #4b5563; font-size: 16px; margin-bottom: 10px;">Your secure access code is:</p>
             
-            <div style="background-color: #f8fdfa; border: 2px dashed #2d6a4f; border-radius: 16px; padding: 25px; margin: 20px auto; width: fit-content; max-width: 80%;">
-              <h1 style="color: #2d6a4f; letter-spacing: 8px; font-size: 38px; margin: 0; font-weight: 800;">${otp}</h1>
+            <div style="background-color: #f8fdfa; border: 2px dashed #2d6a4f; border-radius: 16px; padding: 25px; margin: 20px auto; width: fit-content; max-width: 90%;">
+              <h1 style="color: #2d6a4f; font-size: 38px; margin: 0; font-weight: 800; letter-spacing: 4px; white-space: nowrap;">${otp}</h1>
             </div>
             
             <p style="color: #6b7280; font-size: 14px; margin-top: 25px;">

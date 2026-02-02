@@ -45,7 +45,7 @@ export default function SecretAdminLoginPage() {
     <div className="min-h-screen bg-[#f5f5f7] flex flex-col md:flex-row">
       <div className="hidden md:block w-1/2 bg-gradient-to-b from-[#2a5f6f] to-[#1a3f4f] relative overflow-hidden">
         <Image
-          src="/islamic-mosque.jpg"
+          src="/islamic-mosque.png"
           alt="Islamic artwork"
           fill
           className="object-cover"
