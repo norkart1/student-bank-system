@@ -59,7 +59,8 @@ export default function UserDashboard() {
         }
         
         if (!res.ok) {
-          console.error("Failed to fetch student:", res.status)
+          // If both ID and Code lookups fail, redirect to login
+          router.push("/login")
           return
         }
       
