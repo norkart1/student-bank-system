@@ -20,39 +20,48 @@ export default function UserDashboard() {
 
   const [isLedgerFullscreen, setIsLedgerFullscreen] = useState(false)
 
-  const loadUserData = async () => {
-    try {
-      // Check if we have a student ID in the URL for direct access (QR scan)
-      const urlParams = new URLSearchParams(window.location.search);
-      const directStudentId = urlParams.get('id');
+    const loadUserData = async () => {
+      try {
+        // Check if we have a student ID in the URL for direct access (QR scan)
+        const urlParams = new URLSearchParams(window.location.search);
+        const directStudentId = urlParams.get('id');
 
-      // Verify session from MongoDB
-      const verifyRes = await fetch('/api/auth/verify')
-      
-      let studentId = null;
-      if (verifyRes.ok) {
-        const session = await verifyRes.json()
-        studentId = session.userData?.id || session.userId
-      } else if (directStudentId) {
-        // Allow direct view if ID is provided via QR, but we still prefer session if available
-        studentId = directStudentId;
-      } else {
-        router.push("/login")
-        return
-      }
-
-      const res = await fetch(`/api/students/${studentId}?academicYear=${selectedAcademicYear}`, {
-        method: 'GET',
-        cache: 'no-store',
-        headers: {
-          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0'
+        // Verify session from MongoDB
+        const verifyRes = await fetch('/api/auth/verify')
+        
+        let studentId = null;
+        let studentCode = null;
+        
+        if (verifyRes.ok) {
+          const session = await verifyRes.json()
+          studentId = session.userData?.id || session.userId
+          studentCode = session.userData?.code
+        } else if (directStudentId) {
+          // Allow direct view if ID is provided via QR
+          studentId = directStudentId;
+        } else {
+          router.push("/login")
+          return
         }
-      })
-      
-      if (!res.ok) {
-        console.error("Failed to fetch student:", res.status)
-        return
-      }
+
+        // Try fetching by ID first, then fallback to code if ID fails (404)
+        let res = await fetch(`/api/students/${studentId}?academicYear=${selectedAcademicYear}`, {
+          method: 'GET',
+          cache: 'no-store'
+        })
+        
+        if (!res.ok && studentCode) {
+          // Fallback: search by student code if direct ID lookup fails
+          const searchRes = await fetch(`/api/students/search?code=${studentCode}&academicYear=${selectedAcademicYear}`)
+          if (searchRes.ok) {
+            res = searchRes;
+          }
+        }
+        
+        if (!res.ok) {
+          console.error("Failed to fetch student:", res.status)
+          return
+        }
       
       const student = await res.json()
       if (!student) {
