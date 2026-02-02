@@ -1885,9 +1885,30 @@ export default function AdminDashboard() {
                             <p className="text-xs text-gray-500">Code: {session.userData?.code || 'N/A'}</p>
                           </div>
                         </div>
-                        <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${new Date(session.expiresAt) > new Date() && !session.logoutAt ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}`}>
-                          {new Date(session.expiresAt) > new Date() && !session.logoutAt ? 'Active' : session.logoutAt ? 'Logged Out' : 'Expired'}
+                        <div className="flex flex-col items-end gap-2">
+                          <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${new Date(session.expiresAt) > new Date() && !session.logoutAt ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}`}>
+                            {new Date(session.expiresAt) > new Date() && !session.logoutAt ? 'Active' : session.logoutAt ? 'Logged Out' : 'Expired'}
+                          </div>
+                          <div className="bg-white p-1 rounded-lg border border-gray-100 shadow-sm">
+                            <QRCodeSVG 
+                              value={`https://jdsa-students-bank.replit.app/user/dashboard?id=${session.userId}`} 
+                              size={40} 
+                              level="L" 
+                              includeMargin={false} 
+                            />
+                          </div>
                         </div>
+                      </div>
+                      <div className="flex flex-col items-center gap-1 mb-3">
+                        <div className="bg-white p-2 rounded-xl border border-gray-100 shadow-sm">
+                          <QRCodeSVG 
+                            value={`https://jdsa-students-bank.replit.app/user/dashboard?id=${session.userId}`} 
+                            size={100} 
+                            level="H" 
+                            includeMargin={false} 
+                          />
+                        </div>
+                        <p className="text-[10px] font-bold text-[#2d6a4f] uppercase tracking-wider">Quick Scan QR</p>
                       </div>
                       <div className="grid grid-cols-2 gap-4 text-sm">
                           <div>
