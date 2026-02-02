@@ -143,12 +143,12 @@ export default function AdminLoginPage() {
               </div>
               <Input
                 type="text"
-                placeholder="Enter 6-digit OTP"
+                placeholder="OTP Code"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
                 required
                 maxLength={6}
-                className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#2d6a4f]/30 focus:border-[#2d6a4f] tracking-[0.5em] text-center font-bold text-xl"
+                className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#2d6a4f]/30 focus:border-[#2d6a4f] text-center font-bold text-xl"
               />
             </div>
 
