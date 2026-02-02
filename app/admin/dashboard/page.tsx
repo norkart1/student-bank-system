@@ -117,8 +117,10 @@ export default function AdminDashboard() {
   const [withdrawAllStudents, setWithdrawAllStudents] = useState(false)
   const [adminSessions, setAdminSessions] = useState<any[]>([])
   const [teacherSessions, setTeacherSessions] = useState<any[]>([])
+  const [studentSessions, setStudentSessions] = useState<any[]>([])
   const [showAdminStatus, setShowAdminStatus] = useState(false)
   const [showTeacherStatus, setShowTeacherStatus] = useState(false)
+  const [showStudentStatus, setShowStudentStatus] = useState(false)
 
   useEffect(() => {
     if (showAdminStatus) {
@@ -131,6 +133,12 @@ export default function AdminDashboard() {
       fetchSessions('teacher', setTeacherSessions)
     }
   }, [showTeacherStatus])
+
+  useEffect(() => {
+    if (showStudentStatus) {
+      fetchSessions('student', setStudentSessions)
+    }
+  }, [showStudentStatus])
 
   const fetchSessions = async (type: string, setter: (data: any[]) => void) => {
     try {
@@ -1758,6 +1766,16 @@ export default function AdminDashboard() {
           </div>
           <span className="text-xs font-bold text-[#171532]">Teacher Status</span>
         </button>
+
+        <button 
+          onClick={() => setShowStudentStatus(true)}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm"
+        >
+          <div className="w-10 h-10 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center text-white">
+            <Search className="w-5 h-5" />
+          </div>
+          <span className="text-xs font-bold text-[#171532]">Student Searches</span>
+        </button>
       </div>
 
       {/* Admin Status Modal */}
@@ -1820,6 +1838,83 @@ export default function AdminDashboard() {
                 ) : (
                   <div className="text-center py-10 text-gray-500">
                     No sessions found
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Student Status Modal */}
+      {showStudentStatus && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            <div className="p-6 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-[#2d6a4f]/10 rounded-xl">
+                  <Search className="w-6 h-6 text-[#2d6a4f]" />
+                </div>
+                <h3 className="text-xl font-bold text-[#171532] dark:text-white">Student Searches</h3>
+              </div>
+              <button 
+                onClick={() => setShowStudentStatus(false)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+              >
+                <X className="w-6 h-6 text-gray-500" />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto">
+              <div className="space-y-4">
+                {studentSessions.length > 0 ? (
+                  studentSessions.map((session, idx) => (
+                    <div key={idx} className="p-4 bg-gray-50 dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700">
+                      <div className="flex justify-between items-start mb-3">
+                        <div className="flex items-center gap-3">
+                          {session.userData?.profileImage ? (
+                            <img src={session.userData.profileImage} alt="" className="w-10 h-10 rounded-full object-cover" />
+                          ) : (
+                            <div className="w-10 h-10 rounded-full bg-[#2d6a4f]/10 flex items-center justify-center text-[#2d6a4f] font-bold">
+                              {session.userData?.name?.charAt(0) || 'S'}
+                            </div>
+                          )}
+                          <div>
+                            <p className="font-bold text-[#171532] dark:text-white">{session.userData?.name || 'Student'}</p>
+                            <p className="text-xs text-gray-500">Code: {session.userData?.code || 'N/A'}</p>
+                          </div>
+                        </div>
+                        <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${new Date(session.expiresAt) > new Date() && !session.logoutAt ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}`}>
+                          {new Date(session.expiresAt) > new Date() && !session.logoutAt ? 'Active' : session.logoutAt ? 'Logged Out' : 'Expired'}
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <p className="text-gray-500 text-xs">Search Time</p>
+                            <p className="font-medium dark:text-gray-300">{session.loginAt ? new Date(session.loginAt).toLocaleString() : new Date(session.createdAt).toLocaleString()}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-500 text-xs">Student Name</p>
+                            <p className="font-medium dark:text-gray-300">{session.userData?.name || 'N/A'}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-500 text-xs">Student Code</p>
+                            <p className="font-medium dark:text-gray-300">{session.userData?.code || 'N/A'}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-500 text-xs">Academic Year</p>
+                            <p className="font-medium dark:text-gray-300">{session.userData?.academicYear || '2025-26'}</p>
+                          </div>
+                          <div className="col-span-2 pt-2 border-t border-gray-100 dark:border-slate-700 mt-2">
+                            <p className="text-gray-500 text-xs">Current Balance</p>
+                            <p className="font-bold text-[#10B981]">₹{(session.userData?.balance || 0).toLocaleString('en-IN')}</p>
+                          </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-10 text-gray-500">
+                    No student searches found
                   </div>
                 )}
               </div>

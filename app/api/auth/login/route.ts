@@ -31,18 +31,23 @@ export async function POST(req: NextRequest) {
 
     // Create session
     const token = crypto.randomBytes(32).toString('hex');
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
 
     const session = new Session({
       token,
       userId: student._id.toString(),
-      userType: 'user',
+      userType: 'student',
       userData: {
         id: student._id.toString(),
         name: student.name,
         code: student.code,
+        profileImage: student.profileImage,
+        balance: student.balance,
+        academicYear: student.academicYear,
       },
       expiresAt,
+      loginAt: new Date(),
+      lastActiveAt: new Date(),
     });
 
     await session.save();
@@ -64,7 +69,7 @@ export async function POST(req: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60,
+      maxAge: 30 * 24 * 60 * 60,
     });
 
     return response;
