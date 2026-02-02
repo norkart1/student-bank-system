@@ -10,11 +10,38 @@ import Image from "next/image"
 
 export default function AdminLoginPage() {
   const router = useRouter()
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("")
+  const [otp, setOtp] = useState("")
+  const [step, setStep] = useState(1) // 1: Email, 2: OTP
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
+
+  const handleSendOTP = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError("")
+    setIsLoading(true)
+
+    try {
+      const res = await fetch("/api/admin/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim().toLowerCase() }),
+      })
+
+      const data = await res.json()
+      if (res.ok) {
+        setStep(2)
+        setIsLoading(false)
+        return
+      }
+
+      setError(data.error || "Failed to send OTP")
+      setIsLoading(false)
+    } catch (err) {
+      setError("Error sending OTP. Please try again.")
+      setIsLoading(false)
+    }
+  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -25,16 +52,16 @@ export default function AdminLoginPage() {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: username.trim(), password }),
+        body: JSON.stringify({ email: email.trim().toLowerCase(), otp }),
       })
 
+      const data = await res.json()
       if (res.ok) {
-        // Session created via MongoDB - cookie is set automatically
         router.push("/admin/dashboard")
         return
       }
 
-      setError("Invalid username or password")
+      setError(data.error || "Invalid or expired OTP")
       setIsLoading(false)
     } catch (err) {
       setError("Login error. Please try again.")
@@ -78,56 +105,76 @@ export default function AdminLoginPage() {
           <p className="text-sm text-[#6b7280] mt-2">Administrators only</p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-4 max-w-md">
-          <div className="relative">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]">
-              <Mail className="w-5 h-5" />
+        {step === 1 ? (
+          <form onSubmit={handleSendOTP} className="space-y-4 max-w-md">
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]">
+                <Mail className="w-5 h-5" />
+              </div>
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#2d6a4f]/30 focus:border-[#2d6a4f]"
+              />
             </div>
-            <Input
-              type="text"
-              placeholder="Enter your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#2d6a4f]/30 focus:border-[#2d6a4f]"
-            />
-          </div>
 
-          <div className="relative">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]">
-              <Lock className="w-5 h-5" />
+            {error && (
+              <div className="text-sm text-red-600 bg-red-50 p-3 rounded-xl text-center">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full h-14 bg-[#2d6a4f] hover:bg-[#1b4332] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 disabled:opacity-70 mt-6"
+            >
+              {isLoading ? "Sending OTP..." : "Send OTP"}
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleLogin} className="space-y-4 max-w-md">
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]">
+                <Lock className="w-5 h-5" />
+              </div>
+              <Input
+                type="text"
+                placeholder="Enter 6-digit OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                required
+                maxLength={6}
+                className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#2d6a4f]/30 focus:border-[#2d6a4f] tracking-[0.5em] text-center font-bold text-xl"
+              />
             </div>
-            <Input
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="h-14 pl-12 pr-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#2d6a4f]/30 focus:border-[#2d6a4f]"
-            />
+
+            {error && (
+              <div className="text-sm text-red-600 bg-red-50 p-3 rounded-xl text-center">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full h-14 bg-[#2d6a4f] hover:bg-[#1b4332] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 disabled:opacity-70 mt-6"
+            >
+              {isLoading ? "Verifying..." : "Login"}
+            </button>
+
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-[#2d6a4f] transition-colors"
+              onClick={() => setStep(1)}
+              className="w-full text-sm text-[#2d6a4f] hover:text-[#1b4332] transition-colors mt-2"
             >
-              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              Change Email
             </button>
-          </div>
-
-          {error && (
-            <div className="text-sm text-red-600 bg-red-50 p-3 rounded-xl text-center">
-              {error}
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full h-14 bg-[#2d6a4f] hover:bg-[#1b4332] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 disabled:opacity-70 mt-6"
-          >
-            {isLoading ? "Logging in..." : "Login"}
-          </button>
-        </form>
+          </form>
+        )}
 
         <div className="text-center mt-8">
           <Link href="/login" className="text-xs text-[#2d6a4f] hover:text-[#1b4332] underline transition-colors">
