@@ -1269,15 +1269,16 @@ export default function AdminDashboard() {
     const fetchSystemStatus = async () => {
       try {
         const res = await fetch('/api/system/status')
-        if (!res.ok) throw new Error('Status fetch failed');
-        const data = await res.json()
-        setSystemStatus(data)
-        
-        if (data.discord?.status === 'ONLINE') {
-          setMongoHealth(prev => Math.max(prev, 90)); // Simulate boost if bot is on
+        if (res.ok) {
+          const data = await res.json()
+          setSystemStatus(data)
+          
+          if (data.discord?.status === 'ONLINE') {
+            setMongoHealth(prev => Math.max(prev, 90)); // Simulate boost if bot is on
+          }
         }
       } catch (error) {
-        console.error('Failed to fetch system status:', error)
+        // Silently skip status updates if they fail to avoid intrusive error overlays
       }
     }
     fetchSystemStatus()
