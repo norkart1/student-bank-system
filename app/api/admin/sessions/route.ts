@@ -5,7 +5,8 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(req: NextRequest) {
   try {
     await connectDB();
-    const sessions = await Session.find({ userType: 'admin' })
+    const userType = req.nextUrl.searchParams.get('type') || 'admin';
+    const sessions = await Session.find({ userType })
       .sort({ createdAt: -1 })
       .limit(20);
 
