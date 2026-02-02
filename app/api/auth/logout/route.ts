@@ -8,7 +8,10 @@ export async function POST(req: NextRequest) {
     const token = req.cookies.get('auth_token')?.value;
 
     if (token) {
-      await Session.deleteOne({ token });
+      await Session.findOneAndUpdate(
+        { token },
+        { logoutAt: new Date(), lastActiveAt: new Date() }
+      );
     }
 
     const response = NextResponse.json({ success: true });

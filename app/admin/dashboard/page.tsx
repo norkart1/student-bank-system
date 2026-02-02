@@ -1742,6 +1742,74 @@ export default function AdminDashboard() {
         </button>
       </div>
 
+      {/* Admin Status Modal */}
+      {showAdminStatus && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            <div className="p-6 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-[#2d6a4f]/10 rounded-xl">
+                  <Activity className="w-6 h-6 text-[#2d6a4f]" />
+                </div>
+                <h3 className="text-xl font-bold text-[#171532] dark:text-white">Admin Status</h3>
+              </div>
+              <button 
+                onClick={() => setShowAdminStatus(false)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+              >
+                <X className="w-6 h-6 text-gray-500" />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto">
+              <div className="space-y-4">
+                {adminSessions.length > 0 ? (
+                  adminSessions.map((session, idx) => (
+                    <div key={idx} className="p-4 bg-gray-50 dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700">
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                          <p className="font-bold text-[#171532] dark:text-white">{session.userData?.name || 'Admin'}</p>
+                          <p className="text-xs text-gray-500">{session.userData?.username}</p>
+                        </div>
+                        <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${new Date(session.expiresAt) > new Date() && !session.logoutAt ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}`}>
+                          {new Date(session.expiresAt) > new Date() && !session.logoutAt ? 'Active' : session.logoutAt ? 'Logged Out' : 'Expired'}
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <p className="text-gray-500 text-xs">Login Time</p>
+                          <p className="font-medium dark:text-gray-300">{session.loginAt ? new Date(session.loginAt).toLocaleString() : new Date(session.createdAt).toLocaleString()}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500 text-xs">Logout Time</p>
+                          <p className="font-medium dark:text-gray-300">{session.logoutAt ? new Date(session.logoutAt).toLocaleString() : 'N/A'}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500 text-xs">Last Active</p>
+                          <p className="font-medium dark:text-gray-300">{new Date(session.lastActiveAt || session.updatedAt).toLocaleString()}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500 text-xs">Online Time</p>
+                          <p className="font-medium dark:text-gray-300">
+                            {session.logoutAt 
+                              ? Math.floor((new Date(session.logoutAt).getTime() - new Date(session.loginAt || session.createdAt).getTime()) / 60000) + ' mins'
+                              : Math.floor((new Date().getTime() - new Date(session.loginAt || session.createdAt).getTime()) / 60000) + ' mins'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-10 text-gray-500">
+                    No active sessions found
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-bold text-[#171532]">Recent Transactions</h2>
       </div>
