@@ -1890,26 +1890,42 @@ export default function AdminDashboard() {
                           <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${new Date(session.expiresAt) > new Date() && !session.logoutAt ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}`}>
                             {new Date(session.expiresAt) > new Date() && !session.logoutAt ? 'Active' : session.logoutAt ? 'Logged Out' : 'Expired'}
                           </div>
-                          <div className="bg-white p-1 rounded-lg border border-gray-100 shadow-sm">
-                            <QRCodeSVG 
-                              value={`https://jdsa-students-bank.replit.app/user/dashboard?id=${session.userId}`} 
-                              size={40} 
-                              level="L" 
-                              includeMargin={false} 
-                            />
+                          <div className="flex items-center gap-2">
+                            <div className="bg-white p-1 rounded-lg border border-gray-100 shadow-sm">
+                              <QRCodeSVG 
+                                value={`https://jdsa-students-bank.replit.app/user/dashboard?id=${session.userId}`} 
+                                size={32} 
+                                level="L" 
+                                includeMargin={false} 
+                              />
+                            </div>
+                            <button 
+                              onClick={() => {
+                                const canvas = document.createElement("canvas");
+                                const svg = document.querySelector(`[value="https://jdsa-students-bank.replit.app/user/dashboard?id=${session.userId}"]`) as SVGGraphicsElement;
+                                if (svg) {
+                                  const svgData = new XMLSerializer().serializeToString(svg);
+                                  const img = new Image();
+                                  img.onload = () => {
+                                    canvas.width = img.width;
+                                    canvas.height = img.height;
+                                    const ctx = canvas.getContext("2d");
+                                    ctx?.drawImage(img, 0, 0);
+                                    const a = document.createElement("a");
+                                    a.download = `student-qr-${session.userData?.code || 'code'}.png`;
+                                    a.href = canvas.toDataURL("image/png");
+                                    a.click();
+                                  };
+                                  img.src = "data:image/svg+xml;base64," + btoa(svgData);
+                                }
+                              }}
+                              className="p-2 bg-gray-100 hover:bg-gray-200 dark:bg-slate-700 dark:hover:bg-slate-600 rounded-lg transition-colors group"
+                              title="Download QR"
+                            >
+                              <Download className="w-4 h-4 text-gray-600 dark:text-gray-300 group-hover:text-[#2d6a4f]" />
+                            </button>
                           </div>
                         </div>
-                      </div>
-                      <div className="flex flex-col items-center gap-1 mb-3">
-                        <div className="bg-white p-2 rounded-xl border border-gray-100 shadow-sm">
-                          <QRCodeSVG 
-                            value={`https://jdsa-students-bank.replit.app/user/dashboard?id=${session.userId}`} 
-                            size={100} 
-                            level="H" 
-                            includeMargin={false} 
-                          />
-                        </div>
-                        <p className="text-[10px] font-bold text-[#2d6a4f] uppercase tracking-wider">Quick Scan QR</p>
                       </div>
                       <div className="grid grid-cols-2 gap-4 text-sm">
                           <div>
