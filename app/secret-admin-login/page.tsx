@@ -70,9 +70,9 @@ export default function SecretAdminLoginPage() {
             />
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-[#171532] leading-tight">
-            Secret Admin<br />Portal
+            JDSA<br />Students Bank
           </h1>
-          <p className="text-sm text-[#6b7280] mt-2">Access with Credentials</p>
+          <p className="text-sm text-[#6b7280] mt-2">Secret Admin Portal</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4 max-w-md">

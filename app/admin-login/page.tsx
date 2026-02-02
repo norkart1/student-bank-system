@@ -100,9 +100,9 @@ export default function AdminLoginPage() {
             />
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-[#171532] leading-tight">
-            Admin<br />Portal
+            JDSA<br />Students Bank
           </h1>
-          <p className="text-sm text-[#6b7280] mt-2">Administrators only</p>
+          <p className="text-sm text-[#6b7280] mt-2">Admin Portal</p>
         </div>
 
         {step === 1 ? (
