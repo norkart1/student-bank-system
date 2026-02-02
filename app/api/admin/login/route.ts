@@ -60,6 +60,8 @@ export async function POST(req: NextRequest) {
         username: admin.username,
       },
       expiresAt,
+      loginAt: new Date(),
+      lastActiveAt: new Date(),
     });
 
     await session.save();

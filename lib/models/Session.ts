@@ -11,6 +11,9 @@ export interface ISession extends Document {
     code?: string;
   };
   expiresAt: Date;
+  loginAt: Date;
+  logoutAt?: Date;
+  lastActiveAt: Date;
   createdAt: Date;
 }
 
@@ -26,6 +29,9 @@ const sessionSchema = new Schema<ISession>(
       code: { type: String },
     },
     expiresAt: { type: Date, required: true },
+    loginAt: { type: Date, default: Date.now },
+    logoutAt: { type: Date },
+    lastActiveAt: { type: Date, default: Date.now },
   },
   { timestamps: true }
 );

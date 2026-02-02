@@ -115,6 +115,26 @@ export default function AdminDashboard() {
   const [aiLoading, setAiLoading] = useState(false)
   const [depositAllStudents, setDepositAllStudents] = useState(false)
   const [withdrawAllStudents, setWithdrawAllStudents] = useState(false)
+  const [adminSessions, setAdminSessions] = useState<any[]>([])
+  const [showAdminStatus, setShowAdminStatus] = useState(false)
+
+  useEffect(() => {
+    if (showAdminStatus) {
+      fetchAdminSessions()
+    }
+  }, [showAdminStatus])
+
+  const fetchAdminSessions = async () => {
+    try {
+      const res = await fetch('/api/admin/sessions')
+      if (res.ok) {
+        const data = await res.json()
+        setAdminSessions(data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch admin sessions')
+    }
+  }
 
   const [showQRScanner, setShowQRScanner] = useState(false)
   const [qrScannerStep, setQrScannerStep] = useState<'scan' | 'result'>('scan')
@@ -1709,6 +1729,16 @@ export default function AdminDashboard() {
             <CalendarRange className="w-5 h-5 text-white" />
           </div>
           <span className="text-xs font-bold text-[#171532]">Session Management</span>
+        </button>
+
+        <button 
+          onClick={() => setShowAdminStatus(true)}
+          className="bg-white border border-[#e5e7eb] rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-[#f8f9fa] transition-all shadow-sm"
+        >
+          <div className="w-10 h-10 bg-gradient-to-br from-[#2d6a4f] to-[#1b4332] rounded-xl flex items-center justify-center text-white">
+            <Activity className="w-5 h-5" />
+          </div>
+          <span className="text-xs font-bold text-[#171532]">Admin Status</span>
         </button>
       </div>
 
