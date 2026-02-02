@@ -25,7 +25,7 @@ const sessionSchema = new Schema<ISession>(
       username: { type: String },
       code: { type: String },
     },
-    expiresAt: { type: Date, required: true, index: true },
+    expiresAt: { type: Date, required: true },
   },
   { timestamps: true }
 );
