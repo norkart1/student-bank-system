@@ -119,10 +119,13 @@ export default function SecretAdminLoginPage() {
           </button>
         </form>
 
-        <div className="text-center mt-8">
-          <Link href="/admin-login" className="text-xs text-[#2d6a4f] hover:text-[#1b4332] underline transition-colors">
+        <div className="text-center mt-8 space-y-4">
+          <Link href="/admin-login" className="block text-xs text-[#2d6a4f] hover:text-[#1b4332] underline transition-colors">
             Use OTP Login
           </Link>
+          <p className="text-[10px] text-gray-400 max-w-xs mx-auto px-4">
+            By logging in, you agree to our Terms and Conditions. This system is for authorized personnel only. All activities are logged.
+          </p>
         </div>
       </div>
     </div>
