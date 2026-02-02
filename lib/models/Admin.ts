@@ -5,8 +5,10 @@ export interface IAdmin extends Document {
   username: string;
   password: string;
   name: string;
-  email?: string;
+  email: string;
   role: string;
+  otpCode?: string;
+  otpExpires?: Date;
   createdAt: Date;
   updatedAt: Date;
   comparePassword(password: string): Promise<boolean>;
@@ -17,8 +19,10 @@ const adminSchema = new Schema<IAdmin>(
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     name: { type: String, required: true },
-    email: { type: String },
+    email: { type: String, required: true, unique: true },
     role: { type: String, default: 'admin' },
+    otpCode: { type: String },
+    otpExpires: { type: Date },
   },
   { timestamps: true }
 );

@@ -7,24 +7,26 @@ import crypto from 'crypto';
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
-    const { username, password } = await req.json();
+    const { email, otp } = await req.json();
 
-    if (!username || !password) {
-      return NextResponse.json({ error: 'Username and password required' }, { status: 400 });
+    if (!email || !otp) {
+      return NextResponse.json({ error: 'Email and OTP required' }, { status: 400 });
     }
 
-    const admin = await Admin.findOne({ username });
+    const admin = await Admin.findOne({ 
+      email,
+      otpCode: otp,
+      otpExpires: { $gt: new Date() }
+    });
 
     if (!admin) {
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+      return NextResponse.json({ error: 'Invalid or expired OTP' }, { status: 401 });
     }
 
-    // Use the comparePassword method to check hashed password
-    const isPasswordValid = await admin.comparePassword(password);
-
-    if (!isPasswordValid) {
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
-    }
+    // Clear OTP after successful login
+    admin.otpCode = undefined;
+    admin.otpExpires = undefined;
+    await admin.save();
 
     // Create session token
     const token = crypto.randomBytes(32).toString('hex');
