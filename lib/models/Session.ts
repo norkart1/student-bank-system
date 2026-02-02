@@ -36,7 +36,8 @@ const sessionSchema = new Schema<ISession>(
   { timestamps: true }
 );
 
-// Auto-delete expired sessions
-sessionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+// Session model for tracking logins
+// Note: TTL index is disabled to prevent automatic logout
+// sessionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 export const Session = mongoose.models.Session || mongoose.model<ISession>('Session', sessionSchema);
