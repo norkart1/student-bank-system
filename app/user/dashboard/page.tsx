@@ -32,7 +32,7 @@ export default function UserDashboard() {
       let studentId = null;
       if (verifyRes.ok) {
         const session = await verifyRes.json()
-        studentId = session.userData.id
+        studentId = session.userData?.id || session.userId
       } else if (directStudentId) {
         // Allow direct view if ID is provided via QR, but we still prefer session if available
         studentId = directStudentId;
