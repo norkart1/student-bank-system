@@ -4,6 +4,11 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp"
 import { Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -136,32 +141,34 @@ export default function AdminLoginPage() {
             </button>
           </form>
         ) : (
-          <form onSubmit={handleLogin} className="space-y-4 max-w-md">
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]">
-                <Lock className="w-5 h-5" />
-              </div>
-              <Input
-                type="text"
-                placeholder="OTP Code"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                required
+          <form onSubmit={handleLogin} className="space-y-6 max-w-md flex flex-col items-center md:items-start">
+            <div className="w-full flex justify-center md:justify-start">
+              <InputOTP
                 maxLength={6}
-                className="h-14 pl-12 bg-white border border-[#e5e7eb] rounded-xl text-[#171532] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#2d6a4f]/30 focus:border-[#2d6a4f] text-center font-bold text-xl"
-              />
+                value={otp}
+                onChange={(value) => setOtp(value)}
+              >
+                <InputOTPGroup className="gap-2">
+                  <InputOTPSlot index={0} />
+                  <InputOTPSlot index={1} />
+                  <InputOTPSlot index={2} />
+                  <InputOTPSlot index={3} />
+                  <InputOTPSlot index={4} />
+                  <InputOTPSlot index={5} />
+                </InputOTPGroup>
+              </InputOTP>
             </div>
 
             {error && (
-              <div className="text-sm text-red-600 bg-red-50 p-3 rounded-xl text-center">
+              <div className="w-full text-sm text-red-600 bg-red-50 p-3 rounded-xl text-center">
                 {error}
               </div>
             )}
 
             <button
               type="submit"
-              disabled={isLoading}
-              className="w-full h-14 bg-[#2d6a4f] hover:bg-[#1b4332] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 disabled:opacity-70 mt-6"
+              disabled={isLoading || otp.length !== 6}
+              className="w-full h-14 bg-[#2d6a4f] hover:bg-[#1b4332] text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-300 disabled:opacity-70 mt-2"
             >
               {isLoading ? "Verifying..." : "Login"}
             </button>
@@ -169,7 +176,7 @@ export default function AdminLoginPage() {
             <button
               type="button"
               onClick={() => setStep(1)}
-              className="w-full text-sm text-[#2d6a4f] hover:text-[#1b4332] transition-colors mt-2"
+              className="w-full text-sm text-[#2d6a4f] hover:text-[#1b4332] transition-colors"
             >
               Change Email
             </button>
