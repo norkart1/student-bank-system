@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Poppins } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
+import { Toaster } from "@/components/ui/sonner"
 import './globals.css'
 
 const poppins = Poppins({ 
@@ -99,6 +100,7 @@ export default function RootLayout({
       <body className={`${poppins.variable} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           {children}
+          <Toaster position="top-right" expand={false} richColors={false} />
         </ThemeProvider>
       </body>
     </html>

@@ -4,6 +4,7 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
+import { toast } from "@/lib/toast"
 import {
   InputOTP,
   InputOTPGroup,
@@ -37,13 +38,16 @@ export default function AdminLoginPage() {
       if (res.ok) {
         setStep(2)
         setIsLoading(false)
+        toast.success("OTP Sent", "Please check your email for the verification code.")
         return
       }
 
       setError(data.error || "Failed to send OTP")
+      toast.error("Error Occurred", data.error || "Failed to send OTP")
       setIsLoading(false)
     } catch (err) {
       setError("Error sending OTP. Please try again.")
+      toast.error("Error Occurred", "Connection error. Unable to connect to the server at present")
       setIsLoading(false)
     }
   }
@@ -62,14 +66,17 @@ export default function AdminLoginPage() {
 
       const data = await res.json()
       if (res.ok) {
+        toast.success("Saved Successfully", "Your changes have been saved successfully")
         router.push("/admin/dashboard")
         return
       }
 
       setError(data.error || "Invalid or expired OTP")
+      toast.error("Error Occurred", data.error || "Invalid or expired OTP")
       setIsLoading(false)
     } catch (err) {
       setError("Login error. Please try again.")
+      toast.error("Error Occurred", "Connection error. Unable to connect to the server at present")
       setIsLoading(false)
     }
   }
