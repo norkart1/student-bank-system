@@ -6,9 +6,7 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   serverExternalPackages: ['mongoose', 'mongodb', 'bcryptjs'],
-  experimental: {
-    allowedDevOrigins: ['*'],
-  },
+  allowedDevOrigins: ['*'],
   images: {
     remotePatterns: [
       {

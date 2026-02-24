@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next'
 import { Poppins } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from 'next-themes'
 import './globals.css'
 
@@ -18,7 +17,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://jdsa-students-bank.vercel.app'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://jdsa-students-bank.replit.app'),
   title: 'JDSA STUDENTS BANK - Educational Banking System',
   description: 'Banking Made Simple for Students. A comprehensive, secure banking system designed specifically for educational institutions. Manage student accounts, deposits, withdrawals, and transactions with ease.',
   keywords: ['student banking', 'educational banking', 'account management', 'student accounts', 'banking system'],
@@ -30,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://jdsa-students-bank.vercel.app',
+    url: process.env.NEXT_PUBLIC_BASE_URL || 'https://jdsa-students-bank.replit.app',
     siteName: 'JDSA STUDENTS BANK',
     title: 'JDSA STUDENTS BANK',
     description: 'Banking Made Simple for Students - A comprehensive banking system for educational institutions',
@@ -100,7 +99,6 @@ export default function RootLayout({
       <body className={`${poppins.variable} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           {children}
-          <Analytics />
         </ThemeProvider>
       </body>
     </html>
